@@ -1,8 +1,8 @@
 ===================
 .:: SPREAD 2::.
 ===================
-*Spatial Phylogenetic Reconstruction of Evolutionary Dynamics 2*
-Version: 1.0.7, 2015
+*Spatial Phylogenetic Reconstruction of Evolutionary Dynamics version 2*
+Version: 2.0.0 rc, 2015
 Authors: Filip Bielejec, Andrew Rambaut, Marc A. Suchard & Philippe Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL

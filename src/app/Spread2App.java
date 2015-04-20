@@ -2,6 +2,11 @@ package app;
 
 import java.util.Locale;
 
+/**
+ * @author Andrew Rambaut
+ * @author Filip Bielejec
+ * @version $Id$
+ */
 public class Spread2App {
 
 	
