@@ -7,11 +7,11 @@ package data;
  */
 public class SpreadData {
 
+	//TODO: here's where the magic happens, use public fields to access and modify
+
+	
 	public SpreadData() {
 	}// END: Constructor
-	
-	//TODO: here's where the magic happens, use public fields to access and modify
-	
 	
 	
 	

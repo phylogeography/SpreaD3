@@ -3,7 +3,7 @@
 ===================
 *Spatial Phylogenetic Reconstruction of Evolutionary Dynamics version 2*
 Version: 2.0.0 rc, 2015
-Authors: Filip Bielejec, Andrew Rambaut, Marc A. Suchard & Philippe Lemey
+Authors: Filip Bielejec, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
 
