@@ -6,19 +6,23 @@ public class Line {
 	private  Coordinate endCoordinate;
 	private  double endTime;
 	private  double startTime;
+	private Object value;
 	
 	public Line(Coordinate startCoordinate, //
 			Coordinate endCoordinate, //
 			double startTime, //
-			double endTime //
+			double endTime, //
+			Object value
 			) {
 		
 		//TODO: altitude?
+		//TODO: trait value?
 		
 		this.startCoordinate = startCoordinate;
 		this.endCoordinate = endCoordinate;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.value = value;
 		
 	}//END: Constructor
 	

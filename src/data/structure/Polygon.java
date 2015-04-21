@@ -21,7 +21,9 @@ public class Polygon {
 		this.coordinateList = coordinateList;
 		this.startTime = startTime;
 		this.endTime = endTime;
-				
+		
+		//TODO: altitude?
+		//TODO: trait value?
 				
 	}//END: Polygon
 	
