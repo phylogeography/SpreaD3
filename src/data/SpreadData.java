@@ -1,19 +1,12 @@
 package data;
 
-import generator.Generator;
-import generator.JSONGenerator;
-import generator.KMLGenerator;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
-
-import data.structure.Coordinate;
 import data.structure.Line;
 import data.structure.Polygon;
+
 
 /**
  * @author Andrew Rambaut
@@ -22,12 +15,14 @@ import data.structure.Polygon;
  */
 public class SpreadData {
 
-	private HashMap<String, Object> dataMap;
+	public  List<LinkedList<Polygon>> polygons = new LinkedList<LinkedList<Polygon>>();
+	public List<Line> lines = new LinkedList<Line>();
 	
 	public SpreadData() {
-
-		dataMap = new HashMap<String, Object>();
-
 	}// END: Constructor
 
+	
+	
+	
+	
 }// END: class

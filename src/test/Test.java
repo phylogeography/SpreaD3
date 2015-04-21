@@ -17,6 +17,7 @@ import utils.Utils;
 
 import com.google.gson.Gson;
 
+import data.SpreadData;
 import data.structure.Coordinate;
 import data.structure.Line;
 import data.structure.Polygon;
@@ -58,7 +59,7 @@ public class Test {
 		
 		String latitudeName = traitName.concat("1");
 		
-		ArrayList<Line> linesList = new ArrayList<Line>();
+		 List<Line> linesList = new LinkedList<Line>();
 
 		// /////////////
 		// ---LINES---//
@@ -156,10 +157,13 @@ public class Test {
 			}// END: root check
 		}// END: nodes loop
 		
+		SpreadData data = new SpreadData();
+		
+		data.lines = linesList;
+		data.polygons = polygonsList;
 		
 		Gson gson = new Gson();
-		
-		String s  = gson.toJson(polygonsList);
+		String s = gson.toJson(data);
 		
 		File file = new File("test.json");
         FileWriter fw = new FileWriter(file);
