@@ -78,6 +78,7 @@ public class Test {
 				
 				// END: parsing
 				Coordinate startCoordinate = new Coordinate(parentLongitude, parentLatitude);
+				
 				Coordinate endCoordinate = new Coordinate(longitude, latitude);
 				
 				Line line = new Line(startCoordinate, endCoordinate, parentHeight, nodeHeight, null );				
@@ -88,15 +89,12 @@ public class Test {
 		}//END: nodes loop
 		
 		
-//		SpreadData data = new SpreadData();
+		SpreadData data = new SpreadData();
 		
-		HashMap<String, Object>	dataMap = new HashMap<String,Object>();
+		data.setLinesList(linesList);
 		
-		dataMap.put(SpreadData.LINES_KEY, linesList);
+		data.toJSON();
 		
-		 ObjectMapper mapper = new ObjectMapper();
-		
-		 mapper.writeValue(new File("test.json"), dataMap);
 		
 		
 	}//END: testContinousTreeToJSON
