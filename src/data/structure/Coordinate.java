@@ -1,19 +1,19 @@
 package data.structure;
 
 public class Coordinate {
-	
-	private double longitude;
-	private double latitude;
 
-	public Coordinate( double longitude, double latitude) {
+	private final double longitude;
+	private final double latitude;
+
+	public Coordinate(double longitude, //
+			double latitude //
+	) {
 
 		this.longitude = longitude;
 		this.latitude = latitude;
-		
-		//TODO: altitude?
-		
-	}//END: Constructor
-	
+
+	}// END: Constructor
+
 	public double getLongitude() {
 		return longitude;
 	}
@@ -22,15 +22,4 @@ public class Coordinate {
 		return latitude;
 	}
 
-	
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	
-}//END: class
+}// END: class

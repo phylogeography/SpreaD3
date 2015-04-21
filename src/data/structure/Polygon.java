@@ -1,54 +1,36 @@
 package data.structure;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-/*
- * 
- * 
- * */
 public class Polygon {
 
-	private List<Coordinate> coordinateList;
-	private double startTime;
-	private double endTime;
-	
-	public Polygon(List<Coordinate> coordinateList,//
-			double startTime,
-			double EndTime
-			
-			) {
-		
-		this.coordinateList = coordinateList;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		
-		//TODO: altitude?
-		//TODO: trait value?
-				
-	}//END: Polygon
-	
+	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+
+	private final List<Coordinate> coordinates;
+	private final double time;
+
+	public Polygon(List<Coordinate> coordinates,//
+			double time, //
+			Map<String, Object> attributes //
+	) {
+
+		this.coordinates = coordinates;
+		this.time = time;
+
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
+		}
+
+	}// END: Polygon
+
 	public List<Coordinate> getCoordinateList() {
-		return coordinateList;
-	}
-	
-	public double getStartTime() {
-		return startTime;
-	}
-	
-	public double getEndTime() {
-		return endTime;
-	}
-	
-	public void setCoordinateList(List<Coordinate> coordList) {
-		this.coordinateList = coordList;
-	}
-	
-	public void setStartTime(double time) {
-		this.startTime = time;
+		return coordinates;
 	}
 
-	public void setEndTime(double time) {
-		this.endTime = time;
+	public double getTime() {
+		return time;
 	}
-	
-}//END: class
+
+}// END: class
