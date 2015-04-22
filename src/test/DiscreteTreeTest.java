@@ -2,9 +2,16 @@ package test;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import utils.Utils;
+
+import data.structure.Coordinate;
 import data.structure.Location;
 
 import jebl.evolution.graphs.Node;
@@ -24,9 +31,8 @@ public class DiscreteTreeTest {
 
 		String path = ("/home/filip/Dropbox/JavaProjects/Spread2/data/discrete/");
 
-		String treeFileName = "speciesDiffusion.MCC.tre";
-		String locationFileName = "locationCoordinates_H5N1";
-
+		String treeFileName = "GeoTree.tree";
+		String locationFileName = "GeoLatLongall.txt";
 		String traitName = "Geo";
 
 		// ///////////////////////////////
@@ -34,7 +40,11 @@ public class DiscreteTreeTest {
 		// ///////////////////////////////
 
 		String treefilePath = path.concat(treeFileName);
+		String locationFilePath = path.concat(locationFileName);
+		
+		String traitSetName = traitName.concat(".set");
 
+		
 		
 		// //////////////
 		// ---IMPORT---//
@@ -48,42 +58,60 @@ public class DiscreteTreeTest {
 		// /////////////////
 
 		 List<Location> locationsList = new LinkedList<Location>();
-		 
+
+		// parse the unique locations from tree
+		Set<String> uniqueLocations = new HashSet<String>();
 		for (Node node : tree.getNodes()) {
 			if (!tree.isRoot(node)) {
 
+				Object[] statesSet = Utils.getObjectArrayNodeAttribute(node,
+						traitSetName);
+
+				for (int i = 0; i < statesSet.length; i++) {
+
+					String state = String.valueOf(statesSet[i]);
+					uniqueLocations.add(state);
+
+				}// END: i loop
+
+			}// END: root check
+		}// END: nodes loop
+
+		//TODO: error handling here - howto
+		
+		// look up location coordinates from the file
+		String[] lines = Utils.readLines(locationFilePath);
+		int nrow = lines.length;
+		
+		if(uniqueLocations.size() != nrow) {
+			System.err.println("Size mismatch.");
+		}
+		
+		for (int i = 0; i < nrow; i++) {
+
+			String[] line = lines[i].split("\t");
+			String locationName = line[0];
+			
+			if(uniqueLocations.contains(locationName)) {
 				
+//				System.out.println("Matched " + locationName);
 				
+				Double longitude = Double.valueOf(line[1]);
+				Double latitude = Double.valueOf(line[2]);
 				
+				Location location = new Location(locationName, "", new Coordinate(longitude, latitude), null);
 				
+			} else {
+				
+				System.err.println("Warning: location " + i + " " + locationName + " does not exist in the tree!");
 				
 			}
-		}
+			
+			
+			
+			
 
-		// String lines[] = readLines(locationFilePath);
-		// int nrow = lines.length;
-		// List<Location> locationsList = new LinkedList<Location>();
-		//
-		// for(int i = 0; i < nrow; i++) {
-		//
-		// String[] line = lines[i].split("\t");
-		//
-		// String locationName = line[0];
-		// Double longitude = Double.valueOf(line[1]);
-		// Double latitude = Double.valueOf(line[2]);
-		//
-		// Coordinate coordinate = new Coordinate(longitude, latitude);
-		// Map<String, Object> attributes = new LinkedHashMap<String, Object>();
-		//
-		// Location location = new Location(locationName, //
-		// "Discrete location " + locationName, //
-		// coordinate, //
-		// attributes //
-		// );
-		//
-		// locationsList.add(location);
-		//
-		// }//END: i loop
+		}// END: i loop
 
 		// /////////////
 		// ---LINES---//
@@ -95,4 +123,4 @@ public class DiscreteTreeTest {
 
 	}// END: testDiscreteTreeToJSON
 
-}//END: class
+}// END: class

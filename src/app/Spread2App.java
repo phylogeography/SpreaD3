@@ -9,6 +9,7 @@ import java.util.Locale;
  */
 public class Spread2App {
 
+	public static final boolean DEBUG = true;
 	
 	public static final String SHORT_NAME = "SPREAD2";
 	public static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics 2";

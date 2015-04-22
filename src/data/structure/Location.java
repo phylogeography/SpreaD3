@@ -3,6 +3,8 @@ package data.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.smartcardio.ATR;
+
 public class Location {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
@@ -25,7 +27,9 @@ public class Location {
 		this.coordinate = null;
 		this.polygon = polygon;
 
-		this.attributes.putAll(attributes);
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
+		}
 
 	}
 
@@ -39,9 +43,16 @@ public class Location {
 		this.coordinate = coordinate;
 		this.polygon = null;
 
-		this.attributes.putAll(attributes);
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
+		}
 
 	}
+
+	// public boolean equals() {
+	// return true;
+	//
+	// }
 
 	public String getId() {
 		return id;
