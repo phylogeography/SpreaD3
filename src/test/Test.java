@@ -5,8 +5,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
@@ -16,20 +19,27 @@ import jebl.evolution.trees.RootedTree;
 import utils.Utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import data.SpreadData;
 import data.structure.Coordinate;
+import data.structure.Layer;
 import data.structure.Line;
+import data.structure.Location;
 import data.structure.Polygon;
 
 
 public class Test {
 
+//	https://sites.google.com/site/gson/gson-user-guide#TOC-Using-Gson
+	
 	public static void main(String[] args)  {
 		
 		 try {
 		
 			 testContinousTreeToJSON();
+			 
+			 testDiscreteTreeToJSON();
 			 
 			System.out.println("Finished");
 			
@@ -39,14 +49,34 @@ public class Test {
 		  
 	}//END: main
 
+	private static void testDiscreteTreeToJSON() {
+		
+		String treeFileName = "speciesDiffusion.MCC.tre";
+		String locationFileName = "locationCoordinates_H5N1";
+		
+		String treefilePath = ("/home/filip/Dropbox/JavaProjects/Spread2/data/continuous/").concat(treeFileName);
+		String locationFilePath = ("/home/filip/Dropbox/JavaProjects/Spread2/data/continuous/").concat(locationFileName);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}//END: testDiscreteTreeToJSON
+	
 	private static void testContinousTreeToJSON() throws IOException, ImportException {
 
-//		https://sites.google.com/site/gson/gson-user-guide#TOC-Using-Gson
-		
-//		String path = "/home/filip/Dropbox/JavaProjects/Spread2/data/continuous/RacRABV_cont_0.8_MCC_snyder.tre";
-//		String traitName = "location";
-		
-		String path = "/home/filip/Dropbox/JavaProjects/Spread2/data/continuous/speciesDiffusion.MCC.tre";
+		String fileName = "speciesDiffusion.MCC.tre";
+		String path = ("/home/filip/Dropbox/JavaProjects/Spread2/data/continuous/").concat(fileName);
 		String traitName = "trait";
 		String hpd = "80";
 		
@@ -101,27 +131,21 @@ public class Test {
 //		trait_80%HPD_modality
 		String modalityAttributeName = traitName.concat("_").concat(hpd).concat("%").concat("HPD_modality");
 		
-        List<LinkedList<Polygon>> polygonsList = new LinkedList<LinkedList<Polygon>>();
+		List<Polygon> polygonsList = new LinkedList<Polygon>();
 		
 		for (Node node : tree.getNodes()) {
 			if (!tree.isRoot(node)) {
 				if (!tree.isExternal(node)) {
 
 					Integer modality = (Integer) Utils.getObjectNodeAttribute(node, modalityAttributeName);
-							
+					
+//					System.out.println("modality for the node: " + modality);
+					
 					double nodeHeight = Utils.getNodeHeight(tree, node);
 
-					//TODO
-//					System.out.println("Modality for node: " + modality);
-					
-					LinkedList<Polygon> polygonsModalityList = new LinkedList<Polygon>();
 						for (int m = 1; m <= modality; m++) {
 		
-							//TODO
-//							System.out.println("Polygon for modality " + m);
-							
 							String longitudeHPDName = longitudeName.concat("_").concat(hpd).concat("%").concat("HPD_"+m);
-							
 							String latitudeHPDName = latitudeName.concat("_").concat(hpd).concat("%").concat("HPD_"+m);
 							
 //							trait1_80%HPD_1
@@ -131,10 +155,6 @@ public class Test {
 							Object[] latitudeHPD = Utils
 									.getObjectArrayNodeAttribute(node, latitudeHPDName);
 							
-							//TODO
-//							Utils.printArray(longitudeHPD);
-//							Utils.printArray(latitudeHPD);
-
 							List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 							for(int c = 0 ; c<longitudeHPD.length; c++ ) {
 								
@@ -144,25 +164,34 @@ public class Test {
 							Coordinate coordinate = new Coordinate(longitude, latitude);
 							coordinateList.add(coordinate);
 							
-							}//END: ii loop
+							}//END: c loop
 							
-							Polygon polygon = new Polygon(coordinateList, nodeHeight, null);
+							Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+//							attributes.put("modality", m);
+							Polygon polygon = new Polygon(coordinateList, nodeHeight, attributes);
 							
-							polygonsModalityList.add(polygon);
+							polygonsList.add(polygon);
+							
 						}// END: modality loop
-						
-						polygonsList.add(polygonsModalityList);
 						
 				}// END: external node check
 			}// END: root check
 		}// END: nodes loop
 		
-		SpreadData data = new SpreadData();
+		List<Location> locationsList = new LinkedList<Location>();
 		
-		data.lines = linesList;
-		data.polygons = polygonsList;
+		List<Layer> layersList = new LinkedList<Layer>();
 		
-		Gson gson = new Gson();
+		Layer continuousLayer = new Layer(fileName,
+				"Continuous tree visualisation", 
+				linesList, 
+				polygonsList);
+		
+		layersList.add(continuousLayer);
+		
+		SpreadData data = new SpreadData(locationsList, layersList);
+		
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String s = gson.toJson(data);
 		
 		File file = new File("test.json");

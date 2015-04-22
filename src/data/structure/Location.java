@@ -15,7 +15,7 @@ public class Location {
 	public Location(String id, //
 			String label, //
 			Polygon polygon, //
-			Map<String, Object> attributes//
+			Map<String, Object> attributes //
 	) {
 
 		super();

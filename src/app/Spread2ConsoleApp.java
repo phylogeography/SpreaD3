@@ -18,7 +18,7 @@ public class Spread2ConsoleApp {
 	    
 	public Spread2ConsoleApp() {
 		
-		data = new SpreadData();
+//		data = new SpreadData();
 		
         // //////////////////
         // ---DEFINITION---//

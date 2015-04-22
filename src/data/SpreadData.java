@@ -1,12 +1,9 @@
 package data;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import data.structure.Line;
-import data.structure.Polygon;
-
+import data.structure.Layer;
+import data.structure.Location;
 
 /**
  * @author Andrew Rambaut
@@ -15,14 +12,22 @@ import data.structure.Polygon;
  */
 public class SpreadData {
 
-	public  List<LinkedList<Polygon>> polygons = new LinkedList<LinkedList<Polygon>>();
-	public List<Line> lines = new LinkedList<Line>();
-	
-	public SpreadData() {
+	private final List<Location> locations;// = new LinkedList<Location>();
+	private final List<Layer> layers;// = new LinkedList<Layer>();
+
+	public SpreadData(List<Location> locations, List<Layer> layers) {
+
+		this.locations = locations;
+		this.layers = layers;
+
 	}// END: Constructor
 
-	
-	
-	
-	
+	public List<Location> getLocations() {
+		return locations;
+	}
+
+	public List<Layer> getLayers() {
+		return layers;
+	}
+
 }// END: class
