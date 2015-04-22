@@ -28,4 +28,11 @@ h1. TODO
 * Internal storage format easy to access and modify (e.g just color or line thickness).
 * Conversion to KML and GeoJSON
 * Command-line interface for pipelines
-
+* Visualisations:
+  - locations as polygons (with altitude altering to reflect counts)
+* Display warning if one or more of the discrete states are not found. 
+* Should store all the data in lists or arrays, easy to access and modify (e.g just color or line thickness) without re-parsing trees. These arrays should be also easily written to text files which can be used in R or other software. Maybe in JSON format, like FigTree?
+  - For online analysis we should write a small additional tool in JS using D3 libraries, which can read SPREAD data and display visualisations in browsers.  
+* Use doubles instead of internal Java representations of dates. These fail for very old origins.
+* Processing large tree distributions on GPUs. For this we'd probably need to write a small library and JNI to it.  
+  

@@ -1,5 +1,11 @@
 package utils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 
@@ -47,18 +53,31 @@ public class Utils {
 		return nodeAttributeArray;
 	}// END: getObjectArrayNodeAttribute
 
+	public static String[] readLines(String filename) throws IOException {
+
+		FileReader fileReader = new FileReader(filename);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		List<String> lines = new ArrayList<String>();
+
+		String line = null;
+		while ((line = bufferedReader.readLine()) != null) {
+			lines.add(line);
+		}
+
+		bufferedReader.close();
+
+		return lines.toArray(new String[lines.size()]);
+	}// END: readLines
+
 	// /////////////////////////
 	// ---TODO: PRINT UTILS---//
 	// /////////////////////////
-	
+
 	public static void printArray(Object[] x) {
 		for (int i = 0; i < x.length; i++) {
 			System.out.print(x[i] + " ");
 		}
 		System.out.println();
 	}// END: printArray
-	
-	
-	
 
 }// END: class
