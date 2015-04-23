@@ -64,7 +64,6 @@ public class DiscreteTreeTest {
 			// /////////////////
 
 			List<Location> locationsList = new LinkedList<Location>();
-//			List<String> locationsNamesList = new LinkedList<String>();
 			
 			// create list from the coordinates file
 			String[] lines = Utils.readLines(locationFilePath);
@@ -89,84 +88,7 @@ public class DiscreteTreeTest {
 						new Coordinate(longitude, latitude), null);
 				locationsList.add(location);
 
-//				locationsNamesList.add(locationName);
-				
 			}// END: i loop
-
-			// List<Location> locationsList = new LinkedList<Location>();
-			//
-			// // parse the unique locations from tree
-			// Set<String> uniqueLocations = new HashSet<String>();
-			// for (Node node : tree.getNodes()) {
-			// if (!tree.isRoot(node)) {
-			//
-			// Object[] statesSet = Utils.getObjectArrayNodeAttribute(node,
-			// traitSetName);
-			//
-			// for (int i = 0; i < statesSet.length; i++) {
-			//
-			// String state = String.valueOf(statesSet[i]);
-			// uniqueLocations.add(state);
-			//
-			// }// END: i loop
-			//
-			// }// END: root check
-			// }// END: nodes loop
-			//
-			// // look up location coordinates from the file
-			// String[] lines = Utils.readLines(locationFilePath);
-			// int nrow = lines.length;
-			//
-			// // if(uniqueLocations.size() != nrow) {
-			// //
-			// System.err.println("Number of parsed locations does not match the coordinates file.");
-			// // }
-			//
-			//
-			// for (int i = 0; i < nrow; i++) {
-			//
-			// String[] line = lines[i].split("\t");
-			// String locationName = line[0];
-			//
-			// if(uniqueLocations.contains(locationName)) {
-			//
-			// Double longitude = Double.valueOf(line[1]);
-			// Double latitude = Double.valueOf(line[2]);
-			//
-			// // if match add to the list of Locations
-			// Location location = new Location(locationName, "", new
-			// Coordinate(longitude, latitude), null);
-			// locationsList.add(location);
-			//
-			// // remove from the Set if matched
-			// uniqueLocations.remove(locationName);
-			//
-			// } else {
-			//
-			// System.err.println("Warning: location " + i + " " + locationName
-			// + " does not exist in the tree.");
-			//
-			// }//END: match check
-			//
-			//
-			// }// END: i loop
-			//
-			// // check if any locations remain in the unique set
-			// if(uniqueLocations.size() != 0) {
-			//
-			// String message = "Location(s) ";
-			// for(String locationName : uniqueLocations) {
-			//
-			// message += (locationName + " ");
-			//
-			// }//END: remianing locations loop
-			//
-			// message +=
-			// "do(es) not have a corresponding entry in the location coordinates file";
-			//
-			// System.err.println(message);
-			//
-			// }//END: size check
 
 			// /////////////
 			// ---LINES---//
@@ -174,7 +96,6 @@ public class DiscreteTreeTest {
 
 			List<Line> linesList = new LinkedList<Line>();
 			Location dummy;
-			
 			
 			for (Node node : tree.getNodes()) {
 				if (!tree.isRoot(node)) {
