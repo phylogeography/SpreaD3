@@ -9,10 +9,10 @@ public class Location {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
+	private final String id;
 	private final Polygon polygon;
 	private final String label;
 	private final Coordinate coordinate;
-	private final String id;
 
 	public Location(String id, //
 			String label, //
@@ -33,8 +33,11 @@ public class Location {
 
 	}
 
-	public Location(String id, String label, Coordinate coordinate,
-			Map<String, Object> attributes) {
+	public Location(String id, //
+			String label, //
+			Coordinate coordinate, //
+			Map<String, Object> attributes //
+	) {
 
 		super();
 
@@ -48,11 +51,6 @@ public class Location {
 		}
 
 	}
-
-	// public boolean equals() {
-	// return true;
-	//
-	// }
 
 	public String getId() {
 		return id;
@@ -70,4 +68,36 @@ public class Location {
 		return coordinate;
 	}
 
-}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj == null) {
+			return false;
+		}
+
+		if (obj == this) {
+			return true;
+		}
+		
+		if (!(obj instanceof Location)) {
+			return false;
+		}
+		
+		Location location = (Location) obj;
+		if (location.getId().equals(this.id)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}// END: equals
+
+}// END: class

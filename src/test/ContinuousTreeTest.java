@@ -90,20 +90,20 @@ public class ContinuousTreeTest {
 
 				Double parentHeight = Utils.getNodeHeight(tree, parentNode);
 
-				Double longitude = (Double) Utils.getObjectNodeAttribute(node,
+				Double nodeLongitude = (Double) Utils.getObjectNodeAttribute(node,
 						longitudeName);
 
-				Double latitude = (Double) Utils.getObjectNodeAttribute(node,
+				Double nodeLatitude = (Double) Utils.getObjectNodeAttribute(node,
 						latitudeName);
 
 				Double nodeHeight = Utils.getNodeHeight(tree, node);
 
-				Coordinate startCoordinate = new Coordinate(parentLongitude,
+				Coordinate parentCoordinate = new Coordinate(parentLongitude,
 						parentLatitude);
 
-				Coordinate endCoordinate = new Coordinate(longitude, latitude);
+				Coordinate nodeCoordinate = new Coordinate(nodeLongitude, nodeLatitude);
 
-				Line line = new Line(startCoordinate, endCoordinate,
+				Line line = new Line(parentCoordinate, nodeCoordinate,
 						parentHeight, nodeHeight, null);
 
 				linesList.add(line);

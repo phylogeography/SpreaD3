@@ -5,11 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 
 public class Utils {
+
+	// Use this for all random numbers
+	private static final Random random = new Random();
 
 	// ///////////////////////////
 	// ---TODO: PARSING UTILS---//
@@ -79,5 +83,16 @@ public class Utils {
 		}
 		System.out.println();
 	}// END: printArray
+
+	// /////////////////////////////////
+	// ---TODO: RANDOM NUMB3R UTILS---//
+	// /////////////////////////////////
+
+	public static Object pickRand(Object[] array) {
+
+		int rnd = random.nextInt(array.length);
+		return array[rnd];
+
+	}
 
 }// END: class

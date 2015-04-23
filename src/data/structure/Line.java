@@ -34,7 +34,9 @@ public class Line {
 		this.startCoordinate = null;
 		this.endCoordinate = null;
 
-		this.attributes.putAll(attributes);
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
+		}
 
 	}// END: Constructor
 
