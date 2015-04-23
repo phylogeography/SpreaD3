@@ -12,6 +12,7 @@ import java.util.Set;
 import utils.Utils;
 
 import data.structure.Coordinate;
+import data.structure.Line;
 import data.structure.Location;
 
 import jebl.evolution.graphs.Node;
@@ -29,7 +30,7 @@ public class DiscreteTreeTest {
 		// ---PARSE STRINGS---//
 		// /////////////////////
 
-		String path = ("/home/filip/Dropbox/JavaProjects/Spread2/data/discrete/");
+		String path = ("/home/filip/Dropbox/JavaProjects/Spread2/data/discrete/ambiguousState/");
 
 		String treeFileName = "GeoTree.tree";
 		String locationFileName = "GeoLatLongall.txt";
@@ -44,8 +45,6 @@ public class DiscreteTreeTest {
 		
 		String traitSetName = traitName.concat(".set");
 
-		
-		
 		// //////////////
 		// ---IMPORT---//
 		// //////////////
@@ -77,15 +76,16 @@ public class DiscreteTreeTest {
 			}// END: root check
 		}// END: nodes loop
 
-		//TODO: error handling here - howto
+		//TODO: error handling here?
 		
 		// look up location coordinates from the file
 		String[] lines = Utils.readLines(locationFilePath);
 		int nrow = lines.length;
 		
 		if(uniqueLocations.size() != nrow) {
-			System.err.println("Size mismatch.");
+			System.err.println("Number of parsed locations does not match the coordinates file.");
 		}
+		
 		
 		for (int i = 0; i < nrow; i++) {
 
@@ -94,29 +94,59 @@ public class DiscreteTreeTest {
 			
 			if(uniqueLocations.contains(locationName)) {
 				
-//				System.out.println("Matched " + locationName);
-				
 				Double longitude = Double.valueOf(line[1]);
 				Double latitude = Double.valueOf(line[2]);
 				
+				// if match add to the list of Locations
 				Location location = new Location(locationName, "", new Coordinate(longitude, latitude), null);
+				locationsList.add(location);
+				
+				// remove from the Set if matched
+				uniqueLocations.remove(locationName);
 				
 			} else {
 				
-				System.err.println("Warning: location " + i + " " + locationName + " does not exist in the tree!");
+				System.err.println("Warning: location " + i + " " + locationName + " does not exist in the tree.");
 				
-			}
-			
-			
-			
+			}//END: match check
 			
 
 		}// END: i loop
 
+		// check if any locations remain in the unique set 
+		if(uniqueLocations.size() != 0) {
+
+			String message = "Location(s) ";
+			for(String locationName : uniqueLocations) {
+				
+				message += (locationName + " ");
+				
+			}//END: remianing locations loop
+			
+			message += "do(es) not have a corresponding entry in the location coordinates file";
+			
+			System.err.println(message);
+			
+		}//END: size check
+		
+		
 		// /////////////
 		// ---LINES---//
 		// /////////////
 
+		List<Line> linesList = new LinkedList<Line>();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// ////////////////
 		// ---POLYGONS---//
 		// ////////////////

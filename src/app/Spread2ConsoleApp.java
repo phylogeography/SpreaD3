@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import utils.Arguments;
-import utils.Utils;
 
 public class Spread2ConsoleApp {
 
@@ -19,7 +18,7 @@ public class Spread2ConsoleApp {
 	private static final String CONTINUOUS_TREE = "continuousTree";
 	private static final String DISCRETE_TREE = "discreteTree";
 
-	private static final String TREE_FILE = "treeFile";
+	private static final String TREE_FILE = "tree";
 	private static final String TRAIT = "trait";
 	private static final String HPD = "hpd";
 	
@@ -60,11 +59,6 @@ public class Spread2ConsoleApp {
 		
 	}// END: Constructor
 
-	
-//	private void parseAnalysisType(String[] args) {
-//		
-//	}
-	
 	public void run(String[] args) {
 
 		try {
@@ -130,9 +124,39 @@ public class Spread2ConsoleApp {
 
 				if (option.equalsIgnoreCase(CONTINUOUS_TREE)) {
 
-					//TODO: parse cont tree arguments
-					System.out.println(CONTINUOUS_TREE);
+					//---PARSE---//
+					
+					continuousTreeArguments.parseArguments(argsList.get(1));
+					
+					//---INTERROGATE---//
+					
+					//Tree
+	                if (continuousTreeArguments.hasOption(TREE_FILE)) {
 
+	                 // TODO
+
+	                } else {
+	                    throw new RuntimeException("Tree file not specified.");
+	                }// END: Tree option check
+					
+					//Trait
+	                if (continuousTreeArguments.hasOption(TRAIT)) {
+
+	                 // TODO
+
+	                } else {
+	                	  throw new RuntimeException("Option " + TRAIT + " not specified.");
+	                }// END: Tree / Taxa option check
+	                
+					//Tree
+	                if (continuousTreeArguments.hasOption(HPD)) {
+
+	                 // TODO
+
+	                } else {
+	                    throw new RuntimeException("Option " + HPD + " not specified.");
+	                }// END: Tree / Taxa option check
+					
 				} else if (option.equalsIgnoreCase(DISCRETE_TREE)) {
 
 					//TODO: parse discrete tree arguments
@@ -140,7 +164,7 @@ public class Spread2ConsoleApp {
 					
 				} else {
 
-					gracefullyExit("Unrecognized option.");
+					gracefullyExit("Unrecognized " + ANALYSIS_TYPE + " option");
 
 				}// END: option check
 

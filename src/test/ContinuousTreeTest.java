@@ -65,9 +65,9 @@ public class ContinuousTreeTest {
 		TreeImporter importer = new NexusImporter(new FileReader(treeFilePath));
 		RootedTree tree = (RootedTree) importer.importNextTree();
 
-		// /////////////
+		// /////////////////
 		// ---LOCATIONS---//
-		// /////////////
+		// /////////////////
 
 		List<Location> locationsList = new LinkedList<Location>();
 
