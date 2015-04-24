@@ -8,7 +8,7 @@ public class Polygon {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
-	private final Location centroid;
+	private final Location location;
 
 	private final List<Coordinate> coordinates;
 	private final double time;
@@ -20,7 +20,7 @@ public class Polygon {
 
 		super();
 
-		this.centroid = null;
+		this.location = null;
 
 		this.coordinates = coordinates;
 		this.time = time;
@@ -38,7 +38,7 @@ public class Polygon {
 
 		super();
 
-		this.centroid = centroid;
+		this.location = centroid;
 		this.coordinates = null;
 		this.time = time;
 
@@ -56,7 +56,7 @@ public class Polygon {
 	}
 
 	public Location getCentroid() {
-		return centroid;
+		return location;
 	}
 
 }// END: class

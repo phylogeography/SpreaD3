@@ -242,9 +242,12 @@ public class DiscreteTreeTest {
 
 					if(locationCount > 0) {
 					
-					System.out.println(location.getId() + " " + locationCount);
+//					System.out.println(location.getId() + " " + locationCount);
 					
-					
+					Map<String, Object> attributes = new HashMap<String, Object>();
+					attributes.put("count", locationCount);
+					Polygon polygon = new Polygon(location, sliceHeights[i], attributes);
+					polygonsList.add(polygon);
 					
 					}//END: positive count check
 					

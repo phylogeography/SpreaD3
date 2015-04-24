@@ -13,9 +13,9 @@ public class Line {
 	private final Location startLocation;
 	private final Location endLocation;
 
-	private final double endTime;
 	private final double startTime;
-
+	private final double endTime;
+	
 	public Line(Location startLocation, //
 			Location endLocation, //
 			double startTime, //
