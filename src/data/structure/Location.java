@@ -3,8 +3,6 @@ package data.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.smartcardio.ATR;
-
 public class Location {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();

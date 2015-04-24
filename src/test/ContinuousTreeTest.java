@@ -169,6 +169,10 @@ public class ContinuousTreeTest {
 			}// END: root check
 		}// END: nodes loop
 
+		// /////////////
+		// ---LAYER---//
+		// /////////////
+		
 		List<Layer> layersList = new LinkedList<Layer>();
 
 		Layer continuousLayer = new Layer(treeFileName,

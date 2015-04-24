@@ -3,8 +3,6 @@ package data.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.hamcrest.core.IsNull;
-
 public class Line {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
@@ -25,6 +23,8 @@ public class Line {
 			Map<String, Object> attributes //
 	) {
 
+		super();
+		
 		this.startLocation = startLocation;
 		this.endLocation = endLocation;
 
@@ -47,6 +47,8 @@ public class Line {
 			Map<String, Object> attributes //
 	) {
 
+		super();
+		
 		this.startCoordinate = startCoordinate;
 		this.endCoordinate = endCoordinate;
 		this.startTime = startTime;
