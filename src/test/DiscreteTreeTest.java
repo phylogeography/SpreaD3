@@ -74,7 +74,7 @@ public class DiscreteTreeTest {
 			// /////////////////
 			// ---LOCATIONS---//
 			// /////////////////
-           // TODO: this needs to run thirst, rest can run concurrently
+           // TODO: this needs to run first, rest can run concurrently
 			List<Location> locationsList = new LinkedList<Location>();
 			
 			// create list from the coordinates file

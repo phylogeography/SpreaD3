@@ -21,4 +21,10 @@ public class IllegalCharacterException extends Exception {
 		return illegalCharacter;
 	}
 
+	@Override
+	public String getMessage() {
+		String message = "Illegal character " + illegalCharacter + " found in " + examinedString;
+		return message;
+	}
+	
 }// END: class

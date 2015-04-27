@@ -2,10 +2,11 @@ package settings;
 
 public class DiscreteTreeSettings {
 
-	public String treeFilePath = null;
+	public String tree = null;
 	public String locations = null;
-	public String traitName = null;
-	public Integer numberOfIntervals = null;
+	public String trait = null;
+	public Integer intervals = null;
+	public String output = null;
 	
 	public DiscreteTreeSettings() {
 		
