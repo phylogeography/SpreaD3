@@ -3,24 +3,53 @@ package app;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import exceptions.AnalysisTypeArgumentsException;
+
+import settings.ContinuousTreeSettings;
+import settings.DiscreteTreeSettings;
+import settings.Settings;
+import test.ContinuousTreeTest;
 import utils.Arguments;
+import utils.Arguments.ArgumentException;
+import utils.Utils;
 
 public class Spread2ConsoleApp {
 
-	private Arguments analysisTypeArguments;
+	private Arguments	modeArguments;
+	private Arguments	otherArguments;
 	
-	private Arguments continuousTreeArguments;
 	
 	
 	private static final String HELP = "help";
-
-	private static final String ANALYSIS_TYPE = "analysis";
-	private static final String CONTINUOUS_TREE = "continuousTree";
-	private static final String DISCRETE_TREE = "discreteTree";
-
-	private static final String TREE_FILE = "tree";
+	private static final String READ = "read";
+	private static final String CREATE = "create";
+	
+	private static final String TREE = "tree";
+	private static final String TREES = "trees";
+	private static final String LOCATIONS = "locations";
+	private static final String LOG = "log";
 	private static final String TRAIT = "trait";
 	private static final String HPD = "hpd";
+	private static final String INTERVALS = "intervals";
+	
+	
+//	private Arguments args1 = new Arguments(new Arguments.Option[] {
+//			
+//			new Arguments.Option(HELP, "print this information and exit"),
+//			
+//            new Arguments.StringOption("mode",
+//                    new String[]{"read", //
+//                            "create", //
+//                    }, false, "specify mode"),
+//			
+//			new Arguments.StringOption("input",
+//                    new String[]{"read", //
+//                            "create", //
+//                    }, false, "specify mode")
+//			
+//			
+//			
+//	});
 	
 	
 	public Spread2ConsoleApp() {
@@ -29,193 +58,236 @@ public class Spread2ConsoleApp {
 		// ---DEFINITION---//
 		// //////////////////
 
-		analysisTypeArguments = new Arguments(new Arguments.Option[] {
+			modeArguments = new Arguments(new Arguments.Option[] {
 
 				new Arguments.Option(HELP, "print this information and exit"),
 
-				new Arguments.StringOption(ANALYSIS_TYPE, new String[] {
-						CONTINUOUS_TREE, //
-						DISCRETE_TREE //
-						}, false, "specify analysis type"),
-
-		});
-
-		
-		continuousTreeArguments = new Arguments(new Arguments.Option[] {
-
-				new Arguments.Option(HELP, "print this information and exit"),
-
-                new Arguments.StringOption(TREE_FILE, "",
-                        "path to the tree file"),
-
-                        new Arguments.StringOption(TRAIT, "",
-                                "location attribute name"),
-                                
-                                new Arguments.StringOption(HPD, "tree file",
-                                        "HPD attribute name"),
-                        
+				new Arguments.Option(READ, "read existing JSON file"),
+				
+				new Arguments.Option(CREATE, "create JSON from input files"),
+				
 		});
 		
 		
+//			otherArguments = new Arguments(new Arguments.Option[] {
+//
+//					new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
+//					
+//					new Arguments.StringOption(TREE, "", "tree file name"),
+//					
+//					new Arguments.StringOption(TRAIT, "", "location trait name"),
+//					
+//					new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
+//					
+//			});
+
+			Arguments	arg1 = new Arguments(new Arguments.Option[] {
+
+					new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
+					
+					new Arguments.StringOption(TREE, "", "tree file name"),
+					
+					new Arguments.StringOption(TRAIT, "", "location trait name"),
+					
+					new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
+					
+			});
+		
+			Arguments	arg2 = new Arguments(new Arguments.Option[] {
+
+					new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
+					
+					new Arguments.StringOption(LOG, "", "tree file name"),
+					
+			});
+			
+			Arguments	arg3 = new Arguments(new Arguments.Option[] {
+
+					new Arguments.StringOption(TREE, "", "tree file name"),
+					
+					new Arguments.StringOption(TRAIT, "", "location trait name"),
+					
+					new Arguments.IntegerOption(HPD, "hpd interval attribute name"),
+					
+			});
+		
+			
+			Arguments	arg4 = new Arguments(new Arguments.Option[] {
+
+                    new Arguments.StringOption("timeLine",
+                            new String[]{"tree", //
+                                    "file", //
+                            }, false, "how to create time intervals"),
+					
+					new Arguments.StringOption(TREES, "", "trees file name"),
+					
+					new Arguments.StringOption("file", "", "time intervals file name"),
+					
+			});
+			
 	}// END: Constructor
 
 	public void run(String[] args) {
 
+		if(args[0].contains(HELP)){
+			gracefullyExit(null, modeArguments);
+		} else if (args.length == 0) {
+            gracefullyExit("Empty or incorrect arguments list.", null);
+        }// END: help check
+		
+		//---SPLIT---//
+		
+		ArrayList<String[]> argsList = new ArrayList<String[]>();
+		int from = 0;
+		int to = 1;
+		argsList.add( Arrays.copyOfRange(args, from, to) );
+		from = 1;
+		to = args.length;
+		argsList.add( Arrays.copyOfRange(args, from, to ) );
+		String[] modeArgs = argsList.get(0);
+		String[] otherArgs = argsList.get(1);
+		
+		//---PARSE---//
+//		Utils.printArray(modeArgs);
+		
+		Settings settings = new Settings();
 		try {
-
-			String SPLIT_ANALYSIS_TYPE = ":";
 			
-            // ////////////////////////
-            // ---SPLIT ARGUMENTS ---//
-            // ////////////////////////
+			modeArguments.parseArguments(modeArgs);
 			
-            int from = 0;
-            int to = 0;
-            
-            ArrayList<String[]> argsList = new ArrayList<String[]>();
-            
-            for (String arg : args) {
+		} catch (ArgumentException e) {
+			gracefullyExit("", modeArguments);
+		}
+		
+		// ---INTERROGATE---//
+		
+		if (modeArguments.hasOption(HELP)) {
 
-                if (arg.equalsIgnoreCase(SPLIT_ANALYSIS_TYPE)) {
-                    argsList.add(Arrays.copyOfRange(args, from, to));
-                    from = to + 1;
-                }// END: split check
-
-                to++;
-            }// END: args loop
-
-            // add the remainder
-            argsList.add(Arrays.copyOfRange(args, from, args.length));
-            
-            if (args[0].contains(HELP)) {
-
-                gracefullyExit(null);
-                
-            } else if (argsList.size() == 0) {
-            	
-            	 gracefullyExit("Empty or incorrect arguments list.");
-            	 
-            } else if(argsList.size() > 2) { 
-            	
-            	gracefullyExit("Arguments list is too long.");
-            	
-            } else {
-            	
-            	//
-            	
-            }// END: failed split check
-            
-			// ////////////////////////////////////
-			// ---PARSE ANALYSIS TYPE ARGUMENT---//
-			// ////////////////////////////////////
-            
-            analysisTypeArguments.parseArguments(argsList.get(0));
-            
-			// ///////////////////
-			// ---INTERROGATE---//
-			// ///////////////////
-            
-			String option = null;
-
-			// Analysis type
-			if (analysisTypeArguments.hasOption(ANALYSIS_TYPE)) {
-
-				option = analysisTypeArguments.getStringOption(ANALYSIS_TYPE);
-
-				if (option.equalsIgnoreCase(CONTINUOUS_TREE)) {
-
-					//---PARSE---//
-					
-					continuousTreeArguments.parseArguments(argsList.get(1));
-					
-					//---INTERROGATE---//
-					
-					//Tree
-	                if (continuousTreeArguments.hasOption(TREE_FILE)) {
-
-	                 // TODO
-
-	                } else {
-	                    throw new RuntimeException("Tree file not specified.");
-	                }// END: Tree option check
-					
-					//Trait
-	                if (continuousTreeArguments.hasOption(TRAIT)) {
-
-	                 // TODO
-
-	                } else {
-	                	  throw new RuntimeException("Option " + TRAIT + " not specified.");
-	                }// END: Tree / Taxa option check
-	                
-					//Tree
-	                if (continuousTreeArguments.hasOption(HPD)) {
-
-	                 // TODO
-
-	                } else {
-	                    throw new RuntimeException("Option " + HPD + " not specified.");
-	                }// END: Tree / Taxa option check
-					
-				} else if (option.equalsIgnoreCase(DISCRETE_TREE)) {
-
-					//TODO: parse discrete tree arguments
-					System.out.println(DISCRETE_TREE);
-					
-				} else {
-
-					gracefullyExit("Unrecognized " + ANALYSIS_TYPE + " option");
-
-				}// END: option check
-
-			}// END: ANALYSIS_TYPE option check
-            
-            
-            
-            
+			gracefullyExit(null, modeArguments);
 			
+		}
+		
+		if(modeArguments.hasOption(CREATE)) {
 			
+			System.out.println("In create mode");
+			settings.create = true;
 			
+		} else if(modeArguments.hasOption(READ)) {
+			
+			System.out.println("In read mode");
+			settings.read = true;
+			
+		} else {
+			
+			gracefullyExit("Unrecognized option", modeArguments);
+			
+		}//END: mode check
+		
+		
+		
+		//---PARSE---//
+		
+        // recognises type of analysis from input files
+		if(Arrays.asList(otherArgs).contains("-"+LOCATIONS)) {
+			
+//			System.out.println("In Discrete mode");
 
+			if(Arrays.asList(otherArgs).contains("-"+TREE)) {
+				
+				System.out.println("In Discrete tree mode");
+				settings.discreteTree = true;
+				
+			} else if(Arrays.asList(otherArgs).contains("-"+LOG)) {
+				
+				System.out.println("In bayes factor mode");
+				settings.bayesFactors = true;
+				
+			} else {
+				
+				//TODO: print discrete usage options
+				gracefullyExit("Unrecognized option", null);
+				
+			}//END: tree/log input check
+			
+		} else {
+			
+			Utils.printArray(Arrays.asList(otherArgs).toArray());
+			
+			System.out.println("In Continuous mode");
+			
+			if(Arrays.asList(otherArgs).contains(TREES)) {
+				
+				System.out.println("In time slicer mode");
+				settings.timeSlicer = true;
+				
+			} else {
+				
+				System.out.println("In Continuous tree mode");
+				settings.continuousTree = true;
+				
+			}//END: continuous modes
+			
+		}//END: get intent logic 
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		// ---INTERROGATE---//
+		
+		
+		
 
-			// ////////////////////
-			// ---RUN ANALYSIS---//
-			// ////////////////////
-
-            System.out.println("Finito");
-            
-		} catch (Exception e) {
-
-			System.out.println(e.getMessage());
-
-			System.out.println();
-			printUsage(analysisTypeArguments);
-			System.out.println();
-
-			if (Spread2App.DEBUG) {
-				e.printStackTrace();
-			}
-			System.exit(1);
-
-		}// END: try-catch block
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 	}// END: run
 
-	private void gracefullyExit(String message) {
+	private void gracefullyExit(String message, Arguments arguments) {
+
+		if(Spread2App.DEBUG){
+			
+		}
+		
 		if (message != null) {
 			System.out.println(message);
 			System.out.println();
 		}
 
-		printUsage(analysisTypeArguments);
-
+		if (arguments != null) {
+			printUsage(arguments);
+		}
+		
 		System.exit(0);
 	}// END: gracefullyExit
 
 	private void printUsage(Arguments arguments) {
 
-		 arguments.printUsage("", "");
-		
+		arguments.printUsage("java -jar spread.jar", "");
+		 
 	}// END: printUsage
 
 }// END: class

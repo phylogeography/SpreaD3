@@ -46,12 +46,12 @@ public class DiscreteTreeTest {
 
 			String path = ("/home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/");
 
+			String locationFileName = "locationCoordinates_H5N1";
+			String treeFileName = "H5N1_HA_discrete_MCC.tre";
+			String traitName = "states";
 			int numberOfIntervals = 10;
 			
-			String treeFileName = "H5N1_HA_discrete_MCC.tre";
-			String locationFileName = "locationCoordinates_H5N1";
-			String traitName = "states";
-
+			
 			// ///////////////////////////////
 			// ---BUILD STRINGS FOR PATHS---//
 			// ///////////////////////////////
