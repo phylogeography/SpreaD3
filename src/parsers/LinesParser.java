@@ -19,23 +19,23 @@ import exceptions.LocationNotFoundException;
 
 public class LinesParser {
 
-	String tree;
 	String trait;
 	List<Location> locationsList;
+	RootedTree rootedTree;
 	
-	public LinesParser(String tree, String trait, List<Location> locationsList) {
+	public LinesParser(RootedTree rootedTree, String trait, List<Location> locationsList) {
 		
-		this.tree = tree;
 		this.trait = trait;
 		this.locationsList = locationsList;
+		this.rootedTree = rootedTree;
 		
 	}//END: Constructor
 	
 	public List<Line> parseLines() throws IOException, ImportException, LocationNotFoundException {
 		
-		TreeImporter importer = new NexusImporter(new FileReader(
-				tree));
-		RootedTree rootedTree = (RootedTree) importer.importNextTree();
+//		TreeImporter importer = new NexusImporter(new FileReader(
+//				tree));
+//		RootedTree rootedTree = (RootedTree) importer.importNextTree();
 		
 		List<Line> linesList = new LinkedList<Line>();
 		Location dummy;
@@ -47,7 +47,7 @@ public class LinesParser {
 				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, trait);
 				if(parentState.contains("+")) { 
 					String message = "Found tied state " + parentState + ".";
-					parentState = breakTiesRandomly(parentState);
+					parentState = Utils.breakTiesRandomly(parentState);
 					message += (" randomly choosing " + parentState + ".");
 					System.out.println(message);
 				}//END: tie check
@@ -55,7 +55,7 @@ public class LinesParser {
 				String nodeState = (String) Utils.getObjectNodeAttribute(node, trait);
 				if(nodeState.contains("+")) { 
 					String message = "Found tied state " + nodeState + ".";
-					nodeState = breakTiesRandomly(nodeState);
+					nodeState = Utils.breakTiesRandomly(nodeState);
 					message += (" Randomly choosing " + nodeState + ".");
 					System.out.println(message);
 				}//END: tie check
@@ -92,12 +92,5 @@ public class LinesParser {
 		return linesList;
 	}//END: parseLines
 	
-	private String breakTiesRandomly(String tiedState) {
-
-		String[] array = tiedState.split("\\+");
-		String state = (String) Utils.pickRand(array);
-		
-		return state;
-	}//END: breakTiesRandomly
 	
 }//END: class

@@ -1,17 +1,28 @@
 package app;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-import jebl.evolution.io.ImportException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import jebl.evolution.io.ImportException;
+import jebl.evolution.trees.RootedTree;
+
+import parsers.DiscretePolygonsParser;
 import parsers.LinesParser;
 import parsers.LocationsParser;
 
+import data.SpreadData;
+import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
+import data.structure.Polygon;
 
 import exceptions.AnalysisTypeArgumentsException;
 import exceptions.IllegalCharacterException;
@@ -36,6 +47,7 @@ public class Spread2ConsoleApp {
 	private static final String HELP = "help";
 	private static final String READ = "read";
 	private static final String CREATE = "create";
+	private static final String RENDER = "render";
 	
 	private static final String TREE = "tree";
 	private static final String TREES = "trees";
@@ -59,6 +71,8 @@ public class Spread2ConsoleApp {
 				new Arguments.Option(READ, "read existing JSON file"),
 				
 				new Arguments.Option(CREATE, "create JSON from input files"),
+				
+				new Arguments.Option(RENDER, "render from JSON file"),
 				
 		});
 		
@@ -114,11 +128,15 @@ public class Spread2ConsoleApp {
 	public void run(String[] args) {
 
 		if(args[0].contains(HELP)) {
-			//TODO: print all usage options
+			
+
 			gracefullyExit(null, modeArguments, null);
+
 		} else if (args.length == 0) {
-            gracefullyExit("Empty or incorrect arguments list.", null, null);
-        }// END: help check
+        
+			gracefullyExit("Empty or incorrect arguments list.", null, null);
+        
+		}// END: help check
 		
 		//---SPLIT---//
 		
@@ -162,6 +180,12 @@ public class Spread2ConsoleApp {
 			System.out.println("In read mode");
 			settings.read = true;
 			
+	} else if(modeArguments.hasOption(RENDER)) {
+			
+			System.out.println("In render mode");
+			settings.render = true;
+			
+			
 		} else {
 			
 			gracefullyExit("Unrecognized option", modeArguments, null);
@@ -187,7 +211,6 @@ public class Spread2ConsoleApp {
 				
 			} else {
 				
-				//TODO: print discrete usage options
 				gracefullyExit("Unrecognized option", null, null);
 				
 			}//END: tree/log input check
@@ -262,32 +285,88 @@ public class Spread2ConsoleApp {
 			
 			// ---RUN---//
 			
+			List<Location> locationsList = null;
+			List<Polygon> polygonsList= null;
+			List<Line> linesList = null;
+			
+			// ---IMPORT---//
+
+			RootedTree rootedTree = null;
+			
 			try {
 				
-				LocationsParser locationsParser = new LocationsParser(
-						settings.discreteTreeSettings.locations);
+				rootedTree = Utils.importRootedTree(settings.discreteTreeSettings.tree);
+				
+			} catch (IOException | ImportException e1) {
 
-				List<Location> locationsList = locationsParser.parseLocations();
+				gracefullyExit(e1.getMessage(), args1, e1);
+				
+			}//END: try-catch
+			
+			
+			try {
+				
+				// ---PARSE AND FILL STRUCTURES---//
+				
+				LocationsParser locationsParser = new LocationsParser(
+						settings.discreteTreeSettings.locations //
+						);
+				locationsList = locationsParser.parseLocations();
 				
 				System.out.println("Parsed locations");
 				
-				
-				
-				LinesParser linesParser = new LinesParser(settings.discreteTreeSettings.tree, settings.discreteTreeSettings.trait, locationsList);
-				List<Line> linesList = linesParser.parseLines();
+				LinesParser linesParser = new LinesParser(rootedTree, //
+						settings.discreteTreeSettings.trait, //
+						locationsList //
+						);
+			linesList = linesParser.parseLines();
 				
 				System.out.println("Parsed lines");
 				
 				
+				DiscretePolygonsParser discretePolygonsParser = new DiscretePolygonsParser(rootedTree, //
+						settings.discreteTreeSettings.trait, //
+						settings.discreteTreeSettings.intervals, //
+						locationsList //
+						); 
+		 polygonsList = discretePolygonsParser.parseDiscretePolygons();
 				
-				
-				
-				
-				
+				 System.out.println("Parsed discrete polygons");
+				 
 			} catch (IOException | IllegalCharacterException | ImportException | LocationNotFoundException e) {
 
 				gracefullyExit(e.getMessage(), args1, e);
 
+			}//END: try-catch
+			
+			// ---EXPORT TO JSON---//
+			
+			try {
+				
+			List<Layer> layersList = new LinkedList<Layer>();
+
+			Layer discreteLayer = new Layer(settings.discreteTreeSettings.tree,
+					"Discrete tree visualisation", linesList, polygonsList);
+
+			layersList.add(discreteLayer);
+
+			SpreadData data = new SpreadData(locationsList, layersList);
+
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String s = gson.toJson(data);
+
+			File file = new File(settings.discreteTreeSettings.output);
+			FileWriter fw;
+			fw = new FileWriter(file);
+			fw.write(s);
+			fw.close();
+				
+			 System.out.println("Created JSON file");
+			
+			} catch (IOException e) {
+	
+				gracefullyExit(e.getMessage(), args1, e);
+				
 			}//END: try-catch
 			
 			
@@ -373,6 +452,7 @@ public class Spread2ConsoleApp {
 
 	private void printUsage(Arguments arguments) {
 
+		//TODO: print all usage options
 		arguments.printUsage("java -jar spread.jar", "");
 		 
 	}// END: printUsage

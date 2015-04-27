@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 import jebl.evolution.graphs.Node;
+import jebl.evolution.io.ImportException;
+import jebl.evolution.io.NexusImporter;
+import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
 
 public class Utils {
@@ -73,6 +77,22 @@ public class Utils {
 		return lines.toArray(new String[lines.size()]);
 	}// END: readLines
 
+	public static String breakTiesRandomly(String tiedState) {
+
+		String[] array = tiedState.split("\\+");
+		String state = (String) Utils.pickRand(array);
+		
+		return state;
+	}//END: breakTiesRandomly
+	
+	public static RootedTree importRootedTree(String tree) throws IOException, ImportException {
+		TreeImporter importer = new NexusImporter(new FileReader(
+				tree));
+		RootedTree rootedTree = (RootedTree) importer.importNextTree();
+		
+		return rootedTree;
+	}//END: importRootedTree
+	
 	// /////////////////////////
 	// ---TODO: PRINT UTILS---//
 	// /////////////////////////

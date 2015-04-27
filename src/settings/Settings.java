@@ -5,6 +5,7 @@ public class Settings {
 	
 	public boolean create = false;
 	public boolean read = false;
+	public boolean render = false;
 	
 	
 	public boolean discreteTree = false;
