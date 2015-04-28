@@ -33,10 +33,6 @@ public class LinesParser {
 	
 	public List<Line> parseLines() throws IOException, ImportException, LocationNotFoundException {
 		
-//		TreeImporter importer = new NexusImporter(new FileReader(
-//				tree));
-//		RootedTree rootedTree = (RootedTree) importer.importNextTree();
-		
 		List<Line> linesList = new LinkedList<Line>();
 		Location dummy;
 		for (Node node : rootedTree.getNodes()) {

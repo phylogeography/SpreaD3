@@ -76,7 +76,7 @@ public class Spread2ConsoleApp {
 				
 		});
 		
-		
+		// discrete tree arguments
 				args1 = new Arguments(new Arguments.Option[] {
 
 					new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
@@ -90,7 +90,8 @@ public class Spread2ConsoleApp {
 					new Arguments.StringOption(OUTPUT, "", "output file name"),
 					
 			});
-		
+	
+				// bayes factor arguments
 				args2 = new Arguments(new Arguments.Option[] {
 
 					new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
@@ -99,6 +100,7 @@ public class Spread2ConsoleApp {
 					
 			});
 			
+				// continuous arguments
 				args3 = new Arguments(new Arguments.Option[] {
 
 					new Arguments.StringOption(TREE, "", "tree file name"),
@@ -109,7 +111,7 @@ public class Spread2ConsoleApp {
 					
 			});
 		
-			
+				// time slicer arguments
 				args4 = new Arguments(new Arguments.Option[] {
 
                     new Arguments.StringOption("timeLine",
@@ -129,7 +131,6 @@ public class Spread2ConsoleApp {
 
 		if(args[0].contains(HELP)) {
 			
-
 			gracefullyExit(null, modeArguments, null);
 
 		} else if (args.length == 0) {

@@ -280,6 +280,21 @@ public class DiscreteTreeTest {
 			fw.close();
 			
 			
+			
+			//TODO: read in and render KML
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		} catch (IllegalCharacterException e) {
 
 			System.out.println("Entry " + e.getExaminedString()
