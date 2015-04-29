@@ -1,23 +1,33 @@
 package test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+
+import org.joda.time.DateTime;
+
+import jebl.evolution.graphs.Node;
+import jebl.evolution.io.ImportException;
+import jebl.evolution.io.NexusImporter;
+import jebl.evolution.io.TreeImporter;
+import jebl.evolution.trees.RootedTree;
+import kmlframework.kml.KmlException;
+import renderers.KMLRenderer;
+import utils.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import app.Spread2App;
-
-import utils.Utils;
 
 import data.SpreadData;
 import data.structure.Coordinate;
@@ -28,17 +38,9 @@ import data.structure.Polygon;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
 
-import jebl.evolution.graphs.Node;
-import jebl.evolution.io.ImportException;
-import jebl.evolution.io.NexusImporter;
-import jebl.evolution.io.TreeImporter;
-import jebl.evolution.trees.RootedTree;
-
 public class DiscreteTreeTest {
 
-	public static void testDiscreteTreeToJSON() {
-
-		try {
+	public static void testDiscreteTreeToJSON() throws IOException, ImportException, IllegalCharacterException, LocationNotFoundException, KmlException, ParseException {
 
 			// /////////////////////
 			// ---PARSE STRINGS---//
@@ -51,6 +53,8 @@ public class DiscreteTreeTest {
 			String traitName = "states";
 			int numberOfIntervals = 10;
 			
+			//YYYY-MM-DD
+			String endTime = "1970-01-03";
 			
 			// ///////////////////////////////
 			// ---BUILD STRINGS FOR PATHS---//
@@ -59,7 +63,7 @@ public class DiscreteTreeTest {
 			String treefilePath = path.concat(treeFileName);
 			String locationFilePath = path.concat(locationFileName);
 
-			String traitSetName = traitName.concat(".set");
+//			String traitSetName = traitName.concat(".set");
 
 			// //////////////
 			// ---IMPORT---//
@@ -68,8 +72,22 @@ public class DiscreteTreeTest {
 			TreeImporter importer = new NexusImporter(new FileReader(
 					treefilePath));
 			RootedTree tree = (RootedTree) importer.importNextTree();
-
+			
 			double rootHeight = tree.getHeight(tree.getRootNode());
+			
+			
+			//TODO: EXPERIMENTAL
+//			http://www.joda.org/joda-time/quickstart.html
+			
+//			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+			Date juDate = formatter.parse(endTime);
+//            cal.setTime(date);
+			DateTime date = new DateTime(juDate);
+			
+			
+//			date = date.;
+            System.out.println( date.toLocalDate());
 			
 			// /////////////////
 			// ---LOCATIONS---//
@@ -92,8 +110,9 @@ public class DiscreteTreeTest {
 							illegalCharacter);
 				}
 
-				Double longitude = Double.valueOf(line[1]);
-				Double latitude = Double.valueOf(line[2]);
+				// TODO: change this order everywhere, latitude, goes first
+				Double longitude = Double.valueOf(line[2]);
+				Double latitude = Double.valueOf(line[1]);
 
 				//create Location and add to the list of Locations
 				Location location = new Location(locationName, "",
@@ -269,10 +288,10 @@ public class DiscreteTreeTest {
 
 			layersList.add(discreteLayer);
 
-			SpreadData data = new SpreadData(locationsList, layersList);
+			SpreadData output = new SpreadData(locationsList, layersList);
 
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			String s = gson.toJson(data);
+			String s = gson.toJson(output);
 
 			File file = new File("test.json");
 			FileWriter fw = new FileWriter(file);
@@ -280,47 +299,18 @@ public class DiscreteTreeTest {
 			fw.close();
 			
 			
+//			https://stackoverflow.com/questions/5490789/json-parsing-using-gson-for-java
+			Reader reader = new  FileReader("/home/filip/Dropbox/JavaProjects/Spread2/test.json");
+			Gson gson2 = new GsonBuilder().create();
+            SpreadData input = gson2.fromJson(reader, SpreadData.class);
+//			System.out.println(input.getLocations().get(0).getId());
 			
-			//TODO: read in and render KML
+			KMLRenderer renderer = new KMLRenderer(input);
+			renderer.render();
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			System.out.println("Rendered KML.");
 			
 			
-			
-		} catch (IllegalCharacterException e) {
-
-			System.out.println("Entry " + e.getExaminedString()
-					+ " contains illegal character " + e.getIllegalCharacter());
-
-		}  catch (LocationNotFoundException e) {
-			
-			System.out.println("Location " + e.getNotFoundLocationId()
-					+ " not found in the locations coordinate file.");
-
-			if (Spread2App.DEBUG) e.printStackTrace();
-			
-		} catch (FileNotFoundException e) {
-
-			System.out.println(e.getMessage());
-
-		} catch (IOException e) {
-
-			throw new RuntimeException(e);
-			
-		} catch (ImportException e) {
-
-			throw new RuntimeException(e);
-
-		}// END: try-catch
-
 
 	}// END: testDiscreteTreeToJSON
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import data.structure.Layer;
 import data.structure.Location;
+import data.structure.TimeLine;
 
 /**
  * @author Andrew Rambaut
@@ -12,11 +13,13 @@ import data.structure.Location;
  */
 public class SpreadData {
 
+	private final TimeLine timeLine;
 	private final List<Location> locations;// = new LinkedList<Location>();
 	private final List<Layer> layers;// = new LinkedList<Layer>();
 
 	public SpreadData(List<Location> locations, List<Layer> layers) {
 
+		this.timeLine = null; //TODO
 		this.locations = locations;
 		this.layers = layers;
 
@@ -30,4 +33,6 @@ public class SpreadData {
 		return layers;
 	}
 
+//	public hasLocations()
+	
 }// END: class

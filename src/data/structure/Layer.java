@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Layer {
-
-	private final String label;
+	
+	private final String id;
 	private final String description;
 	private final List<Polygon> polygons;
+
 	private final List<Line> lines;
 
-	public Layer(String label, //
+	public Layer(String id, //
 			String description, //
 			List<Line> lines, //
 			List<Polygon> polygons //
@@ -24,17 +25,25 @@ public class Layer {
 		this.lines.addAll(lines);
 		this.polygons.addAll(polygons);
 
-		this.label = label;
+		this.id = id;
 		this.description = description;
 
+	}//END: Constructor
+
+	public List<Line> getLines() {
+		return lines;
 	}
 
-	public String getLabel() {
-		return label;
+	public List<Polygon> getPolygons() {
+		return polygons;
+	}
+	
+	public String getId() {
+		return id;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-}
+}//END: class

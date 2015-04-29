@@ -8,12 +8,12 @@ public class Location {
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
 	private final String id;
+	private final String description;	
 	private final Polygon polygon;
-	private final String label;
 	private final Coordinate coordinate;
 
 	public Location(String id, //
-			String label, //
+			String description, //
 			Polygon polygon, //
 			Map<String, Object> attributes //
 	) {
@@ -21,7 +21,7 @@ public class Location {
 		super();
 
 		this.id = id;
-		this.label = label;
+		this.description = description;
 		this.coordinate = null;
 		this.polygon = polygon;
 
@@ -32,7 +32,7 @@ public class Location {
 	}
 
 	public Location(String id, //
-			String label, //
+			String description, //
 			Coordinate coordinate, //
 			Map<String, Object> attributes //
 	) {
@@ -40,7 +40,7 @@ public class Location {
 		super();
 
 		this.id = id;
-		this.label = label;
+		this.description = description;
 		this.coordinate = coordinate;
 		this.polygon = null;
 
@@ -54,12 +54,12 @@ public class Location {
 		return id;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+	
 	public Polygon getPolygon() {
 		return polygon;
-	}
-
-	public String getLabel() {
-		return label;
 	}
 
 	public Coordinate getCoordinate() {

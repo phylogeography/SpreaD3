@@ -9,7 +9,6 @@ public class Polygon {
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
 	private final Location location;
-
 	private final List<Coordinate> coordinates;
 	private final double time;
 
