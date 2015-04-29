@@ -110,13 +110,13 @@ public class DiscreteTreeTest {
 							illegalCharacter);
 				}
 
-				// TODO: change this order everywhere, latitude, goes first
-				Double longitude = Double.valueOf(line[2]);
+				// TODO: change this order everywhere, latitude goes first
 				Double latitude = Double.valueOf(line[1]);
+				Double longitude = Double.valueOf(line[2]);
 
 				//create Location and add to the list of Locations
 				Location location = new Location(locationName, "",
-						new Coordinate(longitude, latitude), null);
+						new Coordinate( latitude, longitude), null);
 				locationsList.add(location);
 
 			}// END: i loop

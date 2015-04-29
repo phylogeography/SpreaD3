@@ -11,7 +11,8 @@ public class Polygon {
 	private final Location location;
 	private final List<Coordinate> coordinates;
 	private final double time;
-
+	private final boolean hasCentroid;
+	
 	public Polygon(List<Coordinate> coordinates, //
 			double time, //
 			Map<String, Object> attributes //
@@ -20,7 +21,8 @@ public class Polygon {
 		super();
 
 		this.location = null;
-
+        this.hasCentroid = false;
+		
 		this.coordinates = coordinates;
 		this.time = time;
 
@@ -38,6 +40,7 @@ public class Polygon {
 		super();
 
 		this.location = centroid;
+		this.hasCentroid = true;
 		this.coordinates = null;
 		this.time = time;
 
@@ -46,7 +49,7 @@ public class Polygon {
 		}
 	}
 
-	public List<Coordinate> getCoordinateList() {
+	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
@@ -58,4 +61,8 @@ public class Polygon {
 		return location;
 	}
 
+	public boolean hasCentroid() {
+		return hasCentroid;
+	}
+	
 }// END: class
