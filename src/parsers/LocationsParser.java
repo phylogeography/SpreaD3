@@ -40,12 +40,13 @@ public class LocationsParser {
 			
 			}
 
-			Double longitude = Double.valueOf(line[1]);
-			Double latitude = Double.valueOf(line[2]);
+			Double latitude = Double.valueOf(line[1]);
+			Double longitude = Double.valueOf(line[2]);
 
+			Coordinate coordinate = new Coordinate( latitude, longitude) ;
+			
 			//create Location and add to the list of Locations
-			Location location = new Location(locationName, "",
-					new Coordinate(longitude, latitude), null);
+			Location location = new Location(locationName, "", coordinate, null);
 			locationsList.add(location);
 
 		}// END: i loop

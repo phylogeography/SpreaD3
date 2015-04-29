@@ -28,16 +28,18 @@ public class KMLRenderer {
 	public static final double EARTH_RADIUS = 6371.0;
 	
 	private SpreadData data;
+	private String output;
 	
-	public KMLRenderer(SpreadData data) {
+	public KMLRenderer(SpreadData data, String output) {
 		
 		this.data = data;
+		this.output = output;
 		
 	}//END: Constructor
 	
 	public void render() throws KmlException, IOException {
 		
-		PrintWriter writer = new PrintWriter(new File("test.kml"));
+		PrintWriter writer = new PrintWriter(new File(output));
 		
 		// create a new KML Document
 		Kml kml = new Kml();

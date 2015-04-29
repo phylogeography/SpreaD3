@@ -2,7 +2,7 @@ package settings;
 
 public class Settings {
 
-	
+	// modes
 	public boolean create = false;
 	public boolean read = false;
 	public boolean render = false;
@@ -20,24 +20,11 @@ public class Settings {
 	public boolean timeSlicer = false;
 	// TODO	
 	
+	public KmlRendererSettings kmlRendererSettings = null;
 	
 	public Settings() {
 		
 	}//END: Constructor
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

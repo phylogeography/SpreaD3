@@ -110,7 +110,6 @@ public class DiscreteTreeTest {
 							illegalCharacter);
 				}
 
-				// TODO: change this order everywhere, latitude goes first
 				Double latitude = Double.valueOf(line[1]);
 				Double longitude = Double.valueOf(line[2]);
 
@@ -305,7 +304,7 @@ public class DiscreteTreeTest {
             SpreadData input = gson2.fromJson(reader, SpreadData.class);
 //			System.out.println(input.getLocations().get(0).getId());
 			
-			KMLRenderer renderer = new KMLRenderer(input);
+			KMLRenderer renderer = new KMLRenderer(input, "test.kml");
 			renderer.render();
 			
 			System.out.println("Rendered KML.");

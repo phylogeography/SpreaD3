@@ -35,3 +35,34 @@ h1. TODO
 * Parsers work independently (if only locations supplied then only locations will be parsed).
 * Uncaught exception handler (for bug reports).
 * Processing large tree distributions on GPUs. For this we'd probably need to write a small library and JNI to it.  
+* In circular polygons change:
+  "polygons": [
+        {
+          "attributes": {
+            "count": 1
+          },
+          "location": {
+            "attributes": {},
+            "id": "HongKong",
+            "description": "",
+            "coordinate": {
+              "latitude": 22.3,
+              "longitude": 114.167,
+              "altitude": 0.0
+            }
+          },
+          "time": 10.111956278366861,
+          "hasCentroid": true
+        },
+
+to
+
+      "polygons": [
+        {
+          "attributes": {
+            "count": 1
+          },
+          "location_id": "HongKong"         
+          "time": 10.111956278366861,
+          "hasCentroid": true
+        },
