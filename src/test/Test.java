@@ -9,8 +9,8 @@ public class Test {
 
 		try {
 
-//			ContinuousTreeTest.testContinousTreeToJSON();
-			DiscreteTreeTest.testDiscreteTreeToJSON();
+			ContinuousTreeTest.testContinousTreeToJSON();
+//			DiscreteTreeTest.testDiscreteTreeToJSON();
 
 			System.out.println("Finished");
 

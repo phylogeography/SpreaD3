@@ -132,19 +132,38 @@ public class KMLRenderer {
 
 		Feature feature = null;
 		
+		
+		Coordinate startCoordinate;
+		Coordinate endCoordinate;
+		String name = "";
+		
+		if(line.connectsLocations()) {
+			
 		Location startLocation = line.getStartLocation();
 		Location endLocation = line.getEndLocation();
 		
-		Coordinate startCoordinate = startLocation.getCoordinate();
-		Coordinate endCoordinate = endLocation.getCoordinate();
+		name = startLocation.getId() + " to " + endLocation.getId();
 		
+		 startCoordinate = startLocation.getCoordinate();
+		 endCoordinate = endLocation.getCoordinate();
+		 
+		} else {
+			
+			startCoordinate = line.getStartCoordinate();
+			endCoordinate = line.getEndCoordinate();
+			
+		}
+		
+//		System.out.println(startCoordinate.getLatitude() + " " + startCoordinate.getLongitude());
 		Double startTime = line.getStartTime();
 		
 		//TODO: if line is segmented name the folder and put all the segments inside it
 		
 		feature = generateLineSegment(startCoordinate,endCoordinate, startTime );
-		feature.setName(startLocation.getId() + " to " + endLocation.getId());
-//		feature.setDescription(startLocation.getId() + " to " + endLocation.getId());
+		
+		if (line.connectsLocations()) {
+			feature.setName(name);
+		}
 		
 		return feature;
 	}//END: generateLine
@@ -196,15 +215,30 @@ public class KMLRenderer {
 		LinearRing linearRing = new LinearRing();
 		
 		List<Point> points = new ArrayList<Point>();
-		if(polygon.hasCentroid()) {
+		if(polygon.hasLocation()) {
 			
-			Location centroid = polygon.getCentroid();
+//			Location centroid = polygon.getCentroid();
+			String locationId = polygon.getLocationId();
+			
+			Location dummy = new Location(locationId, "", new Coordinate(0.0, 0.0), null);
+			Integer centroidIndex = data.getLocations().indexOf(dummy);
+			Location centroid = data.getLocations().get(centroidIndex);
+			
+			
 			int numPoints = 36;
 			//TODO: radius mapping: map to an attribute from Map chosen by the user
 			double radius = 100;
 			points.addAll(generateCircle(centroid, radius, numPoints));
 			
-		}
+		} else {
+			
+			for(Coordinate coordinate: polygon.getCoordinates()) {
+				
+				points.add(generatePoint(coordinate));
+				
+			}//END: coordinates loop
+			
+		}//END: centroid check
 		
 		linearRing.setCoordinates(points);
 		

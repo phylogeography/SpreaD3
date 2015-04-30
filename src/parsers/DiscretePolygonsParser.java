@@ -30,9 +30,9 @@ public class DiscretePolygonsParser {
 		
 	}//END: Constructor
 	
-	public  List<Polygon> parseDiscretePolygons() throws LocationNotFoundException {
+	public  LinkedList<Polygon> parseDiscretePolygons() throws LocationNotFoundException {
 		
-        List<Polygon> polygonsList = new LinkedList<Polygon>();
+		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 		
     	double rootHeight = rootedTree.getHeight(rootedTree.getRootNode());
         double delta = rootHeight / intervals;
@@ -110,7 +110,7 @@ public class DiscretePolygonsParser {
 				
 				Map<String, Object> attributes = new HashMap<String, Object>();
 				attributes.put("count", locationCount);
-				Polygon polygon = new Polygon(location, sliceHeights[i], attributes);
+				Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
 				polygonsList.add(polygon);
 				
 				}//END: positive count check

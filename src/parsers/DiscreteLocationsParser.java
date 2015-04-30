@@ -9,16 +9,16 @@ import data.structure.Coordinate;
 import data.structure.Location;
 import exceptions.IllegalCharacterException;
 
-public class LocationsParser {
+public class DiscreteLocationsParser {
 
 	private String locations;
-	private List<Location> locationsList;
+	private LinkedList<Location> locationsList;
 	
-	public LocationsParser(String locations) {
+	public DiscreteLocationsParser(String locations) {
 		this.locations = locations;
 	}//END: Constructor
 	
-	public List<Location> parseLocations() throws IOException, IllegalCharacterException {
+	public LinkedList<Location> parseLocations() throws IOException, IllegalCharacterException {
 		
 //		List<Location> 
 		this.locationsList = new LinkedList<Location>();

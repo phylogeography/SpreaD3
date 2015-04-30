@@ -12,7 +12,8 @@ public class Line {
 
 	private final Location startLocation;
 	private final Location endLocation;
-
+	private final boolean connectsLocations;
+	
 	private final double startTime;
 	private final double endTime;
 	
@@ -27,7 +28,8 @@ public class Line {
 		
 		this.startLocation = startLocation;
 		this.endLocation = endLocation;
-
+		this.connectsLocations = true;
+		
 		this.startTime = startTime;
 		this.endTime = endTime;
 
@@ -56,7 +58,8 @@ public class Line {
 
 		this.startLocation = null;
 		this.endLocation = null;
-
+		this.connectsLocations = false;
+		
 		if(  attributes != null) {
 		this.attributes.putAll(attributes);
 		}
@@ -87,4 +90,8 @@ public class Line {
 		return endLocation;
 	}
 
+	public boolean connectsLocations(){
+		return connectsLocations;
+	}
+	
 }// END: class

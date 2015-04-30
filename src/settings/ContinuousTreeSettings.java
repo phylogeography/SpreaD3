@@ -2,9 +2,16 @@ package settings;
 
 public class ContinuousTreeSettings {
 
-	public String treeFilePath = null;
-	public String traitName = null;
+	// path to tree file
+	public String tree = null;
+	// location attribute name
+	public String locationTrait = null;
+	// hpd attribute name
 	public String hpd = null;
+	// trait attribute names
+	public String[] traits = null;
+	// path to json output file 
+	public String output = null;
 	
 	public ContinuousTreeSettings() {
 	}//END: Constructor

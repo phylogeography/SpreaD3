@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
@@ -85,15 +86,14 @@ public class DiscreteTreeTest {
 //            cal.setTime(date);
 			DateTime date = new DateTime(juDate);
 			
-			
 //			date = date.;
             System.out.println( date.toLocalDate());
 			
 			// /////////////////
 			// ---LOCATIONS---//
 			// /////////////////
-           // TODO: this needs to run first, rest can run concurrently
-			List<Location> locationsList = new LinkedList<Location>();
+
+            LinkedList<Location> locationsList = new LinkedList<Location>();
 			
 			// create list from the coordinates file
 			String[] lines = Utils.readLines(locationFilePath);
@@ -124,7 +124,7 @@ public class DiscreteTreeTest {
 			// ---LINES---//
 			// /////////////
 
-			List<Line> linesList = new LinkedList<Line>();
+			LinkedList<Line> linesList = new LinkedList<Line>();
 			Location dummy;
 			
 			for (Node node : tree.getNodes()) {
@@ -181,7 +181,7 @@ public class DiscreteTreeTest {
 			// ---POLYGONS---//
 			// ////////////////
 			
-            List<Polygon> polygonsList = new LinkedList<Polygon>();
+			LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 			
             double delta = rootHeight / numberOfIntervals;
     		
@@ -190,9 +190,6 @@ public class DiscreteTreeTest {
             	sliceHeights[i] = rootHeight - ((i + 1) * delta);
     		}
             
-            // TODO
-//            Utils.printArray(sliceHeights);
-
 			for (int i = 0; i < sliceHeights.length; i++) {
 
 				for (Location location : locationsList) {
@@ -264,7 +261,7 @@ public class DiscreteTreeTest {
 					
 					Map<String, Object> attributes = new HashMap<String, Object>();
 					attributes.put("count", locationCount);
-					Polygon polygon = new Polygon(location, sliceHeights[i], attributes);
+					Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
 					polygonsList.add(polygon);
 					
 					}//END: positive count check
@@ -280,7 +277,7 @@ public class DiscreteTreeTest {
 			// ---LAYER---//
 			// /////////////
             
-			List<Layer> layersList = new LinkedList<Layer>();
+			LinkedList<Layer> layersList = new LinkedList<Layer>();
 
 			Layer discreteLayer = new Layer(treeFileName,
 					"Discrete tree visualisation", linesList, polygonsList);
@@ -297,13 +294,22 @@ public class DiscreteTreeTest {
 			fw.write(s);
 			fw.close();
 			
+		// /////////////////
+		// ---READ JSON---//
+		// /////////////////
 			
-//			https://stackoverflow.com/questions/5490789/json-parsing-using-gson-for-java
 			Reader reader = new  FileReader("/home/filip/Dropbox/JavaProjects/Spread2/test.json");
 			Gson gson2 = new GsonBuilder().create();
             SpreadData input = gson2.fromJson(reader, SpreadData.class);
+            
 //			System.out.println(input.getLocations().get(0).getId());
 			
+            System.out.println("Imported JSON.");
+            
+		// //////////////
+		// ---RENDER---//
+		// //////////////
+            
 			KMLRenderer renderer = new KMLRenderer(input, "test.kml");
 			renderer.render();
 			

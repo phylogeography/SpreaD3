@@ -8,10 +8,12 @@ public class Polygon {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
-	private final Location location;
+//	private final Location location;
+	private final String location;
+	private final boolean hasLocation;
+	
 	private final List<Coordinate> coordinates;
 	private final double time;
-	private final boolean hasCentroid;
 	
 	public Polygon(List<Coordinate> coordinates, //
 			double time, //
@@ -21,7 +23,7 @@ public class Polygon {
 		super();
 
 		this.location = null;
-        this.hasCentroid = false;
+        this.hasLocation = false;
 		
 		this.coordinates = coordinates;
 		this.time = time;
@@ -32,15 +34,18 @@ public class Polygon {
 
 	}// END: Polygon
 
-	public Polygon(Location centroid, //
+	public Polygon(
+//			Location centroid, //
+			String location, //
 			double time, //
 			Map<String, Object> attributes //
 	) {
 
 		super();
 
-		this.location = centroid;
-		this.hasCentroid = true;
+		this.location = location;
+//		this.location = centroid;
+		this.hasLocation = true;
 		this.coordinates = null;
 		this.time = time;
 
@@ -57,12 +62,17 @@ public class Polygon {
 		return time;
 	}
 
-	public Location getCentroid() {
+	public String getLocationId() {
 		return location;
 	}
 
-	public boolean hasCentroid() {
-		return hasCentroid;
+	
+//	public Location getCentroid() {
+//		return location;
+//	}
+
+	public boolean hasLocation() {
+		return hasLocation;
 	}
 	
 }// END: class

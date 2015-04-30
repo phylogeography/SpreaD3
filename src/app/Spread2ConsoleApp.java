@@ -21,8 +21,8 @@ import kmlframework.kml.KmlException;
 
 import parsers.DiscretePolygonsParser;
 import parsers.DiscreteTreeParser;
-import parsers.LinesParser;
-import parsers.LocationsParser;
+import parsers.DiscreteLinesParser;
+import parsers.DiscreteLocationsParser;
 
 import data.SpreadData;
 import data.structure.Layer;
@@ -63,7 +63,8 @@ public class Spread2ConsoleApp {
 	private static final String TREES = "trees";
 	private static final String LOCATIONS = "locations";
 	private static final String LOG = "log";
-	private static final String TRAIT = "trait";
+	private static final String LOCATION_TRAIT = "locationTrait";
+	private static final String TRAITS = "traits";
 	private static final String HPD = "hpd";
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
@@ -100,7 +101,7 @@ public class Spread2ConsoleApp {
 
 		new Arguments.StringOption(TREE, "", "tree file name"),
 
-		new Arguments.StringOption(TRAIT, "", "location trait name"),
+		new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
 
 		new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
 
@@ -122,10 +123,12 @@ public class Spread2ConsoleApp {
 
 		new Arguments.StringOption(TREE, "", "tree file name"),
 
-		new Arguments.StringOption(TRAIT, "", "location trait name"),
+		new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
 
-		new Arguments.IntegerOption(HPD, "hpd interval attribute name"),
+		new Arguments.StringOption(HPD, "", "hpd interval attribute name"),
 
+		new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed")
+		
 		});
 
 		// time slicer arguments
@@ -141,8 +144,6 @@ public class Spread2ConsoleApp {
 
 		});
 
-		
-		
 		renderArguments = new Arguments(new Arguments.Option[] {
 
 				new Arguments.StringOption(JSON, "", "json input file name"),
@@ -264,7 +265,6 @@ public class Spread2ConsoleApp {
 
 			} else {
 				
-				//TODO: print all relevant arguments
 				gracefullyExit("Unrecognized option", null, null);
 				
 			}// END: continuous modes
@@ -299,10 +299,10 @@ public class Spread2ConsoleApp {
 
 			}
 
-			if (args1.hasOption(TRAIT)) {
+			if (args1.hasOption(LOCATION_TRAIT)) {
 
-				settings.discreteTreeSettings.trait = args1
-						.getStringOption(TRAIT);
+				settings.discreteTreeSettings.locationTrait = args1
+						.getStringOption(LOCATION_TRAIT);
 
 			}
 
@@ -361,8 +361,6 @@ public class Spread2ConsoleApp {
 
 		} else if (settings.bayesFactors) {
 
-			// TODO
-
 			// ---PARSE---//
 
 			// ---INTERROGATE---//
@@ -371,17 +369,50 @@ public class Spread2ConsoleApp {
 
 		} else if (settings.continuousTree) {
 
-			// TODO
-
+			settings.continuousTreeSettings = new ContinuousTreeSettings();
+			
 			// ---PARSE---//
-
+			
+			try {
+				args3.parseArguments(otherArgs);
+			} catch (ArgumentException e) {
+				
+				gracefullyExit(e.getMessage(), args3, e);
+			}
+			
 			// ---INTERROGATE---//
 
+			if(args3.hasOption(TREE)) {
+				settings.continuousTreeSettings.tree = args3.getStringOption(TREE);
+			}
+
+			if(args3.hasOption(LOCATION_TRAIT)) {
+				settings.continuousTreeSettings.locationTrait = args3.getStringOption(LOCATION_TRAIT);
+			}
+
+			if(args3.hasOption(HPD)) {
+				settings.continuousTreeSettings.hpd = args3.getStringOption(HPD);
+			}
+
+			if(args3.hasOption(TRAITS)) {
+				settings.continuousTreeSettings.traits = args3.getStringArrayOption(TRAITS);
+			}
+			
+			if (args3.hasOption(OUTPUT)) {
+				settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
+			}//END: option check
+			
+			//TODO
 			// ---RUN---//
+			
+			
+			
+			
+			
+			
+			
 
 		} else if (settings.timeSlicer) {
-
-			// TODO
 
 			// ---PARSE---//
 
@@ -402,7 +433,6 @@ public class Spread2ConsoleApp {
 			
 			
 			// ---PARSE---//
-			//TODO: parse input
 			//TODO: parse style choices
 			
 			try {
@@ -483,7 +513,6 @@ public class Spread2ConsoleApp {
 
 	private void printUsage(Arguments arguments) {
 
-		// TODO: print all usage options
 		arguments.printUsage("java -jar spread.jar", "");
 
 	}// END: printUsage

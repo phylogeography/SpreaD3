@@ -17,30 +17,31 @@ import data.structure.Line;
 import data.structure.Location;
 import exceptions.LocationNotFoundException;
 
-public class LinesParser {
+public class DiscreteLinesParser {
 
-	String trait;
+	String locationTrait;
 	List<Location> locationsList;
 	RootedTree rootedTree;
 	
-	public LinesParser(RootedTree rootedTree, String trait, List<Location> locationsList) {
+	public DiscreteLinesParser(RootedTree rootedTree, String locationTrait, List<Location> locationsList) {
 		
-		this.trait = trait;
+		this.locationTrait = locationTrait;
 		this.locationsList = locationsList;
 		this.rootedTree = rootedTree;
 		
 	}//END: Constructor
 	
-	public List<Line> parseLines() throws IOException, ImportException, LocationNotFoundException {
+	public LinkedList<Line> parseLines() throws IOException, ImportException, LocationNotFoundException {
 		
-		List<Line> linesList = new LinkedList<Line>();
+		LinkedList<Line> linesList = new LinkedList<Line>();
+		
 		Location dummy;
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
 
 				Node parentNode = rootedTree.getParent(node);
 				
-				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, trait);
+				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
 				if(parentState.contains("+")) { 
 					String message = "Found tied state " + parentState + ".";
 					parentState = Utils.breakTiesRandomly(parentState);
@@ -48,7 +49,7 @@ public class LinesParser {
 					System.out.println(message);
 				}//END: tie check
 				
-				String nodeState = (String) Utils.getObjectNodeAttribute(node, trait);
+				String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
 				if(nodeState.contains("+")) { 
 					String message = "Found tied state " + nodeState + ".";
 					nodeState = Utils.breakTiesRandomly(nodeState);

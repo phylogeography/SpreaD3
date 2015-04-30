@@ -58,6 +58,39 @@ public class Arguments {
         boolean isAvailable = false;
     }
 
+//  public static class RealOption extends Option {
+//
+//      public RealOption(String label, String description) {
+//          super(label, description);
+//      }
+//
+//      public RealOption(String label, double minValue, double maxValue, String description) {
+//          super(label, description);
+//          this.minValue = minValue;
+//          this.maxValue = maxValue;
+//      }
+//
+//      double minValue = Double.NEGATIVE_INFINITY;
+//      double maxValue = Double.POSITIVE_INFINITY;
+//
+//      double value = 0;
+//  }
+//    public static class RealArrayOption extends RealOption {
+//
+//        // A count of -1 means any length
+//        public RealArrayOption(String label, int count, String description) {
+//            this(label, count, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, description);
+//        }
+//
+//        public RealArrayOption(String label, int count, double minValue, double maxValue, String description) {
+//            super(label, minValue, maxValue, description);
+//            this.count = count;
+//        }
+//
+//        private int count;
+//        double[] values = null;
+//    }
+   
     public static class StringOption extends Option {
         /**
          * @param label       Option name:
@@ -82,7 +115,26 @@ public class Arguments {
 
         String value = null;
     }
+    
+    public static class StringArrayOption extends StringOption {
 
+		public StringArrayOption(String label, int count, String[] options, boolean caseSensitive, String description) {
+			super(label, options, caseSensitive, description);
+			this.count = count;
+		}
+    	  
+    	public StringArrayOption(String label, int count, String tag, String description ){
+    		super(label, tag, description);
+    		this.count = count;
+    	}
+      
+    	
+    	
+		int count;
+		String[] values = null;
+    	
+    }//END: StringArrayOption
+    
     public static class IntegerOption extends Option {
 
         public IntegerOption(String label, String description) {
@@ -222,6 +274,8 @@ public class Arguments {
                 optionIndex[index] = i;
                 option.isAvailable = true;
 
+//                System.out.println(arg);
+                
                 if (option instanceof IntegerArrayOption) {
 
                     IntegerArrayOption o = (IntegerArrayOption) option;
@@ -267,7 +321,7 @@ public class Arguments {
                         }
                     }
                 } else if (option instanceof IntegerOption) {
-
+                	
                     IntegerOption o = (IntegerOption) option;
                     if (arg.length() == 0) {
                         int k = index + 1;
@@ -398,7 +452,8 @@ public class Arguments {
                         }
                         o.values = new double[j];
                         System.arraycopy(values, 0, o.values, 0, j);
-                    }
+                    }//END: count check
+                    
                 } else if (option instanceof RealOption) {
 
                     RealOption o = (RealOption) option;
@@ -426,8 +481,36 @@ public class Arguments {
                         throw new ArgumentException("Argument, " + arguments[index] +
                                 " has a bad real value: " + arg);
                     }
-                } else if (option instanceof StringOption) {
+                } else if(option instanceof StringArrayOption) {
+                
+                	// this should handle variable sized arrays (count = -1)
+                	
+                	StringArrayOption o = (StringArrayOption) option;
+                	
+                    String[] values = new String[100];
+                    index += 1;
+                    arg = arguments[index];
+                    optionIndex[index] = i;
 
+                    int j = 0;
+                    if (arg.length() > 0) {
+                        StringTokenizer tokenizer = new StringTokenizer(arg, ",\t ");
+                        
+                        while (tokenizer.hasMoreTokens()) {
+                            String token = tokenizer.nextToken();
+                            
+                            if (token.length() > 0) {
+                                    values[j] = token;
+                                j++;
+                            }
+                        }
+                    }
+                    
+                    o.values = new String[j];
+                    System.arraycopy(values, 0, o.values, 0, j);
+                	
+                } else if (option instanceof StringOption) {
+                	
                     StringOption o = (StringOption) option;
                     if (arg.length() == 0) {
                         int k = index + 1;
@@ -458,10 +541,14 @@ public class Arguments {
                                     " has a bad string value: " + arg);
                         }
                     }
-                } else { // is simply an Option - nothing to do...
+                    
+                }  else { 
+
+                	// is simply an Option - nothing to do...
+                
                 }
             }
-        }
+        }//END: i loop
 
         int n = 0;
         int i = arguments.length - 1;
@@ -560,6 +647,11 @@ public class Arguments {
         return o.value;
     }
 
+    public String[] getStringArrayOption(String label) {
+    	StringArrayOption o = (StringArrayOption) options[findOption(label)];
+    	return o.values;
+    }
+    
     /**
      * Return any arguments leftover after the options
      */

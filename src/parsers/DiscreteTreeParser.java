@@ -28,9 +28,9 @@ public class DiscreteTreeParser {
 	
 public SpreadData parse() throws IOException, ImportException, LocationNotFoundException, IllegalCharacterException {
 	
-	List<Location> locationsList = null;
-	List<Polygon> polygonsList= null;
-	List<Line> linesList = null;
+	LinkedList<Location> locationsList = null;
+	LinkedList<Polygon> polygonsList= null;
+	LinkedList<Line> linesList = null;
 	
 	
 	// ---IMPORT---//
@@ -41,15 +41,15 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 	
 	// ---PARSE AND FILL STRUCTURES---//
 	
-	LocationsParser locationsParser = new LocationsParser(
+	DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
 		discreteTreeSettings.locations //
 			);
 	locationsList = locationsParser.parseLocations();
 	
 	System.out.println("Parsed locations");
 	
-	LinesParser linesParser = new LinesParser(rootedTree, //
-		discreteTreeSettings.trait, //
+	DiscreteLinesParser linesParser = new DiscreteLinesParser(rootedTree, //
+		discreteTreeSettings.locationTrait, //
 			locationsList //
 			);
      linesList = linesParser.parseLines();
@@ -58,7 +58,7 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 	
 	
 	DiscretePolygonsParser discretePolygonsParser = new DiscretePolygonsParser(rootedTree, //
-			discreteTreeSettings.trait, //
+			discreteTreeSettings.locationTrait, //
 			discreteTreeSettings.intervals, //
 			locationsList //
 			); 
@@ -67,7 +67,7 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 	 System.out.println("Parsed discrete polygons");
 	
 	
-		List<Layer> layersList = new LinkedList<Layer>();
+	 LinkedList<Layer> layersList = new LinkedList<Layer>();
 
 		Layer discreteLayer = new Layer(discreteTreeSettings.tree,
 				"Discrete tree visualisation", linesList, polygonsList);
