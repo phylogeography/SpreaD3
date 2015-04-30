@@ -17,7 +17,9 @@ h1. USAGE EXAMPLES
 
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -output test.kml
 
--create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2
+-create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
+
+-create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test.json
 
 h1. LICENSE
 

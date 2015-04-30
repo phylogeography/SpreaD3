@@ -2,14 +2,12 @@ package parsers;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 import utils.Trait;
 import utils.Utils;
-
 import data.structure.Coordinate;
 import data.structure.Line;
 
@@ -27,9 +25,9 @@ public class ContinuousLinesParser {
 		
 	}//END: Constructor
 	
-	public List<Line> parseLines() {
+	public LinkedList<Line> parseLines() {
 		
-		List<Line> linesList = new LinkedList<Line>();
+		LinkedList<Line> linesList = new LinkedList<Line>();
 		String latitudeName = locationTrait.concat("1");
 		String longitudeName = locationTrait.concat("2");
 		
@@ -73,6 +71,7 @@ public class ContinuousLinesParser {
 					
 				}//END: traits loop
 				
+				//TODO: start time & end time
 				Line line = new Line(parentCoordinate, nodeCoordinate,
 						parentHeight, nodeHeight, attributes);
 

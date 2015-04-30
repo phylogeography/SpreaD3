@@ -19,6 +19,7 @@ import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
 import kmlframework.kml.KmlException;
 
+import parsers.ContinuousTreeParser;
 import parsers.DiscretePolygonsParser;
 import parsers.DiscreteTreeParser;
 import parsers.DiscreteLinesParser;
@@ -105,7 +106,7 @@ public class Spread2ConsoleApp {
 
 		new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
 
-		new Arguments.StringOption(OUTPUT, "", "output file name"),
+		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
 		});
 
@@ -115,6 +116,8 @@ public class Spread2ConsoleApp {
 		new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
 
 		new Arguments.StringOption(LOG, "", "tree file name"),
+		
+		new Arguments.StringOption(OUTPUT, "", "json output file name")
 
 		});
 
@@ -127,7 +130,9 @@ public class Spread2ConsoleApp {
 
 		new Arguments.StringOption(HPD, "", "hpd interval attribute name"),
 
-		new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed")
+		new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed"),
+		
+		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 		
 		});
 
@@ -141,6 +146,8 @@ public class Spread2ConsoleApp {
 		new Arguments.StringOption(TREES, "", "trees file name"),
 
 		new Arguments.StringOption("file", "", "time intervals file name"),
+		
+		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
 		});
 
@@ -402,8 +409,34 @@ public class Spread2ConsoleApp {
 				settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
 			}//END: option check
 			
-			//TODO
 			// ---RUN---//
+			
+			try {
+					
+			ContinuousTreeParser parser = new ContinuousTreeParser(
+					settings.continuousTreeSettings);
+
+			SpreadData data = parser.parse();
+
+			// ---EXPORT TO JSON---//
+			
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String s = gson.toJson(data);
+
+			File file = new File(settings.continuousTreeSettings.output);
+			FileWriter fw;
+
+			fw = new FileWriter(file);
+			fw.write(s);
+			fw.close();
+				
+			} catch (IOException e) {
+				gracefullyExit(e.getMessage(), args3, e);
+			} catch (ImportException e) {
+				gracefullyExit(e.getMessage(), args3, e);
+			}
+
+			System.out.println("Created JSON file");
 			
 			
 			

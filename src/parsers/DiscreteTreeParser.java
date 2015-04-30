@@ -2,11 +2,11 @@ package parsers;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
-
+import settings.DiscreteTreeSettings;
+import utils.Utils;
 import data.SpreadData;
 import data.structure.Layer;
 import data.structure.Line;
@@ -14,8 +14,6 @@ import data.structure.Location;
 import data.structure.Polygon;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
-import settings.DiscreteTreeSettings;
-import utils.Utils;
 
 public class DiscreteTreeParser {
 
@@ -57,14 +55,14 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 	System.out.println("Parsed lines");
 	
 	
-	DiscretePolygonsParser discretePolygonsParser = new DiscretePolygonsParser(rootedTree, //
+	DiscretePolygonsParser polygonsParser = new DiscretePolygonsParser(rootedTree, //
 			discreteTreeSettings.locationTrait, //
 			discreteTreeSettings.intervals, //
 			locationsList //
 			); 
-      polygonsList = discretePolygonsParser.parseDiscretePolygons();
+      polygonsList = polygonsParser.parseDiscretePolygons();
 	
-	 System.out.println("Parsed discrete polygons");
+	 System.out.println("Parsed polygons");
 	
 	
 	 LinkedList<Layer> layersList = new LinkedList<Layer>();

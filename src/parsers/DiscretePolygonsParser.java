@@ -15,16 +15,16 @@ import exceptions.LocationNotFoundException;
 
 public class DiscretePolygonsParser {
 
-	private String trait;
-	private List<Location> locationsList;
 	private RootedTree rootedTree;
+	private String locationTrait;
+	private List<Location> locationsList;
 	
 	private Integer intervals;
 	
-	public DiscretePolygonsParser(RootedTree rootedTree, String trait, Integer intervals, List<Location> locationsList) {
+	public DiscretePolygonsParser(RootedTree rootedTree, String locationTrait, Integer intervals, List<Location> locationsList) {
 		
 		this.rootedTree = rootedTree;
-		this.trait = trait;
+		this.locationTrait = locationTrait;
 		this.locationsList = locationsList;
 		this.intervals = intervals;
 		
@@ -58,7 +58,7 @@ public class DiscretePolygonsParser {
 						if ((rootedTree.getHeight(node) <= sliceHeights[i])
 								&& (rootedTree.getHeight(parentNode) > sliceHeights[i])) {
 
-							String parentState = (String) Utils.getObjectNodeAttribute(parentNode, trait);
+							String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
 							if(parentState.contains("+")) { 
 								String message = "Found tied state " + parentState + ".";
 								parentState = Utils.breakTiesRandomly(parentState);
@@ -67,7 +67,7 @@ public class DiscretePolygonsParser {
 							}//END: tie check
 							
 							
-						String nodeState = (String) Utils.getObjectNodeAttribute(node, trait);
+						String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
 						if(nodeState.contains("+")) { 
 							String message = "Found tied state " + nodeState + ".";
 							nodeState = Utils.breakTiesRandomly(nodeState);

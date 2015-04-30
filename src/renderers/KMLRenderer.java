@@ -52,8 +52,10 @@ public class KMLRenderer {
 		kml.setFeature(document);
 		
 		// locations go on top
+		if(data.getLocations() != null) {
 		document.addFeature(generateLocations(data.getLocations()));
-
+		}
+		
 		// then layers
 		for(Layer layer : data.getLayers()) {
 			
