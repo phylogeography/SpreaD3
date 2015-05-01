@@ -35,7 +35,7 @@ import exceptions.AnalysisTypeArgumentsException;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
 
-import renderers.KMLRenderer;
+import renderers.KmlRenderer;
 import settings.ContinuousTreeSettings;
 import settings.DiscreteTreeSettings;
 import settings.KmlRendererSettings;
@@ -502,7 +502,7 @@ public class Spread2ConsoleApp {
 				Gson gson = new GsonBuilder().create();
 				SpreadData input = gson.fromJson(reader, SpreadData.class);
 				
-				KMLRenderer renderer = new KMLRenderer(input, settings.kmlRendererSettings.output);
+				KmlRenderer renderer = new KmlRenderer(input, settings.kmlRendererSettings.output);
 				renderer.render();
 
 				System.out.println("Rendered KML.");

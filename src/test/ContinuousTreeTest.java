@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import renderers.KMLRenderer;
+import renderers.KmlRenderer;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
@@ -239,7 +239,7 @@ public class ContinuousTreeTest {
     		// ---RENDER---//
     		// //////////////
 		
-			KMLRenderer renderer = new KMLRenderer(input, "test.kml");
+			KmlRenderer renderer = new KmlRenderer(input, "test.kml");
 			renderer.render();
 			
 			System.out.println("Rendered KML.");

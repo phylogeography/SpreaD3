@@ -1,10 +1,13 @@
 package renderers;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import utils.Utils;
 
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
@@ -13,9 +16,11 @@ import kmlframework.kml.Folder;
 import kmlframework.kml.Kml;
 import kmlframework.kml.KmlException;
 import kmlframework.kml.LineString;
+import kmlframework.kml.LineStyle;
 import kmlframework.kml.LinearRing;
 import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
+import kmlframework.kml.StyleSelector;
 import data.SpreadData;
 import data.structure.Coordinate;
 import data.structure.Layer;
@@ -23,14 +28,16 @@ import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
 
-public class KMLRenderer {
+public class KmlRenderer {
 
 	public static final double EARTH_RADIUS = 6371.0;
 	
 	private SpreadData data;
 	private String output;
 	
-	public KMLRenderer(SpreadData data, String output) {
+	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
+	
+	public KmlRenderer(SpreadData data, String output) {
 		
 		this.data = data;
 		this.output = output;
@@ -47,6 +54,7 @@ public class KMLRenderer {
 		kml.setGenerateObjectIds(false);
 		
 		Document document = new Document();
+		document.setStyleSelectors(styles);
 		
 		// add a document to the kml
 		kml.setFeature(document);
@@ -175,6 +183,42 @@ public class KMLRenderer {
 
 		Placemark placemark = new Placemark();
 		
+		//TODO
+		
+		// ////////
+		
+		// Style
+		
+		int branchStyleId = 1;
+		
+		int red = 10;
+		int green = 150;
+		int blue = 10;
+		int alpha = 200;
+		Color col = new Color(red, green, blue, alpha);
+		
+		int branchWidth = 2;
+		
+		KmlStyle style = new KmlStyle(col, branchWidth);
+		style.setId("branch_style" + branchStyleId);
+		branchStyleId++;		
+		
+		LineStyle lineStyle = new LineStyle();
+		lineStyle.setColor(getKMLColor(style.getStrokeColor()));
+		lineStyle.setWidth(style.getStrokeWidth());
+		
+		style.setLineStyle(lineStyle);
+		
+		placemark.setStyleUrl(style.getId());
+		
+		if(!styles.contains(style)){
+			styles.add(style);
+		}
+		
+//		document.setStyleSelectors(styles);
+		
+		// ////////
+		
 		LineString lineString = new LineString();
 		lineString.setTessellate(true);
 		lineString.setAltitudeMode(AltitudeModeEnum.relativeToGround);
@@ -252,6 +296,10 @@ public class KMLRenderer {
 		return placemark;
 	}//END: generatePolygon
 	
+	
+	
+	
+	
 	private  List<Point> generateCircle(Location centroid, double radius, int numPoints) {
 
 		Double latitude = centroid.getCoordinate().getLatitude();
@@ -276,14 +324,6 @@ public class KMLRenderer {
 		return points;
 	}// END: GenerateCircle
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	// /////////////
 	// ---POINT---//
 	// /////////////
@@ -298,5 +338,36 @@ public class KMLRenderer {
 		
 		return point;
 	}//END: generatePoint
+
+	
+	// /////////////
+	// ---UTILS---//
+	// /////////////
+	
+	public static String getKMLColor(Color color) {
+		/**
+		 * converts a Java color into a 4 channel hex color string.
+		 * 
+		 * @param color
+		 * @return the color string
+		 */
+		String a = Integer.toHexString(color.getAlpha());
+		String b = Integer.toHexString(color.getBlue());
+		String g = Integer.toHexString(color.getGreen());
+		String r = Integer.toHexString(color.getRed());
+		return (a.length() < 2 ? "0" : "") + a + (b.length() < 2 ? "0" : "")
+				+ b + (g.length() < 2 ? "0" : "") + g
+				+ (r.length() < 2 ? "0" : "") + r;
+	}//END: getKMLColor
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }//END: class

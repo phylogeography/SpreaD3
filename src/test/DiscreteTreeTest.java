@@ -24,7 +24,7 @@ import jebl.evolution.io.NexusImporter;
 import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
 import kmlframework.kml.KmlException;
-import renderers.KMLRenderer;
+import renderers.KmlRenderer;
 import utils.Utils;
 
 import com.google.gson.Gson;
@@ -310,7 +310,7 @@ public class DiscreteTreeTest {
 		// ---RENDER---//
 		// //////////////
             
-			KMLRenderer renderer = new KMLRenderer(input, "test.kml");
+			KmlRenderer renderer = new KmlRenderer(input, "test.kml");
 			renderer.render();
 			
 			System.out.println("Rendered KML.");
