@@ -1,49 +1,31 @@
 package app;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 
 import jebl.evolution.io.ImportException;
-import jebl.evolution.trees.RootedTree;
 import kmlframework.kml.KmlException;
-
 import parsers.ContinuousTreeParser;
-import parsers.DiscretePolygonsParser;
 import parsers.DiscreteTreeParser;
-import parsers.DiscreteLinesParser;
-import parsers.DiscreteLocationsParser;
-
-import data.SpreadData;
-import data.structure.Layer;
-import data.structure.Line;
-import data.structure.Location;
-import data.structure.Polygon;
-
-import exceptions.AnalysisTypeArgumentsException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
-
 import renderers.KmlRenderer;
 import settings.ContinuousTreeSettings;
 import settings.DiscreteTreeSettings;
 import settings.KmlRendererSettings;
 import settings.Settings;
-import test.ContinuousTreeTest;
 import utils.Arguments;
 import utils.Arguments.ArgumentException;
-import utils.Utils;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import data.SpreadData;
+import exceptions.IllegalCharacterException;
+import exceptions.LocationNotFoundException;
 
 public class Spread2ConsoleApp {
 
@@ -69,12 +51,14 @@ public class Spread2ConsoleApp {
 	private static final String HPD = "hpd";
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
-
 	private static final String JSON = "json";
 	
+//	private static final String LINE = "line";
+	private static final String LINE_WIDTH = "linewidth";
+	private static final String LINE_COLOR = "linecolor";
+	private static final String LINE_ALTITUDE = "linealtitude";	
 	
-	
-	
+	private static final String POLYGON_COLOR = "polygoncolor";
 	
 	
 	public Spread2ConsoleApp() {
@@ -157,6 +141,14 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(OUTPUT, "", "kml output file name"),
 
+				new Arguments.StringOption(LINE_WIDTH, "", "mapping of the the line aesthetics"),
+				
+				new Arguments.StringOption(LINE_ALTITUDE, "", "mapping of the the line aesthetics"),
+				
+				new Arguments.StringOption(LINE_COLOR, "", "mapping of the the line aesthetics"),
+				
+				new Arguments.StringOption(POLYGON_COLOR, "", "mapping of the the polygon aesthetics"),
+				
 				});
 		
 		
@@ -466,11 +458,13 @@ public class Spread2ConsoleApp {
 			
 			
 			// ---PARSE---//
+			
 			//TODO: parse style choices
 			
+			// Lines: color width height
+			// Polygons color radius
+			
 			try {
-				
-//				Utils.printArray(otherArgs);
 				
 				renderArguments.parseArguments(otherArgs);
 				
@@ -493,6 +487,24 @@ public class Spread2ConsoleApp {
 					
 			} 
 			
+			if(renderArguments.hasOption(LINE_WIDTH)) {
+				
+				settings.kmlRendererSettings.lineWidth = renderArguments.getStringOption(LINE_WIDTH);
+				
+			}
+			
+			if(renderArguments.hasOption(LINE_COLOR)) {
+				
+				settings.kmlRendererSettings.lineColor = renderArguments.getStringOption(LINE_COLOR);
+				
+			}
+			
+			
+			if(renderArguments.hasOption(POLYGON_COLOR)) {
+				
+				settings.kmlRendererSettings.polygonColor = renderArguments.getStringOption(POLYGON_COLOR);
+				
+			}
 			
 			// ---RUN---//
 			
@@ -502,7 +514,7 @@ public class Spread2ConsoleApp {
 				Gson gson = new GsonBuilder().create();
 				SpreadData input = gson.fromJson(reader, SpreadData.class);
 				
-				KmlRenderer renderer = new KmlRenderer(input, settings.kmlRendererSettings.output);
+				KmlRenderer renderer = new KmlRenderer(input, settings.kmlRendererSettings);
 				renderer.render();
 
 				System.out.println("Rendered KML.");

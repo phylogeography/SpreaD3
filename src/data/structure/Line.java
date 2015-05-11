@@ -3,9 +3,11 @@ package data.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import utils.Trait;
+
 public class Line {
 
-	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 
 	private final Coordinate startCoordinate;
 	private final Coordinate endCoordinate;
@@ -21,7 +23,7 @@ public class Line {
 			Location endLocation, //
 			double startTime, //
 			double endTime, //
-			Map<String, Object> attributes //
+			Map<String, Trait> attributes //
 	) {
 
 		super();
@@ -46,7 +48,7 @@ public class Line {
 			Coordinate endCoordinate, //
 			double startTime, //
 			double endTime, //
-			Map<String, Object> attributes //
+			Map<String, Trait> attributes //
 	) {
 
 		super();
@@ -92,6 +94,10 @@ public class Line {
 
 	public boolean connectsLocations(){
 		return connectsLocations;
+	}
+	
+	public Map<String, Trait> getAttributes() {
+		return attributes;
 	}
 	
 }// END: class

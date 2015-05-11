@@ -25,6 +25,8 @@ import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
 import kmlframework.kml.KmlException;
 import renderers.KmlRenderer;
+import settings.KmlRendererSettings;
+import utils.Trait;
 import utils.Utils;
 
 import com.google.gson.Gson;
@@ -259,10 +261,13 @@ public class DiscreteTreeTest {
 					
 //					System.out.println(location.getId() + " " + locationCount);
 					
-					Map<String, Object> attributes = new HashMap<String, Object>();
-					attributes.put("count", locationCount);
-					Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
-					polygonsList.add(polygon);
+						Map<String, Trait> attributes = new HashMap<String, Trait>();
+						Trait countTrait = new Trait(locationCount);
+
+						attributes.put("count", countTrait);
+
+						Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
+						polygonsList.add(polygon);
 					
 					}//END: positive count check
 					
@@ -310,7 +315,9 @@ public class DiscreteTreeTest {
 		// ---RENDER---//
 		// //////////////
             
-			KmlRenderer renderer = new KmlRenderer(input, "test.kml");
+            KmlRendererSettings kmlRendererSettings = new KmlRendererSettings();
+            kmlRendererSettings.output = "test.kml";
+			KmlRenderer renderer = new KmlRenderer(input, kmlRendererSettings);
 			renderer.render();
 			
 			System.out.println("Rendered KML.");

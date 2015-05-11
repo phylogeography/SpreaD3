@@ -77,4 +77,8 @@ public class Trait {
 		return sb.toString();
 	}
 
+	public Object getId() {
+		return id;
+	}
+	
 }// END: class

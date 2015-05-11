@@ -18,7 +18,7 @@ public class ContinuousTreeParser {
 	private ContinuousTreeSettings continuousTreeSettings;
 	
 	public ContinuousTreeParser(ContinuousTreeSettings continuousTreeSettings) {
-	this.continuousTreeSettings = continuousTreeSettings;
+		this.continuousTreeSettings = continuousTreeSettings;
 	}
 
 	public SpreadData parse() throws IOException, ImportException {
@@ -29,9 +29,7 @@ public class ContinuousTreeParser {
 		
 		// ---IMPORT---//
 
-		RootedTree rootedTree = null;
-		
-		rootedTree = Utils.importRootedTree(continuousTreeSettings.tree);
+		RootedTree rootedTree = Utils.importRootedTree(continuousTreeSettings.tree);
 		
 		// ---PARSE AND FILL STRUCTURES---//
 		
@@ -51,7 +49,6 @@ public class ContinuousTreeParser {
 	      polygonsList = polygonsParser.parsePolygons();
 		
 		 System.out.println("Parsed polygons");
-		
 		
 		 LinkedList<Layer> layersList = new LinkedList<Layer>();
 

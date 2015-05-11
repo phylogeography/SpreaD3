@@ -5,8 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
@@ -104,6 +107,15 @@ public class Utils {
 		System.out.println();
 	}// END: printArray
 
+	public static void printMap(Map<?, ?> map) {
+
+		Iterator<?> it = map.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<?, ?> pairs = (Entry<?, ?>) it.next();
+			System.out.println(pairs.getKey() + " = " + pairs.getValue());
+		}
+	}// END: printMap
+	
 	// /////////////////////////////////
 	// ---TODO: RANDOM NUMB3R UTILS---//
 	// /////////////////////////////////

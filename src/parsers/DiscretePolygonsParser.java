@@ -7,6 +7,7 @@ import java.util.Map;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
+import utils.Trait;
 import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Location;
@@ -15,6 +16,8 @@ import exceptions.LocationNotFoundException;
 
 public class DiscretePolygonsParser {
 
+	public static final String COUNT = "count";
+	
 	private RootedTree rootedTree;
 	private String locationTrait;
 	private List<Location> locationsList;
@@ -106,14 +109,17 @@ public class DiscretePolygonsParser {
 
 				}// END: node loop
 
-				if(locationCount > 0) {
-				
-				Map<String, Object> attributes = new HashMap<String, Object>();
-				attributes.put("count", locationCount);
-				Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
-				polygonsList.add(polygon);
-				
-				}//END: positive count check
+				if (locationCount > 0) {
+
+					Map<String, Trait> attributes = new HashMap<String, Trait>();
+					Trait countTrait = new Trait(locationCount);
+
+					attributes.put(COUNT, countTrait);
+
+					Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
+					polygonsList.add(polygon);
+
+				}// END: positive count check
 				
 			}// END: locations loop
 

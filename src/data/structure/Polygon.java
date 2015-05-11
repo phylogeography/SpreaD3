@@ -4,11 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import utils.Trait;
+
 public class Polygon {
 
-	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 
-//	private final Location location;
+	//	private final Location location;
 	private final String location;
 	private final boolean hasLocation;
 	
@@ -17,7 +19,7 @@ public class Polygon {
 	
 	public Polygon(List<Coordinate> coordinates, //
 			double time, //
-			Map<String, Object> attributes //
+			Map<String, Trait> attributes //
 	) {
 
 		super();
@@ -38,7 +40,7 @@ public class Polygon {
 //			Location centroid, //
 			String location, //
 			double time, //
-			Map<String, Object> attributes //
+			Map<String, Trait> attributes //
 	) {
 
 		super();
@@ -71,6 +73,10 @@ public class Polygon {
 //		return location;
 //	}
 
+	public Map<String, Trait> getAttributes() {
+		return attributes;
+	}
+	
 	public boolean hasLocation() {
 		return hasLocation;
 	}

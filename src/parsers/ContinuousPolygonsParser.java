@@ -77,7 +77,7 @@ public class ContinuousPolygonsParser {
 
 						}// END: c loop
 
-						Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+						Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 						for(String traitName : traits) {
 							
 							Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);

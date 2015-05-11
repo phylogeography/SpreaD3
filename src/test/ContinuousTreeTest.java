@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import renderers.KmlRenderer;
+import settings.KmlRendererSettings;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
@@ -112,7 +113,7 @@ public class ContinuousTreeTest {
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
-				Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 				for(String traitName : traits) {
 					
 					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
@@ -179,7 +180,7 @@ public class ContinuousTreeTest {
 
 						}// END: c loop
 
-						Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+						Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 						for(String traitName : traits) {
 							
 							Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
@@ -239,7 +240,9 @@ public class ContinuousTreeTest {
     		// ---RENDER---//
     		// //////////////
 		
-			KmlRenderer renderer = new KmlRenderer(input, "test.kml");
+            KmlRendererSettings kmlRendererSettings = new KmlRendererSettings();
+            kmlRendererSettings.output = "test.kml";
+			KmlRenderer renderer = new KmlRenderer(input, kmlRendererSettings);
 			renderer.render();
 			
 			System.out.println("Rendered KML.");

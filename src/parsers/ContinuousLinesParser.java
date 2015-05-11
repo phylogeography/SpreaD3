@@ -13,9 +13,12 @@ import data.structure.Line;
 
 public class ContinuousLinesParser {
 
-	RootedTree rootedTree;
-	String locationTrait;
-	String[] traits;
+	public static final String START = "start";
+	public static final String END = "end";
+	
+private	RootedTree rootedTree;
+private	String locationTrait;
+private String[] traits;
 	
 	public ContinuousLinesParser(RootedTree rootedTree, String locationTrait, String traits[]) {
 		
@@ -56,18 +59,18 @@ public class ContinuousLinesParser {
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
-				Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 				for(String traitName : traits) {
 					
 					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
 					Trait parentTrait = new Trait(parentTraitObject, parentHeight);
 					
-					attributes.put("start"+traitName, parentTrait);
+					attributes.put(START+traitName, parentTrait);
 					
 					Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
 					Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
 					
-					attributes.put("end"+traitName, nodeTrait);
+					attributes.put(END+traitName, nodeTrait);
 					
 				}//END: traits loop
 				
