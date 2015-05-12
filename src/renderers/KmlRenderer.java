@@ -5,21 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.smartcardio.ATR;
-
-import com.sun.jmx.mbeanserver.Util;
-
-import parsers.ContinuousLinesParser;
-
-import settings.KmlRendererSettings;
-import utils.Trait;
-import utils.Utils;
 
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
@@ -32,7 +21,11 @@ import kmlframework.kml.LineStyle;
 import kmlframework.kml.LinearRing;
 import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
+import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
+import settings.KmlRendererSettings;
+import utils.Trait;
+import utils.Utils;
 import data.SpreadData;
 import data.structure.Coordinate;
 import data.structure.Layer;
@@ -48,7 +41,12 @@ public class KmlRenderer {
 	private KmlRendererSettings settings;
 //	String output;
 	
+	
+//	private Map<Object, Color> polygonColorMap = null;
+	
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
+	private Integer polygonStyleId = 1;
+	private int branchStyleId = 1;
 	
 	public KmlRenderer(SpreadData data, KmlRendererSettings settings) {
 		
@@ -142,88 +140,17 @@ public class KmlRenderer {
 		folder.setName("lines");
 //		folder.setDescription("lines");
 		
-		//TODO
-		
-        // Maps between Trait values [can be String (a factor) or Double] and numerical values for different aesthetics		
-		Map<Object, Integer> factors = new HashMap<Object, Integer>();
-		Integer factorValue = 1;
-		
-		Map<Object, Double> lineWidthMap = null;
-//		String lineWidth = null;
-		 Double widthMapping = 1.0;
-		if (this.settings.lineWidth != null) {
-//			 lineWidth = settings.lineWidth;
-			lineWidthMap = new HashMap<Object, Double>();
-		}
-
-		Map<Object, Color> lineColorMap = null;
-		 Double minRed = 0.0; Double maxRed = 100.0;
-		if (this.settings.lineColor != null) {
-			lineColorMap = new HashMap<Object, Color>();
-		}
-
-		Map<Object, Double> lineAltitudeMap;
-		if (this.settings.lineAltitude != null) {
-			lineAltitudeMap = new HashMap<Object, Double>();
-		}
-
-		 
-		 
 		for(Line line : lines) {
 
-			Map<String, Trait> attributes = line.getAttributes();
-			for (Trait trait : attributes.values()) {
-
-				Object value =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-//				if (!uniqueTraits.containsKey(value)) {
-//					
-//					uniqueTraits.put(value, uniqueCount);
-//					uniqueCount++;
-//				}
-				
-				//
-				
-				if (this.settings.lineWidth != null) {
-					if (!lineWidthMap.containsKey(value)) {
-						
-						
-//						lineWidthMap.put(value, widthMapping);
-
-					}
-				}
-				
-				
-				if (this.settings.lineColor != null) {
-					if (!lineColorMap.containsKey(value)) {
-						
-						int red = 0;//map(value, minRed, maxRed, 0.0, 255.0);
-						int green = 150;
-						int blue = 10;
-						int alpha = 200;
-						Color color = new Color(red, green, blue, alpha);
-						
-						
-						lineColorMap.put(value, color);
-//						mapping++;
-					}
-				}
-				
-				
-				
-			}//END: attributes loop			
-			
 			folder.addFeature(generateLine(line));
 			
 		}//END: lines loop
-		
-//		Utils.printMap(lineWidthMap);
 		
 		return folder;
 	}//END: generateLines
 
 	private Feature generateLine(Line line) {
 
-//		Feature feature = null;
 		Folder folder = new Folder();
 		
 		
@@ -257,7 +184,6 @@ public class KmlRenderer {
         
         
         
-		int branchStyleId = 1;
 		
 		int red = 10;
 		int green = 150;
@@ -265,15 +191,15 @@ public class KmlRenderer {
 		int alpha = 200;
 		Color col = new Color(red, green, blue, alpha);
 		
-		int branchWidth = 2;
+		Double branchWidth = 2.0;
 		
 		KmlStyle style = new KmlStyle(col, branchWidth);
 		style.setId("branch_style" + branchStyleId);
         
 		if(!styles.contains(style)){
 			styles.add(style);
+			branchStyleId++;
 		}
-		branchStyleId++;
         
         
         
@@ -289,9 +215,10 @@ public class KmlRenderer {
 		return folder;
 	}//END: generateLine
 
-	private Placemark generateLineSegment(Coordinate startCoordinate,
-			Coordinate endCoordinate, double startTime
-			, KmlStyle style
+	private Placemark generateLineSegment(Coordinate startCoordinate, //
+			Coordinate endCoordinate, //
+			double startTime, //
+			KmlStyle style //
 			) {
 
 		Placemark placemark = new Placemark();
@@ -341,72 +268,73 @@ public class KmlRenderer {
 		folder.setName("polygons");
 //		folder.setDescription("polygons");
 		
+		// Map trait values (String | Double) to numerical values (Double)
 		Double factorValue = 1.0;
-
-		Map<Object, Color> polygonColorMap = null;
-		Double minRed = 0.0; Double maxRed = 100.0;
-		if (this.settings.polygonColor != null) {
-			polygonColorMap = new HashMap<Object, Color>();
-		}
-		
-		for(Polygon polygon : polygons) {
+		Map<Object, Double> valueMap = new HashMap<Object, Double>();
+	    for(Polygon polygon : polygons) {
 			
 			Map<String, Trait> attributes = polygon.getAttributes();
 			for (Trait trait : attributes.values()) {
 
 				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-				
-				if (this.settings.polygonColor != null) {
-					if (!polygonColorMap.containsKey(traitValue)) {
+					if (!valueMap.containsKey(traitValue)) {
 						
 						if(trait.isNumber()) { 
-							
-							int red = (int) map((double) traitValue, minRed, maxRed, 0.0, 255.0);
-							int green = 150;
-							int blue = 10;
-							int alpha = 200;
-							Color color = new Color(red, green, blue, alpha);
-							
-							polygonColorMap.put( traitValue, color);
-							
+							valueMap.put( traitValue, (Double) traitValue);
 						} else {
-							
-							int red = (int) map(factorValue, minRed, maxRed, 0.0, 255.0);
-							int green = 150;
-							int blue = 10;
-							int alpha = 200;
-							Color color = new Color(red, green, blue, alpha);
-							
-							polygonColorMap.put(traitValue, color);
-							
+							valueMap.put(traitValue, factorValue);
 							factorValue++;
-							
 						}//END: isNumber check
 						
 					}//END: contains check
-				}//END: settings check
-				
-				
-				
-				
 			}//END: attributes loop
-			
-			
-			
-			
-			folder.addFeature(generatePolygon(polygon));
-			
-		}
+	    }//END: polygons loop
 		
-		//TODO
-		Utils.printMap(polygonColorMap);
+	 double maxValue =  Collections.max(valueMap.values());
+	 double minValue =  Collections.min(valueMap.values());	
+	 
+		// get Colors map
+		KmlStyle style = null;
+		String label = "";
+		for (Polygon polygon : polygons) {
+			
+			if (this.settings.polygonColor != null) {
+
+				Object key = polygon.getAttributes().get(settings.polygonColor);
+				Double value = valueMap.get(key.toString());
+				label = key.toString();
+				
+				int red = (int) map(value, minValue, maxValue,
+						settings.minPolygonRed, settings.maxPolygonRed);
+				int green = (int) map(value, minValue, maxValue,
+						settings.minPolygonGreen, settings.maxPolygonGreen);
+				int blue = (int) map(value, minValue, maxValue,
+						settings.minPolygonBlue, settings.maxPolygonBlue);
+				int alpha = 200;
+				Color color = new Color(red, green, blue, alpha);
+
+				style = new KmlStyle(color);
+				style.setId(style.toString());
+			
+				if (!styles.contains(style)) {
+					styles.add(style);
+					polygonStyleId++;
+				}
+					
+				
+			}// END: settings check
+
+			Feature feature = generatePolygon(polygon, style);
+			feature.setName(label);
+			folder.addFeature(feature);
+
+		}// END: polygons loop
+		
 		
 		return folder;
 	}//END: generatePolygons
 
-	
-	
-	private Feature generatePolygon(Polygon polygon) {
+	private Feature generatePolygon(Polygon polygon , KmlStyle style) {
 
 		Placemark placemark = new Placemark();
 		
@@ -422,9 +350,8 @@ public class KmlRenderer {
 			Integer centroidIndex = data.getLocations().indexOf(dummy);
 			Location centroid = data.getLocations().get(centroidIndex);
 			
-			
 			int numPoints = 36;
-			//TODO: radius mapping: map to an attribute from Map chosen by the user
+			//TODO: radius mapping
 			double radius = 100;
 			points.addAll(generateCircle(centroid, radius, numPoints));
 			
@@ -440,6 +367,14 @@ public class KmlRenderer {
 		
 		linearRing.setCoordinates(points);
 		
+		if (style != null) {
+			PolyStyle polyStyle = new PolyStyle();
+			polyStyle.setOutline(false);
+			polyStyle.setColor(getKMLColor(style.getFillColor()));
+			style.setPolyStyle(polyStyle);
+			placemark.setStyleUrl(style.getId());
+		}
+		
 		kmlframework.kml.Polygon kfPolygon = new kmlframework.kml.Polygon();
 		kfPolygon.setTessellate(true);
 		kfPolygon.setOuterBoundary(linearRing);
@@ -447,10 +382,6 @@ public class KmlRenderer {
 		
 		return placemark;
 	}//END: generatePolygon
-	
-	
-	
-	
 	
 	private  List<Point> generateCircle(Location centroid, double radius, int numPoints) {
 
@@ -526,7 +457,11 @@ public class KmlRenderer {
 	}// END: map
 	
 	
-	
+//	private double map(double value,
+//			double start1, double stop1,
+//			double start2, double stop2) {
+//return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+//}
 	
 	
 	

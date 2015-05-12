@@ -8,11 +8,19 @@ import java.awt.Color;
  */
 public class KmlStyle extends kmlframework.kml.Style {
 
-	public KmlStyle(final Color strokeColor, final double strokeWidth) {
+	private final Color strokeColor;
+	private final Double strokeWidth;
+	private final Color fillColor;
+	
+	public KmlStyle(final Color fillColor) {
+		this(null, null, fillColor);
+	}
+	
+	public KmlStyle(final Color strokeColor, final Double strokeWidth) {
 		this(strokeColor, strokeWidth, null);
 	}
 
-	public KmlStyle(final Color strokeColor, final double strokeWidth,
+	public KmlStyle(final Color strokeColor, final Double strokeWidth,
 			final Color fillColor) {
 		this.strokeColor = strokeColor;
 		this.strokeWidth = strokeWidth;
@@ -33,22 +41,29 @@ public class KmlStyle extends kmlframework.kml.Style {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (this == o)
+		
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		
+		if (o == null || getClass() != o.getClass()) {
 			return false;
+		}
 
 		final KmlStyle style = (KmlStyle) o;
 
-		if (Double.compare(style.strokeWidth, strokeWidth) != 0)
+		if (strokeWidth != null && Double.compare(style.strokeWidth, strokeWidth) != 0){
 			return false;
-		if (fillColor != null ? !fillColor.equals(style.fillColor)
-				: style.fillColor != null)
+    	}
+		
+		if (fillColor != null ? !fillColor.equals(style.fillColor) : style.fillColor != null) {
 			return false;
-		if (strokeColor != null ? !strokeColor.equals(style.strokeColor)
-				: style.strokeColor != null)
+		}
+		
+		if (strokeColor != null ? !strokeColor.equals(style.strokeColor) : style.strokeColor != null) {
 			return false;
-
+		}
+		
 		return true;
 	}
 
@@ -63,7 +78,10 @@ public class KmlStyle extends kmlframework.kml.Style {
 		return result;
 	}
 
-	private final Color strokeColor;
-	private final double strokeWidth;
-	private final Color fillColor;
+	@Override
+	public String toString() {
+		return "KmlStyle [strokeColor=" + strokeColor + ", strokeWidth="
+				+ strokeWidth + ", fillColor=" + fillColor + "]";
+	}
+	
 }
