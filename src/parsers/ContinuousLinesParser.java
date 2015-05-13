@@ -15,6 +15,8 @@ public class ContinuousLinesParser {
 
 	public static final String START = "start";
 	public static final String END = "end";
+	public static final String ONE = "1";
+	public static final String TWO = "2";
 	
 private	RootedTree rootedTree;
 private	String locationTrait;
@@ -31,8 +33,8 @@ private String[] traits;
 	public LinkedList<Line> parseLines() {
 		
 		LinkedList<Line> linesList = new LinkedList<Line>();
-		String latitudeName = locationTrait.concat("1");
-		String longitudeName = locationTrait.concat("2");
+		String latitudeName = locationTrait.concat(ONE);
+		String longitudeName = locationTrait.concat(TWO);
 		
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {

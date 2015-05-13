@@ -4,7 +4,17 @@ public class Coordinate {
 
 	private final double latitude;
 	private final double longitude;
-	private final double altitude;
+	private double altitude;
+	
+	public Coordinate(Double latitude, //
+			Double longitude, //
+			Double altitude) {
+
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.altitude = altitude;
+	
+	}
 	
 	public Coordinate(
 			Double latitude, //
@@ -30,4 +40,8 @@ public class Coordinate {
 		return altitude;
 	}
 
+	public void setAltitude(double altitude) {
+		this.altitude = altitude;
+	}
+	
 }// END: class

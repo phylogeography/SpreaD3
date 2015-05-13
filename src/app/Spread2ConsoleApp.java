@@ -19,6 +19,7 @@ import settings.KmlRendererSettings;
 import settings.Settings;
 import utils.Arguments;
 import utils.Arguments.ArgumentException;
+import utils.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -53,13 +54,14 @@ public class Spread2ConsoleApp {
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
 	
-//	private static final String LINE = "line";
-	private static final String LINE_WIDTH = "linewidth";
-	private static final String LINE_COLOR = "linecolor";
-	private static final String LINE_ALTITUDE = "linealtitude";	
-	
+	private static final String POLYGON_COLOR_MAPPING = "polygoncolormapping";
 	private static final String POLYGON_COLOR = "polygoncolor";
 	
+	private static final String LINE_WIDTH = "linewidth";
+	private static final String LINE_COLOR_MAPPING = "linecolormapping";
+	private static final String LINE_COLOR = "linecolor";
+	private static final String LINE_ALTITUDE_MAPPING = "linealtitudemapping";	
+	private static final String LINE_ALTITUDE = "linealtitude";	
 	
 	public Spread2ConsoleApp() {
 
@@ -141,13 +143,17 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(OUTPUT, "", "kml output file name"),
 
-				new Arguments.StringOption(LINE_WIDTH, "", "mapping of the the line aesthetics"),
+				new Arguments.RealOption(LINE_WIDTH, "line width"),
 				
-				new Arguments.StringOption(LINE_ALTITUDE, "", "mapping of the the line aesthetics"),
+				new Arguments.RealOption(LINE_ALTITUDE,  "specify line altitude"),
 				
-				new Arguments.StringOption(LINE_COLOR, "", "mapping of the the line aesthetics"),
+				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "mapping of the the line aesthetics"),
 				
-				new Arguments.StringOption(POLYGON_COLOR, "", "mapping of the the polygon aesthetics"),
+				new Arguments.RealArrayOption(LINE_COLOR, 3, "specify RGB values"),
+				
+				new Arguments.StringOption(POLYGON_COLOR_MAPPING, "", "mapping of the the polygon aesthetics"),
+				
+			    new Arguments.RealArrayOption(POLYGON_COLOR, 3, "specify RGB values"),
 				
 				});
 		
@@ -489,20 +495,50 @@ public class Spread2ConsoleApp {
 			
 			if(renderArguments.hasOption(LINE_WIDTH)) {
 				
-				settings.kmlRendererSettings.lineWidth = renderArguments.getStringOption(LINE_WIDTH);
+				settings.kmlRendererSettings.lineWidth = renderArguments.getRealOption(LINE_WIDTH);
 				
 			}
 			
-			if(renderArguments.hasOption(LINE_COLOR)) {
+			if(renderArguments.hasOption(LINE_COLOR_MAPPING)) {
 				
-				settings.kmlRendererSettings.lineColor = renderArguments.getStringOption(LINE_COLOR);
+				settings.kmlRendererSettings.lineColorMapping = renderArguments.getStringOption(LINE_COLOR_MAPPING);
+				
+			} else if(renderArguments.hasOption(LINE_COLOR)) {
+				
+				settings.kmlRendererSettings.lineColor = renderArguments.getRealArrayOption(LINE_COLOR);
+				
+			} else {
+				
+				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
+				
+			}
+			
+			if(renderArguments.hasOption(LINE_ALTITUDE_MAPPING)) {
+				
+				settings.kmlRendererSettings.lineAltitudeMapping = renderArguments.getStringOption(LINE_ALTITUDE_MAPPING);
+				
+			} else if(renderArguments.hasOption(LINE_ALTITUDE)) {
+				
+				settings.kmlRendererSettings.lineAltitude = renderArguments.getRealOption(LINE_ALTITUDE);
+				
+			} else {
+				
+				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
 				
 			}
 			
 			
-			if(renderArguments.hasOption(POLYGON_COLOR)) {
+			if(renderArguments.hasOption(POLYGON_COLOR_MAPPING)) {
 				
-				settings.kmlRendererSettings.polygonColor = renderArguments.getStringOption(POLYGON_COLOR);
+				settings.kmlRendererSettings.polygonColorMapping = renderArguments.getStringOption(POLYGON_COLOR_MAPPING);
+				
+			} else if(renderArguments.hasOption(POLYGON_COLOR)) {
+				
+				settings.kmlRendererSettings.polygonColor = renderArguments.getRealArrayOption(POLYGON_COLOR);
+
+			} else {
+				
+				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
 				
 			}
 			

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import app.Spread2ConsoleApp;
+
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 import utils.Trait;
@@ -15,6 +17,9 @@ import data.structure.Polygon;
 
 public class ContinuousPolygonsParser {
 
+	public static final String MODALITY = "modality";
+	public static final String HPD = "hpd";
+	
 	private RootedTree rootedTree;
 	private String locationTrait;
 	private String hpd;
@@ -87,7 +92,13 @@ public class ContinuousPolygonsParser {
 							
 						}//END: traits loop
 						
-						// attributes.put("modality", m);
+						
+						Trait modalityTrait = new Trait(m);
+						attributes.put(MODALITY, modalityTrait);
+						
+						Trait hpdTrait = new Trait(hpd);
+						attributes.put(HPD, hpdTrait);
+						
 						Polygon polygon = new Polygon(coordinateList,
 								nodeHeight, attributes);
 

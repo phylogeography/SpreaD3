@@ -21,8 +21,9 @@ h1. USAGE EXAMPLES
 
 -create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test_host.json
 
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor host -output test.kml
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 50 50 101 -output test.kml
 
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping host -linewidth 2 -linealtitude 500000 -output test.kml
 
 h1. LICENSE
 
