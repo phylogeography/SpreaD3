@@ -17,10 +17,12 @@ public class ContinuousLinesParser {
 	public static final String END = "end";
 	public static final String ONE = "1";
 	public static final String TWO = "2";
+
+	public static final String DURATION = "duration";
 	
-private	RootedTree rootedTree;
-private	String locationTrait;
-private String[] traits;
+	private RootedTree rootedTree;
+	private String locationTrait;
+	private String[] traits;
 	
 	public ContinuousLinesParser(RootedTree rootedTree, String locationTrait, String traits[]) {
 		
@@ -61,25 +63,30 @@ private String[] traits;
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
-				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
+				Map<String, Trait> nodeAttributes = new LinkedHashMap<String, Trait>();
 				for(String traitName : traits) {
 					
 					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
 					Trait parentTrait = new Trait(parentTraitObject, parentHeight);
 					
-					attributes.put(START+traitName, parentTrait);
+					nodeAttributes.put(START+traitName, parentTrait);
 					
 					Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
 					Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
 					
-					attributes.put(END+traitName, nodeTrait);
+					nodeAttributes.put(END+traitName, nodeTrait);
 					
 				}//END: traits loop
 				
-				//TODO: start time & end time
-				Line line = new Line(parentCoordinate, nodeCoordinate,
-						parentHeight, nodeHeight, attributes);
-
+				//TODO: branchAttributes specified from CLI
+				
+				Map<String, Trait> branchAttributes = new LinkedHashMap<String, Trait>();
+				
+				double branchDuration = parentHeight - nodeHeight;
+				Trait branchDurationTrait = new Trait(branchDuration);
+				branchAttributes.put(DURATION, branchDurationTrait);
+				
+				Line line = new Line(parentCoordinate, nodeCoordinate, parentHeight, nodeHeight, nodeAttributes, branchAttributes);
 				linesList.add(line);
 
 			}// END: root check

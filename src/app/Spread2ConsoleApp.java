@@ -48,7 +48,7 @@ public class Spread2ConsoleApp {
 	private static final String LOCATIONS = "locations";
 	private static final String LOG = "log";
 	private static final String LOCATION_TRAIT = "locationTrait";
-	private static final String TRAITS = "traits";
+	private static final String NODE_TRAITS = "nodetraits";
 	private static final String HPD = "hpd";
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
@@ -116,7 +116,7 @@ public class Spread2ConsoleApp {
 
 		new Arguments.StringOption(HPD, "", "hpd interval attribute name"),
 
-		new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed"),
+		new Arguments.StringArrayOption(NODE_TRAITS, -1, "", "traits to be parsed from nodes"),
 		
 		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 		
@@ -146,6 +146,8 @@ public class Spread2ConsoleApp {
 				new Arguments.RealOption(LINE_WIDTH, "line width"),
 				
 				new Arguments.RealOption(LINE_ALTITUDE,  "specify line altitude"),
+				
+				new Arguments.StringOption(LINE_ALTITUDE_MAPPING, "", "mapping of the the line aesthetics"),
 				
 				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "mapping of the the line aesthetics"),
 				
@@ -399,8 +401,8 @@ public class Spread2ConsoleApp {
 				settings.continuousTreeSettings.hpd = args3.getStringOption(HPD);
 			}
 
-			if(args3.hasOption(TRAITS)) {
-				settings.continuousTreeSettings.traits = args3.getStringArrayOption(TRAITS);
+			if(args3.hasOption(NODE_TRAITS)) {
+				settings.continuousTreeSettings.nodeTraits = args3.getStringArrayOption(NODE_TRAITS);
 			}
 			
 			if (args3.hasOption(OUTPUT)) {
@@ -465,11 +467,6 @@ public class Spread2ConsoleApp {
 			
 			// ---PARSE---//
 			
-			//TODO: parse style choices
-			
-			// Lines: color width height
-			// Polygons color radius
-			
 			try {
 				
 				renderArguments.parseArguments(otherArgs);
@@ -499,6 +496,7 @@ public class Spread2ConsoleApp {
 				
 			}
 			
+			// TODO: can be mapped to nodeattributes (changing colors) and to branchattributes (solid colors)
 			if(renderArguments.hasOption(LINE_COLOR_MAPPING)) {
 				
 				settings.kmlRendererSettings.lineColorMapping = renderArguments.getStringOption(LINE_COLOR_MAPPING);
@@ -513,6 +511,7 @@ public class Spread2ConsoleApp {
 				
 			}
 			
+			// TODO: can only be mapped to branchattributes 
 			if(renderArguments.hasOption(LINE_ALTITUDE_MAPPING)) {
 				
 				settings.kmlRendererSettings.lineAltitudeMapping = renderArguments.getStringOption(LINE_ALTITUDE_MAPPING);

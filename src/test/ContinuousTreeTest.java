@@ -113,23 +113,23 @@ public class ContinuousTreeTest {
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
-				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
+				Map<String, Trait> nodeAttributes = new LinkedHashMap<String, Trait>();
 				for(String traitName : traits) {
 					
 					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
 					Trait parentTrait = new Trait(parentTraitObject, parentHeight);
 					
-					attributes.put("start"+traitName, parentTrait);
+					nodeAttributes.put("start"+traitName, parentTrait);
 					
 					Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
 					Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
 					
-					attributes.put("end"+traitName, nodeTrait);
+					nodeAttributes.put("end"+traitName, nodeTrait);
 					
 				}//END: traits loop
 				
 				Line line = new Line(parentCoordinate, nodeCoordinate,
-						parentHeight, nodeHeight, attributes);
+						parentHeight, nodeHeight, nodeAttributes, null);
 
 				linesList.add(line);
 

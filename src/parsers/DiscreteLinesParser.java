@@ -71,13 +71,16 @@ public class DiscreteLinesParser {
 				
 				Location parentLocation = locationsList.get(parentLocationIndex);
 				Location nodeLocation = locationsList.get(nodeLocationIndex);
-				if( !(parentLocation.equals(nodeLocation)) ) {
-				
-				//TODO: start time & end time
-				Line line = new Line(parentLocation, nodeLocation, 0.0, 0.0, null);
-				linesList.add(line);
-				
-				}//END: branch changes state check
+				if (!(parentLocation.equals(nodeLocation))) {
+
+					Double parentHeight = Utils.getNodeHeight(rootedTree, parentNode);
+					Double nodeHeight = Utils.getNodeHeight(rootedTree, node);
+					
+					
+					Line line = new Line(parentLocation, nodeLocation, parentHeight, nodeHeight, null);
+					linesList.add(line);
+
+				}// END: branch changes state check
 				
 			}// END: root check
 		}// END: node loop

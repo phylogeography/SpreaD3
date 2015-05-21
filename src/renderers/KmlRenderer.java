@@ -47,6 +47,7 @@ public class KmlRenderer {
 	
 	// maps trait value to Color
 	private Map<Object, Color> lineColorMap = new LinkedHashMap<Object, Color>();
+	private Map<Object, Double> lineAltitudeMap = new LinkedHashMap<Object, Double>();
 	private Map<Object, Color> polygonColorMap = new LinkedHashMap<Object, Color>();
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 	
@@ -142,48 +143,87 @@ public class KmlRenderer {
 		folder.setName("lines");
 		
 		// Map trait values (String | Double) to numerical values (Double)
-		Double factorValue = 1.0;
-		Map<Object, Double> valueMap = new HashMap<Object, Double>();
+		Double nodeFactorValue = 1.0;
+		Map<Object, Double> nodeValueMap = new HashMap<Object, Double>();
+		Double branchFactorValue = 1.0;
+		Map<Object, Double> branchValueMap = new HashMap<Object, Double>();
+		
+		
 	    for(Line line : lines) {
 			
-			Map<String, Trait> attributes = line.getAttributes();
-			for (Trait trait : attributes.values()) {
+	    	// Get the mapping for node attributes
+			Map<String, Trait> nodeAttributes = line.getNodeAttributes();
+			for (Trait trait : nodeAttributes.values()) {
 
 				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-					if (!valueMap.containsKey(traitValue)) {
+					if (!nodeValueMap.containsKey(traitValue)) {
 						
 						if(trait.isNumber()) { 
-							valueMap.put( traitValue, (Double) traitValue);
+							nodeValueMap.put( traitValue, (Double) traitValue);
 						} else {
-							valueMap.put(traitValue, factorValue);
-							factorValue++;
+							nodeValueMap.put(traitValue, nodeFactorValue);
+							nodeFactorValue++;
 						}//END: isNumber check
 						
 					}//END: contains check
-			}//END: attributes loop
-	    }//END: polygons loop
+			}//END: nodeAttributes loop
+			
+		  	// Get the mapping for branch attributes
+			Map<String, Trait> branchAttributes = line.getBranchAttributes();
+			for (Trait trait : branchAttributes.values()) {
+
+				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+					if (!branchValueMap.containsKey(traitValue)) {
+						
+						if(trait.isNumber()) { 
+							branchValueMap.put( traitValue, (Double) traitValue);
+						} else {
+							branchValueMap.put(traitValue, branchFactorValue);
+							branchFactorValue++;
+						}//END: isNumber check
+						
+					}//END: contains check
+			}//END: nodeAttributes loop
+			
+			
+			
+	    }//END: lines loop
 		
-	 double maxValue = Collections.max(valueMap.values());
-	 double minValue = Collections.min(valueMap.values());	
+	 double maxNodeValue = Collections.max(nodeValueMap.values());
+	 double minNodeValue = Collections.min(nodeValueMap.values());	
 		
+	 double minBranchValue = Collections.max(branchValueMap.values());
+	 double maxBranchValue = Collections.min(branchValueMap.values());	
+	 
 		for(Line line : lines) {
 			
-			folder.addFeature(generateLine(line, valueMap, minValue, maxValue));
+			folder.addFeature(generateLine(line, nodeValueMap, minNodeValue, maxNodeValue, branchValueMap, minBranchValue, maxBranchValue));
 			
 		}//END: lines loop
 		
 		return folder;
 	}//END: generateLines
 
-	private Feature generateLine(Line line, Map<Object, Double> valueMap, double minValue, double maxValue) {
+	private Feature generateLine(
+			Line line, //
+			Map<Object, Double> nodeValueMap, //
+			double minNodeValue, //
+			double maxNodeValue, //
+			Map<Object, Double> branchValueMap, //
+			double minBranchValue, //
+			double maxBranchValue //
+	) {
 
+		int sliceCount = 10;
+		
 		Folder folder = new Folder();
 		String name = "";
 		String label = "";
 		
+		Double startTime = line.getStartTime();
+		
 		Coordinate startCoordinate;
 		Coordinate endCoordinate;
-		
 		if (line.connectsLocations()) {
 
 			Location startLocation = line.getStartLocation();
@@ -201,26 +241,30 @@ public class KmlRenderer {
 
 		}
 		
-		Double startTime = line.getStartTime();
+		//---COLOR---//
 		
 		Color startColor;
 		Color endColor;
 		if (this.settings.lineColorMapping != null) { // map
 
-			Object startKey = line.getAttributes().get( ContinuousLinesParser.START + settings.polygonColorMapping);
+			Trait startTrait = line.getNodeAttributes().get(
+					ContinuousLinesParser.START + settings.polygonColorMapping);
+			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
+			
+			
 			if (lineColorMap.containsKey(startKey)) {
 
 				startColor = lineColorMap.get(startKey);
 
 			} else {
 
-				Double startValue = valueMap.get(startKey.toString());
+				Double startValue = nodeValueMap.get(startKey);
 
-				int red = (int) map(startValue, minValue, maxValue,
+				int red = (int) map(startValue, minNodeValue, maxNodeValue,
 						settings.minLineRed, settings.maxLineRed);
-				int green = (int) map(startValue, minValue, maxValue,
+				int green = (int) map(startValue, minNodeValue, maxNodeValue,
 						settings.minLineGreen, settings.maxLineGreen);
-				int blue = (int) map(startValue, minValue, maxValue,
+				int blue = (int) map(startValue, minNodeValue, maxNodeValue,
 						settings.minLineBlue, settings.maxLineBlue);
 				startColor = new Color(red, green, blue);
 
@@ -228,20 +272,23 @@ public class KmlRenderer {
 
 			}// END: startkey check
 
-			Object endKey = line.getAttributes().get( ContinuousLinesParser.END + settings.polygonColorMapping);
+			Trait endTrait = line.getNodeAttributes().get(
+					ContinuousLinesParser.END + settings.polygonColorMapping);
+			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
+			
 			if (lineColorMap.containsKey(endKey)) {
 
 				endColor = lineColorMap.get(endKey);
 
 			} else {
 
-				Double endValue = valueMap.get(endKey.toString());
+				Double endValue = nodeValueMap.get(endKey);
 
-				int red = (int) map(endValue, minValue, maxValue,
+				int red = (int) map(endValue, minNodeValue, maxNodeValue,
 						settings.minLineRed, settings.maxLineRed);
-				int green = (int) map(endValue, minValue, maxValue,
+				int green = (int) map(endValue, minNodeValue, maxNodeValue,
 						settings.minLineGreen, settings.maxLineGreen);
-				int blue = (int) map(endValue, minValue, maxValue,
+				int blue = (int) map(endValue, minNodeValue, maxNodeValue,
 						settings.minLineBlue, settings.maxLineBlue);
 				endColor = new Color(red, green, blue);
 
@@ -261,34 +308,45 @@ public class KmlRenderer {
 			endColor = startColor;
 
 		}// END: settings check
+	
+		//---ALTITUDE---//
 		
+		Double altitude = 0.0;
+		if (settings.lineAltitudeMapping != null) {// map
+
+			Trait trait = line.getBranchAttributes().get(
+					settings.lineAltitudeMapping);
+			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+
+			if (lineAltitudeMap.containsKey(key)) {
+				
+				altitude = lineAltitudeMap.get(key);
+				
+			} else {
+
+				Double value = branchValueMap.get(key);
+				altitude = map(value, minBranchValue, maxBranchValue,
+						settings.minLineAltitude, settings.maxLineAltitude);
+
+				lineAltitudeMap.put(key, altitude);
+				
+			}// END: key check
+
+		} else { // use defaults or user defined color
+
+			altitude = settings.lineAltitude;
+
+		}// END: settings check
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		Double altitude;
-		
-		
-		int sliceCount = 10;
-		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
-		
-		
-		
-		
-		//TODO: max for this line
-		double a = -2 * settings.lineAltitude
+		double	a = -2 * altitude
 				/ (Math.pow(sliceCount, 2) - sliceCount);
-		double b = 2 * settings.lineAltitude / (sliceCount - 1);
+		double	b = 2 * altitude / (sliceCount - 1);
 
 		double redStep = (endColor.getRed() - startColor.getRed()) / sliceCount;
 		double greenStep = (endColor.getGreen() - startColor.getGreen()) / sliceCount;
 		double blueStep = (endColor.getBlue() - startColor.getBlue()) / sliceCount;
 		
+		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 		for (int i = 0; i < sliceCount; i++) {
 			
 			Double segmentStartTime = startTime;

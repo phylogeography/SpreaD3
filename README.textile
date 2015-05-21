@@ -19,11 +19,13 @@ h1. USAGE EXAMPLES
 
 -create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
 
--create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test_host.json
-
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 50 50 101 -output test.kml
+-create -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -nodetraits host -output test_host.json
 
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping host -linewidth 2 -linealtitude 500000 -output test.kml
+
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping host -linewidth 2 -linealtitudemapping duration -output test.kml
+
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping duration -linewidth 2 -linealtitudemapping duration -output test.kml
 
 h1. LICENSE
 
@@ -41,12 +43,14 @@ h1. TODO
 
 * Renderers
   - built in renderers to KML and GeoJSON
-    - mapping of user specified traits
+    - control arc curvature [0 - 1]
+    - color palletes for discrete traits    
+    - distinction between node traits and branch traits
   - D3 renderer tool
 * Two data modes. dd/mm/yyyy and old origin dates.
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
 * Parsers work independently (if only locations supplied then only locations will be parsed).
 * Uncaught exception handler (for bug reports).
-* Processing large tree distributions on GPUs. For this we'd probably need to write a small library and JNI to it.  
+* Processing large tree distributions on GPUs. Write a small library and JNI to it.  
 

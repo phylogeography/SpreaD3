@@ -7,8 +7,11 @@ import utils.Trait;
 
 public class Line {
 
-	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-
+	// Traits which have start and end values go here:
+	private final Map<String, Trait> nodeAttributes = new LinkedHashMap<String, Trait>();
+	// Traits which apply to a whole branch go here:
+	private final Map<String, Trait> branchAttributes = new LinkedHashMap<String, Trait>();
+	
 	private final Coordinate startCoordinate;
 	private final Coordinate endCoordinate;
 
@@ -19,11 +22,13 @@ public class Line {
 	private final double startTime;
 	private final double endTime;
 	
+	//TODO: branchatrributes in this constructor too (used for discrete data, so change parsers accordingly)
 	public Line(Location startLocation, //
 			Location endLocation, //
 			double startTime, //
 			double endTime, //
-			Map<String, Trait> attributes //
+			Map<String, Trait> nodeAttributes //
+//			Map<String, Trait> branchAttributes //
 	) {
 
 		super();
@@ -38,17 +43,19 @@ public class Line {
 		this.startCoordinate = null;
 		this.endCoordinate = null;
 
-		if (attributes != null) {
-			this.attributes.putAll(attributes);
+		if (nodeAttributes != null) {
+			this.nodeAttributes.putAll(nodeAttributes);
 		}
 
+		
 	}// END: Constructor
 
 	public Line(Coordinate startCoordinate, //
 			Coordinate endCoordinate, //
 			double startTime, //
 			double endTime, //
-			Map<String, Trait> attributes //
+			Map<String, Trait> nodeAttributes, //
+			Map<String, Trait> branchAttributes //
 	) {
 
 		super();
@@ -62,8 +69,12 @@ public class Line {
 		this.endLocation = null;
 		this.connectsLocations = false;
 		
-		if(  attributes != null) {
-		this.attributes.putAll(attributes);
+		if (nodeAttributes != null) {
+			this.nodeAttributes.putAll(nodeAttributes);
+		}
+
+		if (branchAttributes != null) {
+			this.branchAttributes.putAll(branchAttributes);
 		}
 		
 	}// END: Constructor
@@ -96,8 +107,12 @@ public class Line {
 		return connectsLocations;
 	}
 	
-	public Map<String, Trait> getAttributes() {
-		return attributes;
+	public Map<String, Trait> getNodeAttributes() {
+		return nodeAttributes;
+	}
+	
+	public Map<String, Trait> getBranchAttributes() {
+		return branchAttributes;
 	}
 	
 }// END: class
