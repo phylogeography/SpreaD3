@@ -2,7 +2,7 @@
 .:: SPREAD 2::.
 ===================
 *Spatial Phylogenetic Reconstruction of EvolutionAry Dynamics 2*
-Version: 2.0.0 rc, 2015
+Version: 2.0.0 alpha, 2015
 Authors: Filip Bielejec, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
@@ -23,9 +23,15 @@ h1. USAGE EXAMPLES
 
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping host -linewidth 2 -linealtitude 500000 -output test.kml
 
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping host -linewidth 2 -linealtitudemapping duration -output test.kml
-
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -linecolormapping duration -linewidth 2 -linealtitudemapping duration -output test.kml
+
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -linewidth 2 -linealtitudemapping duration -output test.kml
+
+# these options overwrite alpha channel values specified in style sheet:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalpha 255 -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linewidth 2 -linealtitudemapping duration -output test.kml
+
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linewidth 2 -linealtitudemapping duration -output test.kml
+
 
 h1. LICENSE
 

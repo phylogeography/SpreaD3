@@ -78,7 +78,7 @@ public class ContinuousLinesParser {
 					
 				}//END: traits loop
 				
-				//TODO: branchAttributes specified from CLI
+				//TODO: branchAttributes specified from CLI, other than duration 
 				
 				Map<String, Trait> branchAttributes = new LinkedHashMap<String, Trait>();
 				

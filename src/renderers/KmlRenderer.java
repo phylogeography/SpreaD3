@@ -14,6 +14,7 @@ import java.util.Map;
 
 import parsers.ContinuousLinesParser;
 import parsers.ContinuousPolygonsParser;
+import parsers.DiscreteColorsParser;
 
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
@@ -49,6 +50,7 @@ public class KmlRenderer {
 	private Map<Object, Color> lineColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Double> lineAltitudeMap = new LinkedHashMap<Object, Double>();
 	private Map<Object, Color> polygonColorMap = new LinkedHashMap<Object, Color>();
+	private Map<Object, Integer> polygonAlphaMap = new LinkedHashMap<Object, Integer>();
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 	
 	
@@ -122,7 +124,7 @@ public class KmlRenderer {
 	// ---LAYERS---//
 	// //////////////
 	
-	private Feature generateLayer(Layer layer) {
+	private Feature generateLayer(Layer layer) throws IOException {
 
 		Folder folder = new Folder();
 		
@@ -137,17 +139,24 @@ public class KmlRenderer {
 
 	// ---LINES---//
 	
-	private Feature generateLines(List<Line> lines) {
+	private Feature generateLines(List<Line> lines) throws IOException {
 
 		Folder folder = new Folder();
 		folder.setName("lines");
+		
+		// read the supplied colors and create lineColorMap
+		if (settings.lineColors != null) {
+			
+			DiscreteColorsParser colorsParser = new DiscreteColorsParser( settings.lineColors);
+			lineColorMap = colorsParser.parseColors();
+			
+		}
 		
 		// Map trait values (String | Double) to numerical values (Double)
 		Double nodeFactorValue = 1.0;
 		Map<Object, Double> nodeValueMap = new HashMap<Object, Double>();
 		Double branchFactorValue = 1.0;
 		Map<Object, Double> branchValueMap = new HashMap<Object, Double>();
-		
 		
 	    for(Line line : lines) {
 			
@@ -185,8 +194,6 @@ public class KmlRenderer {
 					}//END: contains check
 			}//END: nodeAttributes loop
 			
-			
-			
 	    }//END: lines loop
 		
 	 double maxNodeValue = Collections.max(nodeValueMap.values());
@@ -214,6 +221,7 @@ public class KmlRenderer {
 			double maxBranchValue //
 	) {
 
+		//TODO: make this a setting
 		int sliceCount = 10;
 		
 		Folder folder = new Folder();
@@ -251,13 +259,16 @@ public class KmlRenderer {
 					ContinuousLinesParser.START + settings.polygonColorMapping);
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			
-			
 			if (lineColorMap.containsKey(startKey)) {
-
+				
+				// read the supplied color map, or re-use mappings
 				startColor = lineColorMap.get(startKey);
 
 			} else {
-
+				
+				// scale needs to be created | color for attribute not supplied
+				// TODO: display warning for the latter case?
+				
 				Double startValue = nodeValueMap.get(startKey);
 
 				int red = (int) map(startValue, minNodeValue, maxNodeValue,
@@ -423,15 +434,24 @@ public class KmlRenderer {
 	
 	// ---POLYGONS---//
 
-	private Feature generatePolygons(List<Polygon> polygons) {
+	private Feature generatePolygons(List<Polygon> polygons) throws IOException {
 
 		Folder folder = new Folder();
 		folder.setName("polygons");
 //		folder.setDescription("polygons");
 		
+		// read the supplied colors and create lineColorMap
+		if (settings.polygonColors != null) {
+			
+			DiscreteColorsParser colorsParser = new DiscreteColorsParser( settings.polygonColors);
+			polygonColorMap = colorsParser.parseColors();
+			
+		}
+		
 		// Map trait values (String | Double) to numerical values (Double)
+		//TODO: this processes all traits found in json, perhaps we should split them in maps for color, alpha, width, etc.
 		Double factorValue = 1.0;
-		Map<Object, Double> valueMap = new HashMap<Object, Double>();
+		Map<Object, Double> valueMap = new LinkedHashMap<Object, Double>();
 	    for(Polygon polygon : polygons) {
 			
 			Map<String, Trait> attributes = polygon.getAttributes();
@@ -457,44 +477,78 @@ public class KmlRenderer {
 	 
 		// get Colors map
 		KmlStyle style = null;
-		String label = "";
 		for (Polygon polygon : polygons) {
 
+			String label = "";
 			Color color = null;
+			
+			int red = 255, green = 255, blue = 255, alpha = 0;
 			if (this.settings.polygonColorMapping != null) {// map
 
-				Object key = polygon.getAttributes().get( settings.polygonColorMapping);
-
+				Trait colorTrait = polygon.getAttributes().get(
+						settings.polygonColorMapping);
+				Object key = colorTrait.isNumber() ? colorTrait.getValue()[0] : (String) colorTrait.getId();
+				
 				if (polygonColorMap.containsKey(key)) {
 
-					color = polygonColorMap.get(key);
-
+					Color c = polygonColorMap.get(key);
+					red = c.getRed();
+					green = c.getGreen();
+					blue = c.getBlue();
+					// take alpha value from map if file is supplied by the user 
+                    alpha = c.getAlpha();
+					
 				} else {
 
-					Double value = valueMap.get(key.toString());
-					label = key.toString();
+					Double value = valueMap.get(key);
 
-					int red = (int) map(value, minValue, maxValue,
+					 red = (int) map(value, minValue, maxValue,
 							settings.minPolygonRed, settings.maxPolygonRed);
-					int green = (int) map(value, minValue, maxValue,
+					 green = (int) map(value, minValue, maxValue,
 							settings.minPolygonGreen, settings.maxPolygonGreen);
-					int blue = (int) map(value, minValue, maxValue,
+					 blue = (int) map(value, minValue, maxValue,
 							settings.minPolygonBlue, settings.maxPolygonBlue);
-					// int alpha = 200;
-					color = new Color(red, green, blue);
-
+					
 				}// END: key check
 
+				label = settings.polygonColorMapping + "=" + key.toString();
+				
 			} else {// use defaults or user defined color
 
-				int red = (int) settings.polygonColor[KmlRendererSettings.R];
-				int green = (int) settings.polygonColor[KmlRendererSettings.G];
-				int blue = (int) settings.polygonColor[KmlRendererSettings.B];
-				// int alpha = 200;
-				color = new Color(red, green, blue);
-
+				 red = (int) settings.polygonColor[KmlRendererSettings.R];
+				 green = (int) settings.polygonColor[KmlRendererSettings.G];
+				 blue = (int) settings.polygonColor[KmlRendererSettings.B];
+				 
 			}// END: settings check
 			
+			// this should overwrite any previous settings
+			if (this.settings.polygonAlphaMapping != null) { // map
+				
+				Trait alphaTrait = polygon.getAttributes().get(
+						settings.polygonAlphaMapping);
+				Object key = alphaTrait.isNumber() ? alphaTrait.getValue()[0] : (String) alphaTrait.getId();
+				
+				if (polygonAlphaMap.containsKey(key)) {
+
+					alpha = polygonAlphaMap.get(key);
+					
+				} else {
+
+					Double value = valueMap.get(key);
+					alpha = (int) map(value, minValue, maxValue, settings.minAlpha, settings.maxAlpha);
+					
+				}// END: key check
+				
+				label += (", "+settings.polygonAlphaMapping + "="+key.toString());
+				
+			} // END: settings check
+			
+			// if alpha was specified by the user it overwrites previous settings
+			if(settings.alphaChanged) {
+				alpha = (int) settings.polygonAlpha;
+			}//END: setting check
+			
+			color = new Color(red, green, blue, alpha);
 			style = new KmlStyle(color);
 			style.setId(style.toString());
 		

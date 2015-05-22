@@ -8,6 +8,7 @@ import utils.Trait;
 
 public class Polygon {
 
+	//TODO: maybe it also should have node attributes and branchattributes?
 	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 
 	//	private final Location location;

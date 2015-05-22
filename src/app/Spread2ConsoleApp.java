@@ -55,13 +55,22 @@ public class Spread2ConsoleApp {
 	private static final String JSON = "json";
 	
 	private static final String POLYGON_COLOR_MAPPING = "polygoncolormapping";
+	private static final String POLYGON_COLORS = "polygoncolors";
 	private static final String POLYGON_COLOR = "polygoncolor";
+
+	private static final String POLYGON_ALPHA_MAPPING = "polygonalphamapping";
+	// for discrete data alphas are taken from colors file 
+	private static final String POLYGON_ALPHA = "polygonalpha";
 	
-	private static final String LINE_WIDTH = "linewidth";
+	
 	private static final String LINE_COLOR_MAPPING = "linecolormapping";
+	private static final String LINE_COLORS = "linecolors";
 	private static final String LINE_COLOR = "linecolor";
+	
 	private static final String LINE_ALTITUDE_MAPPING = "linealtitudemapping";	
 	private static final String LINE_ALTITUDE = "linealtitude";	
+
+	private static final String LINE_WIDTH = "linewidth";
 	
 	public Spread2ConsoleApp() {
 
@@ -147,16 +156,26 @@ public class Spread2ConsoleApp {
 				
 				new Arguments.RealOption(LINE_ALTITUDE,  "specify line altitude"),
 				
-				new Arguments.StringOption(LINE_ALTITUDE_MAPPING, "", "mapping of the the line aesthetics"),
+				new Arguments.StringOption(LINE_ALTITUDE_MAPPING, "", "attribute to map line aesthetics"),
 				
-				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "mapping of the the line aesthetics"),
+				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "attribute to map line aesthetics"),
 				
+				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map line attribute values"),
+				
+				//TODO: this should read RGB or RGBA
 				new Arguments.RealArrayOption(LINE_COLOR, 3, "specify RGB values"),
 				
-				new Arguments.StringOption(POLYGON_COLOR_MAPPING, "", "mapping of the the polygon aesthetics"),
+				new Arguments.StringOption(POLYGON_COLOR_MAPPING, "", "attribute to map polygon RGB aesthetics"),
 				
+				new Arguments.StringOption(POLYGON_COLORS, "", "file with RGB(A) colors to map polygon attribute values"),
+				
+				//TODO: this should read RGB or RGBA
 			    new Arguments.RealArrayOption(POLYGON_COLOR, 3, "specify RGB values"),
-				
+
+			    new Arguments.StringOption(POLYGON_ALPHA_MAPPING, "", "attribute to map polygon aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
+			    
+			    new Arguments.RealOption(POLYGON_ALPHA, "specify A value"),
+			    
 				});
 		
 		
@@ -501,6 +520,10 @@ public class Spread2ConsoleApp {
 				
 				settings.kmlRendererSettings.lineColorMapping = renderArguments.getStringOption(LINE_COLOR_MAPPING);
 				
+				if(renderArguments.hasOption(LINE_COLORS)) {
+					settings.kmlRendererSettings.lineColors = renderArguments.getStringOption(LINE_COLORS);
+				}
+				
 			} else if(renderArguments.hasOption(LINE_COLOR)) {
 				
 				settings.kmlRendererSettings.lineColor = renderArguments.getRealArrayOption(LINE_COLOR);
@@ -531,6 +554,11 @@ public class Spread2ConsoleApp {
 				
 				settings.kmlRendererSettings.polygonColorMapping = renderArguments.getStringOption(POLYGON_COLOR_MAPPING);
 				
+				if(renderArguments.hasOption(POLYGON_COLORS)) {
+					settings.kmlRendererSettings.polygonColors = renderArguments.getStringOption(POLYGON_COLORS);
+				}
+				
+				
 			} else if(renderArguments.hasOption(POLYGON_COLOR)) {
 				
 				settings.kmlRendererSettings.polygonColor = renderArguments.getRealArrayOption(POLYGON_COLOR);
@@ -539,6 +567,22 @@ public class Spread2ConsoleApp {
 				
 				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
 				
+			}
+			
+			
+			if(renderArguments.hasOption(POLYGON_ALPHA_MAPPING)) {
+				
+				settings.kmlRendererSettings.polygonAlphaMapping = renderArguments.getStringOption(POLYGON_ALPHA_MAPPING);
+				
+			} else if(renderArguments.hasOption(POLYGON_ALPHA)) {
+				
+				settings.kmlRendererSettings.polygonAlpha = renderArguments.getRealOption(POLYGON_ALPHA);
+				settings.kmlRendererSettings.alphaChanged = true;
+				
+			}else {
+				
+				gracefullyExit("Can't both map and have a defined alpha!", renderArguments, null);
+			
 			}
 			
 			// ---RUN---//
