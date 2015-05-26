@@ -84,8 +84,6 @@ public class ContinuousTreeTest {
 		// ---LINES---//
 		// /////////////
 
-		// TODO: map attributes to aesthetics
-		
 		List<Line> linesList = new LinkedList<Line>();
 
 		for (Node node : tree.getNodes()) {
@@ -113,23 +111,23 @@ public class ContinuousTreeTest {
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
-				Map<String, Trait> nodeAttributes = new LinkedHashMap<String, Trait>();
+				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 				for(String traitName : traits) {
 					
 					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
 					Trait parentTrait = new Trait(parentTraitObject, parentHeight);
 					
-					nodeAttributes.put("start"+traitName, parentTrait);
+					attributes.put("start"+traitName, parentTrait);
 					
 					Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
 					Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
 					
-					nodeAttributes.put("end"+traitName, nodeTrait);
+					attributes.put("end"+traitName, nodeTrait);
 					
 				}//END: traits loop
 				
 				Line line = new Line(parentCoordinate, nodeCoordinate,
-						parentHeight, nodeHeight, nodeAttributes, null);
+						parentHeight, nodeHeight, attributes);
 
 				linesList.add(line);
 

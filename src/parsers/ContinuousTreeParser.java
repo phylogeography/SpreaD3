@@ -35,7 +35,7 @@ public class ContinuousTreeParser {
 		
 		ContinuousLinesParser linesParser = new ContinuousLinesParser(rootedTree, //
 				continuousTreeSettings.locationTrait, //
-				continuousTreeSettings.nodeTraits //
+				continuousTreeSettings.traits //
 				);
 	     linesList = linesParser.parseLines();
 		
@@ -44,7 +44,7 @@ public class ContinuousTreeParser {
 		ContinuousPolygonsParser polygonsParser = new ContinuousPolygonsParser(rootedTree, //
 				continuousTreeSettings.locationTrait, //
 				continuousTreeSettings.hpd, //
-				continuousTreeSettings.nodeTraits //
+				continuousTreeSettings.traits //
 				); 
 	      polygonsList = polygonsParser.parsePolygons();
 		

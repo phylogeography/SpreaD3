@@ -9,10 +9,7 @@ public class ContinuousTreeSettings {
 	// hpd attribute name
 	public String hpd = null;
 	// node trait attribute names
-	public String[] nodeTraits = null;
-	//TODO: no such option in parser yet
-	// branch trait attribute names
-	public String[] branchTraits = null;
+	public String[] traits = null;
 	// path to json output file 
 	public String output = null;
 	

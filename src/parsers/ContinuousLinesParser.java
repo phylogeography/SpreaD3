@@ -63,30 +63,29 @@ public class ContinuousLinesParser {
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
-				Map<String, Trait> nodeAttributes = new LinkedHashMap<String, Trait>();
+				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 				for(String traitName : traits) {
 					
 					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
 					Trait parentTrait = new Trait(parentTraitObject, parentHeight);
 					
-					nodeAttributes.put(START+traitName, parentTrait);
+					attributes.put(START+traitName, parentTrait);
 					
 					Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
 					Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
 					
-					nodeAttributes.put(END+traitName, nodeTrait);
+					attributes.put(END+traitName, nodeTrait);
 					
 				}//END: traits loop
 				
 				//TODO: branchAttributes specified from CLI, other than duration 
-				
-				Map<String, Trait> branchAttributes = new LinkedHashMap<String, Trait>();
+				// TODO: maybe an enum list of possible ones to parse?
 				
 				double branchDuration = parentHeight - nodeHeight;
 				Trait branchDurationTrait = new Trait(branchDuration);
-				branchAttributes.put(DURATION, branchDurationTrait);
+				attributes.put(DURATION, branchDurationTrait);
 				
-				Line line = new Line(parentCoordinate, nodeCoordinate, parentHeight, nodeHeight, nodeAttributes, branchAttributes);
+				Line line = new Line(parentCoordinate, nodeCoordinate, parentHeight, nodeHeight, attributes);//, branchAttributes);
 				linesList.add(line);
 
 			}// END: root check

@@ -48,6 +48,8 @@ public class KmlRenderer {
 	
 	// maps trait value to Color
 	private Map<Object, Color> lineColorMap = new LinkedHashMap<Object, Color>();
+	private Map<Object, Integer> lineAlphaMap = new LinkedHashMap<Object, Integer>();
+	
 	private Map<Object, Double> lineAltitudeMap = new LinkedHashMap<Object, Double>();
 	private Map<Object, Color> polygonColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> polygonAlphaMap = new LinkedHashMap<Object, Integer>();
@@ -153,58 +155,53 @@ public class KmlRenderer {
 		}
 		
 		// Map trait values (String | Double) to numerical values (Double)
-		Double nodeFactorValue = 1.0;
-		Map<Object, Double> nodeValueMap = new HashMap<Object, Double>();
-		Double branchFactorValue = 1.0;
-		Map<Object, Double> branchValueMap = new HashMap<Object, Double>();
+		Double factorValue = 1.0;
+		Map<Object, Double> valueMap = new HashMap<Object, Double>();
 		
 	    for(Line line : lines) {
 			
 	    	// Get the mapping for node attributes
-			Map<String, Trait> nodeAttributes = line.getNodeAttributes();
-			for (Trait trait : nodeAttributes.values()) {
+			Map<String, Trait> attributes = line.getAttributes();
+			for (Trait trait : attributes.values()) {
 
 				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-					if (!nodeValueMap.containsKey(traitValue)) {
+					if (!valueMap.containsKey(traitValue)) {
 						
 						if(trait.isNumber()) { 
-							nodeValueMap.put( traitValue, (Double) traitValue);
+							valueMap.put( traitValue, (Double) traitValue);
 						} else {
-							nodeValueMap.put(traitValue, nodeFactorValue);
-							nodeFactorValue++;
+							valueMap.put(traitValue, factorValue);
+							factorValue++;
 						}//END: isNumber check
 						
 					}//END: contains check
 			}//END: nodeAttributes loop
 			
 		  	// Get the mapping for branch attributes
-			Map<String, Trait> branchAttributes = line.getBranchAttributes();
-			for (Trait trait : branchAttributes.values()) {
-
-				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-					if (!branchValueMap.containsKey(traitValue)) {
-						
-						if(trait.isNumber()) { 
-							branchValueMap.put( traitValue, (Double) traitValue);
-						} else {
-							branchValueMap.put(traitValue, branchFactorValue);
-							branchFactorValue++;
-						}//END: isNumber check
-						
-					}//END: contains check
-			}//END: nodeAttributes loop
+//			Map<String, Trait> branchAttributes = line.getBranchAttributes();
+//			for (Trait trait : branchAttributes.values()) {
+//
+//				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+//					if (!valueMap.containsKey(traitValue)) {
+//						
+//						if(trait.isNumber()) { 
+//							valueMap.put( traitValue, (Double) traitValue);
+//						} else {
+//							valueMap.put(traitValue, factorValue);
+//							factorValue++;
+//						}//END: isNumber check
+//						
+//					}//END: contains check
+//			}//END: nodeAttributes loop
 			
 	    }//END: lines loop
 		
-	 double maxNodeValue = Collections.max(nodeValueMap.values());
-	 double minNodeValue = Collections.min(nodeValueMap.values());	
+	 double maxValue = Collections.max(valueMap.values());
+	 double minValue = Collections.min(valueMap.values());	
 		
-	 double minBranchValue = Collections.max(branchValueMap.values());
-	 double maxBranchValue = Collections.min(branchValueMap.values());	
-	 
 		for(Line line : lines) {
 			
-			folder.addFeature(generateLine(line, nodeValueMap, minNodeValue, maxNodeValue, branchValueMap, minBranchValue, maxBranchValue));
+			folder.addFeature(generateLine(line, valueMap, minValue, maxValue));
 			
 		}//END: lines loop
 		
@@ -213,12 +210,9 @@ public class KmlRenderer {
 
 	private Feature generateLine(
 			Line line, //
-			Map<Object, Double> nodeValueMap, //
-			double minNodeValue, //
-			double maxNodeValue, //
-			Map<Object, Double> branchValueMap, //
-			double minBranchValue, //
-			double maxBranchValue //
+			Map<Object, Double> valueMap, //
+			double minValue, //
+			double maxValue //
 	) {
 
 		//TODO: make this a setting
@@ -252,39 +246,49 @@ public class KmlRenderer {
 		//---COLOR---//
 		
 		Color startColor;
+		int startRed = 255, startGreen = 255, startBlue = 255, startAlpha = 0;
+		
 		Color endColor;
+		int endRed = 255, endGreen = 255, endBlue = 255, endAlpha = 0;
+		
 		if (this.settings.lineColorMapping != null) { // map
 
-			Trait startTrait = line.getNodeAttributes().get(
-					ContinuousLinesParser.START + settings.polygonColorMapping);
+			Trait startTrait = line.getAttributes().get(
+					ContinuousLinesParser.START + settings.lineColorMapping);
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			
 			if (lineColorMap.containsKey(startKey)) {
 				
-				// read the supplied color map, or re-use mappings
-				startColor = lineColorMap.get(startKey);
-
+				// read the supplied color map, or re-use already mapped values
+				Color c = lineColorMap.get(startKey);
+				
+				startRed = c.getRed();
+				startGreen = c.getGreen();
+				startBlue = c.getBlue();
+				// take alpha value from map if file is supplied by the user 
+				startAlpha = c.getAlpha();
+				
 			} else {
 				
 				// scale needs to be created | color for attribute not supplied
 				// TODO: display warning for the latter case?
 				
-				Double startValue = nodeValueMap.get(startKey);
+				Double startValue = valueMap.get(startKey);
 
-				int red = (int) map(startValue, minNodeValue, maxNodeValue,
+				startRed = (int) map(startValue, minValue, maxValue,
 						settings.minLineRed, settings.maxLineRed);
-				int green = (int) map(startValue, minNodeValue, maxNodeValue,
+				startGreen = (int) map(startValue, minValue, maxValue,
 						settings.minLineGreen, settings.maxLineGreen);
-				int blue = (int) map(startValue, minNodeValue, maxNodeValue,
+				startBlue = (int) map(startValue, minValue, maxValue,
 						settings.minLineBlue, settings.maxLineBlue);
-				startColor = new Color(red, green, blue);
-
-				lineColorMap.put(startKey, startColor);
+				
+				Color c = new Color(startRed, startGreen, startBlue);
+				lineColorMap.put(startKey, c);
 
 			}// END: startkey check
 
-			Trait endTrait = line.getNodeAttributes().get(
-					ContinuousLinesParser.END + settings.polygonColorMapping);
+			Trait endTrait = line.getAttributes().get(
+					ContinuousLinesParser.END + settings.lineColorMapping);
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
 			
 			if (lineColorMap.containsKey(endKey)) {
@@ -293,39 +297,99 @@ public class KmlRenderer {
 
 			} else {
 
-				Double endValue = nodeValueMap.get(endKey);
+				Double endValue = valueMap.get(endKey);
 
-				int red = (int) map(endValue, minNodeValue, maxNodeValue,
+				endRed = (int) map(endValue, minValue, maxValue,
 						settings.minLineRed, settings.maxLineRed);
-				int green = (int) map(endValue, minNodeValue, maxNodeValue,
+				endGreen = (int) map(endValue, minValue, maxValue,
 						settings.minLineGreen, settings.maxLineGreen);
-				int blue = (int) map(endValue, minNodeValue, maxNodeValue,
+				endBlue = (int) map(endValue, minValue, maxValue,
 						settings.minLineBlue, settings.maxLineBlue);
-				endColor = new Color(red, green, blue);
-
-				lineColorMap.put(endKey, endColor);
+				
+				Color c = new Color(endRed, endGreen, endBlue);
+				lineColorMap.put(endKey, c);
 
 			}// END: endkey check
 
-			 label = startKey.toString().concat(" to ").concat(endKey.toString());
-			
+				label += (", "+settings.lineColorMapping + "="+startKey.toString().concat(" to ").concat(endKey.toString()));
+
 		} else { // use defaults or user defined color
 
-			int red = (int) settings.lineColor[KmlRendererSettings.R];
-			int green = (int) settings.lineColor[KmlRendererSettings.G];
-			int blue = (int) settings.lineColor[KmlRendererSettings.B];
-			// int alpha = 200;
-			startColor = new Color(red, green, blue);
-			endColor = startColor;
-
+			startRed = (int) settings.lineColor[KmlRendererSettings.R];
+			startGreen = (int) settings.lineColor[KmlRendererSettings.G];
+			startBlue = (int) settings.lineColor[KmlRendererSettings.B];
+			startAlpha = (int) settings.lineAlpha;
+			
+			endRed = startRed;
+			endGreen = startGreen;
+			endBlue = startBlue;
+            endAlpha = startAlpha;
+			
 		}// END: settings check
-	
+		
+		//---ALPHA---//
+		
+		// this should overwrite any previous settings
+		if (this.settings.lineAlphaMapping != null) { // map
+			
+			Trait startTrait = line.getAttributes().get(
+					ContinuousLinesParser.START + settings.lineAlphaMapping);
+			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
+			
+			if (lineAlphaMap.containsKey(startKey)) {
+				
+				startAlpha = lineAlphaMap.get(startKey);
+				
+			} else {
+				
+				Double startValue = valueMap.get(startKey);
+				startAlpha = (int) map(startValue, minValue, maxValue, settings.minPolygonAlpha, settings.maxPolygonAlpha);
+				
+				lineAlphaMap.put(startKey, startAlpha);
+				
+			}// END: startkey check
+
+			Trait endTrait = line.getAttributes().get(
+					ContinuousLinesParser.END + settings.lineAlphaMapping);
+			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
+			
+			if (lineAlphaMap.containsKey(endKey)) {
+
+				endAlpha = lineAlphaMap.get(endKey);
+
+			} else {
+
+				Double endValue = valueMap.get(endKey);
+				endAlpha = (int) map(endValue, minValue, maxValue, settings.minPolygonAlpha, settings.maxPolygonAlpha);
+				
+				lineAlphaMap.put(endKey, endAlpha);
+
+			}// END: endkey check
+
+			label += (", "+settings.lineAlphaMapping + "="+startKey.toString().concat(" to ").concat(endKey.toString()));
+			
+		} // END: settings check
+		
+		// if alpha was specified by the user it overwrites previous settings
+		if(settings.lineAlphaChanged) {
+			startAlpha = (int) settings.lineAlpha;
+			endAlpha = startAlpha;
+		}//END: setting check
+		
+		
+		
+		
+		
+		
+		startColor = new Color(startRed, startGreen, startBlue, startAlpha);
+		endColor = new Color(endRed, endGreen, endBlue, endAlpha);
+		
 		//---ALTITUDE---//
 		
 		Double altitude = 0.0;
 		if (settings.lineAltitudeMapping != null) {// map
 
-			Trait trait = line.getBranchAttributes().get(
+			Trait trait = line.getAttributes().get(
 					settings.lineAltitudeMapping);
 			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 
@@ -335,8 +399,8 @@ public class KmlRenderer {
 				
 			} else {
 
-				Double value = branchValueMap.get(key);
-				altitude = map(value, minBranchValue, maxBranchValue,
+				Double value = valueMap.get(key);
+				altitude = map(value, minValue, maxValue,
 						settings.minLineAltitude, settings.maxLineAltitude);
 
 				lineAltitudeMap.put(key, altitude);
@@ -356,6 +420,7 @@ public class KmlRenderer {
 		double redStep = (endColor.getRed() - startColor.getRed()) / sliceCount;
 		double greenStep = (endColor.getGreen() - startColor.getGreen()) / sliceCount;
 		double blueStep = (endColor.getBlue() - startColor.getBlue()) / sliceCount;
+		double alphaStep = (endColor.getAlpha() - startColor.getAlpha()) / sliceCount;
 		
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 		for (int i = 0; i < sliceCount; i++) {
@@ -378,8 +443,9 @@ public class KmlRenderer {
             int segmentRed = (int) (startColor.getRed() + redStep*i);
             int segmentGreen = (int) (startColor.getGreen() + greenStep*i);
             int segmentBlue = (int) (startColor.getBlue() + blueStep*i);
+            int segmentAlpha = (int) (startColor.getAlpha() + alphaStep*i);
             
-			Color segmentColor = new Color(segmentRed, segmentGreen, segmentBlue);
+			Color segmentColor = new Color(segmentRed, segmentGreen, segmentBlue, segmentAlpha);
 			
 			Double segmentWidth = settings.lineWidth;
 			
@@ -485,12 +551,13 @@ public class KmlRenderer {
 			int red = 255, green = 255, blue = 255, alpha = 0;
 			if (this.settings.polygonColorMapping != null) {// map
 
-				Trait colorTrait = polygon.getAttributes().get(
+				Trait trait = polygon.getAttributes().get(
 						settings.polygonColorMapping);
-				Object key = colorTrait.isNumber() ? colorTrait.getValue()[0] : (String) colorTrait.getId();
+				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 				
 				if (polygonColorMap.containsKey(key)) {
 
+					// read the supplied color map, or re-use already mapped values
 					Color c = polygonColorMap.get(key);
 					red = c.getRed();
 					green = c.getGreen();
@@ -509,6 +576,9 @@ public class KmlRenderer {
 					 blue = (int) map(value, minValue, maxValue,
 							settings.minPolygonBlue, settings.maxPolygonBlue);
 					
+					 Color c = new Color(red,green,blue);
+					 polygonColorMap.put(key, c);
+					 
 				}// END: key check
 
 				label = settings.polygonColorMapping + "=" + key.toString();
@@ -518,15 +588,16 @@ public class KmlRenderer {
 				 red = (int) settings.polygonColor[KmlRendererSettings.R];
 				 green = (int) settings.polygonColor[KmlRendererSettings.G];
 				 blue = (int) settings.polygonColor[KmlRendererSettings.B];
+				 alpha = (int) settings.polygonAlpha;
 				 
 			}// END: settings check
 			
 			// this should overwrite any previous settings
 			if (this.settings.polygonAlphaMapping != null) { // map
 				
-				Trait alphaTrait = polygon.getAttributes().get(
+				Trait trait = polygon.getAttributes().get(
 						settings.polygonAlphaMapping);
-				Object key = alphaTrait.isNumber() ? alphaTrait.getValue()[0] : (String) alphaTrait.getId();
+				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 				
 				if (polygonAlphaMap.containsKey(key)) {
 
@@ -535,7 +606,7 @@ public class KmlRenderer {
 				} else {
 
 					Double value = valueMap.get(key);
-					alpha = (int) map(value, minValue, maxValue, settings.minAlpha, settings.maxAlpha);
+					alpha = (int) map(value, minValue, maxValue, settings.minPolygonAlpha, settings.maxPolygonAlpha);
 					
 				}// END: key check
 				
@@ -544,7 +615,7 @@ public class KmlRenderer {
 			} // END: settings check
 			
 			// if alpha was specified by the user it overwrites previous settings
-			if(settings.alphaChanged) {
+			if(settings.polygonAlphaChanged) {
 				alpha = (int) settings.polygonAlpha;
 			}//END: setting check
 			

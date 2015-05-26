@@ -17,6 +17,7 @@ public class KmlRendererSettings {
 	
 	// For continuous attributes
 	public String lineColorMapping = null;
+	//TODO: min and max values should be created, not parsed
 	public Double minLineRed = 50.0; public Double maxLineRed = 100.0;
 	public Double minLineGreen = 100.0; public Double maxLineGreen = 250.0;
 	public Double minLineBlue = 50.0; public Double maxLineBlue = 100.0;
@@ -30,7 +31,20 @@ public class KmlRendererSettings {
 			50 // B
 	};
 	
+	// ---ALPHA CHANNEL---//
+	
+	// For continuous attributes
+	public String lineAlphaMapping;
+	public Double minLineAlpha = 50.0; public Double maxLineAlpha = 100.0;
+	
+	// Fixed
+	public double lineAlpha = 100;
+	public boolean lineAlphaChanged = false;
+	
+	
+	
 	// ---ALTITUDE---//
+	
 	public String lineAltitudeMapping = null;
 	public Double minLineAltitude = 500.0; 
 	public Double maxLineAltitude = 500000.0;
@@ -65,12 +79,11 @@ public class KmlRendererSettings {
 	// ---ALPHA CHANNEL---//
 	
 	// For continuous attributes
-	
 	public String polygonAlphaMapping = null;
-	public Double minAlpha = 50.0; public Double maxAlpha = 100.0;
+	public Double minPolygonAlpha = 50.0; public Double maxPolygonAlpha = 100.0;
 	
 	// Fixed
 	public double polygonAlpha = 100;
-	public boolean alphaChanged = false;
+	public boolean polygonAlphaChanged = false;
 	
 }//END: class
