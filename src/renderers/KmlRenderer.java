@@ -236,8 +236,16 @@ public class KmlRenderer {
 		
 		if (this.settings.lineColorMapping != null) { // map
 
-			Trait startTrait = line.getAttributes().get(
-					ContinuousLinesParser.START + settings.lineColorMapping);
+			Trait startTrait = line.getAttributes().get(settings.lineColorMapping);
+			
+			if(startTrait == null) {
+				startTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineColorMapping);
+			}
+			
+			if(startTrait == null) {
+				throw new RuntimeException("Trait " + settings.lineColorMapping + " missing from file");
+			}
+			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			
 			if (lineColorMap.containsKey(startKey)) {
@@ -270,8 +278,16 @@ public class KmlRenderer {
 
 			}// END: startkey check
 
-			Trait endTrait = line.getAttributes().get(
-					ContinuousLinesParser.END + settings.lineColorMapping);
+			Trait endTrait = line.getAttributes().get(settings.lineColorMapping);
+			
+			if(endTrait == null) {
+				endTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineColorMapping);
+			}
+			
+			if(endTrait == null) {
+				throw new RuntimeException("Trait " + settings.lineColorMapping + " missing from file");
+			}
+			
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
 			
 			if (lineColorMap.containsKey(endKey)) {
@@ -315,9 +331,15 @@ public class KmlRenderer {
 		// this should overwrite any previous settings
 		if (this.settings.lineAlphaMapping != null) { // map
 			
-			//TODO: should also be possible to specify non-changing attribute (like duration)
-			Trait startTrait = line.getAttributes().get(
-					ContinuousLinesParser.START + settings.lineAlphaMapping);
+            Trait startTrait = line.getAttributes().get(settings.lineAlphaMapping);
+			
+			if(startTrait == null) {
+				startTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineAlphaMapping);
+			}
+			
+			if(startTrait == null) {
+				throw new RuntimeException("Trait " + settings.lineAlphaMapping + " missing from file");
+			}
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			
@@ -334,8 +356,16 @@ public class KmlRenderer {
 				
 			}// END: startkey check
 
-			Trait endTrait = line.getAttributes().get(
-					ContinuousLinesParser.END + settings.lineAlphaMapping);
+			Trait endTrait = line.getAttributes().get(settings.lineAlphaMapping);
+			
+			if(endTrait == null) {
+				endTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineAlphaMapping);
+			}
+			
+			if(endTrait == null) {
+				throw new RuntimeException("Trait " + settings.lineAlphaMapping + " missing from file");
+			}
+			
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
 			
 			if (lineAlphaMap.containsKey(endKey)) {
@@ -398,8 +428,15 @@ public class KmlRenderer {
 		Double width = 0.0;
 		if (settings.lineWidthMapping != null) {// map
 
+			//TODO: traits which cannot be interpolated
+			
 			Trait trait = line.getAttributes().get(
 					settings.lineWidthMapping);
+			
+			if(trait == null) {
+				throw new RuntimeException("Trait " + settings.lineColorMapping + " missing from file");
+			}
+			
 			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 
 			if (lineWidthMap.containsKey(key)) {

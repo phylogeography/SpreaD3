@@ -14,7 +14,8 @@ SPREAD 2 is a program supporting processing and visualizations of Bayesian phylo
 h1. USAGE EXAMPLES
 
 
-h2. #---CONTINUOUS TREE---#
+h3. CONTINUOUS TREE
+
 
 h3. PARSING
 
@@ -29,7 +30,7 @@ h3. RENDERING
 # use all default settings
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -output test.kml
 
-h3. #---POLYGONS---#
+h4. POLYGONS
 
 # override default polygon color settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 0 0 255 -output test.kml
@@ -46,7 +47,7 @@ h3. #---POLYGONS---#
 # map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -output test.kml
 
-h3. #---LINES---#
+h4. LINES
 
 # override default line color settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolor 250 0 0 -output test.kml
@@ -84,7 +85,7 @@ h3. #---LINES---#
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitudemapping duration -output test.kml
 
 
-h2. #---DISCRETE TREE---#
+h3. DISCRETE TREE
 
 h3. PARSING
 

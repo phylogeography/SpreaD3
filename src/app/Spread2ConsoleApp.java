@@ -198,11 +198,6 @@ public class Spread2ConsoleApp {
 			    
 				});
 		
-		
-		
-		
-		
-		
 	}// END: Constructor
 
 	public void run(String[] args) {
@@ -543,9 +538,13 @@ public class Spread2ConsoleApp {
 				
 				settings.kmlRendererSettings.polygonColor = renderArguments.getRealArrayOption(POLYGON_COLOR);
 
-			} else {
+			} else if(renderArguments.hasOption(POLYGON_COLOR_MAPPING) && renderArguments.hasOption(POLYGON_COLOR)) {
 				
 				gracefullyExit("Can't both map and have a defined polygon color!", renderArguments, null);
+				
+			} else {
+				
+				// use defaults
 				
 			}
 			
@@ -560,10 +559,14 @@ public class Spread2ConsoleApp {
 				settings.kmlRendererSettings.polygonAlpha = renderArguments.getRealOption(POLYGON_ALPHA);
 				settings.kmlRendererSettings.polygonAlphaChanged = true;
 				
-			} else {
+			} else if(renderArguments.hasOption(POLYGON_ALPHA_MAPPING) && renderArguments.hasOption(POLYGON_ALPHA)){
 				
 				gracefullyExit("Can't both map and have a defined polygon alpha!", renderArguments, null);
 			
+			} else {
+				
+				// use defaults
+				
 			}
 			
 			
@@ -581,9 +584,13 @@ public class Spread2ConsoleApp {
 				
 				settings.kmlRendererSettings.lineColor = renderArguments.getRealArrayOption(LINE_COLOR);
 				
-			} else {
+			} else if(renderArguments.hasOption(LINE_COLOR_MAPPING) && renderArguments.hasOption(LINE_COLOR)) {
 				
 				gracefullyExit("Can't both map and have a defined line color!", renderArguments, null);
+				
+			} else {
+				
+				// use defaults
 				
 			}
 			
@@ -598,9 +605,13 @@ public class Spread2ConsoleApp {
 				settings.kmlRendererSettings.lineAlpha = renderArguments.getRealOption(LINE_ALPHA);
 				settings.kmlRendererSettings.lineAlphaChanged = true;
 				
-			} else {
+			} else if(renderArguments.hasOption(LINE_ALPHA_MAPPING) && renderArguments.hasOption(LINE_ALPHA)) {
 				
 				gracefullyExit("Can't both map and have a defined line alpha!", renderArguments, null);
+				
+			} else {
+				
+				// use defaults
 				
 			}
 			
@@ -614,9 +625,13 @@ public class Spread2ConsoleApp {
 				
 				settings.kmlRendererSettings.lineWidth = renderArguments.getRealOption(LINE_WIDTH);
 				
-			} else {
+			} else if(renderArguments.hasOption(LINE_WIDTH_MAPPING) && renderArguments.hasOption(LINE_WIDTH)) {
 				
 				gracefullyExit("Can't both map and have a defined line width!", renderArguments, null);
+				
+			} else {
+				
+				// use defaults
 				
 			}
 			
@@ -631,9 +646,13 @@ public class Spread2ConsoleApp {
 				
 				settings.kmlRendererSettings.lineAltitude = renderArguments.getRealOption(LINE_ALTITUDE);
 				
-			} else {
+			} else if(renderArguments.hasOption(LINE_ALTITUDE_MAPPING) && renderArguments.hasOption(LINE_ALTITUDE)) {
 				
 				gracefullyExit("Can't both map and have a defined line altitude!", renderArguments, null);
+				
+			} else {
+				
+				// use defaults
 				
 			}
 			
