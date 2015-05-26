@@ -40,7 +40,7 @@ public class Spread2ConsoleApp {
 	
 	private static final String HELP = "help";
 	private static final String READ = "read";
-	private static final String CREATE = "create";
+	private static final String PARSE = "parse";
 	private static final String RENDER = "render";
 
 	private static final String TREE = "tree";
@@ -61,7 +61,6 @@ public class Spread2ConsoleApp {
 	private static final String POLYGON_ALPHA_MAPPING = "polygonalphamapping";
 	private static final String POLYGON_ALPHA = "polygonalpha";
 	
-	
 	private static final String LINE_COLOR_MAPPING = "linecolormapping";
 	private static final String LINE_COLORS = "linecolors";
 	private static final String LINE_COLOR = "linecolor";
@@ -72,6 +71,7 @@ public class Spread2ConsoleApp {
 	private static final String LINE_ALTITUDE_MAPPING = "linealtitudemapping";	
 	private static final String LINE_ALTITUDE = "linealtitude";	
 
+	private static final String LINE_WIDTH_MAPPING = "linewidthmapping";
 	private static final String LINE_WIDTH = "linewidth";
 	
 	public Spread2ConsoleApp() {
@@ -86,7 +86,7 @@ public class Spread2ConsoleApp {
 
 		new Arguments.Option(READ, "read existing JSON file"),
 
-		new Arguments.Option(CREATE, "create JSON from input files"),
+		new Arguments.Option(PARSE, "create JSON from input files"),
 
 		new Arguments.Option(RENDER, "render from JSON file"),
 
@@ -158,7 +158,7 @@ public class Spread2ConsoleApp {
 				
 				new Arguments.RealOption(LINE_WIDTH, "specify line width"),
 				
-				//TODO: line width maping
+				new Arguments.StringOption(LINE_WIDTH_MAPPING, "", "attribute to map line width"),
 
 				//---LINE ALTITUDE---//
 				
@@ -181,7 +181,6 @@ public class Spread2ConsoleApp {
 				
 				 new Arguments.StringOption(LINE_ALPHA_MAPPING, "", "attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
 				
-				
 				//---POLYGON COLORS---//	
 				
 				//TODO: this should read RGB or RGBA
@@ -193,10 +192,9 @@ public class Spread2ConsoleApp {
 	
 				//---POLYGON ALPHA CHANEL---//
 
-			    new Arguments.RealOption(POLYGON_ALPHA, "specify A value"),
+			    new Arguments.RealOption(POLYGON_ALPHA, "specify A value. Higher values are more opaque, lower values more translucent."),
 				
-			    new Arguments.StringOption(POLYGON_ALPHA_MAPPING, "", "attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
-			    
+			    new Arguments.StringOption(POLYGON_ALPHA_MAPPING, "", "attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent."),
 			    
 				});
 		
@@ -253,9 +251,9 @@ public class Spread2ConsoleApp {
 			gracefullyExit(null, modeArguments, null);
 		}
 
-		if (modeArguments.hasOption(CREATE)) {
+		if (modeArguments.hasOption(PARSE)) {
 
-			System.out.println("In create mode");
+			System.out.println("In parsing mode");
 			settings.create = true;
 
 		} else if (modeArguments.hasOption(READ)) {
@@ -265,7 +263,7 @@ public class Spread2ConsoleApp {
 
 		} else if (modeArguments.hasOption(RENDER)) {
 
-			System.out.println("In render mode");
+			System.out.println("In rendering mode");
 			settings.render = true;
 
 		} else {
@@ -531,11 +529,45 @@ public class Spread2ConsoleApp {
 					
 			} 
 			
-			if(renderArguments.hasOption(LINE_WIDTH)) {
+			//---POLYGON COLOR---//
+			
+			if(renderArguments.hasOption(POLYGON_COLOR_MAPPING)) {
 				
-				settings.kmlRendererSettings.lineWidth = renderArguments.getRealOption(LINE_WIDTH);
+				settings.kmlRendererSettings.polygonColorMapping = renderArguments.getStringOption(POLYGON_COLOR_MAPPING);
+				
+				if(renderArguments.hasOption(POLYGON_COLORS)) {
+					settings.kmlRendererSettings.polygonColors = renderArguments.getStringOption(POLYGON_COLORS);
+				}
+				
+			} else if(renderArguments.hasOption(POLYGON_COLOR)) {
+				
+				settings.kmlRendererSettings.polygonColor = renderArguments.getRealArrayOption(POLYGON_COLOR);
+
+			} else {
+				
+				gracefullyExit("Can't both map and have a defined polygon color!", renderArguments, null);
 				
 			}
+			
+			//---POLYGON ALPHA---//
+			
+			if(renderArguments.hasOption(POLYGON_ALPHA_MAPPING)) {
+				
+				settings.kmlRendererSettings.polygonAlphaMapping = renderArguments.getStringOption(POLYGON_ALPHA_MAPPING);
+				
+			} else if(renderArguments.hasOption(POLYGON_ALPHA)) {
+				
+				settings.kmlRendererSettings.polygonAlpha = renderArguments.getRealOption(POLYGON_ALPHA);
+				settings.kmlRendererSettings.polygonAlphaChanged = true;
+				
+			} else {
+				
+				gracefullyExit("Can't both map and have a defined polygon alpha!", renderArguments, null);
+			
+			}
+			
+			
+			//---LINE COLOR---//
 			
 			if(renderArguments.hasOption(LINE_COLOR_MAPPING)) {
 				
@@ -551,9 +583,11 @@ public class Spread2ConsoleApp {
 				
 			} else {
 				
-				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
+				gracefullyExit("Can't both map and have a defined line color!", renderArguments, null);
 				
 			}
+			
+			//---LINE ALPHA---//		
 			
 			if(renderArguments.hasOption(LINE_ALPHA_MAPPING)) {
 				
@@ -566,10 +600,27 @@ public class Spread2ConsoleApp {
 				
 			} else {
 				
-				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
+				gracefullyExit("Can't both map and have a defined line alpha!", renderArguments, null);
 				
 			}
 			
+			//---LINE WIDTH---//	
+			
+			if(renderArguments.hasOption(LINE_WIDTH_MAPPING)) {
+				
+				settings.kmlRendererSettings.lineWidthMapping = renderArguments.getStringOption(LINE_WIDTH_MAPPING);
+				
+			} else if(renderArguments.hasOption(LINE_WIDTH)) {
+				
+				settings.kmlRendererSettings.lineWidth = renderArguments.getRealOption(LINE_WIDTH);
+				
+			} else {
+				
+				gracefullyExit("Can't both map and have a defined line width!", renderArguments, null);
+				
+			}
+			
+			//---LINE ALTITUDE---//	
 			
 			
 			if(renderArguments.hasOption(LINE_ALTITUDE_MAPPING)) {
@@ -582,44 +633,8 @@ public class Spread2ConsoleApp {
 				
 			} else {
 				
-				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
+				gracefullyExit("Can't both map and have a defined line altitude!", renderArguments, null);
 				
-			}
-			
-			
-			if(renderArguments.hasOption(POLYGON_COLOR_MAPPING)) {
-				
-				settings.kmlRendererSettings.polygonColorMapping = renderArguments.getStringOption(POLYGON_COLOR_MAPPING);
-				
-				if(renderArguments.hasOption(POLYGON_COLORS)) {
-					settings.kmlRendererSettings.polygonColors = renderArguments.getStringOption(POLYGON_COLORS);
-				}
-				
-				
-			} else if(renderArguments.hasOption(POLYGON_COLOR)) {
-				
-				settings.kmlRendererSettings.polygonColor = renderArguments.getRealArrayOption(POLYGON_COLOR);
-
-			} else {
-				
-				gracefullyExit("Can't both map and have a defined color!", renderArguments, null);
-				
-			}
-			
-			
-			if(renderArguments.hasOption(POLYGON_ALPHA_MAPPING)) {
-				
-				settings.kmlRendererSettings.polygonAlphaMapping = renderArguments.getStringOption(POLYGON_ALPHA_MAPPING);
-				
-			} else if(renderArguments.hasOption(POLYGON_ALPHA)) {
-				
-				settings.kmlRendererSettings.polygonAlpha = renderArguments.getRealOption(POLYGON_ALPHA);
-				settings.kmlRendererSettings.polygonAlphaChanged = true;
-				
-			}else {
-				
-				gracefullyExit("Can't both map and have a defined alpha!", renderArguments, null);
-			
 			}
 			
 			// ---RUN---//

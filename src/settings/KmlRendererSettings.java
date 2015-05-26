@@ -45,13 +45,20 @@ public class KmlRendererSettings {
 	
 	// ---ALTITUDE---//
 	
+	// For continuous attributes
 	public String lineAltitudeMapping = null;
-	public Double minLineAltitude = 500.0; 
-	public Double maxLineAltitude = 500000.0;
+	public Double minLineAltitude = 500.0;  public Double maxLineAltitude = 500000.0;
 	
+	// Fixed
 	public Double lineAltitude = 500000.0;
 	
 	// ---WIDTH---//
+	
+	// For continuous attributes
+	public String lineWidthMapping = null;
+	public Double minLineWidth = 1.0;  public Double maxLineWidth = 10.0;
+	
+	// Fixed
 	public Double lineWidth = 2.0;
 	
 	//////////////////

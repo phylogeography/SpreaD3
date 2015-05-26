@@ -46,17 +46,17 @@ public class KmlRenderer {
 	private SpreadData data;
 	private KmlRendererSettings settings;
 	
-	// maps trait value to Color
 	private Map<Object, Color> lineColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> lineAlphaMap = new LinkedHashMap<Object, Integer>();
-	
 	private Map<Object, Double> lineAltitudeMap = new LinkedHashMap<Object, Double>();
+	private Map<Object, Double> lineWidthMap = new LinkedHashMap<Object, Double>();
+	
+	
+	
 	private Map<Object, Color> polygonColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> polygonAlphaMap = new LinkedHashMap<Object, Integer>();
+
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
-	
-	
-	
 	
 	public KmlRenderer(SpreadData data, KmlRendererSettings settings) {
 		
@@ -177,23 +177,6 @@ public class KmlRenderer {
 					}//END: contains check
 			}//END: nodeAttributes loop
 			
-		  	// Get the mapping for branch attributes
-//			Map<String, Trait> branchAttributes = line.getBranchAttributes();
-//			for (Trait trait : branchAttributes.values()) {
-//
-//				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-//					if (!valueMap.containsKey(traitValue)) {
-//						
-//						if(trait.isNumber()) { 
-//							valueMap.put( traitValue, (Double) traitValue);
-//						} else {
-//							valueMap.put(traitValue, factorValue);
-//							factorValue++;
-//						}//END: isNumber check
-//						
-//					}//END: contains check
-//			}//END: nodeAttributes loop
-			
 	    }//END: lines loop
 		
 	 double maxValue = Collections.max(valueMap.values());
@@ -243,7 +226,7 @@ public class KmlRenderer {
 
 		}
 		
-		//---COLOR---//
+		//---LINE COLOR---//
 		
 		Color startColor;
 		int startRed = 255, startGreen = 255, startBlue = 255, startAlpha = 0;
@@ -327,13 +310,15 @@ public class KmlRenderer {
 			
 		}// END: settings check
 		
-		//---ALPHA---//
+		//---LINE ALPHA CHANEL---//
 		
 		// this should overwrite any previous settings
 		if (this.settings.lineAlphaMapping != null) { // map
 			
+			//TODO: should also be possible to specify non-changing attribute (like duration)
 			Trait startTrait = line.getAttributes().get(
 					ContinuousLinesParser.START + settings.lineAlphaMapping);
+			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			
 			if (lineAlphaMap.containsKey(startKey)) {
@@ -376,15 +361,10 @@ public class KmlRenderer {
 			endAlpha = startAlpha;
 		}//END: setting check
 		
-		
-		
-		
-		
-		
 		startColor = new Color(startRed, startGreen, startBlue, startAlpha);
 		endColor = new Color(endRed, endGreen, endBlue, endAlpha);
 		
-		//---ALTITUDE---//
+		//---LINE ALTITUDE---//
 		
 		Double altitude = 0.0;
 		if (settings.lineAltitudeMapping != null) {// map
@@ -412,6 +392,37 @@ public class KmlRenderer {
 			altitude = settings.lineAltitude;
 
 		}// END: settings check
+		
+		//---LINE WIDTH---//
+		
+		Double width = 0.0;
+		if (settings.lineWidthMapping != null) {// map
+
+			Trait trait = line.getAttributes().get(
+					settings.lineWidthMapping);
+			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+
+			if (lineWidthMap.containsKey(key)) {
+				
+				width = lineWidthMap.get(key);
+				
+			} else {
+
+				Double value = valueMap.get(key);
+				width = map(value, minValue, maxValue,
+						settings.minLineWidth, settings.maxLineWidth);
+
+				lineWidthMap.put(key, width);
+				
+			}// END: key check
+
+		} else { // use defaults or user defined color
+
+			width = settings.lineWidth;
+
+		}// END: settings check
+		
+		//---CUT INTO LINE SEGMENTS---//
 		
 		double	a = -2 * altitude
 				/ (Math.pow(sliceCount, 2) - sliceCount);
@@ -447,7 +458,7 @@ public class KmlRenderer {
             
 			Color segmentColor = new Color(segmentRed, segmentGreen, segmentBlue, segmentAlpha);
 			
-			Double segmentWidth = settings.lineWidth;
+			Double segmentWidth = width;
 			
 			KmlStyle segmentStyle = new KmlStyle(segmentColor, segmentWidth);
 			segmentStyle.setId(segmentStyle.toString());
