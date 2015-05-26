@@ -38,11 +38,10 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.MissingAttributeException;
 
 public class KmlRenderer {
 
-	public static final double EARTH_RADIUS = 6371.0;
-	
 	private SpreadData data;
 	private KmlRendererSettings settings;
 	
@@ -50,9 +49,6 @@ public class KmlRenderer {
 	private Map<Object, Integer> lineAlphaMap = new LinkedHashMap<Object, Integer>();
 	private Map<Object, Double> lineAltitudeMap = new LinkedHashMap<Object, Double>();
 	private Map<Object, Double> lineWidthMap = new LinkedHashMap<Object, Double>();
-	
-	
-	
 	private Map<Object, Color> polygonColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> polygonAlphaMap = new LinkedHashMap<Object, Integer>();
 
@@ -65,7 +61,7 @@ public class KmlRenderer {
 		
 	}//END: Constructor
 	
-	public void render() throws KmlException, IOException {
+	public void render() throws KmlException, IOException, MissingAttributeException {
 
 		PrintWriter writer = new PrintWriter(new File(settings.output));
 
@@ -126,7 +122,7 @@ public class KmlRenderer {
 	// ---LAYERS---//
 	// //////////////
 	
-	private Feature generateLayer(Layer layer) throws IOException {
+	private Feature generateLayer(Layer layer) throws IOException, MissingAttributeException {
 
 		Folder folder = new Folder();
 		
@@ -141,7 +137,7 @@ public class KmlRenderer {
 
 	// ---LINES---//
 	
-	private Feature generateLines(List<Line> lines) throws IOException {
+	private Feature generateLines(List<Line> lines) throws IOException, MissingAttributeException {
 
 		Folder folder = new Folder();
 		folder.setName("lines");
@@ -196,7 +192,7 @@ public class KmlRenderer {
 			Map<Object, Double> valueMap, //
 			double minValue, //
 			double maxValue //
-	) {
+	) throws MissingAttributeException {
 
 		//TODO: make this a setting
 		int sliceCount = 10;
@@ -243,7 +239,7 @@ public class KmlRenderer {
 			}
 			
 			if(startTrait == null) {
-				throw new RuntimeException("Trait " + settings.lineColorMapping + " missing from file");
+				throw new MissingAttributeException(settings.lineColorMapping, MissingAttributeException.LINE);
 			}
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
@@ -262,8 +258,6 @@ public class KmlRenderer {
 			} else {
 				
 				// scale needs to be created | color for attribute not supplied
-				// TODO: display warning for the latter case?
-				
 				Double startValue = valueMap.get(startKey);
 
 				startRed = (int) map(startValue, minValue, maxValue,
@@ -285,7 +279,7 @@ public class KmlRenderer {
 			}
 			
 			if(endTrait == null) {
-				throw new RuntimeException("Trait " + settings.lineColorMapping + " missing from file");
+				throw new MissingAttributeException(settings.lineColorMapping, MissingAttributeException.LINE);
 			}
 			
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
@@ -338,7 +332,7 @@ public class KmlRenderer {
 			}
 			
 			if(startTrait == null) {
-				throw new RuntimeException("Trait " + settings.lineAlphaMapping + " missing from file");
+				throw new MissingAttributeException(settings.lineAlphaMapping, MissingAttributeException.LINE);
 			}
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
@@ -363,7 +357,7 @@ public class KmlRenderer {
 			}
 			
 			if(endTrait == null) {
-				throw new RuntimeException("Trait " + settings.lineAlphaMapping + " missing from file");
+				throw new MissingAttributeException(settings.lineAlphaMapping, MissingAttributeException.LINE);
 			}
 			
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
@@ -401,6 +395,11 @@ public class KmlRenderer {
 
 			Trait trait = line.getAttributes().get(
 					settings.lineAltitudeMapping);
+			
+			if(trait == null) {
+				throw new MissingAttributeException(settings.lineAltitudeMapping, MissingAttributeException.LINE);
+			}
+			
 			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 
 			if (lineAltitudeMap.containsKey(key)) {
@@ -428,13 +427,11 @@ public class KmlRenderer {
 		Double width = 0.0;
 		if (settings.lineWidthMapping != null) {// map
 
-			//TODO: traits which cannot be interpolated
-			
 			Trait trait = line.getAttributes().get(
 					settings.lineWidthMapping);
 			
 			if(trait == null) {
-				throw new RuntimeException("Trait " + settings.lineColorMapping + " missing from file");
+				throw new MissingAttributeException(settings.lineWidthMapping, MissingAttributeException.LINE);
 			}
 			
 			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
@@ -548,7 +545,7 @@ public class KmlRenderer {
 	
 	// ---POLYGONS---//
 
-	private Feature generatePolygons(List<Polygon> polygons) throws IOException {
+	private Feature generatePolygons(List<Polygon> polygons) throws IOException, MissingAttributeException {
 
 		Folder folder = new Folder();
 		folder.setName("polygons");
@@ -563,7 +560,7 @@ public class KmlRenderer {
 		}
 		
 		// Map trait values (String | Double) to numerical values (Double)
-		//TODO: this processes all traits found in json, perhaps we should split them in maps for color, alpha, width, etc.
+		// this processes all traits found in json, perhaps we should split them in maps for color, alpha, width, etc.
 		Double factorValue = 1.0;
 		Map<Object, Double> valueMap = new LinkedHashMap<Object, Double>();
 	    for(Polygon polygon : polygons) {
@@ -601,6 +598,11 @@ public class KmlRenderer {
 
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonColorMapping);
+				
+				if(trait == null) {
+					throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
+				}
+				
 				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 				
 				if (polygonColorMap.containsKey(key)) {
@@ -645,6 +647,11 @@ public class KmlRenderer {
 				
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonAlphaMapping);
+				
+				if(trait == null) {
+					throw new MissingAttributeException(settings.polygonAlphaMapping, MissingAttributeException.POLYGON);
+				}
+				
 				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 				
 				if (polygonAlphaMap.containsKey(key)) {
@@ -746,7 +753,7 @@ public class KmlRenderer {
 				
 		List<Point> points = new ArrayList<Point>();
 		
-		double dLongitude = Math.toDegrees((radius / EARTH_RADIUS));
+		double dLongitude = Math.toDegrees((radius / Utils.EARTH_RADIUS));
 		double dLatitude = dLongitude / Math.cos(Math.toRadians(latitude));
 
 		for (int i = 0; i < numPoints; i++) {
@@ -778,7 +785,6 @@ public class KmlRenderer {
 		return point;
 	}//END: generatePoint
 
-	
 	// /////////////
 	// ---UTILS---//
 	// /////////////
@@ -820,7 +826,7 @@ public class KmlRenderer {
 
 		LinkedList<Coordinate> coords = new LinkedList<Coordinate>();
 
-		double distance = rhumbDistance(startCoordinate, endCoordinate);
+		double distance = Utils.rhumbDistance(startCoordinate, endCoordinate);
 
 		double distanceSlice = distance / (double) sliceCount;
 
@@ -836,7 +842,7 @@ public class KmlRenderer {
 		for (int i = 1; i < sliceCount; i++) {
 
 			distance = distanceSlice;
-			double rDist = distance / EARTH_RADIUS;
+			double rDist = distance / Utils.EARTH_RADIUS;
 
 			double bearing = rhumbBearing(rlon1, rlat1, rlon2, rlat2);
 
@@ -858,7 +864,7 @@ public class KmlRenderer {
 			rlon1 = newLonRad;
 			rlat1 = newLatRad;
 
-			distance = rhumbDistance(newCoord, endCoordinate);
+			distance = Utils.rhumbDistance(newCoord, endCoordinate);
 
 			distanceSlice = distance / (sliceCount - i);
 
@@ -868,55 +874,21 @@ public class KmlRenderer {
 		return coords;
 	}// END: getIntermediateCoords
 	
-	private double rhumbDistance(
-			Coordinate startCoordinate, Coordinate endCoordinate
-			) {
-		/**
-		 * Returns the distance from start point to the end point in km,
-		 * travelling along a rhumb line
-		 * 
-		 * @param start
-		 *            point Lon, Lat; end point Lon, Lat;
-		 * 
-		 * @return distance in km
-		 */
-		double rlon1 = Math.toRadians(startCoordinate.getLongitude());
-		double rlat1 = Math.toRadians(startCoordinate.getLatitude());
-		double rlon2 = Math.toRadians(endCoordinate.getLongitude());
-		double rlat2 = Math.toRadians(endCoordinate.getLatitude());
-
-		double dLat = (rlat2 - rlat1);
-		double dLon = Math.abs(rlon2 - rlon1);
-
-		double dPhi = Math.log(Math.tan(rlat2 / 2 + Math.PI / 4)
-				/ Math.tan(rlat1 / 2 + Math.PI / 4));
-		double q = (!Double.isNaN(dLat / dPhi)) ? dLat / dPhi : Math.cos(rlat1); // E-W
-		// line
-		// gives
-		// dPhi=0
-		// if dLon over 180° take shorter rhumb across 180° meridian:
-		if (dLon > Math.PI)
-			dLon = 2 * Math.PI - dLon;
-		double distance = Math.sqrt(dLat * dLat + q * q * dLon * dLon)
-				* EARTH_RADIUS;
-
-		return distance;
-	}
-	
-	public static double longNormalise(double lon) {
+	private double longNormalise(double lon) {
 		// normalise to -180...+180
 		return (lon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
 	}
 	
-	public static double rhumbBearing(double rlon1, double rlat1, double rlon2,
+	private double rhumbBearing(double rlon1, double rlat1, double rlon2,
 			double rlat2) {
 		/**
 		 * Returns the bearing from start point to the supplied point along a
 		 * rhumb line
 		 * 
-		 * @param rlat1
-		 *            , rlon1 : longitude/latitude in radians of start point
-		 *            rlon2, rlat2 : longitude/latitude of end point
+		 * @param rlat1: start point latitude in radians
+		 * @param rlon1: start point longitude in radians
+		 * @param rlat2: end point latitude in radians
+		 * @param rlon2: end point longitude in radians
 		 * 
 		 * @returns Initial bearing in degrees from North
 		 */
@@ -930,6 +902,6 @@ public class KmlRenderer {
 		double brng = Math.atan2(dLon, dPhi);
 
 		return Math.toRadians((Math.toDegrees(brng) + 360) % 360);
-	}
+	}//END: rhumbBearing
 	
 }//END: class

@@ -81,8 +81,8 @@ h4. LINES
 # override default line altitude settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitude 5000 -output test.kml
 
-# map lines altitude to duration attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitudemapping duration -output test.kml
+# map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitudemapping distance -output test.kml
 
 
 h3. DISCRETE TREE

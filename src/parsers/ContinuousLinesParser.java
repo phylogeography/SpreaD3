@@ -18,7 +18,8 @@ public class ContinuousLinesParser {
 	public static final String ONE = "1";
 	public static final String TWO = "2";
 
-	public static final String DURATION = "duration";
+//	public static final String DURATION = "duration";
+//	public static final String DISTANCE = "distance";
 	
 	private RootedTree rootedTree;
 	private String locationTrait;
@@ -78,14 +79,17 @@ public class ContinuousLinesParser {
 					
 				}//END: traits loop
 				
-				//TODO: branchAttributes specified from CLI, other than duration 
-				// TODO: maybe an enum list of possible ones to parse?
+                // branch attribute traits
 				
 				double branchDuration = parentHeight - nodeHeight;
 				Trait branchDurationTrait = new Trait(branchDuration);
-				attributes.put(DURATION, branchDurationTrait);
+				attributes.put(Utils.DURATION, branchDurationTrait);
 				
-				Line line = new Line(parentCoordinate, nodeCoordinate, parentHeight, nodeHeight, attributes);//, branchAttributes);
+				double distance = Utils.rhumbDistance(parentCoordinate, nodeCoordinate);
+				Trait distanceTrait = new Trait(distance);
+				attributes.put(Utils.DISTANCE, distanceTrait);
+				
+				Line line = new Line(parentCoordinate, nodeCoordinate, parentHeight, nodeHeight, attributes);
 				linesList.add(line);
 
 			}// END: root check

@@ -27,6 +27,7 @@ import com.google.gson.GsonBuilder;
 import data.SpreadData;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
+import exceptions.MissingAttributeException;
 
 public class Spread2ConsoleApp {
 
@@ -148,6 +149,7 @@ public class Spread2ConsoleApp {
 
 		});
 
+		//TODO: what overrides what in descriptions
 		renderArguments = new Arguments(new Arguments.Option[] {
 
 				new Arguments.StringOption(JSON, "", "json input file name"),
@@ -158,13 +160,19 @@ public class Spread2ConsoleApp {
 				
 				new Arguments.RealOption(LINE_WIDTH, "specify line width"),
 				
-				new Arguments.StringOption(LINE_WIDTH_MAPPING, "", "attribute to map line width"),
+                new Arguments.StringOption(LINE_WIDTH_MAPPING,
+                        new String[]{Utils.DISTANCE, //
+                                Utils.DURATION //
+                        }, false, "attribute to map line width"),
 
 				//---LINE ALTITUDE---//
 				
 				new Arguments.RealOption(LINE_ALTITUDE,  "specify line altitude"),
 				
-				new Arguments.StringOption(LINE_ALTITUDE_MAPPING, "", "attribute to map line altitude"),
+                new Arguments.StringOption(LINE_ALTITUDE_MAPPING,
+                        new String[]{Utils.DISTANCE, //
+                                Utils.DURATION //
+                        }, false, "attribute to map line altitude"),
 				
 				//---LINE COLORS---//
 				
@@ -173,7 +181,7 @@ public class Spread2ConsoleApp {
 				
 				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
 				
-				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map line attribute values"),
+				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map line attribute values."),
 				
 				//---LINE ALPHA CHANEL---//
 				
@@ -677,7 +685,11 @@ public class Spread2ConsoleApp {
 
 				gracefullyExit(e.getMessage(), renderArguments, e);
 
-			}//END: try-catch block
+			} catch (MissingAttributeException e) {
+				
+				gracefullyExit(e.getMessage(), renderArguments, e);
+				
+			}// END: try-catch block
 			
 			
 		}//END: create / render / read check

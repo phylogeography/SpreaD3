@@ -40,10 +40,11 @@ import data.structure.Location;
 import data.structure.Polygon;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
+import exceptions.MissingAttributeException;
 
 public class DiscreteTreeTest {
 
-	public static void testDiscreteTreeToJSON() throws IOException, ImportException, IllegalCharacterException, LocationNotFoundException, KmlException, ParseException {
+	public static void testDiscreteTreeToJSON() throws IOException, ImportException, IllegalCharacterException, LocationNotFoundException, KmlException, ParseException, MissingAttributeException {
 
 			// /////////////////////
 			// ---PARSE STRINGS---//

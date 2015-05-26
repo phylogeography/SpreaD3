@@ -32,6 +32,7 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.MissingAttributeException;
 
 public class ContinuousTreeTest {
 
@@ -39,7 +40,7 @@ public class ContinuousTreeTest {
 	}
 
 	public static void testContinousTreeToJSON() throws IOException,
-			ImportException, KmlException {
+			ImportException, KmlException, MissingAttributeException {
 
 		// /////////////////////
 		// ---PARSE STRINGS---//
