@@ -12,10 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import parsers.ContinuousLinesParser;
-import parsers.ContinuousPolygonsParser;
-import parsers.DiscreteColorsParser;
-
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
 import kmlframework.kml.Feature;
@@ -29,6 +25,8 @@ import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
+import parsers.ContinuousPolygonsParser;
+import parsers.DiscreteColorsParser;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
 import utils.Utils;
@@ -173,16 +171,39 @@ public class KmlRenderer implements Renderer {
 						}//END: isNumber check
 						
 					}//END: contains check
-			}//END: nodeAttributes loop
+			}//END: attributes loop
+			
+            // Discrete lines connect Locations, need to process them too for mapping		
+			if (line.connectsLocations()) {
+
+				Object traitStartValue = line.getStartLocation().getId();
+				if (!valueMap.containsKey(traitStartValue)) {
+					valueMap.put(traitStartValue, factorValue);
+					factorValue++;
+				}// END: contains check
+
+				Object traitEndValue = line.getEndLocation().getId();
+				if (!valueMap.containsKey(traitEndValue)) {
+					valueMap.put(traitEndValue, factorValue);
+					factorValue++;
+				}// END: contains check
+				
+			}//END: connects check
 			
 	    }//END: lines loop
 
+	    
+	    //TODO
+//	    Utils.printMap(valueMap);
+	    
+	    
+	    
 	    Double maxValue = 0.0;
 	    Double minValue = 0.0;
 		if (!valueMap.isEmpty()) {
 			 maxValue = Collections.max(valueMap.values());
 			 minValue = Collections.min(valueMap.values());
-		}
+		}//END: empty check
  
 		for(Line line : lines) {
 			
@@ -244,6 +265,12 @@ public class KmlRenderer implements Renderer {
 				startTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
 			}
 			
+			if (startTrait == null) {
+				if (line.connectsLocations()) {
+					startTrait = new Trait(line.getStartLocation().getId());
+				}
+			}
+			
 			if(startTrait == null) {
 				throw new MissingAttributeException(settings.lineColorMapping, MissingAttributeException.LINE);
 			}
@@ -281,6 +308,12 @@ public class KmlRenderer implements Renderer {
 			
 			if(endTrait == null) {
 				endTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
+			}
+			
+			if (endTrait == null) {
+				if (line.connectsLocations()) {
+					endTrait = new Trait(line.getEndLocation().getId());
+				}
 			}
 			
 			if(endTrait == null) {
@@ -574,7 +607,6 @@ public class KmlRenderer implements Renderer {
 
 		Folder folder = new Folder();
 		folder.setName("polygons");
-//		folder.setDescription("polygons");
 		
 		// read the supplied colors and create lineColorMap
 		if (settings.polygonColors != null) {

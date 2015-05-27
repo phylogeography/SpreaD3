@@ -9,8 +9,6 @@ public class Line {
 
 	// Traits which have start and end values go here:
 	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-	// Traits which apply to a whole branch go here:
-//	private final Map<String, Trait> branchAttributes = new LinkedHashMap<String, Trait>();
 	
 	private final Coordinate startCoordinate;
 	private final Coordinate endCoordinate;
@@ -27,7 +25,6 @@ public class Line {
 			double startTime, //
 			double endTime, //
 			Map<String, Trait> attributes //
-//			Map<String, Trait> branchAttributes //
 	) {
 
 		super();
@@ -53,8 +50,7 @@ public class Line {
 			Coordinate endCoordinate, //
 			double startTime, //
 			double endTime, //
-			Map<String, Trait> nodeAttributes //, //
-//			Map<String, Trait> branchAttributes //
+			Map<String, Trait> nodeAttributes //
 	) {
 
 		super();
