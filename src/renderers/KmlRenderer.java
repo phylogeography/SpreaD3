@@ -243,7 +243,6 @@ public class KmlRenderer {
 			}
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
-			
 			if (lineColorMap.containsKey(startKey)) {
 				
 				// read the supplied color map, or re-use already mapped values
@@ -283,7 +282,6 @@ public class KmlRenderer {
 			}
 			
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
-			
 			if (lineColorMap.containsKey(endKey)) {
 
 				endColor = lineColorMap.get(endKey);
@@ -304,7 +302,7 @@ public class KmlRenderer {
 
 			}// END: endkey check
 
-				label += (", "+settings.lineColorMapping + "="+startKey.toString().concat(" to ").concat(endKey.toString()));
+				label += ( "color[" + settings.lineColorMapping + "=" + startKey.toString() + " to " + endKey.toString() +"]" );
 
 		} else { // use defaults or user defined color
 
@@ -336,7 +334,6 @@ public class KmlRenderer {
 			}
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
-			
 			if (lineAlphaMap.containsKey(startKey)) {
 				
 				startAlpha = lineAlphaMap.get(startKey);
@@ -361,7 +358,6 @@ public class KmlRenderer {
 			}
 			
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
-			
 			if (lineAlphaMap.containsKey(endKey)) {
 
 				endAlpha = lineAlphaMap.get(endKey);
@@ -375,7 +371,12 @@ public class KmlRenderer {
 
 			}// END: endkey check
 
-			label += (", "+settings.lineAlphaMapping + "="+startKey.toString().concat(" to ").concat(endKey.toString()));
+			label += (", alpha[" + settings.lineAlphaMapping + "=" + startKey.toString() + " to " + endKey.toString() + "]");
+			
+		} else { // use defaults
+			
+			startAlpha = (int) settings.lineAlpha;
+			endAlpha = startAlpha;
 			
 		} // END: settings check
 		
@@ -416,6 +417,8 @@ public class KmlRenderer {
 				
 			}// END: key check
 
+			label += (", altitude[" + settings.lineAltitudeMapping + "=" + key.toString() +"]");
+			
 		} else { // use defaults or user defined color
 
 			altitude = settings.lineAltitude;
@@ -450,6 +453,8 @@ public class KmlRenderer {
 				
 			}// END: key check
 
+			label += (", width[" + settings.lineWidthMapping + "=" + key.toString() +"]");
+			
 		} else { // use defaults or user defined color
 
 			width = settings.lineWidth;
@@ -631,7 +636,7 @@ public class KmlRenderer {
 					 
 				}// END: key check
 
-				label = settings.polygonColorMapping + "=" + key.toString();
+				label = "color[" + settings.polygonColorMapping + "=" + key.toString() +"]";
 				
 			} else {// use defaults or user defined color
 
@@ -665,7 +670,7 @@ public class KmlRenderer {
 					
 				}// END: key check
 				
-				label += (", "+settings.polygonAlphaMapping + "="+key.toString());
+				label += (", alpha[" + settings.polygonAlphaMapping + "="+key.toString()+"]");
 				
 			} // END: settings check
 			

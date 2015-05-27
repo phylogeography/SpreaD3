@@ -35,10 +35,10 @@ public class KmlRendererSettings {
 	
 	// For continuous attributes
 	public String lineAlphaMapping;
-	public Double minLineAlpha = 50.0; public Double maxLineAlpha = 100.0;
+	public Double minLineAlpha = 100.0; public Double maxLineAlpha = 150.0;
 	
 	// Fixed
-	public double lineAlpha = 100;
+	public double lineAlpha = 255;
 	public boolean lineAlphaChanged = false;
 	
 	
@@ -47,7 +47,7 @@ public class KmlRendererSettings {
 	
 	// For continuous attributes
 	public String lineAltitudeMapping = null;
-	public Double minLineAltitude = 500.0;  public Double maxLineAltitude = 500000.0;
+	public Double minLineAltitude = 50000.0;  public Double maxLineAltitude = 500000.0;
 	
 	// Fixed
 	public Double lineAltitude = 500000.0;
@@ -56,7 +56,7 @@ public class KmlRendererSettings {
 	
 	// For continuous attributes
 	public String lineWidthMapping = null;
-	public Double minLineWidth = 1.0;  public Double maxLineWidth = 10.0;
+	public Double minLineWidth = 2.0;  public Double maxLineWidth = 10.0;
 	
 	// Fixed
 	public Double lineWidth = 2.0;
