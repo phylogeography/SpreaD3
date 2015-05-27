@@ -51,6 +51,8 @@ public class KmlRenderer implements Renderer {
 	private Map<Object, Double> lineWidthMap = new LinkedHashMap<Object, Double>();
 	private Map<Object, Color> polygonColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> polygonAlphaMap = new LinkedHashMap<Object, Integer>();
+	private Map<Object, Double> polygonRadiusMap = new LinkedHashMap<Object, Double>();
+	
 
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 	
@@ -707,16 +709,14 @@ public class KmlRenderer implements Renderer {
 				styles.add(style);
 			}
 			
-			Feature feature = generatePolygon(polygon, style);
-			feature.setDescription(label);
+			Feature feature = generatePolygon(polygon, style, valueMap, minValue, maxValue, label);
 			folder.addFeature(feature);
-
 		}// END: polygons loop
 		
 		return folder;
 	}//END: generatePolygons
 
-	private Feature generatePolygon(Polygon polygon , KmlStyle style) {
+	private Feature generatePolygon(Polygon polygon , KmlStyle style, Map<Object, Double> valueMap, Double minValue, Double maxValue, String label) throws MissingAttributeException {
 
 		Placemark placemark = new Placemark();
 		LinearRing linearRing = new LinearRing();
@@ -725,7 +725,6 @@ public class KmlRenderer implements Renderer {
 		
 		if(polygon.hasLocation()) {
 			
-//			Location centroid = polygon.getCentroid();
 			String locationId = polygon.getLocationId();
 			name = locationId;
 			
@@ -735,8 +734,42 @@ public class KmlRenderer implements Renderer {
 			
 			int numPoints = 36;
 			
-			//TODO: radius mapping
-			double radius = 100;
+			double radius = settings.polygonRadius;
+			if (this.settings.polygonRadiusMapping != null) { // map
+				
+				Trait trait = polygon.getAttributes().get(
+						settings.polygonRadiusMapping);
+				
+				if (trait == null) {
+					if (polygon.hasLocation()) {
+						trait = new Trait(polygon.getLocationId());
+					}
+				}
+				
+				if(trait == null) {
+					throw new MissingAttributeException(settings.polygonRadiusMapping, MissingAttributeException.POLYGON);
+				}
+				
+				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+				
+				if (polygonRadiusMap.containsKey(key)) {
+
+					radius = polygonRadiusMap.get(key);
+					
+				} else {
+
+					Double value = valueMap.get(key);
+					radius = map(value, minValue, maxValue, settings.minPolygonRadius, settings.maxPolygonRadius);
+					
+				}// END: key check
+				
+				//TODO: label
+				label += (", radius[" + settings.polygonRadiusMapping + "="+key.toString()+"]");
+				
+			} // END: settings check
+			
+			
+			
 			points.addAll(generateCircle(centroid, radius, numPoints));
 			
 		} else {
@@ -768,6 +801,7 @@ public class KmlRenderer implements Renderer {
 		placemark.setGeometry(kfPolygon);
 		placemark.setName(name);
 		
+		placemark.setDescription(label);
 		return placemark;
 	}//END: generatePolygon
 	

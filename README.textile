@@ -19,69 +19,68 @@ h3. CONTINUOUS TREE
 
 h3. PARSING
 
-@
-# parse two traits
+* parse two traits
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
-@
 
-# parse one trait
+
+* parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test_host.json
 
 h3. RENDERING
 
-# use all default settings
+* use all default settings
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -output test.kml
 
 h4. POLYGONS
 
-# override default polygon color settings:
+* override default polygon color settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 0 0 255 -output test.kml
 
-# map polygon colors to host attribute values, use built-in color schemes
+* map polygon colors to host attribute values, use built-in color schemes
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -output test.kml
 
-# map polygon colors to host attribute values, use supplied color sheet (RGB or RGBA values)
+* map polygon colors to host attribute values, use supplied color sheet (RGB or RGBA values)
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
 
-# specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
+* specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -polygonalpha 255 -output test.kml
 
-# map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
+* map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -output test.kml
 
 h4. LINES
 
-# override default line color settings:
+* override default line color settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolor 250 0 0 -output test.kml
 
-# map line colors to host attribute values, use built-in color schemes. For lines which change host line color will be interpolated to reflect that
+* map line colors to host attribute values, use built-in color schemes. For lines which change host line color will be interpolated to reflect that
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -output test.kml
 
-# map line colors to host attribute values, use supplied color sheet (RGB or RGBA values). For lines which change host line color will be interpolated to reflect that
+* map line colors to host attribute values, use supplied color sheet (RGB or RGBA values). For lines which change host line color will be interpolated to reflect that
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
 
-# map line colors to duration attribute values, use supplied color sheet (RGB or RGBA values). Duration attribute applies to a whole branch and colors are not interpolated to reflect that:
+* map line colors to duration attribute values, use supplied color sheet (RGB or RGBA values). Duration attribute applies to a whole branch and colors are not interpolated to reflect that:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping duration -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
 
-# specify alpha channel for lines, this option overwrites all previous settings, including those in color sheet:
+* specify alpha channel for lines, this option overwrites all previous settings, including those in color sheet:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealpha 150 -output test.kml
 
-# map alpha channel for lines to host attribute values, this option overwrites all previous settings, including those in color sheet. For lines which change host line alpha will be interpolated to reflect that:
+* map alpha channel for lines to host attribute values, this option overwrites all previous settings, including those in color sheet. For lines which change host line alpha will be interpolated to reflect that:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -output test.kml
 
-# map alpha channel for lines to duration attribute values, this option overwrites all previous settings, including those in color sheet. Duration attribute applies to a whole branch and alpha is not interpolated to reflect that:
+* map alpha channel for lines to duration attribute values, this option overwrites all previous settings, including those in color sheet. Duration attribute applies to a whole branch and alpha is not interpolated to reflect that:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping duration -output test.kml
 
-# override default line width settings:
+* override default line width settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -output test.kml
 
-# map lines width to duration attribute values. Width can only be mapped to attributes which apply to a whole branch.
+* map lines width to duration attribute values. Width can only be mapped to attributes which apply to a whole branch.
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidthmapping duration -output test.kml
 
-# override default line altitude settings:
+* override default line altitude settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitude 50000 -output test.kml
 
-# map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
+* map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidthmapping duration -linealtitudemapping distance -output test.kml
 
 
@@ -93,28 +92,43 @@ h3. PARSING
 
 h3. RENDERING
 
-# use all default settings
+* use all default settings
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -output test.kml
 
 h4. POLYGONS
 
-# override default polygon color settings:
+* override default polygon color settings:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolor 0 255 255 -output test.kml
 
-# map polygon colors to count attribute values, use built-in color schemes
+* map polygon colors to count attribute values, use built-in color schemes
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping count -output test.kml
 
-# map polygon colors to location values, use built-in color schemes
+* map polygon colors to location values, use built-in color schemes
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -output test.kml
 
-# map polygon colors to location values, use supplied color sheet (RGB or RGBA values)
+* map polygon colors to location values, use supplied color sheet (RGB or RGBA values)
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
 
-# specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
+* specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalpha 100 -output test.kml
 
-# map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalpha 100 -output test.kml
+* map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -output test.kml
+
+* override default polygon radius (in KM) settings: 
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradius 200 -output test.kml
+
+* map polygon radius to count attribute values
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping count -output test.kml
+
+* map polygon radius to location attribute values
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -output test.kml
+
+
+h4. LINES
+
+* TODO
+
 
 
 

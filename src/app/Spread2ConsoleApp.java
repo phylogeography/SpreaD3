@@ -62,6 +62,9 @@ public class Spread2ConsoleApp {
 	private static final String POLYGON_ALPHA_MAPPING = "polygonalphamapping";
 	private static final String POLYGON_ALPHA = "polygonalpha";
 	
+	private static final String POLYGON_RADIUS = "polygonradius";
+	private static final String POLYGON_RADIUS_MAPPING = "polygonradiusmapping";
+	
 	private static final String LINE_COLOR_MAPPING = "linecolormapping";
 	private static final String LINE_COLORS = "linecolors";
 	private static final String LINE_COLOR = "linecolor";
@@ -181,7 +184,7 @@ public class Spread2ConsoleApp {
 				
 				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
 				
-				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map line attribute values."),
+				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map attribute values."),
 				
 				//---LINE ALPHA CHANEL---//
 				
@@ -203,6 +206,12 @@ public class Spread2ConsoleApp {
 			    new Arguments.RealOption(POLYGON_ALPHA, "specify A value. Higher values are more opaque, lower values more translucent."),
 				
 			    new Arguments.StringOption(POLYGON_ALPHA_MAPPING, "", "attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent."),
+			    
+			  //---POLYGON RADIUS---//
+			    
+			    new Arguments.RealOption(POLYGON_RADIUS, "specify polygon radius. Makes sense only for polygons with locations."),
+			    
+			    new Arguments.StringOption(POLYGON_RADIUS_MAPPING, "" ,"attribute to map radius aesthetic. Only makes sense for polygons with locations."),
 			    
 				});
 		
@@ -528,10 +537,6 @@ public class Spread2ConsoleApp {
 				
 				renderArguments.parseArguments(otherArgs);
 				
-//			} catch (ArgumentException e) {
-//				gracefullyExit(e.getMessage(), renderArguments, e);
-//			}
-			
 			// ---INTERROGATE---//
 
 			settings.kmlRendererSettings = new KmlRendererSettings();
@@ -590,6 +595,26 @@ public class Spread2ConsoleApp {
 			} else if(renderArguments.hasOption(POLYGON_ALPHA_MAPPING) && renderArguments.hasOption(POLYGON_ALPHA)){
 				
 				gracefullyExit("Can't both map and have a defined polygon alpha!", renderArguments, null);
+			
+			} else {
+				
+				// use defaults
+				
+			}
+			
+			  //---POLYGON RADIUS---//
+			
+			if(renderArguments.hasOption(POLYGON_RADIUS_MAPPING)) {
+				
+				settings.kmlRendererSettings.polygonRadiusMapping = renderArguments.getStringOption(POLYGON_RADIUS_MAPPING);
+				
+			} else if(renderArguments.hasOption(POLYGON_RADIUS)) {
+				
+				settings.kmlRendererSettings.polygonRadius = renderArguments.getRealOption(POLYGON_RADIUS);
+				
+			} else if(renderArguments.hasOption(POLYGON_RADIUS_MAPPING) && renderArguments.hasOption(POLYGON_RADIUS)){
+				
+				gracefullyExit("Can't both map and have a defined polygon radius!", renderArguments, null);
 			
 			} else {
 				

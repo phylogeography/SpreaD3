@@ -92,5 +92,19 @@ public class KmlRendererSettings {
 	// Fixed
 	public double polygonAlpha = 100;
 	public boolean polygonAlphaChanged = false;
+
+	
+	// --RADIUS---//
+	
+	// For continuous attributes
+	public String polygonRadiusMapping= null;
+	public Double minPolygonRadius = 100.0; public Double maxPolygonRadius = 1000.0;
+	
+	// For discrete attributes
+    //TODO: file with radius, make a joint CSS style sheet for all these settings
+	
+	// Fixed
+	public Double polygonRadius = 100.0;
+	
 	
 }//END: class
