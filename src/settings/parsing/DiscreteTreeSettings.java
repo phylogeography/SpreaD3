@@ -1,4 +1,4 @@
-package settings;
+package settings.parsing;
 
 public class DiscreteTreeSettings {
 
@@ -9,9 +9,9 @@ public class DiscreteTreeSettings {
 	// location attribute name
 	public String locationTrait = null;
 	// number of discrete intervals
-	public Integer intervals = null;
+	public Integer intervals = 10;
 	// path to json output file 
-	public String output = null;
+	public String output = "output.json";
 	
 	public DiscreteTreeSettings() {
 	}//END: Construtor

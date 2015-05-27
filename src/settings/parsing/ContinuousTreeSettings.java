@@ -1,4 +1,4 @@
-package settings;
+package settings.parsing;
 
 public class ContinuousTreeSettings {
 

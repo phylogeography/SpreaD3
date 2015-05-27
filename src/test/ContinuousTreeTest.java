@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import renderers.KmlRenderer;
-import settings.KmlRendererSettings;
+import settings.rendering.KmlRendererSettings;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;

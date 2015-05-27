@@ -29,7 +29,7 @@ import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
-import settings.KmlRendererSettings;
+import settings.rendering.KmlRendererSettings;
 import utils.Trait;
 import utils.Utils;
 import data.SpreadData;
@@ -40,7 +40,7 @@ import data.structure.Location;
 import data.structure.Polygon;
 import exceptions.MissingAttributeException;
 
-public class KmlRenderer {
+public class KmlRenderer implements Renderer {
 
 	private SpreadData data;
 	private KmlRendererSettings settings;
@@ -54,7 +54,7 @@ public class KmlRenderer {
 
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 	
-	public KmlRenderer(SpreadData data, KmlRendererSettings settings) {
+	public KmlRenderer(SpreadData data, KmlRendererSettings settings)  {
 		
 		this.data = data;
 		this.settings = settings;
@@ -95,7 +95,7 @@ public class KmlRenderer {
 	// ---LOCATIONS---//
 	// /////////////////
 	
-	private Feature generateLocations(List<Location> locations) {
+	public Feature generateLocations(List<Location> locations) {
 		
 		Folder folder = new Folder();
 		folder.setName("locations");
@@ -137,7 +137,7 @@ public class KmlRenderer {
 
 	// ---LINES---//
 	
-	private Feature generateLines(List<Line> lines) throws IOException, MissingAttributeException {
+	public Feature generateLines(List<Line> lines) throws IOException, MissingAttributeException {
 
 		Folder folder = new Folder();
 		folder.setName("lines");
@@ -550,7 +550,7 @@ public class KmlRenderer {
 	
 	// ---POLYGONS---//
 
-	private Feature generatePolygons(List<Polygon> polygons) throws IOException, MissingAttributeException {
+	 public Feature generatePolygons(List<Polygon> polygons) throws IOException, MissingAttributeException {
 
 		Folder folder = new Folder();
 		folder.setName("polygons");

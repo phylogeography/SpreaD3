@@ -13,10 +13,10 @@ import kmlframework.kml.KmlException;
 import parsers.ContinuousTreeParser;
 import parsers.DiscreteTreeParser;
 import renderers.KmlRenderer;
-import settings.ContinuousTreeSettings;
-import settings.DiscreteTreeSettings;
-import settings.KmlRendererSettings;
 import settings.Settings;
+import settings.parsing.ContinuousTreeSettings;
+import settings.parsing.DiscreteTreeSettings;
+import settings.rendering.KmlRendererSettings;
 import utils.Arguments;
 import utils.Arguments.ArgumentException;
 import utils.Utils;
@@ -326,49 +326,64 @@ public class Spread2ConsoleApp {
 
 			// ---PARSE---//
 
-			try {
+				try {
 
-				args1.parseArguments(otherArgs);
+					args1.parseArguments(otherArgs);
 
-			} catch (ArgumentException e) {
-				gracefullyExit(e.getMessage(), args1, e);
-			}// END: try-catch
+					if (args1.hasOption(LOCATIONS)) {
 
-			if (args1.hasOption(LOCATIONS)) {
+						settings.discreteTreeSettings.locations = args1
+								.getStringOption(LOCATIONS);
 
-				settings.discreteTreeSettings.locations = args1
-						.getStringOption(LOCATIONS);
+					} else {
 
-			}
+						throw new ArgumentException("Required argument "
+								+ LOCATIONS + " is missing.");
 
-			if (args1.hasOption(TREE)) {
+					}// END: option check
 
-				settings.discreteTreeSettings.tree = args1
-						.getStringOption(TREE);
+					if (args1.hasOption(TREE)) {
 
-			}
+						settings.discreteTreeSettings.tree = args1
+								.getStringOption(TREE);
 
-			if (args1.hasOption(LOCATION_TRAIT)) {
+					} else {
 
-				settings.discreteTreeSettings.locationTrait = args1
-						.getStringOption(LOCATION_TRAIT);
+						throw new ArgumentException("Required argument " + TREE
+								+ " is missing.");
 
-			}
+					}// END: option check
 
-			if (args1.hasOption(INTERVALS)) {
+					if (args1.hasOption(LOCATION_TRAIT)) {
 
-				settings.discreteTreeSettings.intervals = args1
-						.getIntegerOption(INTERVALS);
+						settings.discreteTreeSettings.locationTrait = args1
+								.getStringOption(LOCATION_TRAIT);
 
-			}
-			
-			if (args1.hasOption(OUTPUT)) {
+					} else {
 
-				settings.discreteTreeSettings.output = args1
-						.getStringOption(OUTPUT);
+						throw new ArgumentException("Required argument "
+								+ LOCATION_TRAIT + " is missing.");
 
-			}
-			
+					}// END: option check
+
+					if (args1.hasOption(INTERVALS)) {
+
+						settings.discreteTreeSettings.intervals = args1
+								.getIntegerOption(INTERVALS);
+
+					}// END: option check
+
+					if (args1.hasOption(OUTPUT)) {
+
+						settings.discreteTreeSettings.output = args1
+								.getStringOption(OUTPUT);
+
+					} // END: option check
+
+				} catch (ArgumentException e) {
+					gracefullyExit(e.getMessage(), args1, e);
+				}// END: try-catch
+
 			// ---RUN---//
 
 			try {

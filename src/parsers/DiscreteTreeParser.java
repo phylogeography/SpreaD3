@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
-import settings.DiscreteTreeSettings;
+import settings.parsing.DiscreteTreeSettings;
 import utils.Utils;
 import data.SpreadData;
 import data.structure.Layer;

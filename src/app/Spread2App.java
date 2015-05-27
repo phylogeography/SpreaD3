@@ -2,6 +2,8 @@ package app;
 
 import java.util.Locale;
 
+import utils.Arguments.ArgumentException;
+
 /**
  * @author Andrew Rambaut
  * @author Filip Bielejec
@@ -16,7 +18,7 @@ public class Spread2App {
     private static final String VERSION = "2.0.0beta";
     private static final String DATE_STRING = "2015";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ArgumentException {
 		
 		 Locale.setDefault(Locale.US);
 			

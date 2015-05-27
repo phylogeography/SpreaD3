@@ -1,5 +1,9 @@
 package settings;
 
+import settings.parsing.ContinuousTreeSettings;
+import settings.parsing.DiscreteTreeSettings;
+import settings.rendering.KmlRendererSettings;
+
 public class Settings {
 
 	// modes
@@ -23,7 +27,6 @@ public class Settings {
 	public KmlRendererSettings kmlRendererSettings = null;
 	
 	public Settings() {
-		
 	}//END: Constructor
 	
 	

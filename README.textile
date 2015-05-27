@@ -87,7 +87,7 @@ h3. DISCRETE TREE
 
 h3. PARSING
 
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -output
 
 h3. RENDERING
 
