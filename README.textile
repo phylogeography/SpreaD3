@@ -19,8 +19,10 @@ h3. CONTINUOUS TREE
 
 h3. PARSING
 
+@
 # parse two traits
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
+@
 
 # parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test_host.json
@@ -87,12 +89,34 @@ h3. DISCRETE TREE
 
 h3. PARSING
 
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -output
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -output test_discrete.json
 
 h3. RENDERING
 
 # use all default settings
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -output test.kml
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -output test.kml
+
+h4. POLYGONS
+
+# override default polygon color settings:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolor 0 255 255 -output test.kml
+
+# map polygon colors to count attribute values, use built-in color schemes
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping count -output test.kml
+
+# map polygon colors to location values, use built-in color schemes
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -output test.kml
+
+# map polygon colors to location values, use supplied color sheet (RGB or RGBA values)
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
+
+# specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalpha 100 -output test.kml
+
+# map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalpha 100 -output test.kml
+
+
 
 
 

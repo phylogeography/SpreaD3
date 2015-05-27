@@ -528,9 +528,9 @@ public class Spread2ConsoleApp {
 				
 				renderArguments.parseArguments(otherArgs);
 				
-			} catch (ArgumentException e) {
-				gracefullyExit(e.getMessage(), renderArguments, e);
-			}
+//			} catch (ArgumentException e) {
+//				gracefullyExit(e.getMessage(), renderArguments, e);
+//			}
 			
 			// ---INTERROGATE---//
 
@@ -539,7 +539,12 @@ public class Spread2ConsoleApp {
 
             settings.kmlRendererSettings.json = renderArguments.getStringOption(JSON);
 				
-			} 
+			} else {
+
+				throw new ArgumentException("Required argument "
+						+ JSON + " is missing.");
+
+			}// END: option check
 			
 			if (renderArguments.hasOption(OUTPUT)) {
 
@@ -679,6 +684,11 @@ public class Spread2ConsoleApp {
 				
 			}
 			
+			
+		} catch (ArgumentException e) {
+			gracefullyExit(e.getMessage(), renderArguments, e);
+		}//END: try-catch
+			
 			// ---RUN---//
 			
 			try {
@@ -705,7 +715,7 @@ public class Spread2ConsoleApp {
 				gracefullyExit(e.getMessage(), renderArguments, e);
 				
 			}// END: try-catch block
-			
+		
 			
 		}//END: create / render / read check
 		

@@ -17,6 +17,7 @@ import exceptions.LocationNotFoundException;
 public class DiscretePolygonsParser {
 
 	public static final String COUNT = "count";
+	public static final String LOCATION = "location";
 	
 	private RootedTree rootedTree;
 	private String locationTrait;
@@ -112,10 +113,20 @@ public class DiscretePolygonsParser {
 				if (locationCount > 0) {
 
 					Map<String, Trait> attributes = new HashMap<String, Trait>();
+					
+					//TODO
+//					System.out.println(location.getId());
+					
+//					Trait locationTrait = new Trait(location.getId());
+//					attributes.put(LOCATION, locationTrait);
+					
+					
 					Trait countTrait = new Trait(locationCount);
-
 					attributes.put(COUNT, countTrait);
 
+					
+					
+					
 					Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
 					polygonsList.add(polygon);
 

@@ -7,7 +7,7 @@ public class KmlRendererSettings {
 	public static final int B = 2;
 	
 	public String json=null;
-	public String output = null;
+	public String output = "output.kml";
 	
 	///////////////
 	//---LINES---//

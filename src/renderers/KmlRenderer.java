@@ -174,10 +174,14 @@ public class KmlRenderer implements Renderer {
 			}//END: nodeAttributes loop
 			
 	    }//END: lines loop
-		
-	 double maxValue = Collections.max(valueMap.values());
-	 double minValue = Collections.min(valueMap.values());	
-		
+
+	    Double maxValue = 0.0;
+	    Double minValue = 0.0;
+		if (!valueMap.isEmpty()) {
+			 maxValue = Collections.max(valueMap.values());
+			 minValue = Collections.min(valueMap.values());
+		}
+ 
 		for(Line line : lines) {
 			
 			folder.addFeature(generateLine(line, valueMap, minValue, maxValue));
@@ -585,6 +589,16 @@ public class KmlRenderer implements Renderer {
 						
 					}//END: contains check
 			}//END: attributes loop
+			
+            // Discrete polygons have Locations, need to process them too for mapping			
+			if (polygon.hasLocation()) {
+				Object traitValue = polygon.getLocationId();
+				if (!valueMap.containsKey(traitValue)) {
+					valueMap.put(traitValue, factorValue);
+					factorValue++;
+				}// END: contains check
+			}// END: location check
+			
 	    }//END: polygons loop
 	
 		// get max and min for mappings
@@ -603,6 +617,12 @@ public class KmlRenderer implements Renderer {
 
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonColorMapping);
+				
+				if (trait == null) {
+					if (polygon.hasLocation()) {
+						trait = new Trait(polygon.getLocationId());
+					}
+				}
 				
 				if(trait == null) {
 					throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
