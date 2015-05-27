@@ -48,17 +48,18 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 	
 	DiscreteLinesParser linesParser = new DiscreteLinesParser(rootedTree, //
 		discreteTreeSettings.locationTrait, //
-			locationsList //
+			locationsList,
+			discreteTreeSettings.traits //
 			);
      linesList = linesParser.parseLines();
 	
 	System.out.println("Parsed lines");
 	
-	
 	DiscretePolygonsParser polygonsParser = new DiscretePolygonsParser(rootedTree, //
 			discreteTreeSettings.locationTrait, //
 			discreteTreeSettings.intervals, //
-			locationsList //
+			locationsList, //
+			discreteTreeSettings.traits//
 			); 
       polygonsList = polygonsParser.parseDiscretePolygons();
 	

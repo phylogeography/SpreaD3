@@ -20,7 +20,7 @@ h3. CONTINUOUS TREE
 h3. PARSING
 
 * parse two traits
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
+@ -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json @
 
 
 * parse one trait
@@ -88,6 +88,7 @@ h3. DISCRETE TREE
 
 h3. PARSING
 
+* cut into 10 discrete time intervals
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -output test_discrete.json
 
 h3. RENDERING
@@ -127,7 +128,20 @@ h4. POLYGONS
 
 h4. LINES
 
-* TODO
+* override default line color settings:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolor 250 0 0 -output test.kml
+
+* map line colors to distance attribute values, use built-in color schemes
+TODO: problem, labels and color gradient shouldn't interpolate
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping distance -output test.kml
+
+
+* map line colors to location attribute values
+TODO
+
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 package parsers;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +25,15 @@ public class DiscretePolygonsParser {
 	private List<Location> locationsList;
 	
 	private Integer intervals;
+	private String[] traits;
 	
-	public DiscretePolygonsParser(RootedTree rootedTree, String locationTrait, Integer intervals, List<Location> locationsList) {
+	public DiscretePolygonsParser(RootedTree rootedTree, String locationTrait, Integer intervals, List<Location> locationsList, String[] traits) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;
 		this.locationsList = locationsList;
 		this.intervals = intervals;
+		this.traits = traits;
 		
 	}//END: Constructor
 	
@@ -113,19 +116,23 @@ public class DiscretePolygonsParser {
 				if (locationCount > 0) {
 
 					Map<String, Trait> attributes = new HashMap<String, Trait>();
-					
-					//TODO
-//					System.out.println(location.getId());
-					
-//					Trait locationTrait = new Trait(location.getId());
-//					attributes.put(LOCATION, locationTrait);
-					
+
+					//TODO: no sense to have traits for these polygons?
+					if (traits != null) {
+						for (String traitName : traits) {
+
+							// Object nodeTraitObject =
+							// Utils.getObjectNodeAttribute( node, traitName);
+							// Trait nodeTrait = new Trait(nodeTraitObject,
+							// nodeHeight);
+							//
+							// attributes.put(traitName, nodeTrait);
+
+						}// END: traits loop
+					}// END: null check
 					
 					Trait countTrait = new Trait(locationCount);
 					attributes.put(COUNT, countTrait);
-
-					
-					
 					
 					Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
 					polygonsList.add(polygon);

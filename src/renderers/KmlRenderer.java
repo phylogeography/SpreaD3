@@ -241,7 +241,7 @@ public class KmlRenderer implements Renderer {
 			Trait startTrait = line.getAttributes().get(settings.lineColorMapping);
 			
 			if(startTrait == null) {
-				startTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineColorMapping);
+				startTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
 			}
 			
 			if(startTrait == null) {
@@ -280,7 +280,7 @@ public class KmlRenderer implements Renderer {
 			Trait endTrait = line.getAttributes().get(settings.lineColorMapping);
 			
 			if(endTrait == null) {
-				endTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineColorMapping);
+				endTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
 			}
 			
 			if(endTrait == null) {
@@ -332,7 +332,7 @@ public class KmlRenderer implements Renderer {
             Trait startTrait = line.getAttributes().get(settings.lineAlphaMapping);
 			
 			if(startTrait == null) {
-				startTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineAlphaMapping);
+				startTrait = line.getAttributes().get(Utils.START + settings.lineAlphaMapping);
 			}
 			
 			if(startTrait == null) {
@@ -356,7 +356,7 @@ public class KmlRenderer implements Renderer {
 			Trait endTrait = line.getAttributes().get(settings.lineAlphaMapping);
 			
 			if(endTrait == null) {
-				endTrait = line.getAttributes().get(ContinuousLinesParser.START + settings.lineAlphaMapping);
+				endTrait = line.getAttributes().get(Utils.START + settings.lineAlphaMapping);
 			}
 			
 			if(endTrait == null) {

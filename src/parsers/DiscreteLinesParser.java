@@ -1,12 +1,15 @@
 package parsers;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
+import utils.Trait;
 import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Line;
@@ -18,12 +21,14 @@ public class DiscreteLinesParser {
 	String locationTrait;
 	List<Location> locationsList;
 	RootedTree rootedTree;
+	private String[] traits;
 	
-	public DiscreteLinesParser(RootedTree rootedTree, String locationTrait, List<Location> locationsList) {
+	public DiscreteLinesParser(RootedTree rootedTree, String locationTrait, List<Location> locationsList, String traits[]) {
 		
 		this.locationTrait = locationTrait;
 		this.locationsList = locationsList;
 		this.rootedTree = rootedTree;
+		this.traits = traits;
 		
 	}//END: Constructor
 	
@@ -76,8 +81,41 @@ public class DiscreteLinesParser {
 					Double parentHeight = Utils.getNodeHeight(rootedTree, parentNode);
 					Double nodeHeight = Utils.getNodeHeight(rootedTree, node);
 					
+					Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 					
-					Line line = new Line(parentLocation, nodeLocation, parentHeight, nodeHeight, null);
+					if (traits != null) {
+						for (String traitName : traits) {
+
+							Object parentTraitObject = Utils
+									.getObjectNodeAttribute(parentNode,
+											traitName);
+							Trait parentTrait = new Trait(parentTraitObject,
+									parentHeight);
+
+							attributes
+									.put(Utils.START + traitName, parentTrait);
+
+							Object nodeTraitObject = Utils
+									.getObjectNodeAttribute(node, traitName);
+							Trait nodeTrait = new Trait(nodeTraitObject,
+									nodeHeight);
+
+							attributes.put(Utils.END + traitName, nodeTrait);
+
+						}// END: traits loop
+					}// END: null check
+					
+	                // branch attribute traits
+					
+					double branchDuration = parentHeight - nodeHeight;
+					Trait branchDurationTrait = new Trait(branchDuration);
+					attributes.put(Utils.DURATION, branchDurationTrait);
+					
+					double distance = Utils.rhumbDistance(parentLocation.getCoordinate(), nodeLocation.getCoordinate());
+					Trait distanceTrait = new Trait(distance);
+					attributes.put(Utils.DISTANCE, distanceTrait);
+					
+					Line line = new Line(parentLocation, nodeLocation, parentHeight, nodeHeight, attributes);
 					linesList.add(line);
 
 				}// END: branch changes state check
@@ -87,6 +125,5 @@ public class DiscreteLinesParser {
 		
 		return linesList;
 	}//END: parseLines
-	
 	
 }//END: class

@@ -31,6 +31,8 @@ public class Utils {
 
 	public static final String DURATION = "duration";
 	public static final String DISTANCE = "distance";
+	public static final String START = "start";
+	public static final String END = "end";
 	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 

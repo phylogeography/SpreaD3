@@ -106,6 +106,8 @@ public class Spread2ConsoleApp {
 		new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
 
 		new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
+		
+		new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 
 		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
@@ -382,6 +384,12 @@ public class Spread2ConsoleApp {
 
 					}// END: option check
 
+					if(args1.hasOption(TRAITS)) {
+						
+						settings.discreteTreeSettings.traits = args1.getStringArrayOption(TRAITS);
+						
+					}// END: option check
+					
 					if (args1.hasOption(OUTPUT)) {
 
 						settings.discreteTreeSettings.output = args1

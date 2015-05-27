@@ -13,14 +13,9 @@ import data.structure.Line;
 
 public class ContinuousLinesParser {
 
-	public static final String START = "start";
-	public static final String END = "end";
 	public static final String ONE = "1";
 	public static final String TWO = "2";
 
-//	public static final String DURATION = "duration";
-//	public static final String DISTANCE = "distance";
-	
 	private RootedTree rootedTree;
 	private String locationTrait;
 	private String[] traits;
@@ -65,20 +60,26 @@ public class ContinuousLinesParser {
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
 
 				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-				for(String traitName : traits) {
-					
-					Object parentTraitObject = Utils.getObjectNodeAttribute( parentNode, traitName);
-					Trait parentTrait = new Trait(parentTraitObject, parentHeight);
-					
-					attributes.put(START+traitName, parentTrait);
-					
-					Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
-					Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
-					
-					attributes.put(END+traitName, nodeTrait);
-					
-				}//END: traits loop
 				
+				if (traits != null) {
+					for (String traitName : traits) {
+
+						Object parentTraitObject = Utils
+								.getObjectNodeAttribute(parentNode, traitName);
+						Trait parentTrait = new Trait(parentTraitObject,
+								parentHeight);
+
+						attributes.put(Utils.START + traitName, parentTrait);
+
+						Object nodeTraitObject = Utils.getObjectNodeAttribute(
+								node, traitName);
+						Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
+
+						attributes.put(Utils.END + traitName, nodeTrait);
+
+					}// END: traits loop
+				}// END: null check
+
                 // branch attribute traits
 				
 				double branchDuration = parentHeight - nodeHeight;

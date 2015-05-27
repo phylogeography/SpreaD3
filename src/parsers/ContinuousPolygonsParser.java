@@ -83,15 +83,19 @@ public class ContinuousPolygonsParser {
 						}// END: c loop
 
 						Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-						for(String traitName : traits) {
-							
-							Object nodeTraitObject = Utils.getObjectNodeAttribute( node, traitName);
-							Trait nodeTrait = new Trait(nodeTraitObject, nodeHeight);
-							
-							attributes.put(traitName, nodeTrait);
-							
-						}//END: traits loop
 						
+						if (traits != null) {
+							for (String traitName : traits) {
+
+								Object nodeTraitObject = Utils
+										.getObjectNodeAttribute(node, traitName);
+								Trait nodeTrait = new Trait(nodeTraitObject,
+										nodeHeight);
+
+								attributes.put(traitName, nodeTrait);
+
+							}// END: traits loop
+						}// END: null check
 						
 						Trait modalityTrait = new Trait(m);
 						attributes.put(MODALITY, modalityTrait);
