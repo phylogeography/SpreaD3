@@ -290,8 +290,14 @@ public class KmlRenderer implements Renderer {
 			Object endKey = endTrait.isNumber() ? endTrait.getValue()[0] : (String) endTrait.getId();
 			if (lineColorMap.containsKey(endKey)) {
 
-				endColor = lineColorMap.get(endKey);
+				Color c = lineColorMap.get(endKey);
 
+				endRed = c.getRed();
+				endGreen = c.getGreen();
+				endBlue = c.getBlue();
+				// take alpha value from map if file is supplied by the user 
+				endAlpha = c.getAlpha();
+				
 			} else {
 
 				Double endValue = valueMap.get(endKey);
@@ -308,8 +314,12 @@ public class KmlRenderer implements Renderer {
 
 			}// END: endkey check
 
+			if(startKey.equals(endKey)){
+				label += ( "color[" + settings.lineColorMapping + "=" + startKey.toString()+"]" );
+			} else {
 				label += ( "color[" + settings.lineColorMapping + "=" + startKey.toString() + " to " + endKey.toString() +"]" );
-
+			}//END: equal check
+				
 		} else { // use defaults or user defined color
 
 			startRed = (int) settings.lineColor[KmlRendererSettings.R];
@@ -377,7 +387,11 @@ public class KmlRenderer implements Renderer {
 
 			}// END: endkey check
 
-			label += (", alpha[" + settings.lineAlphaMapping + "=" + startKey.toString() + " to " + endKey.toString() + "]");
+			if(startKey.equals(endKey)){
+				label += ( ", alpha[" + settings.lineAlphaMapping + "=" + startKey.toString()+"]" );
+			} else {
+				label += ( ", alpha[" + settings.lineAlphaMapping + "=" + startKey.toString() + " to " + endKey.toString() +"]" );
+			}//END: equal check
 			
 		} else { // use defaults
 			
@@ -477,7 +491,7 @@ public class KmlRenderer implements Renderer {
 		double greenStep = (endColor.getGreen() - startColor.getGreen()) / sliceCount;
 		double blueStep = (endColor.getBlue() - startColor.getBlue()) / sliceCount;
 		double alphaStep = (endColor.getAlpha() - startColor.getAlpha()) / sliceCount;
-		
+
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 		for (int i = 0; i < sliceCount; i++) {
 			
@@ -763,12 +777,9 @@ public class KmlRenderer implements Renderer {
 					
 				}// END: key check
 				
-				//TODO: label
 				label += (", radius[" + settings.polygonRadiusMapping + "="+key.toString()+"]");
 				
 			} // END: settings check
-			
-			
 			
 			points.addAll(generateCircle(centroid, radius, numPoints));
 			

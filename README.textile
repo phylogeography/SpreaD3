@@ -20,8 +20,9 @@ h3. CONTINUOUS TREE
 h3. PARSING
 
 * parse two traits
-@ -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json @
-
+bc..
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json @
+p.
 
 * parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test_host.json
@@ -132,7 +133,7 @@ h4. LINES
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolor 250 0 0 -output test.kml
 
 * map line colors to distance attribute values, use built-in color schemes
-TODO: problem, labels and color gradient shouldn't interpolate
+TODO: labels shouldn't interpolate
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping distance -output test.kml
 
 
