@@ -2,7 +2,7 @@ package app;
 
 import java.util.Locale;
 
-import utils.Arguments.ArgumentException;
+import exceptions.ArgumentException;
 
 /**
  * @author Andrew Rambaut

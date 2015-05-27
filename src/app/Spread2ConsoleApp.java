@@ -18,13 +18,13 @@ import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.rendering.KmlRendererSettings;
 import utils.Arguments;
-import utils.Arguments.ArgumentException;
 import utils.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import data.SpreadData;
+import exceptions.ArgumentException;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
 import exceptions.MissingAttributeException;
