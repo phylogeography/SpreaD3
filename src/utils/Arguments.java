@@ -27,24 +27,11 @@ package utils;
 
 import java.util.StringTokenizer;
 
+import exceptions.ArgumentException;
+
 public class Arguments {
 
     public static final String ARGUMENT_CHARACTER = "-";
-
-    public static class ArgumentException extends Exception {
-        /**
-         *
-         */
-        private static final long serialVersionUID = -3229759954341228233L;
-
-        public ArgumentException() {
-            super();
-        }
-
-        public ArgumentException(String message) {
-            super(message);
-        }
-    }
 
     public static class Option {
 

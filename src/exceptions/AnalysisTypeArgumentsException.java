@@ -1,7 +1,5 @@
 package exceptions;
 
-import utils.Arguments.ArgumentException;
-
 @SuppressWarnings("serial")
 public class AnalysisTypeArgumentsException extends Exception {
 
