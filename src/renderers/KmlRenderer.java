@@ -378,6 +378,12 @@ public class KmlRenderer implements Renderer {
 				startTrait = line.getAttributes().get(Utils.START + settings.lineAlphaMapping);
 			}
 			
+			if (startTrait == null) {
+				if (line.connectsLocations()) {
+					startTrait = new Trait(line.getStartLocation().getId());
+				}
+			}
+			
 			if(startTrait == null) {
 				throw new MissingAttributeException(settings.lineAlphaMapping, MissingAttributeException.LINE);
 			}
@@ -400,6 +406,12 @@ public class KmlRenderer implements Renderer {
 			
 			if(endTrait == null) {
 				endTrait = line.getAttributes().get(Utils.START + settings.lineAlphaMapping);
+			}
+			
+			if (endTrait == null) {
+				if (line.connectsLocations()) {
+					endTrait = new Trait(line.getEndLocation().getId());
+				}
 			}
 			
 			if(endTrait == null) {

@@ -6,7 +6,7 @@ public class KmlRendererSettings {
 	public static final int G = 1;
 	public static final int B = 2;
 	
-	public String json=null;
+	public String json = null;
 	public String output = "output.kml";
 	
 	///////////////

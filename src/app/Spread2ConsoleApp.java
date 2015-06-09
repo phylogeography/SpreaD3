@@ -10,10 +10,12 @@ import java.util.Arrays;
 
 import jebl.evolution.io.ImportException;
 import kmlframework.kml.KmlException;
+import parsers.BayesFactorParser;
 import parsers.ContinuousTreeParser;
 import parsers.DiscreteTreeParser;
 import renderers.KmlRenderer;
 import settings.Settings;
+import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.rendering.KmlRendererSettings;
@@ -442,12 +444,76 @@ public class Spread2ConsoleApp {
 
 		} else if (settings.bayesFactors) {
 
-			// ---PARSE---//
+			settings.bayesFactorsSettings = new BayesFactorsSettings();
 
-			// ---INTERROGATE---//
+				// ---PARSE---//
 
-			// ---RUN---//
+				try {
 
+					args2.parseArguments(otherArgs);
+
+					// ---INTERROGATE---//
+
+					if (args2.hasOption(LOCATIONS)) {
+						settings.bayesFactorsSettings.locations = args2
+								.getStringOption(LOCATIONS);
+					} else {
+						throw new ArgumentException("Required argument "
+								+ LOCATIONS + " is missing.");
+					}// END: option check
+
+					if (args2.hasOption(LOG)) {
+						settings.bayesFactorsSettings.log = args2
+								.getStringOption(LOG);
+					} else {
+						throw new ArgumentException("Required argument " + LOG
+								+ " is missing.");
+					}// END: option check
+
+					if (args2.hasOption(OUTPUT)) {
+						settings.bayesFactorsSettings.output = args2
+								.getStringOption(OUTPUT);
+					} // END: option check
+
+					
+					
+					
+					
+					
+				} catch (ArgumentException e) {
+					gracefullyExit(e.getMessage(), args2, e);
+				}// END: try-catch
+
+				// ---RUN---//
+
+				try {
+
+					BayesFactorParser parser = new BayesFactorParser(
+							settings.bayesFactorsSettings);
+
+					SpreadData data = parser.parse();
+
+					// ---EXPORT TO JSON---//
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String s = gson.toJson(data);
+
+					File file = new File(settings.bayesFactorsSettings.output);
+					FileWriter fw;
+
+					fw = new FileWriter(file);
+					fw.write(s);
+					fw.close();
+
+					System.out.println("Created JSON file");
+
+				} catch (IOException e) {
+					gracefullyExit(e.getMessage(), args2, e);
+				} catch (IllegalCharacterException e) {
+					gracefullyExit(e.getMessage(), args2, e);
+				}// END: try-catch
+				
+				
+				
 		} else if (settings.continuousTree) {
 
 			settings.continuousTreeSettings = new ContinuousTreeSettings();
@@ -455,11 +521,8 @@ public class Spread2ConsoleApp {
 			// ---PARSE---//
 			
 			try {
-				args3.parseArguments(otherArgs);
-			} catch (ArgumentException e) {
 				
-				gracefullyExit(e.getMessage(), args3, e);
-			}
+				args3.parseArguments(otherArgs);
 			
 			// ---INTERROGATE---//
 
@@ -482,6 +545,11 @@ public class Spread2ConsoleApp {
 			if (args3.hasOption(OUTPUT)) {
 				settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
 			}//END: option check
+			
+			} catch (ArgumentException e) {
+				
+				gracefullyExit(e.getMessage(), args3, e);
+			}
 			
 			// ---RUN---//
 			

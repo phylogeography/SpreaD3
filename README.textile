@@ -20,7 +20,7 @@ h3. CONTINUOUS TREE
 h3. PARSING
 
 * parse two traits
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json @
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
 
 * parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -output test_host.json
@@ -133,16 +133,44 @@ h4. LINES
 * map line colors to distance attribute values, use built-in color schemes
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping distance -output test.kml
 
-* map line colors to location attribute values, use supplied color sheet (RGB or RGBA values)
+* map line colors to locations, use supplied color sheet (RGB or RGBA values)
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
 
+* specify alpha channel for lines, this option overwrites all previous settings, including those in color sheet:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 150 -output test.kml
+
+* map alpha channel for lines to duration attribute values, this option overwrites all previous settings, including those in color sheet. Duration attribute applies to a whole branch and colors are not interpolated to reflect that:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping duration -output test.kml
+
+* map alpha channel for lines to locations, this option overwrites all previous settings, including those in color sheet. For lines which change location line alpha will be interpolated to reflect that:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -output test.kml
+
+* override default line width settings:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -linewidth 3 -output test.kml
+
+* map lines width to duration attribute values. Width can only be mapped to attributes which apply to a whole branch.
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -output test.kml
+
+* override default line altitude settings:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitude 100000 -output test.kml
+
+* map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
 
 
+h3. BAYES FACTORS
 
+h3. PARSING
 
+* -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -output test_discrete.json
 
+h3. RENDERING
 
+* TODO
 
+h4. LINES
+
+* TODO
 
 
 h1. LICENSE

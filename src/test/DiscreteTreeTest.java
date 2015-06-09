@@ -99,7 +99,7 @@ public class DiscreteTreeTest {
             LinkedList<Location> locationsList = new LinkedList<Location>();
 			
 			// create list from the coordinates file
-			String[] lines = Utils.readLines(locationFilePath);
+			String[] lines = Utils.readLines(locationFilePath, Utils.HASH_COMMENT);
 			int nrow = lines.length;
 
 			for (int i = 0; i < nrow; i++) {

@@ -24,7 +24,7 @@ public class DiscreteLocationsParser {
 		this.locationsList = new LinkedList<Location>();
 		
 		// create list from the coordinates file
-		String[] lines = Utils.readLines(locations);
+		String[] lines = Utils.readLines(locations, Utils.HASH_COMMENT);
 		int nrow = lines.length;
 
 		for (int i = 0; i < nrow; i++) {

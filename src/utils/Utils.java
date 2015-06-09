@@ -24,15 +24,19 @@ public class Utils {
 	// Use this for all random numbers
 	private static final Random random = new Random();
 	public static final double EARTH_RADIUS = 6371.0;
-	
+
 	// /////////////////////
 	// ---PARSING UTILS---//
 	// /////////////////////
 
+	public static final String BLANK_SPACE = "\\s+";
+	public static final String HASH_COMMENT = "#";
+	public static final String INDICATORS = "indicators";
 	public static final String DURATION = "duration";
 	public static final String DISTANCE = "distance";
 	public static final String START = "start";
 	public static final String END = "end";
+
 	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 
@@ -72,7 +76,8 @@ public class Utils {
 		return nodeAttributeArray;
 	}// END: getObjectArrayNodeAttribute
 
-	public static String[] readLines(String filename) throws IOException {
+	public static String[] readLines(String filename, String comment)
+			throws IOException {
 
 		FileReader fileReader = new FileReader(filename);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -80,8 +85,13 @@ public class Utils {
 
 		String line = null;
 		while ((line = bufferedReader.readLine()) != null) {
-			lines.add(line);
-		}
+
+			// skip commented lines
+			if (!line.contains(comment)) {
+				lines.add(line);
+			}// END: commented line check
+			
+		}//END: lines loop
 
 		bufferedReader.close();
 
@@ -92,18 +102,18 @@ public class Utils {
 
 		String[] array = tiedState.split("\\+");
 		String state = (String) Utils.pickRand(array);
-		
+
 		return state;
-	}//END: breakTiesRandomly
-	
-	public static RootedTree importRootedTree(String tree) throws IOException, ImportException {
-		TreeImporter importer = new NexusImporter(new FileReader(
-				tree));
+	}// END: breakTiesRandomly
+
+	public static RootedTree importRootedTree(String tree) throws IOException,
+			ImportException {
+		TreeImporter importer = new NexusImporter(new FileReader(tree));
 		RootedTree rootedTree = (RootedTree) importer.importNextTree();
-		
+
 		return rootedTree;
-	}//END: importRootedTree
-	
+	}// END: importRootedTree
+
 	// ///////////////////
 	// ---PRINT UTILS---//
 	// ///////////////////
@@ -114,7 +124,7 @@ public class Utils {
 		}
 		System.out.println();
 	}// END: printArray
-	
+
 	public static void printArray(Object[] x) {
 		for (int i = 0; i < x.length; i++) {
 			System.out.print(x[i] + " ");
@@ -122,6 +132,13 @@ public class Utils {
 		System.out.println();
 	}// END: printArray
 
+	public static void headArray(Object[] x, int nrow) {
+		for (int i = 0; i < nrow; i++) {
+			System.out.print(x[i] + " ");
+		}
+		System.out.println();
+	}// END: printArray
+	
 	public static void printMap(Map<?, ?> map) {
 
 		Iterator<?> it = map.entrySet().iterator();
@@ -130,6 +147,22 @@ public class Utils {
 			System.out.println(pairs.getKey() + " = " + pairs.getValue());
 		}
 	}// END: printMap
+
+	public static void printList(List<Integer> x) {
+		for (int i = 0; i < x.size(); i++) {
+			System.out.print(x.get(i) + " ");
+		}
+		System.out.println();
+	}// END: printArray
+	
+	public static void print2DArray(Object[][] array, int nrow) {
+		for (int row = 0; row < nrow; row++) {
+			for (int col = 0; col < array[row].length; col++) {
+				System.out.print(array[row][col] + " ");
+			}
+			System.out.print("\n");
+		}
+	}// END: print2DArray
 	
 	// ///////////////////////////
 	// ---RANDOM NUMB3R UTILS---//
@@ -138,15 +171,14 @@ public class Utils {
 	public static Object pickRand(Object[] array) {
 		int rnd = random.nextInt(array.length);
 		return array[rnd];
-	}//END: pickRand
+	}// END: pickRand
 
 	// ///////////////////////
 	// ---GEOGRAPHY UTILS---//
 	// ///////////////////////
-	
-	public static double rhumbDistance(
-			Coordinate startCoordinate, Coordinate endCoordinate
-			) {
+
+	public static double rhumbDistance(Coordinate startCoordinate,
+			Coordinate endCoordinate) {
 		/**
 		 * Returns the distance from start point to the end point in km,
 		 * travelling along a rhumb line
@@ -176,6 +208,6 @@ public class Utils {
 				* Utils.EARTH_RADIUS;
 
 		return distance;
-	}//END: rhumbDistance
-	
+	}// END: rhumbDistance
+
 }// END: class

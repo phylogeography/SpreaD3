@@ -1,5 +1,6 @@
 package settings;
 
+import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.rendering.KmlRendererSettings;
@@ -16,7 +17,7 @@ public class Settings {
 	public ContinuousTreeSettings continuousTreeSettings = null;
 	
 	public boolean bayesFactors = false;
-// TODO
+	public BayesFactorsSettings bayesFactorsSettings = null;
 	
 	public boolean continuousTree = false;
 	public DiscreteTreeSettings discreteTreeSettings  = null;

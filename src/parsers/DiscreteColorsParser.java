@@ -20,12 +20,12 @@ public class DiscreteColorsParser {
 		
 		this.colorMap = new LinkedHashMap<Object, Color>();
 		
-		String[] lines = Utils.readLines(colors);
+		String[] lines = Utils.readLines(colors, Utils.HASH_COMMENT);
 		int nrow = lines.length;
 
 		for (int i = 0; i < nrow; i++) {
 
-			String[] line = lines[i].split("\\s+");
+			String[] line = lines[i].split(Utils.BLANK_SPACE);
 			int ncol = line.length;
 
 			if(ncol == 4) {

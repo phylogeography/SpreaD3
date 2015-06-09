@@ -17,11 +17,11 @@ import exceptions.LocationNotFoundException;
 
 public class DiscreteTreeParser {
 
-	private DiscreteTreeSettings discreteTreeSettings;
+	private DiscreteTreeSettings settings;
 	
-	public DiscreteTreeParser(DiscreteTreeSettings discreteTreeSettings) {
-		this.discreteTreeSettings = discreteTreeSettings;
-	}
+	public DiscreteTreeParser(DiscreteTreeSettings settings) {
+		this.settings = settings;
+	}//END: Constructor
 	
 	
 public SpreadData parse() throws IOException, ImportException, LocationNotFoundException, IllegalCharacterException {
@@ -35,31 +35,31 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 
 	RootedTree rootedTree = null;
 	
-	rootedTree = Utils.importRootedTree(discreteTreeSettings.tree);
+	rootedTree = Utils.importRootedTree(settings.tree);
 	
 	// ---PARSE AND FILL STRUCTURES---//
 	
 	DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-		discreteTreeSettings.locations //
+		settings.locations //
 			);
 	locationsList = locationsParser.parseLocations();
 	
 	System.out.println("Parsed locations");
 	
 	DiscreteLinesParser linesParser = new DiscreteLinesParser(rootedTree, //
-		discreteTreeSettings.locationTrait, //
+		settings.locationTrait, //
 			locationsList,
-			discreteTreeSettings.traits //
+			settings.traits //
 			);
      linesList = linesParser.parseLines();
 	
 	System.out.println("Parsed lines");
 	
 	DiscretePolygonsParser polygonsParser = new DiscretePolygonsParser(rootedTree, //
-			discreteTreeSettings.locationTrait, //
-			discreteTreeSettings.intervals, //
+			settings.locationTrait, //
+			settings.intervals, //
 			locationsList, //
-			discreteTreeSettings.traits//
+			settings.traits//
 			); 
       polygonsList = polygonsParser.parseDiscretePolygons();
 	
@@ -68,7 +68,7 @@ public SpreadData parse() throws IOException, ImportException, LocationNotFoundE
 	
 	 LinkedList<Layer> layersList = new LinkedList<Layer>();
 
-		Layer discreteLayer = new Layer(discreteTreeSettings.tree,
+		Layer discreteLayer = new Layer(settings.tree,
 				"Discrete tree visualisation", linesList, polygonsList);
 
 		layersList.add(discreteLayer);
