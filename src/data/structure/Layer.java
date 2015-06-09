@@ -23,8 +23,10 @@ public class Layer {
 		this.lines = new ArrayList<Line>();
 
 		this.lines.addAll(lines);
+		if(polygons != null) {
 		this.polygons.addAll(polygons);
-
+		}
+		
 		this.id = id;
 		this.description = description;
 

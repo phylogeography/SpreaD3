@@ -148,7 +148,7 @@ public class Utils {
 		}
 	}// END: printMap
 
-	public static void printList(List<Integer> x) {
+	public static void printList(List<?> x) {
 		for (int i = 0; i < x.size(); i++) {
 			System.out.print(x.get(i) + " ");
 		}

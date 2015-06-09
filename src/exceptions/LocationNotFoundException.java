@@ -17,4 +17,10 @@ public class LocationNotFoundException extends Exception {
 		return location.getId();
 	}
 	
+	@Override
+	public String getMessage() {
+		String message = "Location " + location.getId() + " not found";
+		return message;
+	}
+	
 }//END: class

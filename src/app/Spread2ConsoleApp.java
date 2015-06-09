@@ -510,6 +510,8 @@ public class Spread2ConsoleApp {
 					gracefullyExit(e.getMessage(), args2, e);
 				} catch (IllegalCharacterException e) {
 					gracefullyExit(e.getMessage(), args2, e);
+				} catch (LocationNotFoundException e) {
+					gracefullyExit(e.getMessage(), args2, e);
 				}// END: try-catch
 				
 				
