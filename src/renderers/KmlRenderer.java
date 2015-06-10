@@ -160,9 +160,8 @@ public class KmlRenderer implements Renderer {
 		
 		// Map trait values (String | Double) to numerical values (Double)
 		Double factorValue = 1.0;
-		Map<Object, Double> valueMap = new HashMap<Object, Double>();
-		Map<String, double[]> minMaxMap = new HashMap<String, double[]>();
-		
+		Map<Object, Double> valueMap = new LinkedHashMap<Object, Double>();
+		Map<String, double[]> minMaxMap = new LinkedHashMap<String, double[]>();
 		
 	    for(Line line : lines) {
 			
@@ -223,27 +222,6 @@ public class KmlRenderer implements Renderer {
 				
 			}//END: iterate
 			
-//			for (Trait trait : attributes.values()) {
-//
-//				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-//					if (!valueMap.containsKey(traitValue)) {
-//						
-//						if(trait.isNumber()) { 
-//							valueMap.put( traitValue, (Double) traitValue);
-//						} else {
-//							valueMap.put(traitValue, factorValue);
-//							factorValue++;
-//						}//END: isNumber check
-//						
-//					}//END: contains value check
-//					
-//			}//END: attribute values loop
-			
-			
-			
-			
-			
-			
             // Discrete lines connect Locations, need to process them too for mapping		
 			if (line.connectsLocations()) {
 
@@ -263,17 +241,7 @@ public class KmlRenderer implements Renderer {
 			
 	    }//END: lines loop
 
-//	    System.exit(-1);
-	    
-	    Double maxValue = 0.0;
-	    Double minValue = 0.0;
-		if (!valueMap.isEmpty()) {
-			 maxValue = Collections.max(valueMap.values());
-			 minValue = Collections.min(valueMap.values());
-		}//END: empty check
- 
-//	    Utils.printMap(valueMap);
-		
+	    // Second lines loop does the actual rendering
 		for (Line line : lines) {
 
 			// TODO: attribute cutoff /subset for factors, test this logic
@@ -321,15 +289,11 @@ public class KmlRenderer implements Renderer {
 				}//END: settings check			
 				
 			}//END: subset check
-			
+
 			if (include) {
-				folder.addFeature(generateLine(line, valueMap, minMaxMap
-//						minValue,
-//						maxValue
-						)
-						);
+				folder.addFeature(generateLine(line, valueMap, minMaxMap));
 			}
-			
+
 		}//END: lines loop
 		
 		return folder;
@@ -339,8 +303,6 @@ public class KmlRenderer implements Renderer {
 			Line line, //
 			Map<Object, Double> valueMap, //
 			Map<String, double[]> minmaxMap //
-//			double minValue, //
-//			double maxValue //
 	) throws MissingAttributeException {
 
 		//TODO: make this a setting
@@ -417,10 +379,7 @@ public class KmlRenderer implements Renderer {
 				
 				// scale needs to be created | color for attribute not supplied
 				Double startValue = valueMap.get(startKey);
-//				double[] minmax = minmaxMap.get(settings.lineColorMapping);
-//				double minValue = minmax[MIN_INDEX];
-//				double maxValue = minmax[MAX_INDEX];
-				
+
 				startRed = (int) map(startValue, minValue, maxValue,
 						settings.minLineRed, settings.maxLineRed);
 				startGreen = (int) map(startValue, minValue, maxValue,
@@ -770,26 +729,82 @@ public class KmlRenderer implements Renderer {
 		}
 		
 		// Map trait values (String | Double) to numerical values (Double)
-		// this processes all traits found in json, perhaps we should split them in maps for color, alpha, width, etc.
 		Double factorValue = 1.0;
 		Map<Object, Double> valueMap = new LinkedHashMap<Object, Double>();
+		Map<String, double[]> minmaxMap = new LinkedHashMap<String, double[]>();
+		
 	    for(Polygon polygon : polygons) {
 			
 			Map<String, Trait> attributes = polygon.getAttributes();
-			for (Trait trait : attributes.values()) {
+			
+			Iterator<?> it = attributes.entrySet().iterator();
+			
+			while (it.hasNext()) {
 
+				Entry<?, ?> pairs = (Entry<?, ?>) it.next();
+			
+				Trait trait = (Trait) pairs.getValue();
 				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-					if (!valueMap.containsKey(traitValue)) {
+				Double value = Double.NaN;
+				
+				if (!valueMap.containsKey(traitValue)) {
+					
+					if(trait.isNumber()) { 
 						
-						if(trait.isNumber()) { 
-							valueMap.put( traitValue, (Double) traitValue);
-						} else {
-							valueMap.put(traitValue, factorValue);
-							factorValue++;
-						}//END: isNumber check
+						value = (Double) traitValue;
+						valueMap.put( traitValue, value);
 						
-					}//END: contains check
-			}//END: attributes loop
+					} else {
+						
+						value = factorValue;
+						valueMap.put(traitValue, value);
+						factorValue++;
+					
+					}//END: isNumber check
+					
+				}//END: contains check
+				
+				String traitName = (String) pairs.getKey();				
+				
+				if(!minmaxMap.containsKey(traitName)) {
+					
+					double[] minmax = new double[2];
+					minmax[MIN_INDEX] = value;
+					minmax[MAX_INDEX] = value;
+					
+					minmaxMap.put(traitName, minmax);
+					
+				} else {
+					
+					double[] minmax = minmaxMap.get(traitName);
+					
+					if(value < minmax[MIN_INDEX] ) {
+						minmax[MIN_INDEX] = value;
+					}
+					
+					if(value > minmax[MAX_INDEX]) {
+						minmax[MAX_INDEX] = value;
+					}
+					
+					minmaxMap.put(traitName, minmax);
+					
+				}//END: contains check
+				
+			}//END: iterate
+//			for (Trait trait : attributes.values()) {
+//
+//				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+//					if (!valueMap.containsKey(traitValue)) {
+//						
+//						if(trait.isNumber()) { 
+//							valueMap.put( traitValue, (Double) traitValue);
+//						} else {
+//							valueMap.put(traitValue, factorValue);
+//							factorValue++;
+//						}//END: isNumber check
+//						
+//					}//END: contains check
+//			}//END: attributes loop
 			
             // Discrete polygons have Locations, need to process them too for mapping			
 			if (polygon.hasLocation()) {
@@ -803,9 +818,15 @@ public class KmlRenderer implements Renderer {
 	    }//END: polygons loop
 	
 		// get max and min for mappings
-		double maxValue = Collections.max(valueMap.values());
-		double minValue = Collections.min(valueMap.values());
+//		double maxValue = Collections.max(valueMap.values());
+//		double minValue = Collections.min(valueMap.values());
 	 
+		
+		
+		
+		
+		
+		
 		// get Colors map
 		KmlStyle style = null;
 		for (Polygon polygon : polygons) {
@@ -816,6 +837,10 @@ public class KmlRenderer implements Renderer {
 			int red = 255, green = 255, blue = 255, alpha = 0;
 			if (this.settings.polygonColorMapping != null) {// map
 
+				double[] minmax = minmaxMap.get(settings.polygonColorMapping);
+				double minValue = minmax[MIN_INDEX];	
+				double maxValue = minmax[MAX_INDEX];
+				
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonColorMapping);
 				
@@ -871,6 +896,10 @@ public class KmlRenderer implements Renderer {
 			// this should overwrite any previous settings
 			if (this.settings.polygonAlphaMapping != null) { // map
 				
+				double[] minmax = minmaxMap.get(settings.polygonAlphaMapping);
+				double minValue = minmax[MIN_INDEX];	
+				double maxValue = minmax[MAX_INDEX];
+				
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonAlphaMapping);
 				
@@ -908,14 +937,19 @@ public class KmlRenderer implements Renderer {
 				styles.add(style);
 			}
 			
-			Feature feature = generatePolygon(polygon, style, valueMap, minValue, maxValue, label);
+			Feature feature = generatePolygon(polygon, style, valueMap, minmaxMap,
+//					minValue, maxValue, 
+					label);
 			folder.addFeature(feature);
 		}// END: polygons loop
 		
 		return folder;
 	}//END: generatePolygons
 
-	private Feature generatePolygon(Polygon polygon , KmlStyle style, Map<Object, Double> valueMap, Double minValue, Double maxValue, String label) throws MissingAttributeException {
+	private Feature generatePolygon(Polygon polygon , KmlStyle style, Map<Object, Double> valueMap, 
+//			Double minValue, Double maxValue, 
+			Map<String, double[]> minmaxMap,
+			String label) throws MissingAttributeException {
 
 		Placemark placemark = new Placemark();
 		LinearRing linearRing = new LinearRing();
@@ -935,6 +969,10 @@ public class KmlRenderer implements Renderer {
 			
 			double radius = settings.polygonRadius;
 			if (this.settings.polygonRadiusMapping != null) { // map
+				
+				double[] minmax = minmaxMap.get(settings.polygonRadiusMapping);
+				double minValue = minmax[MIN_INDEX];	
+				double maxValue = minmax[MAX_INDEX];
 				
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonRadiusMapping);
