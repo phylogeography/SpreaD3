@@ -10,5 +10,10 @@ public class BayesFactorsSettings {
 	
 	// path to json output file 
 	public String output = "output.json";
+
+	// burnin in %
+	public Double burnin = 10.0;
+
+	public double bfcutoff = 0.0;
 	
 }//END: class

@@ -130,7 +130,9 @@ public class KmlRenderer implements Renderer {
 		folder.setDescription(layer.getDescription());
 		
 		folder.addFeature(generateLines(layer.getLines()));
-		folder.addFeature(generatePolygons(layer.getPolygons()));
+		if (layer.hasPolygons()) {
+			folder.addFeature(generatePolygons(layer.getPolygons()));
+		}
 		
 		return folder;
 	}
@@ -205,9 +207,27 @@ public class KmlRenderer implements Renderer {
 			 minValue = Collections.min(valueMap.values());
 		}//END: empty check
  
+		// TODO attribute cutoff /subset for factors
 		for(Line line : lines) {
+
+			boolean include = true;
+			if(this.settings.linesSubset != null) {
+				
+				Trait trait = line.getAttributes().get(
+						settings.linesSubset);
+				
+
+				
+				
+//				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+
+				
+				
+			}//END: subset check
 			
+			if(include) {
 			folder.addFeature(generateLine(line, valueMap, minValue, maxValue));
+			}
 			
 		}//END: lines loop
 		

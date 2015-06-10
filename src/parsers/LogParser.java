@@ -1,7 +1,6 @@
 package parsers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,14 +9,15 @@ import java.util.regex.Pattern;
 import utils.Utils;
 
 public class LogParser {
-	
+
 	private static final int HEADER_ROW = 0;
-	
 	private String log;
-	
-	public LogParser(String log) {
+	private Double burnin;
+
+	public LogParser(String log, Double burnin) {
 		
 		this.log = log;
+		this.burnin = burnin;
 		
 	}//END: Constructor
 	
@@ -42,20 +42,29 @@ public class LogParser {
 		}//END: column names loop
 		
 		int ncol = columns.size();
+		int skip = (int) ((burnin/100 * nrow));
 		
 		// parse indicator columns
-		Double[][] indicators = new Double[nrow][ncol];
+		Double[][] indicators = new Double[nrow-skip][ncol];
+		int i = 0;
 		for (int row = 1; row <= nrow; row++) {
-			
-			String[] line = lines[row].split(Utils.BLANK_SPACE);
-			for(int col = 0; col < ncol; col++) {
-				
-				indicators[row-1][col] = Double.valueOf(line[columns.get(col)]);
-				
-			}//END: col loop
-			
-		}//END: row loop
+
+			if (row > skip) {
+
+				String[] line = lines[row].split(Utils.BLANK_SPACE);
+				for (int col = 0; col < ncol; col++) {
+
+					// indicators[row-1][col] = Double.valueOf(line[columns.get(col)]);
+					indicators[i][col] = Double.valueOf(line[columns.get(col)]);
+
+				}// END: col loop
+
+				i++;
+			}// END: burn-in check
+
+		}// END: row loop
 		
+//		System.out.println(indicators.length);
 //		Utils.print2DArray(indicators, 5);	
 //		Utils.print2DArray(indicators, indicators.length);		
 		

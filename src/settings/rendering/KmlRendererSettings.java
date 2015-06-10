@@ -61,6 +61,16 @@ public class KmlRendererSettings {
 	// Fixed
 	public Double lineWidth = 2.0;
 	
+	
+	// ---SUBSETTING---//
+	
+	public String linesSubset = null;
+	public double linesCutoff = 0.0;
+	public String linesValue = "0.0";
+	
+	
+	
+	
 	//////////////////
 	//---POLYGONS---//
 	//////////////////
@@ -105,6 +115,9 @@ public class KmlRendererSettings {
 	
 	// Fixed
 	public Double polygonRadius = 100.0;
+	
+	
+	
 	
 	
 }//END: class

@@ -50,12 +50,20 @@ public class Spread2ConsoleApp {
 	private static final String TREES = "trees";
 	private static final String LOCATIONS = "locations";
 	private static final String LOG = "log";
+	private static final String BURNIN = "burnin";
 	private static final String LOCATION_TRAIT = "locationTrait";
 	private static final String TRAITS = "traits";
 	private static final String HPD = "hpd";
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
+	
+	private static final String LINES_SUBSET = "linesSubset";
+	private static final String LINES_CUTOFF = "linesCutoff";
+	private static final String LINES_VALUE = "linesValue";
+	
+   //	TODO: polygon cutoffs
+	
 	
 	private static final String POLYGON_COLOR_MAPPING = "polygoncolormapping";
 	private static final String POLYGON_COLORS = "polygoncolors";
@@ -121,6 +129,8 @@ public class Spread2ConsoleApp {
 		new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
 
 		new Arguments.StringOption(LOG, "", "tree file name"),
+		
+		new Arguments.RealOption(BURNIN, "log file burning in %"),
 		
 		new Arguments.StringOption(OUTPUT, "", "json output file name")
 
@@ -216,6 +226,12 @@ public class Spread2ConsoleApp {
 			    new Arguments.RealOption(POLYGON_RADIUS, "specify polygon radius. Makes sense only for polygons with locations."),
 			    
 			    new Arguments.StringOption(POLYGON_RADIUS_MAPPING, "" ,"attribute to map radius aesthetic. Only makes sense for polygons with locations."),
+			    
+			    new Arguments.StringOption(LINES_SUBSET, "" ,"attribute to select a subset of values above the certain cutoff."),
+			    
+			    new Arguments.RealOption(LINES_CUTOFF, "specify cutoff value to create a subset"),
+			    
+			    new Arguments.StringOption(LINES_VALUE, "", "specify fixed value to create a subset"),
 			    
 				});
 		
@@ -475,7 +491,26 @@ public class Spread2ConsoleApp {
 								.getStringOption(OUTPUT);
 					} // END: option check
 
+					if (args2.hasOption(BURNIN)) {
+
+						Double burnin = args2
+								.getRealOption(BURNIN);
+
+						if (burnin < 0.0 || burnin > 100.0) {
+
+							throw new ArgumentException(
+									"Burnin outside of [0,100].");
+
+						} else {
+							settings.bayesFactorsSettings.burnin = burnin;
+						}
+
+					} // END: option check
 					
+//					if (args2.hasOption(BF_CUTOFF)) {
+//						settings.bayesFactorsSettings.bfcutoff = args2
+//								.getRealOption(BF_CUTOFF);
+//					} // END: option check
 					
 					
 					
@@ -786,6 +821,31 @@ public class Spread2ConsoleApp {
 				// use defaults
 				
 			}
+			
+			//---LINES SUBSET---//	
+
+			if(renderArguments.hasOption(LINES_SUBSET)) {
+				
+				settings.kmlRendererSettings.linesSubset = renderArguments.getStringOption(LINES_SUBSET);
+				
+				if(renderArguments.hasOption(LINES_CUTOFF)) {
+					
+					settings.kmlRendererSettings.linesCutoff = renderArguments.getRealOption(LINES_CUTOFF);
+					
+				} else if(renderArguments.hasOption(LINES_VALUE)) {
+					
+                     //TODO: this should work for both real value and a factor
+					settings.kmlRendererSettings.linesValue = renderArguments.getStringOption(LINES_VALUE);
+					
+				} else {
+					
+					gracefullyExit("Can't create a subset from these options!", renderArguments, null);
+					
+				}
+				
+			}
+			
+			
 			
 			
 		} catch (ArgumentException e) {

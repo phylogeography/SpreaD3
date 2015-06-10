@@ -1,23 +1,21 @@
 package utils;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
-
-import data.structure.Coordinate;
+import java.util.Random;
 
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NexusImporter;
 import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
+import data.structure.Coordinate;
 
 public class Utils {
 
@@ -30,6 +28,7 @@ public class Utils {
 	// /////////////////////
 
 	public static final String BLANK_SPACE = "\\s+";
+	public static final String TAB = "\t";
 	public static final String HASH_COMMENT = "#";
 	public static final String INDICATORS = "indicators";
 	public static final String DURATION = "duration";

@@ -162,15 +162,18 @@ h3. BAYES FACTORS
 
 h3. PARSING
 
-* -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -output test_discrete.json
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -output test_discrete.json
 
 h3. RENDERING
 
-* TODO
+* use all default settings
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -output test.kml
 
 h4. LINES
 
-* TODO
+* TODO: attribute cutoff [bayes factor values]
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -linesSubset bayesFactor -linesCutoff 10 -output test.kml
+
 
 
 h1. LICENSE
@@ -188,7 +191,7 @@ h1. LICENSE
 h1. TODO
 
 * Renderers
-  - alpha channel mapping for lines
+  - subsetting numerical and factor values
   - control arc curvature [0 - 1]
   - D3 renderer tool
 * Two data modes. dd/mm/yyyy and old origin dates.
