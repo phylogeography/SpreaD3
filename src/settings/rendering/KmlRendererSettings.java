@@ -17,9 +17,9 @@ public class KmlRendererSettings {
 	
 	// For continuous attributes
 	public String lineColorMapping = null;
-	//TODO: min and max values should be created, not parsed
-	public Double minLineRed = 50.0; public Double maxLineRed = 100.0;
-	public Double minLineGreen = 100.0; public Double maxLineGreen = 250.0;
+	//TODO: parse min and max values
+	public Double minLineRed = 100.0; public Double maxLineRed = 250.0;
+	public Double minLineGreen = 50.0; public Double maxLineGreen = 100.0;
 	public Double minLineBlue = 50.0; public Double maxLineBlue = 100.0;
 	
 	// For discrete attributes
@@ -65,8 +65,8 @@ public class KmlRendererSettings {
 	// ---SUBSETTING---//
 	
 	public String linesSubset = null;
-	public double linesCutoff = 0.0;
-	public String linesValue = "0.0";
+	public Double linesCutoff = null;
+	public String linesValue = null;
 	
 	
 	

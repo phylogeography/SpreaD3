@@ -171,8 +171,15 @@ h3. RENDERING
 
 h4. LINES
 
-* TODO: attribute cutoff [bayes factor values]
--render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -linesSubset bayesFactor -linesCutoff 10 -output test.kml
+* attribute cutoff [bayes factor values]
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -linesSubset bayesFactor -linesCutoff 5 -output test.kml
+
+* map line colors to bayes factor attribute values, use built-in color schemes
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -linesSubset bayesFactor -linesCutoff 5 -linecolormapping bayesFactor -output test.kml
+
+* override default line width settings:
+-render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -linesSubset bayesFactor -linesCutoff 5 -linecolormapping bayesFactor -linewidth 5 -output test.kml
+
 
 
 
@@ -191,7 +198,7 @@ h1. LICENSE
 h1. TODO
 
 * Renderers
-  - subsetting numerical and factor values
+  - separate min/max values for colors, widths, altitudes etc, they are not interpolated enough when attributes live on different scales [create them per attribute!]
   - control arc curvature [0 - 1]
   - D3 renderer tool
 * Two data modes. dd/mm/yyyy and old origin dates.

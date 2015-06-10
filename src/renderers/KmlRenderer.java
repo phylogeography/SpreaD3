@@ -7,10 +7,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
@@ -40,6 +43,9 @@ import exceptions.MissingAttributeException;
 
 public class KmlRenderer implements Renderer {
 
+	private static final int MIN_INDEX=0;
+	private static final int MAX_INDEX=1;
+	
 	private SpreadData data;
 	private KmlRendererSettings settings;
 	
@@ -155,25 +161,88 @@ public class KmlRenderer implements Renderer {
 		// Map trait values (String | Double) to numerical values (Double)
 		Double factorValue = 1.0;
 		Map<Object, Double> valueMap = new HashMap<Object, Double>();
+		Map<String, double[]> minMaxMap = new HashMap<String, double[]>();
+		
 		
 	    for(Line line : lines) {
 			
 	    	// Get the mapping for node attributes
 			Map<String, Trait> attributes = line.getAttributes();
-			for (Trait trait : attributes.values()) {
+			Iterator<?> it = attributes.entrySet().iterator();
+			
+			while (it.hasNext()) {
 
+				Entry<?, ?> pairs = (Entry<?, ?>) it.next();
+			
+				Trait trait = (Trait) pairs.getValue();
 				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-					if (!valueMap.containsKey(traitValue)) {
+				Double value = Double.NaN;
+				
+				if (!valueMap.containsKey(traitValue)) {
+					
+					if(trait.isNumber()) { 
 						
-						if(trait.isNumber()) { 
-							valueMap.put( traitValue, (Double) traitValue);
-						} else {
-							valueMap.put(traitValue, factorValue);
-							factorValue++;
-						}//END: isNumber check
+						value = (Double) traitValue;
+						valueMap.put( traitValue, value);
 						
-					}//END: contains check
-			}//END: attributes loop
+					} else {
+						
+						value = factorValue;
+						valueMap.put(traitValue, value);
+						factorValue++;
+					
+					}//END: isNumber check
+					
+				}//END: contains check
+				
+				String traitName = (String) pairs.getKey();				
+				
+				if(!minMaxMap.containsKey(traitName)) {
+					
+					double[] minmax = new double[2];
+					minmax[MIN_INDEX] = value;
+					minmax[MAX_INDEX] = value;
+					
+					minMaxMap.put(traitName, minmax);
+					
+				} else {
+					
+					double[] minmax = minMaxMap.get(traitName);
+					
+					if(value < minmax[MIN_INDEX] ) {
+						minmax[MIN_INDEX] = value;
+					}
+					
+					if(value > minmax[MAX_INDEX]) {
+						minmax[MAX_INDEX] = value;
+					}
+					
+					minMaxMap.put(traitName, minmax);
+					
+				}//END: contains check
+				
+			}//END: iterate
+			
+//			for (Trait trait : attributes.values()) {
+//
+//				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+//					if (!valueMap.containsKey(traitValue)) {
+//						
+//						if(trait.isNumber()) { 
+//							valueMap.put( traitValue, (Double) traitValue);
+//						} else {
+//							valueMap.put(traitValue, factorValue);
+//							factorValue++;
+//						}//END: isNumber check
+//						
+//					}//END: contains value check
+//					
+//			}//END: attribute values loop
+			
+			
+			
+			
+			
 			
             // Discrete lines connect Locations, need to process them too for mapping		
 			if (line.connectsLocations()) {
@@ -194,11 +263,7 @@ public class KmlRenderer implements Renderer {
 			
 	    }//END: lines loop
 
-	    
-	    //TODO
-//	    Utils.printMap(valueMap);
-	    
-	    
+//	    System.exit(-1);
 	    
 	    Double maxValue = 0.0;
 	    Double minValue = 0.0;
@@ -207,26 +272,62 @@ public class KmlRenderer implements Renderer {
 			 minValue = Collections.min(valueMap.values());
 		}//END: empty check
  
-		// TODO attribute cutoff /subset for factors
-		for(Line line : lines) {
+//	    Utils.printMap(valueMap);
+		
+		for (Line line : lines) {
 
+			// TODO: attribute cutoff /subset for factors, test this logic
 			boolean include = true;
-			if(this.settings.linesSubset != null) {
-				
-				Trait trait = line.getAttributes().get(
-						settings.linesSubset);
-				
+			if (this.settings.linesSubset != null) {
 
-				
-				
-//				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+				Trait subsetTrait = line.getAttributes().get( settings.linesSubset);
 
-				
+				if (settings.linesCutoff != null) {
+
+					if (subsetTrait.isNumber()) {
+
+						if (subsetTrait.getValue()[0] < settings.linesCutoff) {
+							include = false;
+						}// END: cutoff check
+
+					} else {
+
+						// TODO: custom exception we can recover from
+						throw new RuntimeException(
+								"Cutoff attribute has a non-numeric value!");
+					}// END: isNumber check
+
+				} else if (settings.linesValue != null) {
+
+					if (subsetTrait.isNumber()) {
+
+						if (subsetTrait.getValue()[0] != Double.valueOf(settings.linesValue)) {
+							include = false;
+						}// END: cutoff check
+
+					} else {
+
+						if ((String) subsetTrait.getId() != settings.linesValue) {
+							include = false;
+						}// END: cutoff check
+						
+					}// END: isNumber check
+					
+				} else {
+
+					throw new RuntimeException(
+							"Should never get here!");
+					
+				}//END: settings check			
 				
 			}//END: subset check
 			
-			if(include) {
-			folder.addFeature(generateLine(line, valueMap, minValue, maxValue));
+			if (include) {
+				folder.addFeature(generateLine(line, valueMap, minMaxMap
+//						minValue,
+//						maxValue
+						)
+						);
 			}
 			
 		}//END: lines loop
@@ -237,8 +338,9 @@ public class KmlRenderer implements Renderer {
 	private Feature generateLine(
 			Line line, //
 			Map<Object, Double> valueMap, //
-			double minValue, //
-			double maxValue //
+			Map<String, double[]> minmaxMap //
+//			double minValue, //
+//			double maxValue //
 	) throws MissingAttributeException {
 
 		//TODO: make this a setting
@@ -279,6 +381,10 @@ public class KmlRenderer implements Renderer {
 		
 		if (this.settings.lineColorMapping != null) { // map
 
+			double[] minmax = minmaxMap.get(settings.lineColorMapping);
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
+			
 			Trait startTrait = line.getAttributes().get(settings.lineColorMapping);
 			
 			if(startTrait == null) {
@@ -311,7 +417,10 @@ public class KmlRenderer implements Renderer {
 				
 				// scale needs to be created | color for attribute not supplied
 				Double startValue = valueMap.get(startKey);
-
+//				double[] minmax = minmaxMap.get(settings.lineColorMapping);
+//				double minValue = minmax[MIN_INDEX];
+//				double maxValue = minmax[MAX_INDEX];
+				
 				startRed = (int) map(startValue, minValue, maxValue,
 						settings.minLineRed, settings.maxLineRed);
 				startGreen = (int) map(startValue, minValue, maxValue,
@@ -391,6 +500,10 @@ public class KmlRenderer implements Renderer {
 		
 		// this should overwrite any previous settings
 		if (this.settings.lineAlphaMapping != null) { // map
+			
+			double[] minmax = minmaxMap.get(settings.lineAlphaMapping);
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
 			
             Trait startTrait = line.getAttributes().get(settings.lineAlphaMapping);
 			
@@ -479,6 +592,10 @@ public class KmlRenderer implements Renderer {
 		Double altitude = 0.0;
 		if (settings.lineAltitudeMapping != null) {// map
 
+			double[] minmax = minmaxMap.get(settings.lineAltitudeMapping);
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
+			
 			Trait trait = line.getAttributes().get(
 					settings.lineAltitudeMapping);
 			
@@ -515,6 +632,10 @@ public class KmlRenderer implements Renderer {
 		Double width = 0.0;
 		if (settings.lineWidthMapping != null) {// map
 
+			double[] minmax = minmaxMap.get(settings.lineWidthMapping);
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
+			
 			Trait trait = line.getAttributes().get(
 					settings.lineWidthMapping);
 			
