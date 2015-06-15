@@ -3,6 +3,7 @@ package settings;
 import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
+import settings.parsing.TimeSlicerSettings;
 import settings.rendering.KmlRendererSettings;
 
 public class Settings {
@@ -23,7 +24,7 @@ public class Settings {
 	public DiscreteTreeSettings discreteTreeSettings  = null;
 
 	public boolean timeSlicer = false;
-	// TODO	
+	public TimeSlicerSettings timeSlicerSettings  = null;
 	
 	public KmlRendererSettings kmlRendererSettings = null;
 	

@@ -15,10 +15,10 @@ import data.structure.Polygon;
 
 public class ContinuousTreeParser {
 
-	private ContinuousTreeSettings continuousTreeSettings;
+	private ContinuousTreeSettings settings;
 	
-	public ContinuousTreeParser(ContinuousTreeSettings continuousTreeSettings) {
-		this.continuousTreeSettings = continuousTreeSettings;
+	public ContinuousTreeParser(ContinuousTreeSettings settings) {
+		this.settings = settings;
 	}
 
 	public SpreadData parse() throws IOException, ImportException {
@@ -29,22 +29,22 @@ public class ContinuousTreeParser {
 		
 		// ---IMPORT---//
 
-		RootedTree rootedTree = Utils.importRootedTree(continuousTreeSettings.tree);
+		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
 		
 		// ---PARSE AND FILL STRUCTURES---//
 		
 		ContinuousLinesParser linesParser = new ContinuousLinesParser(rootedTree, //
-				continuousTreeSettings.locationTrait, //
-				continuousTreeSettings.traits //
+				settings.locationTrait, //
+				settings.traits //
 				);
 	     linesList = linesParser.parseLines();
 		
 		System.out.println("Parsed lines");
 		
 		ContinuousPolygonsParser polygonsParser = new ContinuousPolygonsParser(rootedTree, //
-				continuousTreeSettings.locationTrait, //
-				continuousTreeSettings.hpd, //
-				continuousTreeSettings.traits //
+				settings.locationTrait, //
+				settings.hpd, //
+				settings.traits //
 				); 
 	      polygonsList = polygonsParser.parsePolygons();
 		
@@ -52,10 +52,10 @@ public class ContinuousTreeParser {
 		
 		 LinkedList<Layer> layersList = new LinkedList<Layer>();
 
-			Layer discreteLayer = new Layer(continuousTreeSettings.tree,
-					"Discrete tree visualisation", linesList, polygonsList);
+			Layer layer = new Layer(settings.tree,
+					"Continuous tree visualisation", linesList, polygonsList);
 
-			layersList.add(discreteLayer);
+			layersList.add(layer);
 
 			SpreadData data = new SpreadData(locationsList, layersList);
 			

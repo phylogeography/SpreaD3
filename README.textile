@@ -181,6 +181,14 @@ h4. LINES
 -render -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -linesSubset bayesFactor -linesCutoff 5 -linecolormapping bayesFactor -linewidth 5 -output test.kml
 
 
+h3. TIME SLICING
+
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -output slice_test.json
+
+
+
+
+
 
 
 h1. LICENSE

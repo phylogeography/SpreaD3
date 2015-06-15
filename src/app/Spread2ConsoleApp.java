@@ -13,11 +13,13 @@ import kmlframework.kml.KmlException;
 import parsers.BayesFactorParser;
 import parsers.ContinuousTreeParser;
 import parsers.DiscreteTreeParser;
+import parsers.TimeSlicerParser;
 import renderers.KmlRenderer;
 import settings.Settings;
 import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
+import settings.parsing.TimeSlicerSettings;
 import settings.rendering.KmlRendererSettings;
 import utils.Arguments;
 import utils.Utils;
@@ -48,6 +50,7 @@ public class Spread2ConsoleApp {
 
 	private static final String TREE = "tree";
 	private static final String TREES = "trees";
+	private static final String SLICE_TIMES = "sliceTimes";
 	private static final String LOCATIONS = "locations";
 	private static final String LOG = "log";
 	private static final String BURNIN = "burnin";
@@ -154,19 +157,23 @@ public class Spread2ConsoleApp {
 		// time slicer arguments
 		args4 = new Arguments(new Arguments.Option[] {
 
-		new Arguments.StringOption("timeLine", new String[] { "tree", //
-				"file", //
-		}, false, "how to create time intervals"),
+//		new Arguments.StringOption("timeLine", new String[] { "tree", //
+//				"file", //
+//		}, false, "how to create time intervals"),
 
+		new Arguments.StringOption(TREE, "", "tree file name"),
+		
 		new Arguments.StringOption(TREES, "", "trees file name"),
+		
+		new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
 
-		new Arguments.StringOption("file", "", "time intervals file name"),
+		// TODO: add to intent and to parsers
+		new Arguments.StringOption(SLICE_TIMES, "", "time intervals file name"),
 		
 		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
 		});
 
-		//TODO: what overrides what in descriptions
 		renderArguments = new Arguments(new Arguments.Option[] {
 
 				new Arguments.StringOption(JSON, "", "json input file name"),
@@ -265,19 +272,18 @@ public class Spread2ConsoleApp {
 			gracefullyExit("Empty or incorrect arguments list.", null, null);
 		}
 		
-		// ---PARSE---//
 
 		Settings settings = new Settings();
 
 		try {
-
+			
+			// ---PARSE---//
+			
 			modeArguments.parseArguments(modeArgs);
 
 		} catch (ArgumentException e) {
 			gracefullyExit("", modeArguments, e);
 		}
-
-		// ---INTERROGATE---//
 
 		if (modeArguments.hasOption(HELP)) {
 			gracefullyExit(null, modeArguments, null);
@@ -468,8 +474,6 @@ public class Spread2ConsoleApp {
 
 					args2.parseArguments(otherArgs);
 
-					// ---INTERROGATE---//
-
 					if (args2.hasOption(LOCATIONS)) {
 						settings.bayesFactorsSettings.locations = args2
 								.getStringOption(LOCATIONS);
@@ -506,13 +510,6 @@ public class Spread2ConsoleApp {
 						}
 
 					} // END: option check
-					
-//					if (args2.hasOption(BF_CUTOFF)) {
-//						settings.bayesFactorsSettings.bfcutoff = args2
-//								.getRealOption(BF_CUTOFF);
-//					} // END: option check
-					
-					
 					
 					
 				} catch (ArgumentException e) {
@@ -561,8 +558,6 @@ public class Spread2ConsoleApp {
 				
 				args3.parseArguments(otherArgs);
 			
-			// ---INTERROGATE---//
-
 			if(args3.hasOption(TREE)) {
 				settings.continuousTreeSettings.tree = args3.getStringOption(TREE);
 			}
@@ -626,15 +621,78 @@ public class Spread2ConsoleApp {
 
 		} else if (settings.timeSlicer) {
 
+			settings.timeSlicerSettings = new TimeSlicerSettings();
+			
+			try {
+				
 			// ---PARSE---//
 
-			// ---INTERROGATE---//
-
+				args4.parseArguments(otherArgs);
+			
+				if(args4.hasOption(TREE)) {
+					settings.timeSlicerSettings.tree = args4.getStringOption(TREE);
+				}
+			
+				if(args4.hasOption(TREES)) {
+					settings.timeSlicerSettings.trees = args4.getStringOption(TREES);
+				}
+			
+				if(args4.hasOption(INTERVALS)) {
+					settings.timeSlicerSettings.intervals = args4.getIntegerOption(INTERVALS);
+				}
+				
+				if(args4.hasOption(BURNIN)) {
+					settings.timeSlicerSettings.burnIn = args4.getIntegerOption(BURNIN);
+				}
+				
+				if (args4.hasOption(OUTPUT)) {
+					settings.timeSlicerSettings.output = args4.getStringOption(OUTPUT);
+				}//END: option check
+				
+			} catch(ArgumentException e) {
+				gracefullyExit(e.getMessage(), args4, e);
+			}
+				
 			// ---RUN---//
 
+			
+			try {
+				
+			TimeSlicerParser parser = new TimeSlicerParser(
+					settings.timeSlicerSettings);
+
+			SpreadData data = parser.parse();
+
+			// ---EXPORT TO JSON---//
+			
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String s = gson.toJson(data);
+
+			File file = new File(settings.timeSlicerSettings.output);
+			FileWriter fw;
+
+			fw = new FileWriter(file);
+			fw.write(s);
+			fw.close();
+				
+			} catch (IOException e) {
+				gracefullyExit(e.getMessage(), args4, e);
+			} catch (ImportException e) {
+				gracefullyExit(e.getMessage(), args4, e);
+			}
+
+			System.out.println("Created JSON file");
+			
+			
+			
+			
+			
+			
+			
+			
 		} else {
 			throw new RuntimeException("Should never get here!");
-		}//END: setings check
+		}//END: settings check
 
 		
 		} else if(settings.read) {
@@ -834,7 +892,6 @@ public class Spread2ConsoleApp {
 					
 				} else if(renderArguments.hasOption(LINES_VALUE)) {
 					
-                     //TODO: this should work for both real value and a factor
 					settings.kmlRendererSettings.linesValue = renderArguments.getStringOption(LINES_VALUE);
 					
 				} else {

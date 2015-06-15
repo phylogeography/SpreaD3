@@ -157,11 +157,17 @@ public class KmlRenderer implements Renderer {
 			lineColorMap = colorsParser.parseColors();
 			
 		}
-		
-		// Map trait values (String | Double) to numerical values (Double)
+
+		/**
+		 * Map trait values (String | Double) to numerical values (Double). This
+		 * code creates two maps valueMap maps between attribute (trait) values
+		 * which can be numeric/factor to actual numerical values needed for
+		 * interpolating minmaxMap maps between attribute name and the scale it
+		 * lives on.
+		 * */
 		Double factorValue = 1.0;
 		Map<Object, Double> valueMap = new LinkedHashMap<Object, Double>();
-		Map<String, double[]> minMaxMap = new LinkedHashMap<String, double[]>();
+		Map<String, double[]> minmaxMap = new LinkedHashMap<String, double[]>();
 		
 	    for(Line line : lines) {
 			
@@ -196,17 +202,17 @@ public class KmlRenderer implements Renderer {
 				
 				String traitName = (String) pairs.getKey();				
 				
-				if(!minMaxMap.containsKey(traitName)) {
+				if(!minmaxMap.containsKey(traitName)) {
 					
 					double[] minmax = new double[2];
 					minmax[MIN_INDEX] = value;
 					minmax[MAX_INDEX] = value;
 					
-					minMaxMap.put(traitName, minmax);
+					minmaxMap.put(traitName, minmax);
 					
 				} else {
 					
-					double[] minmax = minMaxMap.get(traitName);
+					double[] minmax = minmaxMap.get(traitName);
 					
 					if(value < minmax[MIN_INDEX] ) {
 						minmax[MIN_INDEX] = value;
@@ -216,7 +222,7 @@ public class KmlRenderer implements Renderer {
 						minmax[MAX_INDEX] = value;
 					}
 					
-					minMaxMap.put(traitName, minmax);
+					minmaxMap.put(traitName, minmax);
 					
 				}//END: contains check
 				
@@ -244,7 +250,6 @@ public class KmlRenderer implements Renderer {
 	    // Second lines loop does the actual rendering
 		for (Line line : lines) {
 
-			// TODO: attribute cutoff /subset for factors, test this logic
 			boolean include = true;
 			if (this.settings.linesSubset != null) {
 
@@ -291,7 +296,7 @@ public class KmlRenderer implements Renderer {
 			}//END: subset check
 
 			if (include) {
-				folder.addFeature(generateLine(line, valueMap, minMaxMap));
+				folder.addFeature(generateLine(line, valueMap, minmaxMap));
 			}
 
 		}//END: lines loop

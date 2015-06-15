@@ -24,7 +24,9 @@ public class Layer {
 		this.polygons = new ArrayList<Polygon>();
 		this.lines = new ArrayList<Line>();
 
-		this.lines.addAll(lines);
+		if (lines != null) {
+			this.lines.addAll(lines);
+		}
 		
 		if (polygons != null) {
 			this.polygons.addAll(polygons);
