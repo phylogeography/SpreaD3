@@ -167,6 +167,8 @@ public class Spread2ConsoleApp {
 		
 		new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
 
+		new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
+		
 		// TODO: add to intent and to parsers
 		new Arguments.StringOption(SLICE_TIMES, "", "time intervals file name"),
 		
@@ -637,6 +639,18 @@ public class Spread2ConsoleApp {
 					settings.timeSlicerSettings.trees = args4.getStringOption(TREES);
 				}
 			
+				if (args4.hasOption(LOCATION_TRAIT)) {
+
+					settings.timeSlicerSettings.locationTrait = args4
+							.getStringOption(LOCATION_TRAIT);
+
+				} else {
+
+					throw new ArgumentException("Required argument "
+							+ LOCATION_TRAIT + " is missing.");
+
+				}// END: option check
+				
 				if(args4.hasOption(INTERVALS)) {
 					settings.timeSlicerSettings.intervals = args4.getIntegerOption(INTERVALS);
 				}

@@ -25,23 +25,29 @@ public class TimeSlicerPolygonsParser {
 	private int numberOfIntervals;
 	// how many trees to burn in (in #trees)
 	private int burnIn;
-	
+	private String locationTrait;
 	
 	private int assumedTrees;
 	
 	public TimeSlicerPolygonsParser(RootedTree rootedTree,
-			NexusImporter treesImporter, int numberOfIntervals, int burnIn) {
+			NexusImporter treesImporter, int numberOfIntervals, String locationTrait, int burnIn) {
 
 		this.rootedTree = rootedTree;
 		this.treesImporter = treesImporter;
         this.numberOfIntervals = numberOfIntervals;
 		this.burnIn = burnIn;
-        
+		this.locationTrait = locationTrait;
+		
+		
+		
 	}// END: Constructor
 
 	public LinkedList<Polygon> parsePolygons() throws IOException, ImportException {
 
 		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
+//		String latitudeName = locationTrait.concat(Utils.ONE);
+//		String longitudeName = locationTrait.concat(Utils.TWO);
+		
 		
 		double[] sliceHeights = generateSliceHeights(rootedTree, numberOfIntervals);
 		
@@ -83,8 +89,8 @@ public class TimeSlicerPolygonsParser {
 
 				new AnalyzeTree(slicesMap, //
 						currentTree, //
-						sliceHeights //
-						).run();
+						sliceHeights, //
+						locationTrait).run();
 				
 				
 				

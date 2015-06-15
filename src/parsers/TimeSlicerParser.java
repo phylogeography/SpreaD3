@@ -54,7 +54,7 @@ public class TimeSlicerParser {
 	 	TimeSlicerPolygonsParser polygonsParser = new TimeSlicerPolygonsParser(rootedTree, //
 	 			treesImporter, //
 	 			settings.intervals, //
-	 			settings.burnIn //
+	 			settings.locationTrait, settings.burnIn //
 	 			);
 	 	
 	 	int assumedTrees = getAssumedTrees(settings.trees) ;

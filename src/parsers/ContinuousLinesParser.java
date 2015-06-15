@@ -13,8 +13,8 @@ import data.structure.Line;
 
 public class ContinuousLinesParser {
 
-	public static final String ONE = "1";
-	public static final String TWO = "2";
+//	public static final String ONE = "1";
+//	public static final String TWO = "2";
 
 	private RootedTree rootedTree;
 	private String locationTrait;
@@ -31,8 +31,8 @@ public class ContinuousLinesParser {
 	public LinkedList<Line> parseLines() {
 		
 		LinkedList<Line> linesList = new LinkedList<Line>();
-		String latitudeName = locationTrait.concat(ONE);
-		String longitudeName = locationTrait.concat(TWO);
+		String latitudeName = locationTrait.concat(Utils.ONE);
+		String longitudeName = locationTrait.concat(Utils.TWO);
 		
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {

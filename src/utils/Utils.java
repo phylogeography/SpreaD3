@@ -35,7 +35,11 @@ public class Utils {
 	public static final String DISTANCE = "distance";
 	public static final String START = "start";
 	public static final String END = "end";
-
+	public static final String ONE = "1";
+	public static final String TWO = "2";
+	public static final String RATE = "rate";
+	public static final String PRECISION = "precision";
+	
 	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 
@@ -75,6 +79,48 @@ public class Utils {
 		return nodeAttributeArray;
 	}// END: getObjectArrayNodeAttribute
 
+	public static Double[] getDoubleArrayNodeAttribute(Node node,
+			String attributeName) {
+		
+		Object[] o = getObjectArrayNodeAttribute(node, attributeName);
+		
+		Double[] array = new Double[o.length];
+		for (int i = 0; i < o.length; i++) {
+			array[i] = Double.valueOf(o[i].toString());
+		}
+		
+		return array;
+	}//END: getDoubleArrayNodeAttribute
+	
+	public static Object[] getObjectArrayTreeAttribute(RootedTree tree,
+			String attributeName) {
+		
+		Object o = tree.getAttribute(attributeName);
+		
+		if (o == null) {
+			throw new RuntimeException("Attribute " + attributeName
+					+ " missing from the tree. \n");
+		}
+
+		return (Object[]) o;
+	}//END: getObjectArrayTreeAttribute
+	
+	public static Double[] getDoubleArrayTreeAttribute(RootedTree tree,
+			String attributeName) {
+		
+		Object[] o = getObjectArrayTreeAttribute(tree, attributeName);
+		
+		Double[] array = new Double[o.length];
+		for (int i = 0; i < o.length; i++) {
+			array[i] = Double.valueOf(o[i].toString());
+		}
+		
+		return array;
+	}//END: getDoubleArrayNodeAttribute
+	
+	
+	
+	
 	public static String[] readLines(String filename, String comment)
 			throws IOException {
 

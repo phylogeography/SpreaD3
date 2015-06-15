@@ -1,5 +1,7 @@
 package settings.parsing;
 
+import utils.Utils;
+
 public class TimeSlicerSettings {
 
 	// path to tree file
@@ -17,7 +19,9 @@ public class TimeSlicerSettings {
 	// how many trees to burn in (in #trees)
 	public int burnIn = 1;
 
-	
+	// location attribute name
+	public String locationTrait = null;
+
 	
 	
 
