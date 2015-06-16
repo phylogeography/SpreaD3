@@ -11,16 +11,13 @@ import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Line;
 
-public class ContinuousLinesParser {
-
-//	public static final String ONE = "1";
-//	public static final String TWO = "2";
+public class ContinuousTreeLinesParser {
 
 	private RootedTree rootedTree;
 	private String locationTrait;
 	private String[] traits;
 	
-	public ContinuousLinesParser(RootedTree rootedTree, String locationTrait, String traits[]) {
+	public ContinuousTreeLinesParser(RootedTree rootedTree, String locationTrait, String traits[]) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;

@@ -22,6 +22,11 @@ public class TimeSlicerSettings {
 	// location attribute name
 	public String locationTrait = null;
 
+	public int gridSize = 100;
+
+	// TODO: make an option in command line
+	public double hpdLevel = 0.95;
+
 	
 	
 

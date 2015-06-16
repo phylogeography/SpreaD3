@@ -183,7 +183,7 @@ h4. LINES
 
 h3. TIME SLICING
 
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -output slice_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -locationTrait location -output slice_test.json
 
 
 

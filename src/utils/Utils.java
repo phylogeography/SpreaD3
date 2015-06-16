@@ -39,7 +39,8 @@ public class Utils {
 	public static final String TWO = "2";
 	public static final String RATE = "rate";
 	public static final String PRECISION = "precision";
-	
+	public static final int LATITUDE_INDEX = 0;
+	public static final int LONGITUDE_INDEX = 1;
 	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 

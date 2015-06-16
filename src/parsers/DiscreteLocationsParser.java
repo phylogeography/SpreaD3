@@ -2,7 +2,6 @@ package parsers;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 
 import utils.Utils;
 import data.structure.Coordinate;
@@ -11,16 +10,20 @@ import exceptions.IllegalCharacterException;
 
 public class DiscreteLocationsParser {
 
+	private static final int LATITUDE_COLUMN = 1;
+	private static final int LONGITUDE_COLUMN = 2;
+	
 	private String locations;
 	private LinkedList<Location> locationsList;
 	
 	public DiscreteLocationsParser(String locations) {
+		
 		this.locations = locations;
+		
 	}//END: Constructor
 	
 	public LinkedList<Location> parseLocations() throws IOException, IllegalCharacterException {
 		
-//		List<Location> 
 		this.locationsList = new LinkedList<Location>();
 		
 		// create list from the coordinates file
@@ -40,8 +43,8 @@ public class DiscreteLocationsParser {
 			
 			}
 
-			Double latitude = Double.valueOf(line[1]);
-			Double longitude = Double.valueOf(line[2]);
+			Double latitude = Double.valueOf(line[LATITUDE_COLUMN]);
+			Double longitude = Double.valueOf(line[LONGITUDE_COLUMN]);
 
 			Coordinate coordinate = new Coordinate( latitude, longitude) ;
 			
@@ -53,9 +56,5 @@ public class DiscreteLocationsParser {
 		
 		return locationsList;
 	}//END: parseLocations
-	
-//	public List<Location> getLocationsList() {
-//		return locationsList;
-//	}//END: getLocationsList
 	
 }//END: class

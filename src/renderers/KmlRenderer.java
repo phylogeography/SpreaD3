@@ -28,7 +28,7 @@ import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
-import parsers.ContinuousPolygonsParser;
+import parsers.ContinuousTreePolygonsParser;
 import parsers.DiscreteColorsParser;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
@@ -1013,8 +1013,8 @@ public class KmlRenderer implements Renderer {
 			
 		} else {
 			
-			Trait hpdTrait = polygon.getAttributes().get(ContinuousPolygonsParser.HPD);
-			name = ((String) hpdTrait.getId()).concat(ContinuousPolygonsParser.HPD);
+			Trait hpdTrait = polygon.getAttributes().get(ContinuousTreePolygonsParser.HPD);
+			name = ((String) hpdTrait.getId()).concat(ContinuousTreePolygonsParser.HPD);
 			
 			for(Coordinate coordinate: polygon.getCoordinates()) {
 				
