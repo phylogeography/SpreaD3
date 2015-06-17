@@ -35,7 +35,7 @@ public class GeoJSONRenderer implements Renderer {
     }
 
     @Override
-    public void render() throws KmlException, IOException, MissingAttributeException {
+    public void render() throws  IOException, MissingAttributeException {
 
         PrintWriter writer = new PrintWriter(new File("test.geo.json"));
 
@@ -113,8 +113,8 @@ public class GeoJSONRenderer implements Renderer {
 
         } catch (FileNotFoundException fnf) {
             System.err.println(fnf);
-        } catch (KmlException ke) {
-            System.err.println(ke);
+//        } catch (KmlException ke) {
+//            System.err.println(ke);
         } catch (IOException ioe) {
             System.err.println(ioe);
         } catch (MissingAttributeException mae) {

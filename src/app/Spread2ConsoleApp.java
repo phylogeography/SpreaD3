@@ -1,6 +1,7 @@
 package app;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class Spread2ConsoleApp {
 
 	private Arguments kmlRenderArguments;
 	private Arguments geojsonRenderArguments;
-	
+
 	private static final String HELP = "help";
 	private static final String READ = "read";
 	private static final String PARSE = "parse";
@@ -101,8 +102,8 @@ public class Spread2ConsoleApp {
 		// ---DEFINITION---//
 		// //////////////////
 
-		//---MODES---//
-		
+		// ---MODES---//
+
 		modeArguments = new Arguments(new Arguments.Option[] {
 
 		new Arguments.Option(HELP, "print this information and exit"),
@@ -111,17 +112,16 @@ public class Spread2ConsoleApp {
 
 		new Arguments.Option(PARSE, "create JSON from input files"),
 
-//		new Arguments.Option(RENDER, "render from JSON file"),
+				// new Arguments.Option(RENDER, "render from JSON file"),
 
-		new Arguments.StringOption(RENDER,
-				new String[] { KML, //
+				new Arguments.StringOption(RENDER, new String[] { KML, //
 						GEOJSON //
-				}, false, "render from JSON file"),
-		
+						}, false, "render from JSON file"),
+
 		});
 
-		//---PARSERS---//
-		
+		// ---PARSERS---//
+
 		// discrete tree arguments
 		args1 = new Arguments(
 				new Arguments.Option[] {
@@ -209,8 +209,8 @@ public class Spread2ConsoleApp {
 
 				});
 
-		//---RENDERERS---//
-		
+		// ---RENDERERS---//
+
 		kmlRenderArguments = new Arguments(
 				new Arguments.Option[] {
 
@@ -305,15 +305,12 @@ public class Spread2ConsoleApp {
 
 				});
 
-		
-		geojsonRenderArguments = new  Arguments(
-				new Arguments.Option[] {
-						
-						//TODO: fill with options
-						
+		geojsonRenderArguments = new Arguments(new Arguments.Option[] {
+
+		// TODO: fill with options
+
 				});
-		
-		
+
 	}// END: Constructor
 
 	public void run(String[] args) {
@@ -344,7 +341,7 @@ public class Spread2ConsoleApp {
 			gracefullyExit("Empty or incorrect arguments list.", null, null);
 		}
 
-//		Utils.printArray(modeArgs);
+		// Utils.printArray(modeArgs);
 		Settings settings = new Settings();
 
 		try {
@@ -379,7 +376,7 @@ public class Spread2ConsoleApp {
 			if (modeArguments.getStringOption(RENDER).equalsIgnoreCase(KML)) {
 
 				settings.kml = true;
-				
+
 			} else if (modeArguments.getStringOption(RENDER).equalsIgnoreCase(
 					GEOJSON)) {
 
@@ -388,9 +385,7 @@ public class Spread2ConsoleApp {
 			} else {
 				gracefullyExit("Unrecognized option", modeArguments, null);
 			}// END: render arg check
-			
-			
-			
+
 		} else {
 
 			gracefullyExit("Unrecognized option", modeArguments, null);
@@ -840,344 +835,331 @@ public class Spread2ConsoleApp {
 
 		} else if (settings.render) {
 
-			
-			if(settings.kml) {	//---KML RENDERING---//
-			
-				
-			// ---PARSE---//
+			if (settings.kml) { // ---KML RENDERING---//
 
-			try {
+				// ---PARSE---//
 
-				kmlRenderArguments.parseArguments(otherArgs);
+				try {
 
-				// ---INTERROGATE---//
+					kmlRenderArguments.parseArguments(otherArgs);
 
-				settings.kmlRendererSettings = new KmlRendererSettings();
-				if (kmlRenderArguments.hasOption(JSON)) {
+					// ---INTERROGATE---//
 
-					settings.kmlRendererSettings.json = kmlRenderArguments
-							.getStringOption(JSON);
+					settings.kmlRendererSettings = new KmlRendererSettings();
+					if (kmlRenderArguments.hasOption(JSON)) {
 
-				} else {
-
-					throw new ArgumentException("Required argument " + JSON
-							+ " is missing.");
-
-				}// END: option check
-
-				if (kmlRenderArguments.hasOption(OUTPUT)) {
-
-					settings.kmlRendererSettings.output = kmlRenderArguments
-							.getStringOption(OUTPUT);
-
-				}
-
-				// ---POLYGON COLOR---//
-
-				if (kmlRenderArguments.hasOption(POLYGON_COLOR_MAPPING)) {
-
-					settings.kmlRendererSettings.polygonColorMapping = kmlRenderArguments
-							.getStringOption(POLYGON_COLOR_MAPPING);
-
-					if (kmlRenderArguments.hasOption(POLYGON_COLORS)) {
-						settings.kmlRendererSettings.polygonColors = kmlRenderArguments
-								.getStringOption(POLYGON_COLORS);
-					}
-
-				} else if (kmlRenderArguments.hasOption(POLYGON_COLOR)) {
-
-					settings.kmlRendererSettings.polygonColor = kmlRenderArguments
-							.getRealArrayOption(POLYGON_COLOR);
-
-				} else if (kmlRenderArguments.hasOption(POLYGON_COLOR_MAPPING)
-						&& kmlRenderArguments.hasOption(POLYGON_COLOR)) {
-
-//					gracefullyExit(
-//							"Can't both map and have a defined polygon color!",
-//							kmlRenderArguments, null);
-
-					throw new ArgumentException("Can't both map and have a defined polygon color!");
-					
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---POLYGON ALPHA---//
-
-				if (kmlRenderArguments.hasOption(POLYGON_ALPHA_MAPPING)) {
-
-					settings.kmlRendererSettings.polygonAlphaMapping = kmlRenderArguments
-							.getStringOption(POLYGON_ALPHA_MAPPING);
-
-				} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
-
-					settings.kmlRendererSettings.polygonAlpha = kmlRenderArguments
-							.getRealOption(POLYGON_ALPHA);
-					settings.kmlRendererSettings.polygonAlphaChanged = true;
-
-				} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA_MAPPING)
-						&& kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
-
-//					gracefullyExit(
-//							"Can't both map and have a defined polygon alpha!",
-//							kmlRenderArguments, null);
-
-					throw new ArgumentException("Can't both map and have a defined polygon alpha!");
-					
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---POLYGON RADIUS---//
-
-				if (kmlRenderArguments.hasOption(POLYGON_RADIUS_MAPPING)) {
-
-					settings.kmlRendererSettings.polygonRadiusMapping = kmlRenderArguments
-							.getStringOption(POLYGON_RADIUS_MAPPING);
-
-				} else if (kmlRenderArguments.hasOption(POLYGON_RADIUS)) {
-
-					settings.kmlRendererSettings.polygonRadius = kmlRenderArguments
-							.getRealOption(POLYGON_RADIUS);
-
-				} else if (kmlRenderArguments.hasOption(POLYGON_RADIUS_MAPPING)
-						&& kmlRenderArguments.hasOption(POLYGON_RADIUS)) {
-
-					throw new ArgumentException("Can't both map and have a defined polygon radius!");
-					
-//					gracefullyExit(
-//							"Can't both map and have a defined polygon radius!",
-//							kmlRenderArguments, null);
-
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---LINE COLOR---//
-
-				if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)) {
-
-					settings.kmlRendererSettings.lineColorMapping = kmlRenderArguments
-							.getStringOption(LINE_COLOR_MAPPING);
-
-					if (kmlRenderArguments.hasOption(LINE_COLORS)) {
-						settings.kmlRendererSettings.lineColors = kmlRenderArguments
-								.getStringOption(LINE_COLORS);
-					}
-
-				} else if (kmlRenderArguments.hasOption(LINE_COLOR)) {
-
-					settings.kmlRendererSettings.lineColor = kmlRenderArguments
-							.getRealArrayOption(LINE_COLOR);
-
-				} else if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)
-						&& kmlRenderArguments.hasOption(LINE_COLOR)) {
-
-					throw new ArgumentException("Can't both map and have a defined line color!");
-					
-//					gracefullyExit(
-//							"Can't both map and have a defined line color!",
-//							kmlRenderArguments, null);
-
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---LINE ALPHA---//
-
-				if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)) {
-
-					settings.kmlRendererSettings.lineAlphaMapping = kmlRenderArguments
-							.getStringOption(LINE_ALPHA_MAPPING);
-
-				} else if (kmlRenderArguments.hasOption(LINE_ALPHA)) {
-
-					settings.kmlRendererSettings.lineAlpha = kmlRenderArguments
-							.getRealOption(LINE_ALPHA);
-					settings.kmlRendererSettings.lineAlphaChanged = true;
-
-				} else if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)
-						&& kmlRenderArguments.hasOption(LINE_ALPHA)) {
-
-					throw new ArgumentException("Can't both map and have a defined line alpha!");
-					
-//					gracefullyExit(
-//							"Can't both map and have a defined line alpha!",
-//							kmlRenderArguments, null);
-
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---LINE WIDTH---//
-
-				if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)) {
-
-					settings.kmlRendererSettings.lineWidthMapping = kmlRenderArguments
-							.getStringOption(LINE_WIDTH_MAPPING);
-
-				} else if (kmlRenderArguments.hasOption(LINE_WIDTH)) {
-
-					settings.kmlRendererSettings.lineWidth = kmlRenderArguments
-							.getRealOption(LINE_WIDTH);
-
-				} else if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)
-						&& kmlRenderArguments.hasOption(LINE_WIDTH)) {
-
-					
-					throw new ArgumentException("Can't both map and have a defined line altitude!");
-					
-//					gracefullyExit(
-//							"Can't both map and have a defined line width!",
-//							kmlRenderArguments, null);
-
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---LINE ALTITUDE---//
-
-				if (kmlRenderArguments.hasOption(LINE_ALTITUDE_MAPPING)) {
-
-					settings.kmlRendererSettings.lineAltitudeMapping = kmlRenderArguments
-							.getStringOption(LINE_ALTITUDE_MAPPING);
-
-				} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
-
-					settings.kmlRendererSettings.lineAltitude = kmlRenderArguments
-							.getRealOption(LINE_ALTITUDE);
-
-				} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE_MAPPING)
-						&& kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
-
-					throw new ArgumentException("Can't both map and have a defined line altitude!");
-					
-//					gracefullyExit(
-//							"Can't both map and have a defined line altitude!",
-//							kmlRenderArguments, null);
-
-				} else {
-
-					// use defaults
-
-				}
-
-				// ---LINES SUBSET---//
-
-				if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
-
-					settings.kmlRendererSettings.linesSubset = kmlRenderArguments
-							.getStringOption(LINES_SUBSET);
-
-					if (kmlRenderArguments.hasOption(LINES_CUTOFF)) {
-
-						settings.kmlRendererSettings.linesCutoff = kmlRenderArguments
-								.getRealOption(LINES_CUTOFF);
-
-					} else if (kmlRenderArguments.hasOption(LINES_VALUE)) {
-
-						settings.kmlRendererSettings.linesValue = kmlRenderArguments
-								.getStringOption(LINES_VALUE);
+						settings.kmlRendererSettings.json = kmlRenderArguments
+								.getStringOption(JSON);
 
 					} else {
 
-						throw new ArgumentException("Can't create a subset from these options!");
-						
-//						gracefullyExit(
-//								"Can't create a subset from these options!",
-//								kmlRenderArguments, null);
+						throw new ArgumentException("Required argument " + JSON
+								+ " is missing.");
+
+					}// END: option check
+
+					if (kmlRenderArguments.hasOption(OUTPUT)) {
+
+						settings.kmlRendererSettings.output = kmlRenderArguments
+								.getStringOption(OUTPUT);
 
 					}
 
-				}//END: option check
+					// ---POLYGON COLOR---//
 
-			} catch (ArgumentException e) {
-				gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-			}// END: try-catch
+					if (kmlRenderArguments.hasOption(POLYGON_COLOR_MAPPING)) {
 
-			// ---RUN---//
+						settings.kmlRendererSettings.polygonColorMapping = kmlRenderArguments
+								.getStringOption(POLYGON_COLOR_MAPPING);
 
-			try {
+						if (kmlRenderArguments.hasOption(POLYGON_COLORS)) {
+							settings.kmlRendererSettings.polygonColors = kmlRenderArguments
+									.getStringOption(POLYGON_COLORS);
+						}
 
-				Reader reader = new FileReader(
-						settings.kmlRendererSettings.json);
-				Gson gson = new GsonBuilder().create();
-				SpreadData input = gson.fromJson(reader, SpreadData.class);
+					} else if (kmlRenderArguments.hasOption(POLYGON_COLOR)) {
 
-				KmlRenderer renderer = new KmlRenderer(input,
-						settings.kmlRendererSettings);
-				renderer.render();
+						settings.kmlRendererSettings.polygonColor = kmlRenderArguments
+								.getRealArrayOption(POLYGON_COLOR);
 
-				System.out.println("Rendered KML.");
+					} else if (kmlRenderArguments
+							.hasOption(POLYGON_COLOR_MAPPING)
+							&& kmlRenderArguments.hasOption(POLYGON_COLOR)) {
 
-			} catch (KmlException e) {
+						throw new ArgumentException(
+								"Can't both map and have a defined polygon color!");
 
-				gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					} else {
 
-			} catch (IOException e) {
+						// use defaults
 
-				gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					}
 
-			} catch (MissingAttributeException e) {
+					// ---POLYGON ALPHA---//
 
-				gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					if (kmlRenderArguments.hasOption(POLYGON_ALPHA_MAPPING)) {
 
-			}// END: try-catch block
+						settings.kmlRendererSettings.polygonAlphaMapping = kmlRenderArguments
+								.getStringOption(POLYGON_ALPHA_MAPPING);
 
-	
-		} else if(settings.geojson) { //---GEOJSON RENDERING---//
+					} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
 
-			// ---PARSE---//
+						settings.kmlRendererSettings.polygonAlpha = kmlRenderArguments
+								.getRealOption(POLYGON_ALPHA);
+						settings.kmlRendererSettings.polygonAlphaChanged = true;
 
-			try {
+					} else if (kmlRenderArguments
+							.hasOption(POLYGON_ALPHA_MAPPING)
+							&& kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
 
-				geojsonRenderArguments.parseArguments(otherArgs);
+						throw new ArgumentException(
+								"Can't both map and have a defined polygon alpha!");
 
-				// ---INTERROGATE---//
+					} else {
 
-				settings.geoJSONRendererSettings = new GeoJSONRendererSettings();
-			
-			} catch (ArgumentException e) {
-				gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
-			}// END: try-catch
-				
-			// ---RUN---//
-			
-			try {
-			
-				Reader reader = new FileReader(
-						settings.geoJSONRendererSettings.json);
-				Gson gson = new GsonBuilder().create();
-				SpreadData input = gson.fromJson(reader, SpreadData.class);
+						// use defaults
 
-				GeoJSONRenderer renderer = new GeoJSONRenderer(input, settings.geoJSONRendererSettings);
-				renderer.render();
+					}
 
-				System.out.println("Rendered GeoJSON.");
-				
-			} catch (Exception e) {
-				gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
-			}// END: try-catch
-			
-			
-		} else {
-			
-			throw new RuntimeException("Should never get here!");
-			
-		}//END: rendering type check
-			
+					// ---POLYGON RADIUS---//
+
+					if (kmlRenderArguments.hasOption(POLYGON_RADIUS_MAPPING)) {
+
+						settings.kmlRendererSettings.polygonRadiusMapping = kmlRenderArguments
+								.getStringOption(POLYGON_RADIUS_MAPPING);
+
+					} else if (kmlRenderArguments.hasOption(POLYGON_RADIUS)) {
+
+						settings.kmlRendererSettings.polygonRadius = kmlRenderArguments
+								.getRealOption(POLYGON_RADIUS);
+
+					} else if (kmlRenderArguments
+							.hasOption(POLYGON_RADIUS_MAPPING)
+							&& kmlRenderArguments.hasOption(POLYGON_RADIUS)) {
+
+						throw new ArgumentException(
+								"Can't both map and have a defined polygon radius!");
+
+					} else {
+
+						// use defaults
+
+					}
+
+					// ---LINE COLOR---//
+
+					if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)) {
+
+						settings.kmlRendererSettings.lineColorMapping = kmlRenderArguments
+								.getStringOption(LINE_COLOR_MAPPING);
+
+						if (kmlRenderArguments.hasOption(LINE_COLORS)) {
+							settings.kmlRendererSettings.lineColors = kmlRenderArguments
+									.getStringOption(LINE_COLORS);
+						}
+
+					} else if (kmlRenderArguments.hasOption(LINE_COLOR)) {
+
+						settings.kmlRendererSettings.lineColor = kmlRenderArguments
+								.getRealArrayOption(LINE_COLOR);
+
+					} else if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)
+							&& kmlRenderArguments.hasOption(LINE_COLOR)) {
+
+						throw new ArgumentException(
+								"Can't both map and have a defined line color!");
+
+					} else {
+
+						// use defaults
+
+					}
+
+					// ---LINE ALPHA---//
+
+					if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)) {
+
+						settings.kmlRendererSettings.lineAlphaMapping = kmlRenderArguments
+								.getStringOption(LINE_ALPHA_MAPPING);
+
+					} else if (kmlRenderArguments.hasOption(LINE_ALPHA)) {
+
+						settings.kmlRendererSettings.lineAlpha = kmlRenderArguments
+								.getRealOption(LINE_ALPHA);
+						settings.kmlRendererSettings.lineAlphaChanged = true;
+
+					} else if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)
+							&& kmlRenderArguments.hasOption(LINE_ALPHA)) {
+
+						throw new ArgumentException(
+								"Can't both map and have a defined line alpha!");
+
+					} else {
+
+						// use defaults
+
+					}
+
+					// ---LINE WIDTH---//
+
+					if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)) {
+
+						settings.kmlRendererSettings.lineWidthMapping = kmlRenderArguments
+								.getStringOption(LINE_WIDTH_MAPPING);
+
+					} else if (kmlRenderArguments.hasOption(LINE_WIDTH)) {
+
+						settings.kmlRendererSettings.lineWidth = kmlRenderArguments
+								.getRealOption(LINE_WIDTH);
+
+					} else if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)
+							&& kmlRenderArguments.hasOption(LINE_WIDTH)) {
+
+						throw new ArgumentException(
+								"Can't both map and have a defined line altitude!");
+
+					} else {
+
+						// use defaults
+
+					}
+
+					// ---LINE ALTITUDE---//
+
+					if (kmlRenderArguments.hasOption(LINE_ALTITUDE_MAPPING)) {
+
+						settings.kmlRendererSettings.lineAltitudeMapping = kmlRenderArguments
+								.getStringOption(LINE_ALTITUDE_MAPPING);
+
+					} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
+
+						settings.kmlRendererSettings.lineAltitude = kmlRenderArguments
+								.getRealOption(LINE_ALTITUDE);
+
+					} else if (kmlRenderArguments
+							.hasOption(LINE_ALTITUDE_MAPPING)
+							&& kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
+
+						throw new ArgumentException(
+								"Can't both map and have a defined line altitude!");
+
+					} else {
+
+						// use defaults
+
+					}
+
+					// ---LINES SUBSET---//
+
+					if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
+
+						settings.kmlRendererSettings.linesSubset = kmlRenderArguments
+								.getStringOption(LINES_SUBSET);
+
+						if (kmlRenderArguments.hasOption(LINES_CUTOFF)) {
+
+							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments
+									.getRealOption(LINES_CUTOFF);
+
+						} else if (kmlRenderArguments.hasOption(LINES_VALUE)) {
+
+							settings.kmlRendererSettings.linesValue = kmlRenderArguments
+									.getStringOption(LINES_VALUE);
+
+						} else {
+
+							throw new ArgumentException(
+									"Can't create a subset from these options!");
+
+						}
+
+					}// END: option check
+
+				} catch (ArgumentException e) {
+					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+				}// END: try-catch
+
+				// ---RUN---//
+
+				try {
+
+					Reader reader = new FileReader(
+							settings.kmlRendererSettings.json);
+					Gson gson = new GsonBuilder().create();
+					SpreadData input = gson.fromJson(reader, SpreadData.class);
+
+					KmlRenderer renderer = new KmlRenderer(input,
+							settings.kmlRendererSettings);
+					renderer.render();
+
+					System.out.println("Rendered KML.");
+
+				} catch (KmlException e) {
+
+					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+
+				} catch (IOException e) {
+
+					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+
+				} catch (MissingAttributeException e) {
+
+					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+
+				}// END: Exception handling
+
+			} else if (settings.geojson) { // ---GEOJSON RENDERING---//
+
+				// ---PARSE---//
+
+				try {
+
+					geojsonRenderArguments.parseArguments(otherArgs);
+
+					// ---INTERROGATE---//
+
+					settings.geoJSONRendererSettings = new GeoJSONRendererSettings();
+
+				} catch (ArgumentException e) {
+					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+				}// END: Exception handling
+
+				// ---RUN---//
+
+				try {
+
+					Reader reader;
+					reader = new FileReader(
+							settings.geoJSONRendererSettings.json);
+					Gson gson = new GsonBuilder().create();
+					SpreadData input = gson.fromJson(reader, SpreadData.class);
+
+					GeoJSONRenderer renderer = new GeoJSONRenderer(input,
+							settings.geoJSONRendererSettings);
+					renderer.render();
+
+					System.out.println("Rendered GeoJSON.");
+
+				} catch (FileNotFoundException e) {
+
+					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+
+				} catch (IOException e) {
+
+					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+
+				} catch (MissingAttributeException e) {
+
+					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+
+				}// END: Exception handling
+
+			} else {
+
+				throw new RuntimeException("Should never get here!");
+
+			}// END: rendering type check
+
 		}// END: create / render / read check
 
 	}// END: run
