@@ -4,6 +4,7 @@ import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.parsing.TimeSlicerSettings;
+import settings.rendering.GeoJSONRendererSettings;
 import settings.rendering.KmlRendererSettings;
 
 public class Settings {
@@ -31,5 +32,7 @@ public class Settings {
 	//---RENDERERS---//
 	
 	public KmlRendererSettings kmlRendererSettings = null;
+
+    public GeoJSONRendererSettings geoJSONRendererSettings = null;
 	
 }//END: class
