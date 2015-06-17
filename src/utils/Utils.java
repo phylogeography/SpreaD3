@@ -210,6 +210,21 @@ public class Utils {
 		}
 	}// END: print2DArray
 	
+	public static  void printProgressBar(double progressPercentage, int barLength) {
+
+		System.out.print("\r[");
+		int i = 0;
+		for (; i < (int) (progressPercentage * (barLength - 1)); i++) {
+			System.out.print("*");
+		}
+
+		for (; i < barLength - 1; i++) {
+			System.out.print(" ");
+		}
+
+		System.out.print("]");
+	}// END: updateProgress
+	
 	// ///////////////////////////
 	// ---RANDOM NUMB3R UTILS---//
 	// ///////////////////////////
