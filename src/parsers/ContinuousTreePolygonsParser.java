@@ -16,7 +16,6 @@ import data.structure.Polygon;
 public class ContinuousTreePolygonsParser {
 
 	public static final String MODALITY = "modality";
-	public static final String HPD = "hpd";
 	
 	private RootedTree rootedTree;
 	private String locationTrait;
@@ -99,7 +98,7 @@ public class ContinuousTreePolygonsParser {
 						attributes.put(MODALITY, modalityTrait);
 						
 						Trait hpdTrait = new Trait(hpd);
-						attributes.put(HPD, hpdTrait);
+						attributes.put(Utils.HPD, hpdTrait);
 						
 						Polygon polygon = new Polygon(coordinateList,
 								nodeHeight, attributes);

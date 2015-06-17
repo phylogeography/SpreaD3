@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-import settings.rendering.KmlRendererSettings;
 import utils.Utils;
 
 public class DiscreteColorsParser {

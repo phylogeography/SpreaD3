@@ -8,14 +8,19 @@ import settings.rendering.KmlRendererSettings;
 
 public class Settings {
 
-	// modes
+	//---MODES---//
+	
 	public boolean create = false;
 	public boolean read = false;
 	public boolean render = false;
-	
+
+	//---PARSERS---//
 	
 	public boolean discreteTree = false;
 	public ContinuousTreeSettings continuousTreeSettings = null;
+	
+	public boolean timeSlicer = false;
+	public TimeSlicerSettings timeSlicerSettings  = null;
 	
 	public boolean bayesFactors = false;
 	public BayesFactorsSettings bayesFactorsSettings = null;
@@ -23,18 +28,8 @@ public class Settings {
 	public boolean continuousTree = false;
 	public DiscreteTreeSettings discreteTreeSettings  = null;
 
-	public boolean timeSlicer = false;
-	public TimeSlicerSettings timeSlicerSettings  = null;
+	//---RENDERERS---//
 	
 	public KmlRendererSettings kmlRendererSettings = null;
-	
-	public Settings() {
-	}//END: Constructor
-	
-	
-	
-	
-	
-	
 	
 }//END: class

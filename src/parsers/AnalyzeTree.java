@@ -14,12 +14,15 @@ public class AnalyzeTree implements Runnable {
 	private double[] sliceHeights;
 	private ConcurrentHashMap<Double, LinkedList<double[]>> slicesMap;
 	private String locationTrait;
-
+	private String[] traits;
+	
+	
 	public AnalyzeTree(
 			ConcurrentHashMap<Double, LinkedList<double[]>> slicesMap, //
 			RootedTree currentTree, //
 			double[] sliceHeights, //
-			String locationTrait //
+			String locationTrait, //
+            String[] traits //
 	) {
 
 		this.rootedTree = currentTree;
@@ -78,6 +81,9 @@ public class AnalyzeTree implements Runnable {
 						coordinate[Utils.LATITUDE_INDEX] = latitude;
 						coordinate[Utils.LONGITUDE_INDEX] = longitude;
 						
+						
+						//TODO: process other traits
+						
 						if (slicesMap.containsKey(sliceHeight)) {
 
 							slicesMap.get(sliceHeight).add(coordinate);
@@ -101,17 +107,18 @@ public class AnalyzeTree implements Runnable {
 	}// END: run
 
 	private Double[] imputeValue(
-			Double[] location, //
-			Double[] parentLocation, //
+			Double[] trait, //
+			Double[] parentTrait, //
 			double sliceHeight, //
 			double nodeHeight, //
 			double parentHeight, //
 			double rate, //
 			double treeNormalization, //
-			Double[] precisionArray//
+			Double[] precisionArray //
 			) {
 
 		int dim = (int) Math.sqrt(1 + 8 * precisionArray.length) / 2;
+		
 		double[][] precision = new double[dim][dim];
 		int c = 0;
 		for (int i = 0; i < dim; i++) {
@@ -121,15 +128,13 @@ public class AnalyzeTree implements Runnable {
 			}
 		}
 
-		dim = location.length;
-		
-		double[] nodeValue = new double[2];
-		double[] parentValue = new double[2];
+		double[] nodeValue = new double[dim];
+		double[] parentValue = new double[dim];
 
 		for (int i = 0; i < dim; i++) {
 
-			nodeValue[i] = location[i];
-			parentValue[i] = parentLocation[i];
+			nodeValue[i] = trait[i];
+			parentValue[i] = parentTrait[i];
 
 		}
 
@@ -139,11 +144,11 @@ public class AnalyzeTree implements Runnable {
 				+ (1.0 / scaledTimeParent);
 
 		if (scaledTimeChild == 0) {
-			return location;
+			return trait;
 		}
 
 		if (scaledTimeParent == 0) {
-			return parentLocation;
+			return parentTrait;
 		}
 		// Find mean value, weighted average
 		double[] mean = new double[dim];

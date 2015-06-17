@@ -2,6 +2,8 @@ package settings.parsing;
 
 public class DiscreteTreeSettings {
 
+	//---REQUIRED---//
+	
 	// path to tree file
 	public String tree = null;
 	
@@ -11,6 +13,8 @@ public class DiscreteTreeSettings {
 	// location attribute name
 	public String locationTrait = null;
 	
+	//---OPTIONAL---//
+	
 	// node trait attribute names
 	public String[] traits = null;
 	
@@ -19,8 +23,5 @@ public class DiscreteTreeSettings {
 	
 	// path to json output file 
 	public String output = "output.json";
-	
-	public DiscreteTreeSettings() {
-	}//END: Construtor
 	
 }//END: class

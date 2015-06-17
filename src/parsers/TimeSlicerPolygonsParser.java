@@ -32,6 +32,7 @@ public class TimeSlicerPolygonsParser {
 	private String locationTrait;
 	private int gridSize;
 	private double hpdLevel;
+	private String[] traits;
 	private int assumedTrees;
 
 	public TimeSlicerPolygonsParser(RootedTree rootedTree,
@@ -40,7 +41,8 @@ public class TimeSlicerPolygonsParser {
 			String locationTrait, //
 			int burnIn, //
 			int gridSize, //
-			double hpdValue //
+			double hpdValue, //
+           String[] traits //
 	) {
 
 		this.rootedTree = rootedTree;
@@ -50,7 +52,10 @@ public class TimeSlicerPolygonsParser {
 		this.locationTrait = locationTrait;
 		this.gridSize = gridSize;
 		this.hpdLevel = hpdValue;
-
+		this.traits = traits;
+		
+		this.assumedTrees = 10000;
+		
 	}// END: Constructor
 
 	public LinkedList<Polygon> parsePolygons() throws IOException,
@@ -93,7 +98,8 @@ public class TimeSlicerPolygonsParser {
 				new AnalyzeTree(slicesMap, //
 						currentTree, //
 						sliceHeights, //
-						locationTrait //
+						locationTrait, //
+						traits //
 				).run();
 
 				treesRead++;
@@ -156,12 +162,13 @@ public class TimeSlicerPolygonsParser {
 
 				for (int i = 0; i < latitude.length; i++) {
 					coordinateList
-							.add(new Coordinate(longitude[i], latitude[i]));
+							.add(new Coordinate(latitude[i], longitude[i]));
 				}
 
-				// TODO: add them traits / attributes
 				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-
+				Trait hpdTrait = new Trait(hpdLevel);
+				attributes.put(Utils.HPD, hpdTrait);
+				
 				Polygon polygon = new Polygon(coordinateList, sliceHeight,
 						attributes);
 
@@ -197,6 +204,6 @@ public class TimeSlicerPolygonsParser {
 
 	public void setAssumedTrees(int assumedTrees) {
 		this.assumedTrees = assumedTrees;
-	}
+	}//END: setAssumedTrees
 
 }// END: class

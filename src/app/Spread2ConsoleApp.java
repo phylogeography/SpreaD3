@@ -50,13 +50,13 @@ public class Spread2ConsoleApp {
 
 	private static final String TREE = "tree";
 	private static final String TREES = "trees";
-	private static final String SLICE_TIMES = "sliceTimes";
+	private static final String SLICE_HEIGHTS = "sliceHeights";
 	private static final String LOCATIONS = "locations";
 	private static final String LOG = "log";
 	private static final String BURNIN = "burnin";
 	private static final String LOCATION_TRAIT = "locationTrait";
 	private static final String TRAITS = "traits";
-	private static final String HPD = "hpd";
+	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
@@ -157,20 +157,21 @@ public class Spread2ConsoleApp {
 		// time slicer arguments
 		args4 = new Arguments(new Arguments.Option[] {
 
-//		new Arguments.StringOption("timeLine", new String[] { "tree", //
-//				"file", //
-//		}, false, "how to create time intervals"),
-
 		new Arguments.StringOption(TREE, "", "tree file name"),
 		
 		new Arguments.StringOption(TREES, "", "trees file name"),
 		
-		new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
-
+		new Arguments.StringOption(SLICE_HEIGHTS, "", "slice heights file name"),		
+		
 		new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
 		
-		// TODO: add to intent and to parsers
-		new Arguments.StringOption(SLICE_TIMES, "", "time intervals file name"),
+		new Arguments.IntegerOption(INTERVALS, "number of time intervals for slicing"),
+		
+		new Arguments.IntegerOption(BURNIN, "how many trees to discard as burn-in (in # trees)"),
+		
+		new Arguments.RealOption(HPD, "hpd level for contouring"),
+		
+		new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 		
 		new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
@@ -274,7 +275,6 @@ public class Spread2ConsoleApp {
 			gracefullyExit("Empty or incorrect arguments list.", null, null);
 		}
 		
-
 		Settings settings = new Settings();
 
 		try {
@@ -339,7 +339,7 @@ public class Spread2ConsoleApp {
 
 			System.out.println("In Continuous mode");
 
-			if (Arrays.asList(otherArgs).contains("-" + TREES)) {
+			if (Arrays.asList(otherArgs).contains("-" + TREES) || Arrays.asList(otherArgs).contains("-" + SLICE_HEIGHTS)) {
 
 				System.out.println("In time slicer mode");
 				settings.timeSlicer = true;
@@ -631,13 +631,34 @@ public class Spread2ConsoleApp {
 
 				args4.parseArguments(otherArgs);
 			
-				if(args4.hasOption(TREE)) {
-					settings.timeSlicerSettings.tree = args4.getStringOption(TREE);
-				}
+					if (args4.hasOption(TREE)) {
+
+						settings.timeSlicerSettings.tree = args4 .getStringOption(TREE);
+
+					} else if (args4.hasOption(SLICE_HEIGHTS)) {
+
+						settings.timeSlicerSettings.sliceHeights = args4 .getStringOption(SLICE_HEIGHTS);
+
+					} else if (args4.hasOption(TREE) && args4.hasOption(SLICE_HEIGHTS)) {
+
+						throw new ArgumentException("Can't use both a" + TREES + " and " + SLICE_HEIGHTS + " argument.");
+
+					} else {
+
+						throw new ArgumentException("Must specify" + TREES + " or " + SLICE_HEIGHTS + " argument.");
+
+					}// END: option check
 			
 				if(args4.hasOption(TREES)) {
+				
 					settings.timeSlicerSettings.trees = args4.getStringOption(TREES);
-				}
+				
+				} else {
+
+					throw new ArgumentException("Required argument "
+							+ TREES + " is missing.");
+
+				}// END: option check
 			
 				if (args4.hasOption(LOCATION_TRAIT)) {
 
@@ -658,6 +679,28 @@ public class Spread2ConsoleApp {
 				if(args4.hasOption(BURNIN)) {
 					settings.timeSlicerSettings.burnIn = args4.getIntegerOption(BURNIN);
 				}
+				
+				if(args4.hasOption(HPD)) {
+					
+					double hpdLevel = args4
+							.getRealOption(HPD);
+
+					if (hpdLevel < 0.0 || hpdLevel > 1.0) {
+
+						throw new ArgumentException(
+								HPD + "argument outside of [0.0, 1.0].");
+
+					} else {
+						settings.timeSlicerSettings.hpdLevel = hpdLevel;
+					}
+					
+				}//END: option check
+				
+				if(args4.hasOption(TRAITS)) {
+					
+					settings.timeSlicerSettings.traits = args4.getStringArrayOption(TRAITS);
+					
+				}// END: option check
 				
 				if (args4.hasOption(OUTPUT)) {
 					settings.timeSlicerSettings.output = args4.getStringOption(OUTPUT);

@@ -56,12 +56,17 @@ public class TimeSlicerParser {
 				settings.locationTrait, //
 				settings.burnIn, //
 				settings.gridSize, //
-				settings.hpdLevel //
+				settings.hpdLevel, //
+				settings.traits //
 		);
 
 		int assumedTrees = getAssumedTrees(settings.trees);
+		
+		if(settings.burnIn >= assumedTrees) {
+			throw new RuntimeException("Trying to burn in too many trees!");
+		}
+		
 		polygonsParser.setAssumedTrees(assumedTrees);
-
 		polygonsList = polygonsParser.parsePolygons();
 
 		System.out.println("Parsed polygons");

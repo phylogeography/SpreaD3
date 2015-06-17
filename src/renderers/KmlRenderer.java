@@ -5,11 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +25,6 @@ import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
-import parsers.ContinuousTreePolygonsParser;
 import parsers.DiscreteColorsParser;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
@@ -796,20 +792,6 @@ public class KmlRenderer implements Renderer {
 				}//END: contains check
 				
 			}//END: iterate
-//			for (Trait trait : attributes.values()) {
-//
-//				Object traitValue =  trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
-//					if (!valueMap.containsKey(traitValue)) {
-//						
-//						if(trait.isNumber()) { 
-//							valueMap.put( traitValue, (Double) traitValue);
-//						} else {
-//							valueMap.put(traitValue, factorValue);
-//							factorValue++;
-//						}//END: isNumber check
-//						
-//					}//END: contains check
-//			}//END: attributes loop
 			
             // Discrete polygons have Locations, need to process them too for mapping			
 			if (polygon.hasLocation()) {
@@ -822,16 +804,6 @@ public class KmlRenderer implements Renderer {
 			
 	    }//END: polygons loop
 	
-		// get max and min for mappings
-//		double maxValue = Collections.max(valueMap.values());
-//		double minValue = Collections.min(valueMap.values());
-	 
-		
-		
-		
-		
-		
-		
 		// get Colors map
 		KmlStyle style = null;
 		for (Polygon polygon : polygons) {
@@ -943,7 +915,6 @@ public class KmlRenderer implements Renderer {
 			}
 			
 			Feature feature = generatePolygon(polygon, style, valueMap, minmaxMap,
-//					minValue, maxValue, 
 					label);
 			folder.addFeature(feature);
 		}// END: polygons loop
@@ -952,7 +923,6 @@ public class KmlRenderer implements Renderer {
 	}//END: generatePolygons
 
 	private Feature generatePolygon(Polygon polygon , KmlStyle style, Map<Object, Double> valueMap, 
-//			Double minValue, Double maxValue, 
 			Map<String, double[]> minmaxMap,
 			String label) throws MissingAttributeException {
 
@@ -1013,8 +983,8 @@ public class KmlRenderer implements Renderer {
 			
 		} else {
 			
-			Trait hpdTrait = polygon.getAttributes().get(ContinuousTreePolygonsParser.HPD);
-			name = ((String) hpdTrait.getId()).concat(ContinuousTreePolygonsParser.HPD);
+			Trait hpdTrait = polygon.getAttributes().get(Utils.HPD);
+			name = (String.valueOf(hpdTrait.getId()).concat(Utils.HPD));
 			
 			for(Coordinate coordinate: polygon.getCoordinates()) {
 				

@@ -3,15 +3,14 @@ package parsers;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import settings.parsing.BayesFactorsSettings;
+import utils.Utils;
 import data.SpreadData;
 import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
-import data.structure.Polygon;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
-import settings.parsing.BayesFactorsSettings;
-import utils.Utils;
 
 public class BayesFactorParser {
 

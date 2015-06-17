@@ -1,33 +1,40 @@
 package settings.parsing;
 
-import utils.Utils;
 
 public class TimeSlicerSettings {
 
+	//---REQUIRED---//
+	
 	// path to tree file
 	public String tree = null;
+	
+	// path to trees file
+	public String trees = null;
+
+	// path to slice heights file
+	public String sliceHeights = null;
+
+	// location attribute name
+	public String locationTrait = null;
+	
+	//---OPTIONAL---//
 	
 	// number of intervals to create the time line
 	public int intervals = 10;
 	
-	// path to trees file
-	public String trees = null;
-	
-	// path to json output file 
-	public String output;
-
 	// how many trees to burn in (in #trees)
 	public int burnIn = 1;
 
-	// location attribute name
-	public String locationTrait = null;
-
-	public int gridSize = 100;
-
-	// TODO: make an option in command line
+	// contouring hpd level
 	public double hpdLevel = 0.95;
 
+	public String[] traits = null;
 	
+	// path to json output file 
+	public String output = "output.json";
+
+	//---HARDCODED---//
 	
+	public final int gridSize = 100;
 
 }//END: class
