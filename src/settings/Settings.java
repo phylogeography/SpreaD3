@@ -31,8 +31,10 @@ public class Settings {
 
 	//---RENDERERS---//
 	
+	public boolean kml = false;
 	public KmlRendererSettings kmlRendererSettings = null;
 
+	public boolean geojson = false;
     public GeoJSONRendererSettings geoJSONRendererSettings = null;
 	
 }//END: class
