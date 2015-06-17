@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import renderers.KmlRenderer;
+import renderers.kml.KmlRenderer;
 import settings.rendering.KmlRendererSettings;
 
 import jebl.evolution.graphs.Node;

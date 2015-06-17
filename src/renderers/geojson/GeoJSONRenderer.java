@@ -1,4 +1,4 @@
-package renderers;
+package renderers.geojson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,6 +6,7 @@ import data.SpreadData;
 import data.structure.*;
 import exceptions.MissingAttributeException;
 import kmlframework.kml.KmlException;
+import renderers.Renderer;
 import settings.Settings;
 import settings.rendering.GeoJSONRendererSettings;
 import settings.rendering.KmlRendererSettings;

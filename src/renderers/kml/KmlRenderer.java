@@ -1,4 +1,4 @@
-package renderers;
+package renderers.kml;
 
 import java.awt.Color;
 import java.io.File;
@@ -26,6 +26,7 @@ import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
 import parsers.DiscreteColorsParser;
+import renderers.Renderer;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
 import utils.Utils;

@@ -24,7 +24,7 @@ import jebl.evolution.io.NexusImporter;
 import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
 import kmlframework.kml.KmlException;
-import renderers.KmlRenderer;
+import renderers.kml.KmlRenderer;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
 import utils.Utils;

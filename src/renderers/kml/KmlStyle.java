@@ -1,4 +1,4 @@
-package renderers;
+package renderers.kml;
 
 import java.awt.Color;
 

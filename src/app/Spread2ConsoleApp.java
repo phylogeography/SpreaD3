@@ -14,7 +14,7 @@ import parsers.BayesFactorParser;
 import parsers.ContinuousTreeParser;
 import parsers.DiscreteTreeParser;
 import parsers.TimeSlicerParser;
-import renderers.KmlRenderer;
+import renderers.kml.KmlRenderer;
 import settings.Settings;
 import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
