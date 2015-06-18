@@ -192,14 +192,15 @@ h3. PARSING
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -output test_slice.json
 
 * parse other numerical traits for imputing
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,host.rate -hpd 0.8 -intervals 20 -burnin 5 -output test_slice.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,trait2 -hpd 0.8 -intervals 20 -burnin 5 -output test_slice.json
 
 h3. RENDERING
 
 * use all default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -output test.kml
 
-
+* map polygon colors to trait name attribute values, use built-in color schemes
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -polygoncolormapping trait -output test.kml
 
 
 
@@ -218,7 +219,6 @@ h1. LICENSE
 
 h1. TODO
 
-* Move all node / tree parsing to use Traits
 * Renderers
   - control arc curvature [0 - 1]
   - D3 renderer tool

@@ -86,20 +86,24 @@ public class DiscreteLinesParser {
 					if (traits != null) {
 						for (String traitName : traits) {
 
-							Object parentTraitObject = Utils
-									.getObjectNodeAttribute(parentNode,
-											traitName);
-							Trait parentTrait = new Trait(parentTraitObject,
-									parentHeight);
+//							Object parentTraitObject = Utils
+//									.getObjectNodeAttribute(parentNode,
+//											traitName);
+//							Trait parentTrait = new Trait(parentTraitObject,
+//									parentHeight);
 
+							Trait parentTrait = Utils.getNodeTrait(parentNode, traitName);
+							
 							attributes
 									.put(Utils.START + traitName, parentTrait);
 
-							Object nodeTraitObject = Utils
-									.getObjectNodeAttribute(node, traitName);
-							Trait nodeTrait = new Trait(nodeTraitObject,
-									nodeHeight);
+//							Object nodeTraitObject = Utils
+//									.getObjectNodeAttribute(node, traitName);
+//							Trait nodeTrait = new Trait(nodeTraitObject,
+//									nodeHeight);
 
+							Trait nodeTrait = Utils.getNodeTrait(node, traitName);
+							
 							attributes.put(Utils.END + traitName, nodeTrait);
 
 						}// END: traits loop

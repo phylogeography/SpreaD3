@@ -84,11 +84,12 @@ public class ContinuousTreePolygonsParser {
 						if (traits != null) {
 							for (String traitName : traits) {
 
-								Object nodeTraitObject = Utils
-										.getObjectNodeAttribute(node, traitName);
-								Trait nodeTrait = new Trait(nodeTraitObject,
-										nodeHeight);
+//								Object nodeTraitObject = Utils
+//										.getObjectNodeAttribute(node, traitName);
+//								Trait nodeTrait = new Trait(nodeTraitObject,
+//										nodeHeight);
 
+								Trait nodeTrait = Utils.getNodeTrait(node, traitName);
 								attributes.put(traitName, nodeTrait);
 
 							}// END: traits loop

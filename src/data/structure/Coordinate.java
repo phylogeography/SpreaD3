@@ -1,41 +1,42 @@
 package data.structure;
 
 public class Coordinate {
-
-	private final double latitude;
-	private final double longitude;
-	private double altitude;
 	
+	// latitude, xCoordinate
+	private final double xCoordinate;
+	// longitude, yCoordinate
+	private final double yCoordinate;
+	private double altitude;
+
 	public Coordinate(Double latitude, //
 			Double longitude, //
-			Double altitude) {
+			Double altitude //
+	) {
 
-		this.latitude = latitude;
-		this.longitude = longitude;
+		this.xCoordinate = latitude;
+		this.yCoordinate = longitude;
 		this.altitude = altitude;
-	
+
 	}
-	
-	public Coordinate(
-			Double latitude, //
+
+	public Coordinate(Double latitude, //
 			Double longitude //
 	) {
 
-		this.latitude = latitude;
-		this.longitude = longitude;
+		this.xCoordinate = latitude;
+		this.yCoordinate = longitude;
 		this.altitude = 0.0;
-		
+
 	}// END: Constructor
 
-
 	public double getLatitude() {
-		return latitude;
+		return xCoordinate;
 	}
 
 	public double getLongitude() {
-		return longitude;
+		return yCoordinate;
 	}
-	
+
 	public Double getAltitude() {
 		return altitude;
 	}
@@ -43,5 +44,5 @@ public class Coordinate {
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
 	}
-	
+
 }// END: class

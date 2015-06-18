@@ -42,6 +42,7 @@ public class Utils {
 	public static final int LATITUDE_INDEX = 0;
 	public static final int LONGITUDE_INDEX = 1;
 	public static final String HPD = "hpd";
+	public static final String TRAIT = "trait";
 	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 

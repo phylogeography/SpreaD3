@@ -1112,6 +1112,10 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
+				} catch (AnalysisException e) {
+					
+					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					
 				}// END: Exception handling
 
 			} else if (settings.geojson) { // ---GEOJSON RENDERING---//

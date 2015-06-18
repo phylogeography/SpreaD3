@@ -36,6 +36,7 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
 import exceptions.MissingAttributeException;
 
 public class KmlRenderer implements Renderer {
@@ -54,7 +55,6 @@ public class KmlRenderer implements Renderer {
 	private Map<Object, Integer> polygonAlphaMap = new LinkedHashMap<Object, Integer>();
 	private Map<Object, Double> polygonRadiusMap = new LinkedHashMap<Object, Double>();
 	
-
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 	
 	public KmlRenderer(SpreadData data, KmlRendererSettings settings)  {
@@ -64,7 +64,7 @@ public class KmlRenderer implements Renderer {
 		
 	}//END: Constructor
 	
-	public void render() throws KmlException, IOException, MissingAttributeException {
+	public void render() throws KmlException, IOException, MissingAttributeException, AnalysisException {
 
 		PrintWriter writer = new PrintWriter(new File(settings.output));
 
@@ -125,7 +125,7 @@ public class KmlRenderer implements Renderer {
 	// ---LAYERS---//
 	// //////////////
 	
-	private Feature generateLayer(Layer layer) throws IOException, MissingAttributeException {
+	private Feature generateLayer(Layer layer) throws IOException, MissingAttributeException, AnalysisException {
 
 		Folder folder = new Folder();
 		
@@ -142,7 +142,7 @@ public class KmlRenderer implements Renderer {
 
 	// ---LINES---//
 	
-	public Feature generateLines(List<Line> lines) throws IOException, MissingAttributeException {
+	public Feature generateLines(List<Line> lines) throws IOException, MissingAttributeException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("lines");
@@ -262,8 +262,7 @@ public class KmlRenderer implements Renderer {
 
 					} else {
 
-						// TODO: custom exception we can recover from
-						throw new RuntimeException(
+						throw new AnalysisException(
 								"Cutoff attribute has a non-numeric value!");
 					}// END: isNumber check
 
@@ -1047,7 +1046,7 @@ public class KmlRenderer implements Renderer {
 		
 		Point point = new Point();
 		point.setAltitudeMode(AltitudeModeEnum.relativeToGround);
-		point.setAltitude(coordinate.getAltitude());
+//		point.setAltitude(coordinate.getAltitude());
 		point.setLatitude(coordinate.getLatitude());
 		point.setLongitude(coordinate.getLongitude());
 		

@@ -182,9 +182,13 @@ public class TimeSlicerPolygonsParser {
 					}
 
 					Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
+					
 					Trait hpdTrait = new Trait(hpdLevel);
 					attributes.put(Utils.HPD, hpdTrait);
 
+					Trait attributeName = new Trait(traitName);
+					attributes.put(Utils.TRAIT, attributeName);
+					
 					Polygon polygon = new Polygon(coordinateList, sliceHeight,
 							attributes);
 

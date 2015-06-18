@@ -1,18 +1,14 @@
 package renderers;
 
 import java.io.IOException;
-import java.util.List;
 
-import kmlframework.kml.Feature;
 import kmlframework.kml.KmlException;
-import data.structure.Line;
-import data.structure.Location;
-import data.structure.Polygon;
+import exceptions.AnalysisException;
 import exceptions.MissingAttributeException;
 
 public interface Renderer {
 
-	public void render() throws KmlException, IOException, MissingAttributeException;
+	public void render() throws KmlException, IOException, MissingAttributeException, AnalysisException;
 	
 //	public Feature generateLocations(List<Location> locations);
 //	
