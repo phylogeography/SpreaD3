@@ -44,11 +44,21 @@ public class GeoJSONRenderer implements Renderer {
 
             writer.write("{\"type\":\"FeatureCollection\",\"features\":[\n");
 
-            //Write the polygons to file
+            //Get the polygons and lines
             ArrayList<Polygon> polygonList = (ArrayList)l.getPolygons();
+            ArrayList<Line> lineList = (ArrayList)l.getLines();
+
+            //Get an idea of the times
+            ArrayList<Double> times = new ArrayList<Double>();
+
+            //Write the polygons to file
             for (int j = 0; j < polygonList.size(); j++) {
 
                 Polygon p = polygonList.get(j);
+
+                if (!times.contains(p.getTime())) {
+                    times.add(p.getTime());
+                }
 
                 writer.write("{\"type\":\"Feature\",");
                 //writer.write("\"id\":" + p.getLocationId());
@@ -75,10 +85,41 @@ public class GeoJSONRenderer implements Renderer {
 
             }
 
+            if (lineList.size() > 0) {
+                writer.write(",\n");
+            }
+
             //Write the lines to file
-            ArrayList<Line> lineList = (ArrayList)l.getLines();
+            for (int j = 0; j < lineList.size(); j++) {
+
+                Line line = lineList.get(j);
+                writer.write("{\"type\":\"Feature\",");
+                writer.write("\"geometry\":{\"type\":\"LineString\",\"coordinates\":[");
+
+                Coordinate startCoordinate = line.getStartCoordinate();
+                Coordinate endCoordinate = line.getEndCoordinate();
+
+                writer.write("[");
+                //longitude first, then latitude, then altitude
+                writer.write(startCoordinate.getLongitude() + "," + startCoordinate.getLatitude());
+                writer.write("],[");
+                writer.write(endCoordinate.getLongitude() + "," + endCoordinate.getLatitude());
+                writer.write("]");
+
+                writer.write("]}}");
+
+                if (j < lineList.size()-1) {
+                    writer.write(",\n");
+                }
+
+            }
 
             writer.write("\n]}\n");
+
+            /*System.out.println("Sampled times:");
+            for (double t : times) {
+                System.out.println(t);
+            }*/
 
         }
 
