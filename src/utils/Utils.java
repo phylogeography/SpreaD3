@@ -55,6 +55,18 @@ public class Utils {
 		return nodeHeight;
 	}// END: getHeight
 
+	public static Trait getNodeTrait(Node node, String traitName) {
+		
+		Object nodeAttribute = node.getAttribute(traitName);
+		
+		if (nodeAttribute == null) {
+			throw new RuntimeException("Attribute " + traitName
+					+ " missing from the node. \n");
+		}
+		
+		return new Trait(nodeAttribute);
+	}//END: getNodeTrait
+	
 	public static Object getObjectNodeAttribute(Node node, String attributeName) {
 
 		Object nodeAttribute = node.getAttribute(attributeName);

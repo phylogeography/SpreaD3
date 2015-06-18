@@ -17,6 +17,8 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
+import exceptions.ArgumentException;
 
 public class TimeSlicerParser {
 
@@ -28,7 +30,7 @@ public class TimeSlicerParser {
 
 	}// END: Constructor
 
-	public SpreadData parse() throws IOException, ImportException {
+	public SpreadData parse() throws IOException, ImportException, AnalysisException {
 
 		LinkedList<Location> locationsList = null;
 		LinkedList<Polygon> polygonsList = null;
@@ -42,22 +44,23 @@ public class TimeSlicerParser {
 
 		// ---PARSE AND FILL STRUCTURES---//
 
-		TimeSlicerLinesParser linesParser = new TimeSlicerLinesParser(
-				rootedTree //
-		);
-		linesList = linesParser.parseLines();
-
-		System.out.println("Parsed lines");
+//		TimeSlicerLinesParser linesParser = new TimeSlicerLinesParser(
+//				rootedTree //
+//		);
+//		linesList = linesParser.parseLines();
+//
+//		System.out.println("Parsed lines");
 
 		TimeSlicerPolygonsParser polygonsParser = new TimeSlicerPolygonsParser(
 				rootedTree, //
 				treesImporter, //
+				settings.traits, //
 				settings.intervals, //
-				settings.locationTrait, //
+//				settings.locationTrait, //
 				settings.burnIn, //
 				settings.gridSize, //
-				settings.hpdLevel, //
-				settings.traits //
+				settings.hpdLevel //
+//				settings.traits //
 		);
 
 		int assumedTrees = getAssumedTrees(settings.trees);
@@ -73,7 +76,7 @@ public class TimeSlicerParser {
 
 		LinkedList<Layer> layersList = new LinkedList<Layer>();
 
-		Layer layer = new Layer(settings.tree, "Time Slicer visualisation",
+		Layer layer = new Layer(settings.trees, "Time Slicer visualisation",
 				linesList, polygonsList);
 
 		layersList.add(layer);

@@ -3,7 +3,7 @@ package parsers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +21,7 @@ import contouring.ContourPath;
 import contouring.ContourWithSnyder;
 import data.structure.Coordinate;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
 
 public class TimeSlicerPolygonsParser {
 
@@ -29,37 +30,37 @@ public class TimeSlicerPolygonsParser {
 	private int numberOfIntervals;
 	// how many trees to burn in (in #trees)
 	private int burnIn;
-	private String locationTrait;
+	// private String locationTrait;
 	private int gridSize;
 	private double hpdLevel;
 	private String[] traits;
 	private int assumedTrees;
 
-	public TimeSlicerPolygonsParser(RootedTree rootedTree,
+	public TimeSlicerPolygonsParser(RootedTree rootedTree, //
 			NexusImporter treesImporter, //
+			String[] traits, //
 			int numberOfIntervals, //
-			String locationTrait, //
+			// String locationTrait, //
 			int burnIn, //
 			int gridSize, //
-			double hpdValue, //
-           String[] traits //
+			double hpdValue //
 	) {
 
 		this.rootedTree = rootedTree;
 		this.treesImporter = treesImporter;
+		this.traits = traits;
 		this.numberOfIntervals = numberOfIntervals;
 		this.burnIn = burnIn;
-		this.locationTrait = locationTrait;
+		// this.locationTrait = locationTrait;
 		this.gridSize = gridSize;
 		this.hpdLevel = hpdValue;
-		this.traits = traits;
-		
+
 		this.assumedTrees = 10000;
-		
+
 	}// END: Constructor
 
 	public LinkedList<Polygon> parsePolygons() throws IOException,
-			ImportException {
+			ImportException, AnalysisException {
 
 		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 		double[] sliceHeights = generateSliceHeights(rootedTree,
@@ -86,28 +87,34 @@ public class TimeSlicerPolygonsParser {
 				.println("|------------------------|------------------------|------------------------|------------------------|");
 
 		RootedTree currentTree;
-		ConcurrentHashMap<Double, LinkedList<double[]>> slicesMap = new ConcurrentHashMap<Double, LinkedList<double[]>>();
+		ConcurrentHashMap<String, HashMap<Double, List<double[]>>> traitsMap = new ConcurrentHashMap<String, HashMap<Double, List<double[]>>>();
 
 		int counter = 0;
 		while (treesImporter.hasTree()) {
 
-			currentTree = (RootedTree) treesImporter.importNextTree();
+			try {
 
-			if (counter >= burnIn) {
+				currentTree = (RootedTree) treesImporter.importNextTree();
 
-				new AnalyzeTree(slicesMap, //
-						currentTree, //
-						sliceHeights, //
-						locationTrait, //
-						traits //
-				).run();
+				if (counter >= burnIn) {
 
-				treesRead++;
-			}// END: burnin check
+					new AnalyzeTree(traitsMap, //
+							currentTree, //
+							sliceHeights, //
+							traits //
+					).run();
 
-			counter++;
-			double progress = (stepSize * counter) / barLength;
-			progressBar.setProgressPercentage(progress);
+					treesRead++;
+				}// END: burnin check
+
+				counter++;
+				double progress = (stepSize * counter) / barLength;
+				progressBar.setProgressPercentage(progress);
+
+			} catch (Exception e) {
+				// catch any unchecked exceptions coming from Runnable, pass them to handlers
+				throw new AnalysisException(e.getMessage());
+			}//END: try-catch
 
 		}// END: trees loop
 		progressBar.showCompleted();
@@ -117,72 +124,83 @@ public class TimeSlicerPolygonsParser {
 		System.out.println("Analyzed " + treesRead + " trees with burn-in of "
 				+ burnIn + " for the total of " + counter + " trees");
 
-		System.out.println("Creating contours at " + hpdLevel + " HPD level");
-		System.out
-				.println("0                        25                       50                       75                       100%");
-		System.out
-				.println("|------------------------|------------------------|------------------------|------------------------|");
+		// loop over traits
+		for (String traitName : traitsMap.keySet()) {
 
-		Iterator<Double> iterator = slicesMap.keySet().iterator();
+			HashMap<Double, List<double[]>> traitMap = traitsMap.get(traitName);
 
-		counter = 0;
-		stepSize = (double) barLength / (double) slicesMap.size();
+			System.out.println("Creating contours for " + traitName
+					+ " trait at " + hpdLevel + " HPD level");
+			System.out
+					.println("0                        25                       50                       75                       100%");
+			System.out
+					.println("|------------------------|------------------------|------------------------|------------------------|");
 
-		progressBar = new ProgressBar(barLength);
-		progressBar.start();
-		while (iterator.hasNext()) {
+			counter = 0;
+			stepSize = (double) barLength / (double) traitMap.size();
 
-			Double sliceHeight = iterator.next();
-			LinkedList<double[]> coords = slicesMap.get(sliceHeight);
-			int n = coords.size();
+			progressBar = new ProgressBar(barLength);
+			progressBar.start();
 
-			double[] x = new double[n];
-			double[] y = new double[n];
+			// Iterator<Double> iterator = traitMap.keySet().iterator();
+			// while (iterator.hasNext()) {
+			// Double sliceHeight = iterator.next();
 
-			for (int i = 0; i < n; i++) {
+			for (Double sliceHeight : traitMap.keySet()) {
 
-				if (coords.get(i) == null) {
-					System.out.println("null found");
-				}
+				List<double[]> coords = traitMap.get(sliceHeight);
+				int n = coords.size();
 
-				x[i] = coords.get(i)[Utils.LATITUDE_INDEX];
-				y[i] = coords.get(i)[Utils.LONGITUDE_INDEX];
+				double[] x = new double[n];
+				double[] y = new double[n];
 
-			}// END: i loop
+				for (int i = 0; i < n; i++) {
 
-			ContourMaker contourMaker = new ContourWithSnyder(x, y, gridSize);
-			ContourPath[] paths = contourMaker.getContourPaths(hpdLevel);
+					if (coords.get(i) == null) {
+						System.out.println("null found");
+					}
 
-			for (ContourPath path : paths) {
+					x[i] = coords.get(i)[Utils.LATITUDE_INDEX];
+					y[i] = coords.get(i)[Utils.LONGITUDE_INDEX];
 
-				double[] latitude = path.getAllX();
-				double[] longitude = path.getAllY();
+				}// END: i loop
 
-				List<Coordinate> coordinateList = new ArrayList<Coordinate>();
+				ContourMaker contourMaker = new ContourWithSnyder(x, y,
+						gridSize);
+				ContourPath[] paths = contourMaker.getContourPaths(hpdLevel);
 
-				for (int i = 0; i < latitude.length; i++) {
-					coordinateList
-							.add(new Coordinate(latitude[i], longitude[i]));
-				}
+				for (ContourPath path : paths) {
 
-				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-				Trait hpdTrait = new Trait(hpdLevel);
-				attributes.put(Utils.HPD, hpdTrait);
-				
-				Polygon polygon = new Polygon(coordinateList, sliceHeight,
-						attributes);
+					double[] latitude = path.getAllX();
+					double[] longitude = path.getAllY();
 
-				polygonsList.add(polygon);
-			}// END: paths loop
+					List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 
-			counter++;
-			double progress = (stepSize * counter) / barLength;
-			progressBar.setProgressPercentage(progress);
+					for (int i = 0; i < latitude.length; i++) {
+						coordinateList.add(new Coordinate(latitude[i],
+								longitude[i]));
+					}
 
-		}// END: iterate
-		progressBar.showCompleted();
-		progressBar.setShowProgress(false);
-		System.out.print("\n");
+					Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
+					Trait hpdTrait = new Trait(hpdLevel);
+					attributes.put(Utils.HPD, hpdTrait);
+
+					Polygon polygon = new Polygon(coordinateList, sliceHeight,
+							attributes);
+
+					polygonsList.add(polygon);
+				}// END: paths loop
+
+				counter++;
+				double progress = (stepSize * counter) / barLength;
+				progressBar.setProgressPercentage(progress);
+
+			}// END: iterate
+			progressBar.showCompleted();
+			progressBar.setShowProgress(false);
+			System.out.print("\n");
+
+		}// END: traits loop
 
 		return polygonsList;
 	}// END: parsePolygons
@@ -204,6 +222,6 @@ public class TimeSlicerPolygonsParser {
 
 	public void setAssumedTrees(int assumedTrees) {
 		this.assumedTrees = assumedTrees;
-	}//END: setAssumedTrees
+	}// END: setAssumedTrees
 
 }// END: class

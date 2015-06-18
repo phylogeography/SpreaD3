@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import data.SpreadData;
+import exceptions.AnalysisException;
 import exceptions.ArgumentException;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
@@ -189,8 +190,11 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(SLICE_HEIGHTS, "",
 								"slice heights file name"),
 
-						new Arguments.StringOption(LOCATION_TRAIT, "",
-								"location trait name"),
+						new Arguments.StringArrayOption(TRAITS, -1, "",
+										"traits to be parsed from nodes"),
+								
+//						new Arguments.StringOption(LOCATION_TRAIT, "",
+//								"location trait name"),
 
 						new Arguments.IntegerOption(INTERVALS,
 								"number of time intervals for slicing"),
@@ -200,9 +204,6 @@ public class Spread2ConsoleApp {
 
 						new Arguments.RealOption(HPD,
 								"hpd level for contouring"),
-
-						new Arguments.StringArrayOption(TRAITS, -1, "",
-								"traits to be parsed from nodes"),
 
 						new Arguments.StringOption(OUTPUT, "",
 								"json output file name"),
@@ -313,7 +314,7 @@ public class Spread2ConsoleApp {
 
 	}// END: Constructor
 
-	public void run(String[] args) {
+	public void run(String[] args)  {
 
 		if (args[0].contains(HELP)) {
 
@@ -327,13 +328,20 @@ public class Spread2ConsoleApp {
 
 		// ---SPLIT---//
 
+//		Utils.printArray(args);
+		
+		
 		ArrayList<String[]> argsList = new ArrayList<String[]>();
+		
 		int from = 0;
-		int to = 2;
+		// RENDER arg has options
+		int to = args[0].equalsIgnoreCase("-"+RENDER) ? 2 : 1;
 		argsList.add(Arrays.copyOfRange(args, from, to));
-		from = 2;
+		
+		from = to;
 		to = args.length;
 		argsList.add(Arrays.copyOfRange(args, from, to));
+		
 		String[] modeArgs = argsList.get(0);
 		String[] otherArgs = argsList.get(1);
 
@@ -706,6 +714,8 @@ public class Spread2ConsoleApp {
 
 					// ---PARSE---//
 
+//				Utils.printArray(otherArgs);
+					
 					args4.parseArguments(otherArgs);
 
 					if (args4.hasOption(TREE)) {
@@ -743,10 +753,10 @@ public class Spread2ConsoleApp {
 
 					}// END: option check
 
-					if (args4.hasOption(LOCATION_TRAIT)) {
+					if (args4.hasOption(TRAITS)) {
 
-						settings.timeSlicerSettings.locationTrait = args4
-								.getStringOption(LOCATION_TRAIT);
+						settings.timeSlicerSettings.traits = args4
+								.getStringArrayOption(TRAITS);
 
 					} else {
 
@@ -754,6 +764,7 @@ public class Spread2ConsoleApp {
 								+ LOCATION_TRAIT + " is missing.");
 
 					}// END: option check
+					
 
 					if (args4.hasOption(INTERVALS)) {
 						settings.timeSlicerSettings.intervals = args4
@@ -777,13 +788,6 @@ public class Spread2ConsoleApp {
 						} else {
 							settings.timeSlicerSettings.hpdLevel = hpdLevel;
 						}
-
-					}// END: option check
-
-					if (args4.hasOption(TRAITS)) {
-
-						settings.timeSlicerSettings.traits = args4
-								.getStringArrayOption(TRAITS);
 
 					}// END: option check
 
@@ -820,6 +824,8 @@ public class Spread2ConsoleApp {
 				} catch (IOException e) {
 					gracefullyExit(e.getMessage(), args4, e);
 				} catch (ImportException e) {
+					gracefullyExit(e.getMessage(), args4, e);
+				} catch (AnalysisException e) {
 					gracefullyExit(e.getMessage(), args4, e);
 				}
 
