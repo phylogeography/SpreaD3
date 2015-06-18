@@ -19,7 +19,7 @@ public class Spread2App {
     private static final String CODENAME = "Early beta";
     private static final String DATE_STRING = "2015";
 	
-	public static void main(String[] args) throws ArgumentException {
+	public static void main(String[] args) {
 		
 		 Locale.setDefault(Locale.US);
 			

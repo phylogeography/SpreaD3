@@ -1,5 +1,6 @@
 package exceptions;
 
+@SuppressWarnings("serial")
 public class ArgumentException extends Exception {
 
 	public ArgumentException() {
