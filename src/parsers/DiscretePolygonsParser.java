@@ -12,6 +12,7 @@ import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
 import exceptions.LocationNotFoundException;
 
 public class DiscretePolygonsParser {
@@ -36,7 +37,7 @@ public class DiscretePolygonsParser {
 		
 	}//END: Constructor
 	
-	public  LinkedList<Polygon> parseDiscretePolygons() throws LocationNotFoundException {
+	public  LinkedList<Polygon> parseDiscretePolygons() throws LocationNotFoundException, AnalysisException {
 		
 		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 		

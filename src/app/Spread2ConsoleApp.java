@@ -15,6 +15,7 @@ import parsers.BayesFactorParser;
 import parsers.ContinuousTreeParser;
 import parsers.DiscreteTreeParser;
 import parsers.TimeSlicerParser;
+import readers.JsonReader;
 import renderers.geojson.GeoJSONRenderer;
 import renderers.kml.KmlRenderer;
 import settings.Settings;
@@ -22,6 +23,7 @@ import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.parsing.TimeSlicerSettings;
+import settings.reading.JsonReaderSettings;
 import settings.rendering.GeoJSONRendererSettings;
 import settings.rendering.KmlRendererSettings;
 import utils.Arguments;
@@ -39,7 +41,10 @@ import exceptions.MissingAttributeException;
 
 public class Spread2ConsoleApp {
 
+	// ---ARGUMENTS--//
+
 	private Arguments modeArguments;
+
 	private Arguments args1;
 	private Arguments args2;
 	private Arguments args3;
@@ -48,12 +53,15 @@ public class Spread2ConsoleApp {
 	private Arguments kmlRenderArguments;
 	private Arguments geojsonRenderArguments;
 
+	private Arguments jsonReaderArguments;;
+
+	// ---HELP---//
+
 	private static final String HELP = "help";
-	private static final String READ = "read";
+
+	// ---PARSING---//
+
 	private static final String PARSE = "parse";
-	private static final String RENDER = "render";
-	private static final String KML = "kml";
-	private static final String GEOJSON = "geojson";
 
 	private static final String TREE = "tree";
 	private static final String TREES = "trees";
@@ -67,6 +75,12 @@ public class Spread2ConsoleApp {
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
+
+	// ---RENDERING---//
+
+	private static final String RENDER = "render";
+	private static final String KML = "kml";
+	private static final String GEOJSON = "geojson";
 
 	private static final String LINES_SUBSET = "linesSubset";
 	private static final String LINES_CUTOFF = "linesCutoff";
@@ -96,6 +110,12 @@ public class Spread2ConsoleApp {
 
 	private static final String LINE_WIDTH_MAPPING = "linewidthmapping";
 	private static final String LINE_WIDTH = "linewidth";
+
+	// ---READING---//
+
+	private static final String READ = "read";
+	private static final String LINES = "lines";
+	private static final String POLYGONS = "polygons";
 
 	public Spread2ConsoleApp() {
 
@@ -312,6 +332,23 @@ public class Spread2ConsoleApp {
 
 				});
 
+		// ---READER---//
+
+		jsonReaderArguments = new Arguments(new Arguments.Option[] {
+
+				new Arguments.StringArrayOption(LOCATIONS, -1, "",
+						"json file names with locations to read"),
+
+				new Arguments.StringArrayOption(LINES, -1, "",
+						"json file names with lines to read"),
+
+				new Arguments.StringArrayOption(POLYGONS, -1, "",
+						"json file names with polygons to read"),
+
+				new Arguments.StringOption(OUTPUT, "", "json output file name")
+
+		});
+
 	}// END: Constructor
 
 	public void run(String[] args) {
@@ -368,7 +405,7 @@ public class Spread2ConsoleApp {
 		if (modeArguments.hasOption(PARSE)) {
 
 			System.out.println("In parsing mode");
-			settings.create = true;
+			settings.parse = true;
 
 		} else if (modeArguments.hasOption(READ)) {
 
@@ -399,7 +436,7 @@ public class Spread2ConsoleApp {
 
 		}// END: mode check
 
-		if (settings.create) {
+		if (settings.parse) {
 
 			// ---GET INTENT---//
 
@@ -847,7 +884,74 @@ public class Spread2ConsoleApp {
 
 		} else if (settings.read) {
 
-			System.out.println("NOT YET IMPLEMENTED!");
+			settings.jsonReaderSettings = new JsonReaderSettings();
+
+			// ---PARSE---//
+
+			try {
+
+				jsonReaderArguments.parseArguments(otherArgs);
+
+				if (jsonReaderArguments.hasOption(LOCATIONS)) {
+					settings.jsonReaderSettings.locations = jsonReaderArguments
+							.getStringArrayOption(LOCATIONS);
+				}
+
+				if (jsonReaderArguments.hasOption(LINES)) {
+					settings.jsonReaderSettings.lines = jsonReaderArguments
+							.getStringArrayOption(LINES);
+				}
+
+				if (jsonReaderArguments.hasOption(POLYGONS)) {
+					settings.jsonReaderSettings.polygons = jsonReaderArguments
+							.getStringArrayOption(POLYGONS);
+				}
+
+				if (settings.jsonReaderSettings.locations == null
+						&& settings.jsonReaderSettings.lines == null
+						&& settings.jsonReaderSettings.polygons == null) {
+					throw new ArgumentException("Must specify at least one of "
+							+ LOCATIONS + ", " + LINES + ", " + " or "
+							+ POLYGONS + " arguments.");
+				}
+
+				if (jsonReaderArguments.hasOption(OUTPUT)) {
+
+					settings.jsonReaderSettings.output = jsonReaderArguments
+							.getStringOption(OUTPUT);
+
+				} else {
+
+					throw new ArgumentException("Required argument " + OUTPUT
+							+ " is missing.");
+				}
+
+			} catch (ArgumentException e) {
+				gracefullyExit(e.getMessage(), jsonReaderArguments, e);
+			}
+
+			// ---RUN---//
+
+			try {
+
+				JsonReader reader = new JsonReader(settings.jsonReaderSettings);
+				SpreadData data = reader.read();
+
+				// ---EXPORT TO JSON---//
+
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				String s = gson.toJson(data);
+
+				File file = new File(settings.jsonReaderSettings.output);
+				FileWriter fw;
+
+				fw = new FileWriter(file);
+				fw.write(s);
+				fw.close();
+
+			} catch (IOException e) {
+				gracefullyExit(e.getMessage(), jsonReaderArguments, e);
+			}
 
 		} else if (settings.render) {
 

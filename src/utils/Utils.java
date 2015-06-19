@@ -70,12 +70,12 @@ public class Utils {
 		return new Trait(nodeAttribute);
 	}//END: getNodeTrait
 	
-	public static Object getObjectNodeAttribute(Node node, String attributeName) {
+	public static Object getObjectNodeAttribute(Node node, String attributeName) throws AnalysisException {
 
 		Object nodeAttribute = node.getAttribute(attributeName);
 
 		if (nodeAttribute == null) {
-			throw new RuntimeException("Attribute " + attributeName
+			throw new AnalysisException("Attribute " + attributeName
 					+ " missing from the node. \n");
 		}
 
@@ -83,13 +83,13 @@ public class Utils {
 	}// END: getObjectNodeAttribute
 
 	public static Object[] getObjectArrayNodeAttribute(Node node,
-			String attributeName) {
+			String attributeName) throws AnalysisException {
 
 		Object[] nodeAttributeArray = (Object[]) node
 				.getAttribute(attributeName);
 
 		if (nodeAttributeArray == null) {
-			throw new RuntimeException("Attribute " + attributeName
+			throw new AnalysisException("Attribute " + attributeName
 					+ " missing from the node. \n");
 		}
 
@@ -97,7 +97,7 @@ public class Utils {
 	}// END: getObjectArrayNodeAttribute
 
 	public static Double[] getDoubleArrayNodeAttribute(Node node,
-			String attributeName) {
+			String attributeName) throws AnalysisException {
 		
 		Object[] o = getObjectArrayNodeAttribute(node, attributeName);
 		

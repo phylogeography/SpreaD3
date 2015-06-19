@@ -208,7 +208,7 @@ h3. MANIPULATING JSON OUTPUT
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -locationTrait location -hpd 95 -output test_continuous.json
 
 * read polygons and lines, merge
--read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json - lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous -output test_merge.json
+-read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous -output test_merge.json
 
 
 h1. LICENSE
