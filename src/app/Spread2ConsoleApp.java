@@ -191,10 +191,10 @@ public class Spread2ConsoleApp {
 								"slice heights file name"),
 
 						new Arguments.StringArrayOption(TRAITS, -1, "",
-										"traits to be parsed from nodes"),
-								
-//						new Arguments.StringOption(LOCATION_TRAIT, "",
-//								"location trait name"),
+								"traits to be parsed from nodes"),
+
+						// new Arguments.StringOption(LOCATION_TRAIT, "",
+						// "location trait name"),
 
 						new Arguments.IntegerOption(INTERVALS,
 								"number of time intervals for slicing"),
@@ -314,7 +314,7 @@ public class Spread2ConsoleApp {
 
 	}// END: Constructor
 
-	public void run(String[] args)  {
+	public void run(String[] args) {
 
 		if (args[0].contains(HELP)) {
 
@@ -328,20 +328,19 @@ public class Spread2ConsoleApp {
 
 		// ---SPLIT---//
 
-//		Utils.printArray(args);
-		
-		
+		// Utils.printArray(args);
+
 		ArrayList<String[]> argsList = new ArrayList<String[]>();
-		
+
 		int from = 0;
 		// RENDER arg has options
-		int to = args[0].equalsIgnoreCase("-"+RENDER) ? 2 : 1;
+		int to = args[0].equalsIgnoreCase("-" + RENDER) ? 2 : 1;
 		argsList.add(Arrays.copyOfRange(args, from, to));
-		
+
 		from = to;
 		to = args.length;
 		argsList.add(Arrays.copyOfRange(args, from, to));
-		
+
 		String[] modeArgs = argsList.get(0);
 		String[] otherArgs = argsList.get(1);
 
@@ -555,6 +554,10 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), args1, e);
 
+				} catch (AnalysisException e) {
+
+					gracefullyExit(e.getMessage(), args1, e);
+
 				}// END: try-catch
 
 			} else if (settings.bayesFactors) {
@@ -699,10 +702,18 @@ public class Spread2ConsoleApp {
 					fw.close();
 
 				} catch (IOException e) {
+
 					gracefullyExit(e.getMessage(), args3, e);
+
 				} catch (ImportException e) {
+
 					gracefullyExit(e.getMessage(), args3, e);
-				}
+
+				} catch (AnalysisException e) {
+
+					gracefullyExit(e.getMessage(), args3, e);
+
+				}// END: try-catch block
 
 				System.out.println("Created JSON file");
 
@@ -714,8 +725,8 @@ public class Spread2ConsoleApp {
 
 					// ---PARSE---//
 
-//				Utils.printArray(otherArgs);
-					
+					// Utils.printArray(otherArgs);
+
 					args4.parseArguments(otherArgs);
 
 					if (args4.hasOption(TREE)) {
@@ -764,7 +775,6 @@ public class Spread2ConsoleApp {
 								+ LOCATION_TRAIT + " is missing.");
 
 					}// END: option check
-					
 
 					if (args4.hasOption(INTERVALS)) {
 						settings.timeSlicerSettings.intervals = args4
@@ -1113,9 +1123,9 @@ public class Spread2ConsoleApp {
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
 				} catch (AnalysisException e) {
-					
+
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-					
+
 				}// END: Exception handling
 
 			} else if (settings.geojson) { // ---GEOJSON RENDERING---//

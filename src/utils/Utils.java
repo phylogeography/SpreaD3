@@ -16,6 +16,8 @@ import jebl.evolution.io.NexusImporter;
 import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
 import data.structure.Coordinate;
+import exceptions.AnalysisException;
+import exceptions.ArgumentException;
 
 public class Utils {
 
@@ -56,12 +58,12 @@ public class Utils {
 		return nodeHeight;
 	}// END: getHeight
 
-	public static Trait getNodeTrait(Node node, String traitName) {
+	public static Trait getNodeTrait(Node node, String traitName) throws AnalysisException {
 		
 		Object nodeAttribute = node.getAttribute(traitName);
 		
 		if (nodeAttribute == null) {
-			throw new RuntimeException("Attribute " + traitName
+			throw new AnalysisException("Attribute " + traitName
 					+ " missing from the node. \n");
 		}
 		

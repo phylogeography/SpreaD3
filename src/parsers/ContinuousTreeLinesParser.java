@@ -10,6 +10,7 @@ import utils.Trait;
 import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Line;
+import exceptions.AnalysisException;
 
 public class ContinuousTreeLinesParser {
 
@@ -25,7 +26,7 @@ public class ContinuousTreeLinesParser {
 		
 	}//END: Constructor
 	
-	public LinkedList<Line> parseLines() {
+	public LinkedList<Line> parseLines() throws AnalysisException {
 		
 		LinkedList<Line> linesList = new LinkedList<Line>();
 		String latitudeName = locationTrait.concat(Utils.ONE);

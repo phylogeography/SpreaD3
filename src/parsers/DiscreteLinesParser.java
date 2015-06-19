@@ -14,6 +14,7 @@ import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Line;
 import data.structure.Location;
+import exceptions.AnalysisException;
 import exceptions.LocationNotFoundException;
 
 public class DiscreteLinesParser {
@@ -32,7 +33,7 @@ public class DiscreteLinesParser {
 		
 	}//END: Constructor
 	
-	public LinkedList<Line> parseLines() throws IOException, ImportException, LocationNotFoundException {
+	public LinkedList<Line> parseLines() throws IOException, ImportException, LocationNotFoundException, AnalysisException {
 		
 		LinkedList<Line> linesList = new LinkedList<Line>();
 		

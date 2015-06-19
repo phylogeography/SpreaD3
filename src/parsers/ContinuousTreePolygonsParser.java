@@ -12,6 +12,7 @@ import utils.Trait;
 import utils.Utils;
 import data.structure.Coordinate;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
 
 public class ContinuousTreePolygonsParser {
 
@@ -31,7 +32,7 @@ public class ContinuousTreePolygonsParser {
 		
 	}//END: Constructor
 	
-	public LinkedList<Polygon> parsePolygons() {
+	public LinkedList<Polygon> parsePolygons() throws AnalysisException {
 		
 		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 

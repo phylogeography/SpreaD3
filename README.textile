@@ -202,7 +202,13 @@ h3. RENDERING
 * map polygon colors to trait name attribute values, use built-in color schemes
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -polygoncolormapping trait -output test.kml
 
+h3. MANIPULATING JSON OUTPUT
 
+* parse the continuous tree 
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -locationTrait location -hpd 95 -output test_continuous.json
+
+* read polygons and lines, merge
+-read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json - lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous -output test_merge.json
 
 
 h1. LICENSE

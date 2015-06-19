@@ -12,6 +12,7 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
 
 public class ContinuousTreeParser {
 
@@ -21,7 +22,7 @@ public class ContinuousTreeParser {
 		this.settings = settings;
 	}
 
-	public SpreadData parse() throws IOException, ImportException {
+	public SpreadData parse() throws IOException, ImportException, AnalysisException {
 
 		LinkedList<Location> locationsList = null;
 		LinkedList<Polygon> polygonsList= null;

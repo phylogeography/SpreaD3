@@ -12,6 +12,7 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import exceptions.AnalysisException;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
 
@@ -24,7 +25,7 @@ public class DiscreteTreeParser {
 	}//END: Constructor
 	
 	
-public SpreadData parse() throws IOException, ImportException, LocationNotFoundException, IllegalCharacterException {
+public SpreadData parse() throws IOException, ImportException, LocationNotFoundException, IllegalCharacterException, AnalysisException {
 	
 	LinkedList<Location> locationsList = null;
 	LinkedList<Polygon> polygonsList= null;
