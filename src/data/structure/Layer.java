@@ -17,7 +17,7 @@ public class Layer {
 			List<Polygon> polygons //
 	) {
 		
-		super();
+//		super();
 
 		
 		this.hasPolygons = true;

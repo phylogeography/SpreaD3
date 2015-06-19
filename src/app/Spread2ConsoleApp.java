@@ -657,6 +657,7 @@ public class Spread2ConsoleApp {
 					SpreadData data = parser.parse();
 
 					// ---EXPORT TO JSON---//
+					
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
@@ -949,6 +950,8 @@ public class Spread2ConsoleApp {
 				fw.write(s);
 				fw.close();
 
+				System.out.println("Created JSON file");
+				
 			} catch (IOException e) {
 				gracefullyExit(e.getMessage(), jsonReaderArguments, e);
 			}
@@ -1252,8 +1255,7 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					Reader reader;
-					reader = new FileReader(
+					Reader reader = new FileReader(
 							settings.geoJSONRendererSettings.json);
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
@@ -1289,7 +1291,9 @@ public class Spread2ConsoleApp {
 	}// END: run
 
 	private void gracefullyExit(String message, Arguments arguments, Exception e) {
-
+    
+		// TODO: read / parse / render in help message
+		
 		if (Spread2App.DEBUG) {
 			if (e != null) {
 				e.printStackTrace();
