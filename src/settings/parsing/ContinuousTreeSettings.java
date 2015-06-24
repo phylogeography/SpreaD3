@@ -14,11 +14,14 @@ public class ContinuousTreeSettings {
 	public String hpd = null;
 	
 	//---OPTIONAL---//
+
+	// most recent sampling date yyy/mm/dd
+	public String mrsd = null;
 	
 	// node trait attribute names
 	public String[] traits = null;
 	
 	// path to json output file 
 	public String output = "output.json";
-	
+
 }//END: class

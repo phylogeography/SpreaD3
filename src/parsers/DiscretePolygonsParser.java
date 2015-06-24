@@ -26,14 +26,23 @@ public class DiscretePolygonsParser {
 	
 	private Integer intervals;
 	private String[] traits;
+	private String mrsd;
 	
-	public DiscretePolygonsParser(RootedTree rootedTree, String locationTrait, Integer intervals, List<Location> locationsList, String[] traits) {
+	public DiscretePolygonsParser(
+			RootedTree rootedTree, //
+			String locationTrait, // 
+			Integer intervals, //
+			List<Location> locationsList, // 
+			String[] traits, //
+			String mrsd //
+			) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;
 		this.locationsList = locationsList;
 		this.intervals = intervals;
 		this.traits = traits;
+		this.mrsd = mrsd;
 		
 	}//END: Constructor
 	
@@ -49,9 +58,15 @@ public class DiscretePolygonsParser {
         	sliceHeights[i] = rootHeight - ((i + 1) * delta);
 		}
         
+		TimeParser timeParser = new TimeParser(mrsd);
+		timeParser.parseTime();
+        
         Location dummy;
 		for (int i = 0; i < sliceHeights.length; i++) {
 
+			double sliceHeight = sliceHeights[i];
+			String startTime = timeParser.getNodeDate(sliceHeight);
+			
 			for (Location location : locationsList) {
 
 				int locationCount = 0;
@@ -62,8 +77,8 @@ public class DiscretePolygonsParser {
 
 						Node parentNode = rootedTree.getParent(node);
 						
-						if ((rootedTree.getHeight(node) <= sliceHeights[i])
-								&& (rootedTree.getHeight(parentNode) > sliceHeights[i])) {
+						if ((rootedTree.getHeight(node) <= sliceHeight)
+								&& (rootedTree.getHeight(parentNode) > sliceHeight)) {
 
 							String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
 							if(parentState.contains("+")) { 
@@ -117,16 +132,12 @@ public class DiscretePolygonsParser {
 
 					Map<String, Trait> attributes = new HashMap<String, Trait>();
 
-					//TODO: no sense to have traits for these polygons?
+					//TODO: no sense to have traits for these polygons, they represent all nodes ?
 					if (traits != null) {
 						for (String traitName : traits) {
 
-							// Object nodeTraitObject =
-							// Utils.getObjectNodeAttribute( node, traitName);
-							// Trait nodeTrait = new Trait(nodeTraitObject,
-							// nodeHeight);
-							//
-							// attributes.put(traitName, nodeTrait);
+//							Trait nodeTrait = Utils.getNodeTrait(node, traitName);
+//							attributes.put(traitName, nodeTrait);
 
 						}// END: traits loop
 					}// END: null check
@@ -134,7 +145,7 @@ public class DiscretePolygonsParser {
 					Trait countTrait = new Trait(locationCount);
 					attributes.put(COUNT, countTrait);
 					
-					Polygon polygon = new Polygon(location.getId(), sliceHeights[i], attributes);
+					Polygon polygon = new Polygon(location.getId(), startTime, attributes);
 					polygonsList.add(polygon);
 
 				}// END: positive count check

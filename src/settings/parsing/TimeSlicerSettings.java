@@ -3,6 +3,10 @@ package settings.parsing;
 
 public class TimeSlicerSettings {
 
+	//---HARDCODED---//
+	
+	public final int gridSize = 100;
+	
 	//---REQUIRED---//
 	
 	// path to tree file
@@ -33,8 +37,7 @@ public class TimeSlicerSettings {
 	// path to json output file 
 	public String output = "output.json";
 
-	//---HARDCODED---//
+	// most recent sampling date yyy/mm/dd
+	public String mrsd = null;
 	
-	public final int gridSize = 100;
-
 }//END: class

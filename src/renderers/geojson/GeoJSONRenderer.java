@@ -49,15 +49,15 @@ public class GeoJSONRenderer implements Renderer {
             ArrayList<Line> lineList = (ArrayList)l.getLines();
 
             //Get an idea of the times
-            ArrayList<Double> times = new ArrayList<Double>();
+            ArrayList<String> times = new ArrayList<String>();
 
             //Write the polygons to file
             for (int j = 0; j < polygonList.size(); j++) {
 
                 Polygon p = polygonList.get(j);
 
-                if (!times.contains(p.getTime())) {
-                    times.add(p.getTime());
+                if (!times.contains(p.getStartTime())) {
+                    times.add(p.getStartTime());
                 }
 
                 writer.write("{\"type\":\"Feature\",");

@@ -17,18 +17,16 @@ public class Line {
 	private final Location endLocation;
 	private final boolean connectsLocations;
 	
-	private final double startTime;
-	private final double endTime;
+	private final String startTime;
+	private final String endTime;
 	
 	public Line(Location startLocation, //
 			Location endLocation, //
-			double startTime, //
-			double endTime, //
+			String startTime, //
+			String endTime, //
 			Map<String, Trait> attributes //
 	) {
 
-		super();
-		
 		this.startLocation = startLocation;
 		this.endLocation = endLocation;
 		this.connectsLocations = true;
@@ -42,19 +40,38 @@ public class Line {
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
 		}
-
 		
 	}// END: Constructor
 
+	
+	public Line(Location startLocation, //
+			Location endLocation, //
+			Map<String, Trait> nodeAttributes //
+			) {
+		
+		this.startLocation = startLocation;
+		this.endLocation = endLocation;
+		this.connectsLocations = true;
+		
+		this.startTime = null;
+		this.endTime = null;
+
+		this.startCoordinate = null;
+		this.endCoordinate = null;
+
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
+		}
+		
+	}
+	
 	public Line(Coordinate startCoordinate, //
 			Coordinate endCoordinate, //
-			double startTime, //
-			double endTime, //
-			Map<String, Trait> nodeAttributes //
+			String startTime, //
+			String endTime, //
+			Map<String, Trait> attributes //
 	) {
 
-		super();
-		
 		this.startCoordinate = startCoordinate;
 		this.endCoordinate = endCoordinate;
 		this.startTime = startTime;
@@ -64,14 +81,10 @@ public class Line {
 		this.endLocation = null;
 		this.connectsLocations = false;
 		
-		if (nodeAttributes != null) {
-			this.attributes.putAll(nodeAttributes);
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
 		}
 
-//		if (branchAttributes != null) {
-//			this.branchAttributes.putAll(branchAttributes);
-//		}
-		
 	}// END: Constructor
 
 	public Coordinate getStartCoordinate() {
@@ -82,11 +95,11 @@ public class Line {
 		return endCoordinate;
 	}
 
-	public double getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public double getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
@@ -105,9 +118,5 @@ public class Line {
 	public Map<String, Trait> getAttributes() {
 		return attributes;
 	}
-	
-//	public Map<String, Trait> getBranchAttributes() {
-//		return branchAttributes;
-//	}
 	
 }// END: class

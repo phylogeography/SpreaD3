@@ -313,7 +313,7 @@ public class KmlRenderer implements Renderer {
 		String name = "";
 		String label = "";
 		
-		Double startTime = line.getStartTime();
+		String startTime = line.getStartTime();
 		
 		Coordinate startCoordinate;
 		Coordinate endCoordinate;
@@ -641,7 +641,8 @@ public class KmlRenderer implements Renderer {
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 		for (int i = 0; i < sliceCount; i++) {
 			
-			Double segmentStartTime = startTime;
+			//TODO
+			Double segmentStartTime = Double.valueOf(startTime);
 			
 			double segmentStartAltitude = a * Math.pow((double) i, 2) + b
 					* (double) i;

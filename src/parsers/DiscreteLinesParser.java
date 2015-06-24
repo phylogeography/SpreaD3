@@ -120,7 +120,7 @@ public class DiscreteLinesParser {
 					Trait distanceTrait = new Trait(distance);
 					attributes.put(Utils.DISTANCE, distanceTrait);
 					
-					Line line = new Line(parentLocation, nodeLocation, parentHeight, nodeHeight, attributes);
+					Line line = new Line(parentLocation, nodeLocation, "", "", attributes);
 					linesList.add(line);
 
 				}// END: branch changes state check

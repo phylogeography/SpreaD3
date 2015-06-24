@@ -79,7 +79,7 @@ public class BayesFactorLinesParser {
 			Trait distanceTrait = new Trait(distance);
 			attributes.put(Utils.DISTANCE, distanceTrait);
 			
-			Line line = new Line(fromLocation, toLocation, 0.0, 0.0, attributes);
+			Line line = new Line(fromLocation, toLocation, attributes);
 			linesList.add(line);
 
 		}// END: i loop

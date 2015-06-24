@@ -16,13 +16,19 @@ public class ContinuousTreeLinesParser {
 
 	private RootedTree rootedTree;
 	private String locationTrait;
+	private String mrsd;
 	private String[] traits;
 	
-	public ContinuousTreeLinesParser(RootedTree rootedTree, String locationTrait, String traits[]) {
+	public ContinuousTreeLinesParser(RootedTree rootedTree, //
+			String locationTrait, //
+			String traits[], //
+			String mrsd //
+			) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;
 		this.traits = traits;
+		this.mrsd = mrsd;
 		
 	}//END: Constructor
 	
@@ -31,6 +37,9 @@ public class ContinuousTreeLinesParser {
 		LinkedList<Line> linesList = new LinkedList<Line>();
 		String latitudeName = locationTrait.concat(Utils.ONE);
 		String longitudeName = locationTrait.concat(Utils.TWO);
+
+		TimeParser timeParser = new TimeParser(mrsd);
+		timeParser.parseTime();
 		
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
@@ -44,7 +53,9 @@ public class ContinuousTreeLinesParser {
 						parentNode, latitudeName);
 
 				Double parentHeight = Utils.getNodeHeight(rootedTree, parentNode);
-
+				
+				String startTime = timeParser.getNodeDate(parentHeight);
+				
 				Double nodeLongitude = (Double) Utils.getObjectNodeAttribute(node,
 						longitudeName);
 
@@ -53,6 +64,8 @@ public class ContinuousTreeLinesParser {
 
 				Double nodeHeight = Utils.getNodeHeight(rootedTree, node);
 
+				String endTime = timeParser.getNodeDate(nodeHeight);
+				
 				Coordinate parentCoordinate = new Coordinate(parentLatitude, parentLongitude);
 
 				Coordinate nodeCoordinate = new Coordinate(nodeLatitude, nodeLongitude);
@@ -81,7 +94,7 @@ public class ContinuousTreeLinesParser {
 				Trait distanceTrait = new Trait(distance);
 				attributes.put(Utils.DISTANCE, distanceTrait);
 				
-				Line line = new Line(parentCoordinate, nodeCoordinate, parentHeight, nodeHeight, attributes);
+				Line line = new Line(parentCoordinate, nodeCoordinate, startTime, endTime, attributes);
 				linesList.add(line);
 
 			}// END: root check
@@ -89,5 +102,63 @@ public class ContinuousTreeLinesParser {
 		
 		return linesList;
 	}//END: parseLines
+	
+//	private LocalDate getTime(double nodeHeight, LocalDate mrsd) {
+//		
+//		String[] fields = convertToYearMonthDay(nodeHeight);
+//		Integer years =  Integer.valueOf(fields[Utils.YEAR_INDEX]);
+//		Integer months =  Integer.valueOf(fields[Utils.MONTH_INDEX]);
+//		Integer days =  Integer.valueOf(fields[Utils.DAY_INDEX]);
+//		LocalDate endTime = mrsd.minusYears(years).minusMonths(months).minusDays(days);
+//		
+//		return endTime;
+//	}
+//	
+//	 private String[] convertToYearMonthDay(double fractionalDate) {
+//
+//	        String[] yearMonthDay = new String[3];
+//
+//	        int year = (int) fractionalDate;
+//	        String yearString;
+//
+//	        if (year < 10) {
+//	            yearString = "000"+year;
+//	        } else if (year < 100) {
+//	            yearString = "00"+year;
+//	        } else if (year < 1000) {
+//	            yearString = "0"+year;
+//	        } else {
+//	            yearString = ""+year;
+//	        }
+//
+//	        yearMonthDay[0]  = yearString;
+//
+//	        double fractionalMonth = fractionalDate - year;
+//
+//	        int month = (int) (12.0 * fractionalMonth);
+//	        String monthString;
+//
+//	        if (month < 10) {
+//	            monthString = "0"+month;
+//	        } else {
+//	            monthString = ""+month;
+//	        }
+//
+//	        yearMonthDay[1] = monthString;
+//
+//	        int day = (int) Math.round(30*(12*fractionalMonth - month));
+//	        String dayString;
+//
+//	        if (day < 10) {
+//	            dayString = "0"+day;
+//	        } else {
+//	            dayString = ""+day;
+//	        }
+//
+//	        yearMonthDay[2] = dayString;
+//
+//	        return yearMonthDay;
+//
+//	    }
 	
 }//END: class

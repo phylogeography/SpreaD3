@@ -22,13 +22,19 @@ public class ContinuousTreePolygonsParser {
 	private String locationTrait;
 	private String hpd;
 	private String[] traits;
+	private String mrsd;
 	
-	public ContinuousTreePolygonsParser(RootedTree rootedTree, String locationTrait, String hpd, String[] traits ) {
+	public ContinuousTreePolygonsParser(RootedTree rootedTree, //
+			String locationTrait, //
+			String hpd, //
+			String[] traits, //
+			String mrsd ) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;
 		this.hpd = hpd;
 		this.traits = traits;
+		this.mrsd = mrsd;
 		
 	}//END: Constructor
 	
@@ -42,6 +48,9 @@ public class ContinuousTreePolygonsParser {
 		String latitudeName = locationTrait.concat("1");
 		String longitudeName = locationTrait.concat("2");
 		
+		TimeParser timeParser = new TimeParser(mrsd);
+		timeParser.parseTime();
+		
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
 				if (!rootedTree.isExternal(node)) {
@@ -52,7 +61,8 @@ public class ContinuousTreePolygonsParser {
 					// System.out.println("modality for the node: " + modality);
 
 					double nodeHeight = Utils.getNodeHeight(rootedTree, node);
-
+					String startTime = timeParser.getNodeDate(nodeHeight);
+					
 					for (int m = 1; m <= modality; m++) {
 
 						String longitudeHPDName = longitudeName.concat("_")
@@ -85,11 +95,6 @@ public class ContinuousTreePolygonsParser {
 						if (traits != null) {
 							for (String traitName : traits) {
 
-//								Object nodeTraitObject = Utils
-//										.getObjectNodeAttribute(node, traitName);
-//								Trait nodeTrait = new Trait(nodeTraitObject,
-//										nodeHeight);
-
 								Trait nodeTrait = Utils.getNodeTrait(node, traitName);
 								attributes.put(traitName, nodeTrait);
 
@@ -103,7 +108,7 @@ public class ContinuousTreePolygonsParser {
 						attributes.put(Utils.HPD, hpdTrait);
 						
 						Polygon polygon = new Polygon(coordinateList,
-								nodeHeight, attributes);
+								startTime, attributes);
 
 						polygonsList.add(polygon);
 

@@ -1,19 +1,24 @@
 package data.structure;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class TimeLine {
 
-	Integer intervals;
+//	Integer intervals;
+
 	
-	Double startAge; // startHeight in beast units goes to 0
-	Double endAge;
+	// startHeight in beast units (goes to 0)
+	private final double startHeight;
+	private final double endHeight;
 	
-	Date startTime;
-	Date endTime;
+//	private  String startDate;
+//	private  String endDate;
 	
-	private TimeLine() {
+	public TimeLine(double startHeight, double endHeight) {
+		
+		this.startHeight = startHeight;
+		this.endHeight = endHeight;
+
 		
 	}//END: Constructor
 	

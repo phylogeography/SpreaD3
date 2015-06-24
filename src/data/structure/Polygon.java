@@ -8,78 +8,69 @@ import utils.Trait;
 
 public class Polygon {
 
-	//TODO: maybe it also should have node attributes and branchattributes?
 	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 
-	//	private final Location location;
 	private final String location;
 	private final boolean hasLocation;
-	
+
 	private final List<Coordinate> coordinates;
-	private final double time;
-	
+	private final String startTime;
+
 	public Polygon(List<Coordinate> coordinates, //
-			double time, //
+			String startTime, //
 			Map<String, Trait> attributes //
 	) {
 
 		super();
 
 		this.location = null;
-        this.hasLocation = false;
-		
+		this.hasLocation = false;
+
 		this.coordinates = coordinates;
-		this.time = time;
+		this.startTime = startTime;
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
 		}
 
-	}// END: Polygon
+	}// END: Constructor
 
-	public Polygon(
-//			Location centroid, //
-			String location, //
-			double time, //
+	public Polygon(String location, //
+			String startTime, //
 			Map<String, Trait> attributes //
 	) {
 
 		super();
 
 		this.location = location;
-//		this.location = centroid;
 		this.hasLocation = true;
 		this.coordinates = null;
-		this.time = time;
+		this.startTime = startTime;
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
 		}
-	}
+
+	}// END: Constructor
 
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
-	public double getTime() {
-		return time;
+	public String getStartTime() {
+		return startTime;
 	}
 
 	public String getLocationId() {
 		return location;
 	}
 
-	
-//	public Location getCentroid() {
-//		return location;
-//	}
-
 	public Map<String, Trait> getAttributes() {
 		return attributes;
 	}
-	
+
 	public boolean hasLocation() {
 		return hasLocation;
 	}
-	
+
 }// END: class

@@ -35,6 +35,7 @@ public class TimeSlicerPolygonsParser {
 	private double hpdLevel;
 	private String[] traits;
 	private int assumedTrees;
+	private String mrsd;
 
 	public TimeSlicerPolygonsParser(RootedTree rootedTree, //
 			NexusImporter treesImporter, //
@@ -43,8 +44,8 @@ public class TimeSlicerPolygonsParser {
 			// String locationTrait, //
 			int burnIn, //
 			int gridSize, //
-			double hpdValue //
-	) {
+			double hpdValue, //
+			String mrsd) {
 
 		this.rootedTree = rootedTree;
 		this.treesImporter = treesImporter;
@@ -54,6 +55,7 @@ public class TimeSlicerPolygonsParser {
 		// this.locationTrait = locationTrait;
 		this.gridSize = gridSize;
 		this.hpdLevel = hpdValue;
+		this.mrsd = mrsd;
 
 		this.assumedTrees = 10000;
 
@@ -70,6 +72,11 @@ public class TimeSlicerPolygonsParser {
 
 		System.out.println("Using as slice times: ");
 		Utils.printArray(sliceHeights);
+
+		TimeParser timeParser = new TimeParser(mrsd);
+		timeParser.parseTime();
+
+		// ---PARSE TREES---//
 
 		int barLength = 100;
 		int treesRead = 0;
@@ -112,9 +119,10 @@ public class TimeSlicerPolygonsParser {
 				progressBar.setProgressPercentage(progress);
 
 			} catch (Exception e) {
-				// catch any unchecked exceptions coming from Runnable, pass them to handlers
+				// catch any unchecked exceptions coming from Runnable, pass
+				// them to handlers
 				throw new AnalysisException(e.getMessage());
-			}//END: try-catch
+			}// END: try-catch
 
 		}// END: trees loop
 		progressBar.showCompleted();
@@ -145,6 +153,8 @@ public class TimeSlicerPolygonsParser {
 			// Iterator<Double> iterator = traitMap.keySet().iterator();
 			// while (iterator.hasNext()) {
 			// Double sliceHeight = iterator.next();
+
+			// ---MAKE CONTOURS---//
 
 			for (Double sliceHeight : traitMap.keySet()) {
 
@@ -182,15 +192,19 @@ public class TimeSlicerPolygonsParser {
 					}
 
 					Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-					
+
 					Trait hpdTrait = new Trait(hpdLevel);
 					attributes.put(Utils.HPD, hpdTrait);
 
 					Trait attributeName = new Trait(traitName);
 					attributes.put(Utils.TRAIT, attributeName);
-					
-					Polygon polygon = new Polygon(coordinateList, sliceHeight,
-							attributes);
+
+					String startTime = timeParser.getNodeDate(sliceHeight);
+
+					Polygon polygon = new Polygon(coordinateList, //
+							startTime, //
+							attributes //
+					);
 
 					polygonsList.add(polygon);
 				}// END: paths loop
@@ -200,6 +214,7 @@ public class TimeSlicerPolygonsParser {
 				progressBar.setProgressPercentage(progress);
 
 			}// END: iterate
+
 			progressBar.showCompleted();
 			progressBar.setShowProgress(false);
 			System.out.print("\n");

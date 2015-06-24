@@ -44,13 +44,6 @@ public class TimeSlicerParser {
 
 		// ---PARSE AND FILL STRUCTURES---//
 
-//		TimeSlicerLinesParser linesParser = new TimeSlicerLinesParser(
-//				rootedTree //
-//		);
-//		linesList = linesParser.parseLines();
-//
-//		System.out.println("Parsed lines");
-
 		TimeSlicerPolygonsParser polygonsParser = new TimeSlicerPolygonsParser(
 				rootedTree, //
 				treesImporter, //
@@ -59,14 +52,15 @@ public class TimeSlicerParser {
 //				settings.locationTrait, //
 				settings.burnIn, //
 				settings.gridSize, //
-				settings.hpdLevel //
+				settings.hpdLevel, //
 //				settings.traits //
+				settings.mrsd
 		);
 
 		int assumedTrees = getAssumedTrees(settings.trees);
 		
 		if(settings.burnIn >= assumedTrees) {
-			throw new RuntimeException("Trying to burn in too many trees!");
+			throw new AnalysisException("Trying to burn too many trees!");
 		}
 		
 		polygonsParser.setAssumedTrees(assumedTrees);

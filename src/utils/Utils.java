@@ -45,6 +45,9 @@ public class Utils {
 	public static final int LONGITUDE_INDEX = 1;
 	public static final String HPD = "hpd";
 	public static final String TRAIT = "trait";
+	public static final int YEAR_INDEX = 0;
+	public static final int MONTH_INDEX = 1;
+	public static final int DAY_INDEX = 2;
 	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 

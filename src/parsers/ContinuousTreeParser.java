@@ -17,50 +17,57 @@ import exceptions.AnalysisException;
 public class ContinuousTreeParser {
 
 	private ContinuousTreeSettings settings;
-	
+
 	public ContinuousTreeParser(ContinuousTreeSettings settings) {
 		this.settings = settings;
 	}
 
-	public SpreadData parse() throws IOException, ImportException, AnalysisException {
+	public SpreadData parse() throws IOException, ImportException,
+			AnalysisException {
 
 		LinkedList<Location> locationsList = null;
-		LinkedList<Polygon> polygonsList= null;
+		LinkedList<Polygon> polygonsList = null;
 		LinkedList<Line> linesList = null;
-		
+
 		// ---IMPORT---//
 
 		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
-		
+
 		// ---PARSE AND FILL STRUCTURES---//
-		
-		ContinuousTreeLinesParser linesParser = new ContinuousTreeLinesParser(rootedTree, //
+
+		ContinuousTreeLinesParser linesParser = new ContinuousTreeLinesParser(
+				rootedTree, //
 				settings.locationTrait, //
-				settings.traits //
-				);
-	     linesList = linesParser.parseLines();
-		
+				settings.traits, //
+				settings.mrsd //
+		);
+
+		linesList = linesParser.parseLines();
+
 		System.out.println("Parsed lines");
-		
-		ContinuousTreePolygonsParser polygonsParser = new ContinuousTreePolygonsParser(rootedTree, //
+
+		ContinuousTreePolygonsParser polygonsParser = new ContinuousTreePolygonsParser(
+				rootedTree, //
 				settings.locationTrait, //
 				settings.hpd, //
-				settings.traits //
-				); 
-	      polygonsList = polygonsParser.parsePolygons();
-		
-		 System.out.println("Parsed polygons");
-		
-		 LinkedList<Layer> layersList = new LinkedList<Layer>();
+				settings.traits, //
+				settings.mrsd //
+		);
 
-			Layer layer = new Layer(settings.tree,
-					"Continuous tree visualisation", linesList, polygonsList);
+		polygonsList = polygonsParser.parsePolygons();
 
-			layersList.add(layer);
+		System.out.println("Parsed polygons");
 
-			SpreadData data = new SpreadData(locationsList, layersList);
-			
+		LinkedList<Layer> layersList = new LinkedList<Layer>();
+
+		Layer layer = new Layer(settings.tree, "Continuous tree visualisation",
+				linesList, polygonsList);
+
+		layersList.add(layer);
+
+		SpreadData data = new SpreadData(locationsList, layersList);
+
 		return data;
-	}//END: parse
+	}// END: parse
 
-}//END: class
+}// END: class

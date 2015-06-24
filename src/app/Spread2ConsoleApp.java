@@ -75,7 +75,8 @@ public class Spread2ConsoleApp {
 	private static final String INTERVALS = "intervals";
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
-
+	private static final String MRSD = "mrsd";
+	
 	// ---RENDERING---//
 
 	private static final String RENDER = "render";
@@ -158,6 +159,9 @@ public class Spread2ConsoleApp {
 						new Arguments.IntegerOption(INTERVALS,
 								"number of time intervals"),
 
+						new Arguments.StringOption(MRSD, "",
+								"most recent sampling date [yyyy/mm/dd]"),
+
 						new Arguments.StringArrayOption(TRAITS, -1, "",
 								"traits to be parsed from nodes"),
 
@@ -191,6 +195,9 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(HPD, "",
 								"hpd interval attribute name"),
 
+						new Arguments.StringOption(MRSD, "",
+								"most recent sampling date [yyyy/mm/dd]"),
+
 						new Arguments.StringArrayOption(TRAITS, -1, "",
 								"traits to be parsed from nodes"),
 
@@ -219,6 +226,9 @@ public class Spread2ConsoleApp {
 						new Arguments.IntegerOption(INTERVALS,
 								"number of time intervals for slicing"),
 
+						new Arguments.StringOption(MRSD, "",
+										"most recent sampling date [yyyy/mm/dd]"),			
+								
 						new Arguments.IntegerOption(BURNIN,
 								"how many trees to discard as burn-in (in # trees)"),
 
@@ -536,6 +546,11 @@ public class Spread2ConsoleApp {
 
 					}// END: option check
 
+					if (args1.hasOption(MRSD)) {
+						settings.discreteTreeSettings.mrsd = args1
+								.getStringOption(MRSD);
+					}
+					
 					if (args1.hasOption(TRAITS)) {
 
 						settings.discreteTreeSettings.traits = args1
@@ -703,6 +718,11 @@ public class Spread2ConsoleApp {
 								.getStringOption(HPD);
 					}
 
+					if (args3.hasOption(MRSD)) {
+						settings.continuousTreeSettings.mrsd = args3
+								.getStringOption(MRSD);
+					}
+					
 					if (args3.hasOption(TRAITS)) {
 						settings.continuousTreeSettings.traits = args3
 								.getStringArrayOption(TRAITS);
@@ -839,6 +859,11 @@ public class Spread2ConsoleApp {
 
 					}// END: option check
 
+					if (args4.hasOption(MRSD)) {
+						settings.timeSlicerSettings.mrsd = args4
+								.getStringOption(MRSD);
+					}
+					
 					if (args4.hasOption(OUTPUT)) {
 						settings.timeSlicerSettings.output = args4
 								.getStringOption(OUTPUT);
