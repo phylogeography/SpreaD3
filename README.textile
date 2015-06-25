@@ -20,7 +20,7 @@ h3. CONTINUOUS TREE
 h3. PARSING
 
 * parse two traits
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -output test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -mrsd 2011-01-01 -output test.json
 
 * parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011-01-01 -output test_host.json
@@ -88,7 +88,7 @@ h3. DISCRETE TREE
 h3. PARSING
 
 * cut into 10 discrete time intervals
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -output test_discrete.json
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011-01-01 -output test_discrete.json
 
 h3. RENDERING
 
@@ -189,10 +189,10 @@ h3. PARSING
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -traits location -output test_slice.json
 
 * parse overriding default settings
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -output test_slice.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
 
 * parse other numerical traits for imputing
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,trait2 -hpd 0.8 -intervals 20 -burnin 5 -output test_slice.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,trait2 -hpd 0.8 -intervals 20 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
 
 h3. RENDERING
 
@@ -205,7 +205,7 @@ h3. RENDERING
 h3. MANIPULATING JSON OUTPUT
 
 * parse the continuous tree 
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -locationTrait location -hpd 95 -output test_continuous.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -locationTrait location -hpd 95 -mrsd 2011-01-01 -output test_continuous.json
 
 * read polygons and lines, merge
 -read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous -output test_merge.json

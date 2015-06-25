@@ -1,86 +1,45 @@
 package test;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+
 public class Test {
 
 	public static void main(String[] args) {
 
 		try {
 
-			int barLength = 100;
-			int jobLength = 501;
-			double stepSize = (double) barLength / (double) jobLength;
+			int sliceCount = 10;
 
-			ProgressBar progressBar = new ProgressBar(barLength);
-			progressBar.start();
+			String startTime = "2010-01-01";
+			DateTime startDate = new DateTime(startTime);
 
-			System.out
-					.println("0                        25                       50                       75                       100%");
-			System.out
-					.println("|------------------------|------------------------|------------------------|------------------------|");
+			String endTime = "2011-01-02";
+			DateTime endDate = new DateTime(endTime);
 
-			for (int i = 0; i <= jobLength; i++) {
+			Interval interval = new Interval(startDate, endDate);
+			long millis = interval.toDurationMillis();
+			long segmentMillis = millis / (sliceCount - 1);
+			
+			System.out.println("startDate: " + new LocalDate(startDate).toString());
+			
+			for (int i = 0; i < sliceCount; i++) {
 
-				Thread.sleep(100);
-
-				double progress = (stepSize * i) / barLength;
-                progressBar.setProgressPercentage(progress);
+				Duration duration = new Duration(segmentMillis * i );
+				System.out.println("\t" + new LocalDate(startDate.plus(duration)));
+				
 				
 			}
 
-			progressBar.setShowProgress(false);
+			System.out.println("endDate: " + new LocalDate(endDate).toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}// END: main
-
-	static class ProgressBar extends Thread {
-
-		private static final String anim = "|/-\\";
-		private boolean showProgress;
-		double progressPercentage;
-		private final int barLength;
-		
-		public ProgressBar(int barLength) {
-            this.barLength = barLength;
-            this.showProgress = true;
-            this.progressPercentage = 0;
-		}
-
-		public void run() {
-
-			int i = 0;
-
-			while (showProgress) {
-
-				String progress ="\r";
-				int column = (int) (progressPercentage * barLength);
-				for(int j=0; j<=column;j++) {
-					progress+=("*");
-				}
-
-				System.out.print(progress + anim.charAt(i++ % anim.length()));
-
-				try {
-
-					Thread.sleep(10);
-
-				} catch (Exception e) {
-					// do nothing
-				}// END: try-catch
-
-			}// END: while
-
-		}// END: run
-
-		public void setShowProgress(boolean showProgress) {
-			this.showProgress = showProgress;
-		}
-
-		public void setProgressPercentage(double progressPercentage) {
-			this.progressPercentage = progressPercentage;
-		}
-	}// END: class
 
 }// END: class

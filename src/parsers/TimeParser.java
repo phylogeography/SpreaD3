@@ -43,7 +43,6 @@ public class TimeParser {
 		}
 
 		this.endDate = new LocalDate(year, month, day);
-
 	}// END: parseTime
 
 	public String getNodeDate(double nodeHeight) {
@@ -59,7 +58,7 @@ public class TimeParser {
 		return stringDate;
 	}// END: getNodeDate
 
-	private String[] convertToYearMonthDay(double fractionalDate) {
+	public String[] convertToYearMonthDay(double fractionalDate) {
 
 		String[] yearMonthDay = new String[3];
 

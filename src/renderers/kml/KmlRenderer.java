@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
 import kmlframework.kml.Feature;
@@ -25,7 +31,10 @@ import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
+import kmlframework.kml.TimePrimitive;
+import kmlframework.kml.TimeSpan;
 import parsers.DiscreteColorsParser;
+import parsers.TimeParser;
 import renderers.Renderer;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
@@ -304,7 +313,7 @@ public class KmlRenderer implements Renderer {
 			Line line, //
 			Map<Object, Double> valueMap, //
 			Map<String, double[]> minmaxMap //
-	) throws MissingAttributeException {
+	) throws MissingAttributeException, AnalysisException {
 
 		//TODO: make this a setting
 		int sliceCount = 10;
@@ -312,8 +321,6 @@ public class KmlRenderer implements Renderer {
 		Folder folder = new Folder();
 		String name = "";
 		String label = "";
-		
-		String startTime = line.getStartTime();
 		
 		Coordinate startCoordinate;
 		Coordinate endCoordinate;
@@ -639,10 +646,26 @@ public class KmlRenderer implements Renderer {
 		double alphaStep = (endColor.getAlpha() - startColor.getAlpha()) / sliceCount;
 
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
+		
+		
+		// TODO time intervals
+
+		
+		String startTime = line.getStartTime();
+		DateTime startDate = new DateTime(startTime);
+
+		String endTime = line.getEndTime();
+		DateTime endDate = new DateTime(endTime);
+
+		Interval interval = new Interval(startDate, endDate);
+		long millis = interval.toDurationMillis();
+		long segmentMillis = millis / (sliceCount - 1);
+		
 		for (int i = 0; i < sliceCount; i++) {
 			
-			//TODO
-			Double segmentStartTime = Double.valueOf(startTime);
+			Duration duration = new Duration(segmentMillis * i );
+			LocalDate segmentDate =  new LocalDate(startDate.plus(duration));
+			String segmentStartTime = segmentDate.toString();
 			
 			double segmentStartAltitude = a * Math.pow((double) i, 2) + b
 					* (double) i;
@@ -686,7 +709,7 @@ public class KmlRenderer implements Renderer {
 
 	private Placemark generateLineSegment(Coordinate startCoordinate, //
 			Coordinate endCoordinate, //
-			double startTime, //
+			String startTime, //
 			KmlStyle style //
 			) {
 
@@ -699,6 +722,11 @@ public class KmlRenderer implements Renderer {
 		style.setLineStyle(lineStyle);
 		
 		placemark.setStyleUrl(style.getId());
+		
+		// set time
+		TimeSpan timeSpan = new TimeSpan();
+		timeSpan.setBegin(startTime);
+		placemark.setTimePrimitive(timeSpan);
 		
 		LineString lineString = new LineString();
 		lineString.setTessellate(true);
@@ -923,9 +951,13 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}//END: generatePolygons
 
-	private Feature generatePolygon(Polygon polygon , KmlStyle style, Map<Object, Double> valueMap, 
-			Map<String, double[]> minmaxMap,
-			String label) throws MissingAttributeException {
+	// TODO: time
+	private Feature generatePolygon(Polygon polygon, //
+			KmlStyle style, //
+			Map<Object, Double> valueMap, //
+			Map<String, double[]> minmaxMap, //
+			String label //
+	) throws MissingAttributeException {
 
 		Placemark placemark = new Placemark();
 		LinearRing linearRing = new LinearRing();
@@ -1004,6 +1036,11 @@ public class KmlRenderer implements Renderer {
 			style.setPolyStyle(polyStyle);
 			placemark.setStyleUrl(style.getId());
 		}
+		
+		// set time
+		TimeSpan timeSpan = new TimeSpan();
+		timeSpan.setBegin(polygon.getStartTime());
+		placemark.setTimePrimitive(timeSpan);
 		
 		kmlframework.kml.Polygon kfPolygon = new kmlframework.kml.Polygon();
 		kfPolygon.setTessellate(true);
