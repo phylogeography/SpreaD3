@@ -12,12 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
 import kmlframework.kml.AltitudeModeEnum;
 import kmlframework.kml.Document;
 import kmlframework.kml.Feature;
@@ -31,10 +25,14 @@ import kmlframework.kml.Placemark;
 import kmlframework.kml.Point;
 import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
-import kmlframework.kml.TimePrimitive;
 import kmlframework.kml.TimeSpan;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+
 import parsers.DiscreteColorsParser;
-import parsers.TimeParser;
 import renderers.Renderer;
 import settings.rendering.KmlRendererSettings;
 import utils.Trait;
@@ -646,10 +644,6 @@ public class KmlRenderer implements Renderer {
 		double alphaStep = (endColor.getAlpha() - startColor.getAlpha()) / sliceCount;
 
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
-		
-		
-		// TODO time intervals
-
 		
 		String startTime = line.getStartTime();
 		DateTime startDate = new DateTime(startTime);

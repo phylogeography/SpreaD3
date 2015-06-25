@@ -2,8 +2,6 @@ package app;
 
 import java.util.Locale;
 
-import exceptions.ArgumentException;
-
 /**
  * @author Andrew Rambaut
  * @author Filip Bielejec

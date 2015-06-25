@@ -17,7 +17,6 @@ import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
 import data.structure.Coordinate;
 import exceptions.AnalysisException;
-import exceptions.ArgumentException;
 
 public class Utils {
 
