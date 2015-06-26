@@ -945,7 +945,6 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}//END: generatePolygons
 
-	// TODO: time
 	private Feature generatePolygon(Polygon polygon, //
 			KmlStyle style, //
 			Map<Object, Double> valueMap, //

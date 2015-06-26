@@ -11,12 +11,17 @@ public class Spread2App {
 
 	public static final boolean DEBUG = true;
 	
-	public static final String SHORT_NAME = "SPREAD2";
-	public static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics 2";
+	private static final String SHORT_NAME = "SPREAD2";
+	private static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics 2";
     private static final String VERSION = "0.0.1";
-    private static final String CODENAME = "Early beta";
+    private static final String CODENAME = "One O'Clock Gun";
     private static final String DATE_STRING = "2015";
 	
+	private static final String FILIP_BIELEJEC = "Filip Bielejec";
+	private static final String ANDREW_RAMBAUT = "Andrew Rambaut";
+	private static final String MARC_SUCHARD = "Marc A. Suchard";
+	private static final String PHILIPPE_LEMEY = "Philippe 'The Wise' Lemey";
+    
 	public static void main(String[] args) {
 		
 		 Locale.setDefault(Locale.US);
@@ -24,6 +29,7 @@ public class Spread2App {
 			if (args.length > 0) {
 				
 				Spread2ConsoleApp cli = new Spread2ConsoleApp();
+				welcomeDialog();
 				cli.run(args);
 				
 			} else {
@@ -34,4 +40,25 @@ public class Spread2App {
 
 	}//END: main
 
+	private static void welcomeDialog() {
+		
+        System.out.println();
+        centreLine(SHORT_NAME + " version " + VERSION + " (" + DATE_STRING + ")" + " -- " + CODENAME , 60);
+        centreLine(LONG_NAME, 60);
+        centreLine("Authors: " + FILIP_BIELEJEC + ", " +ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and " + PHILIPPE_LEMEY, 60);
+
+        
+        System.out.println();
+		
+	}//END: welcomeDialog
+	
+    public static void centreLine(String line, int pageWidth) {
+        int n = pageWidth - line.length();
+        int n1 = n / 2;
+        for (int i = 0; i < n1; i++) {
+            System.out.print(" ");
+        }
+        System.out.println(line);
+    }
+	
 }//END: class

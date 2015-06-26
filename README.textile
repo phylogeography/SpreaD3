@@ -228,12 +228,12 @@ h1. TODO
 * Two data modes. dd/mm/yyyy and old origin dates.
   - If no date specified everything goes to 0
 * Renderers
+  - D3 renderer
+  - GeoJSON renderer
   - control arc curvature [0 - 1]
-  - D3 renderer tool
 * Non-geographic locations (e.g. antigenic locations)
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
-* Parsers work independently (if only locations supplied then only locations will be parsed).
 * Uncaught exception handler (for bug reports).
 * Processing large tree distributions on GPUs. Write a small library and JNI to it.  
 
