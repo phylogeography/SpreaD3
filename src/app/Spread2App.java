@@ -2,6 +2,8 @@ package app;
 
 import java.util.Locale;
 
+import utils.FortuneCookies;
+
 /**
  * @author Andrew Rambaut
  * @author Filip Bielejec
@@ -46,7 +48,7 @@ public class Spread2App {
         centreLine(SHORT_NAME + " version " + VERSION + " (" + DATE_STRING + ")" + " -- " + CODENAME , 60);
         centreLine(LONG_NAME, 60);
         centreLine("Authors: " + FILIP_BIELEJEC + ", " +ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and " + PHILIPPE_LEMEY, 60);
-
+        centreLine(FortuneCookies.nextCookie(), 60);
         
         System.out.println();
 		
