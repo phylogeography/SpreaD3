@@ -60,9 +60,20 @@ public class FortuneCookies {
 "Homer no function beer well without -- Homer Simpson", //
 "Pffft. Who needs English? I'm never going to England -- Homer Simpson", //
 
+//---STARCRAFT ---//
 
+"Y'all need some good ol' fashioned discipline -- Edmund Duke", //
+"Is something burning?",// -- Firebat", //
+"Somebody call for an exterminator?",// -- Ghost", //
+"I'm about to overload my aggression inhibitors",// -- Ghost", //
+"I vote we frag this commander",// -- Marine",
+"Need medical attention?", //			
+"Nuclear launch detected", //
 
-			
+//---GANG ALBANII ---//
+
+"habarala habarala hesk -- Popek"
+
 	};
 
 	public static String nextCookie() {

@@ -96,8 +96,8 @@ public class Spread2ConsoleApp {
 	private static final String POLYGON_ALPHA_MAPPING = "polygonalphamapping";
 	private static final String POLYGON_ALPHA = "polygonalpha";
 
-	private static final String POLYGON_RADIUS = "polygonradius";
-	private static final String POLYGON_RADIUS_MAPPING = "polygonradiusmapping";
+	private static final String POLYGON_AREA = "polygonarea";
+	private static final String POLYGON_AREA_MAPPING = "polygonradiusmapping";
 
 	private static final String LINE_COLOR_MAPPING = "linecolormapping";
 	private static final String LINE_COLORS = "linecolors";
@@ -317,13 +317,13 @@ public class Spread2ConsoleApp {
 
 						// ---POLYGON RADIUS---//
 
-						new Arguments.RealOption(POLYGON_RADIUS,
-								"specify polygon radius. Makes sense only for polygons with locations."),
+						new Arguments.RealOption(POLYGON_AREA,
+								"specify circular polygons area. Makes sense only for polygons with locations."),
 
 						new Arguments.StringOption(
-								POLYGON_RADIUS_MAPPING,
+								POLYGON_AREA_MAPPING,
 								"",
-								"attribute to map radius aesthetic. Only makes sense for polygons with locations."),
+								"attribute to map circular polygons area aesthetic. Only makes sense for polygons with locations."),
 
 						new Arguments.StringOption(LINES_SUBSET, "",
 								"attribute to select a subset of values above the certain cutoff."),
@@ -1071,19 +1071,19 @@ public class Spread2ConsoleApp {
 
 					// ---POLYGON RADIUS---//
 
-					if (kmlRenderArguments.hasOption(POLYGON_RADIUS_MAPPING)) {
+					if (kmlRenderArguments.hasOption(POLYGON_AREA_MAPPING)) {
 
-						settings.kmlRendererSettings.polygonRadiusMapping = kmlRenderArguments
-								.getStringOption(POLYGON_RADIUS_MAPPING);
+						settings.kmlRendererSettings.polygonAreaMapping = kmlRenderArguments
+								.getStringOption(POLYGON_AREA_MAPPING);
 
-					} else if (kmlRenderArguments.hasOption(POLYGON_RADIUS)) {
+					} else if (kmlRenderArguments.hasOption(POLYGON_AREA)) {
 
-						settings.kmlRendererSettings.polygonRadius = kmlRenderArguments
-								.getRealOption(POLYGON_RADIUS);
+						settings.kmlRendererSettings.polygonArea = kmlRenderArguments
+								.getRealOption(POLYGON_AREA);
 
 					} else if (kmlRenderArguments
-							.hasOption(POLYGON_RADIUS_MAPPING)
-							&& kmlRenderArguments.hasOption(POLYGON_RADIUS)) {
+							.hasOption(POLYGON_AREA_MAPPING)
+							&& kmlRenderArguments.hasOption(POLYGON_AREA)) {
 
 						throw new ArgumentException(
 								"Can't both map and have a defined polygon radius!");

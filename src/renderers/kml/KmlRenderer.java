@@ -968,15 +968,15 @@ public class KmlRenderer implements Renderer {
 			
 			int numPoints = 36;
 			
-			double radius = settings.polygonRadius;
-			if (this.settings.polygonRadiusMapping != null) { // map
+			double area = settings.polygonArea;
+			if (this.settings.polygonAreaMapping != null) { // map
 				
-				double[] minmax = minmaxMap.get(settings.polygonRadiusMapping);
+				double[] minmax = minmaxMap.get(settings.polygonAreaMapping);
 				double minValue = minmax[MIN_INDEX];	
 				double maxValue = minmax[MAX_INDEX];
 				
 				Trait trait = polygon.getAttributes().get(
-						settings.polygonRadiusMapping);
+						settings.polygonAreaMapping);
 				
 				if (trait == null) {
 					if (polygon.hasLocation()) {
@@ -985,27 +985,27 @@ public class KmlRenderer implements Renderer {
 				}
 				
 				if(trait == null) {
-					throw new MissingAttributeException(settings.polygonRadiusMapping, MissingAttributeException.POLYGON);
+					throw new MissingAttributeException(settings.polygonAreaMapping, MissingAttributeException.POLYGON);
 				}
 				
 				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 				
 				if (polygonRadiusMap.containsKey(key)) {
 
-					radius = polygonRadiusMap.get(key);
+					area = polygonRadiusMap.get(key);
 					
 				} else {
 
 					Double value = valueMap.get(key);
-					radius = map(value, minValue, maxValue, settings.minPolygonRadius, settings.maxPolygonRadius);
+					area = map(value, minValue, maxValue, settings.minPolygonArea, settings.maxPolygonRadius);
 					
 				}// END: key check
 				
-				label += (", radius[" + settings.polygonRadiusMapping + "="+key.toString()+"]");
+				label += (", radius[" + settings.polygonAreaMapping + "="+key.toString()+"]");
 				
 			} // END: settings check
 			
-			points.addAll(generateCircle(centroid, radius, numPoints));
+			points.addAll(generateCircle(centroid, area, numPoints));
 			
 		} else {
 			
@@ -1045,8 +1045,10 @@ public class KmlRenderer implements Renderer {
 		return placemark;
 	}//END: generatePolygon
 	
-	private  List<Point> generateCircle(Location centroid, double radius, int numPoints) {
+	private  List<Point> generateCircle(Location centroid, double area, int numPoints) {
 
+		double radius = Math.sqrt(area/Math.PI);
+		
 		Double latitude = centroid.getCoordinate().getLatitude();
 		Double longitude = centroid.getCoordinate().getLongitude();
 				

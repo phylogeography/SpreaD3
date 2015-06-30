@@ -225,12 +225,14 @@ h1. LICENSE
 
 h1. TODO
 
-* Two data modes. dd/mm/yyyy and old origin dates.
+* Date-time calculations
   - If no date specified everything goes to 0
+  - parse decimal dates as MRSD (i.e. 2011.653)
 * Renderers
   - D3 renderer
   - GeoJSON renderer
-  - control arc curvature [0 - 1]
+  - KML renderers
+    - control arc curvature [0 - 1]
 * Non-geographic locations (e.g. antigenic locations)
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
