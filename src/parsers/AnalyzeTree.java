@@ -61,7 +61,7 @@ public class AnalyzeTree implements Runnable {
 
 					Double nodeHeight = Utils.getNodeHeight(rootedTree, node);
 
-					double rate = (double) Utils.getObjectNodeAttribute(node,
+					Double rate = (Double) Utils.getObjectNodeAttribute(node,
 							Utils.RATE);
 
 					for (String traitName : traits) {

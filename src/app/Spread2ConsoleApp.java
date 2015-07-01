@@ -900,6 +900,9 @@ public class Spread2ConsoleApp {
 					gracefullyExit(e.getMessage(), args4, e);
 				} catch (AnalysisException e) {
 					gracefullyExit(e.getMessage(), args4, e);
+				} catch(UnsupportedClassVersionError e) {
+					String message = "Java version found " + System.getProperty("java.version") + " is too old. Please update";
+					gracefullyExit(message, args4, new AnalysisException(e.getMessage()));
 				}
 
 				System.out.println("Created JSON file");

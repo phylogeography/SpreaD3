@@ -29,7 +29,7 @@ public class FortuneCookies {
 "Fine", //
 "Ice cream soup", //
 "Making fun of someones name is pretty immature", //
-
+"Gobbledegook", //
 
 //---INSERT BENDER QUOTES HERE---//
 
@@ -72,7 +72,12 @@ public class FortuneCookies {
 
 //---GANG ALBANII ---//
 
-"habarala habarala hesk -- Popek"
+"habarala habarala hesk -- Popek",
+
+//--- ACTION BRONSON ---//
+"Eat burgers, they're good for you -- Action Bronson",
+"I question your mother's upbringing if you don't like me  -- Action Bronson"
+
 
 	};
 

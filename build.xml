@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SPREAD" default="help" basedir=".">
+
+   <property name="build.sysclasspath" value="last" />
+   <property name="Main-Class" value="app.Spread2App" />
+   <property name="JDK_VERSION" value="1.6" />
+   <property name="src" location="src"/>
+   <property name="buildDir" location="classes" />
+   <property name="dist" location="dist" />
+   <property name="lib" location="lib" />
+   <property name="report" location="${buildDir}/junitreport" />
+
+
+   <target name="help">
+      <echo message="Common build targets:" />
+      <echo message="jar - Builds spread.jar" />
+      <echo message="build - Same as clean+jar" />
+      <echo message="compile - Compiles spread classes" />
+      <echo message="clean - Remove all *.class and spread.jar" />
+   </target>
+
+
+   <path id="classpath">
+      <pathelement path="." />
+      <fileset dir="${lib}">
+         <include name="*.jar" />
+      </fileset>
+      <pathelement location="." />
+   </path>
+
+
+   <target name="build" depends="clean,jar" />
+
+
+   <target name="jar" depends="compile">
+      <mkdir dir="${dist}" />
+      
+      <!-- TODO: parse version from main and append here -->
+      <jar jarfile="${dist}/spread2_0.0.1.jar">
+
+         <manifest>
+            <attribute name="Built-By" value="${user.name}" />
+            <attribute name="Main-Class" value="${Main-Class}" />
+            <!--<attribute name="Classpath" value="." />-->
+         </manifest>
+
+         <fileset dir="${buildDir}" />
+         <zipgroupfileset dir="${lib}" includes="colt.jar" />
+         <zipgroupfileset dir="${lib}" includes="gson-2.3.1.jar" />
+         <zipgroupfileset dir="${lib}" includes="jebl.jar" />
+         <zipgroupfileset dir="${lib}" includes="joda-time-2.7.jar" />
+
+      </jar>
+   </target>
+
+   <target name="compile">
+      <mkdir dir="${buildDir}" />
+<!--
+      <mkdir dir="${buildDir}/icons" />
+      <mkdir dir="${buildDir}/colorpicker/swing/resources" />
+-->
+      <javac source="1.6" target="1.6" srcdir="${src}" destdir="classes" classpathref="classpath" />
+
+      <!--copy resources 
+      <copy todir="${buildDir}/icons">
+         <fileset dir="${src}/icons">
+            <include name="**/*.png" />
+         </fileset>
+      </copy>
+
+      <copy todir="${buildDir}/colorpicker/swing/resources">
+         <fileset dir="${src}/colorpicker/swing/resources">
+            <include name="**/*.properties" />
+         </fileset>
+      </copy>
+
+      <copy file="${src}/templates/world_map.png" todir="classes/templates" />
+-->
+
+   </target>
+
+   <target name="clean">
+      <delete dir="${buildDir}" />
+      <delete dir="${dist}" />
+   </target>
+
+	<!-- JUnit test 
+	<target name="junit" depends="compile">
+		<mkdir dir="${report}" />
+		<junit printsummary="yes">
+			<classpath>
+				<path refid="classpath" />
+				<path location="${buildDir}" />
+			</classpath>
+
+			<formatter type="xml" />
+
+			<batchtest fork="yes" todir="${report}">
+				<fileset dir="${src}">
+					<include name="test/**/*Test.java" />
+                    <exclude name="test/templates/SpatialStatsToTerminalTest.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<echo message="JUnit test finished." />
+	</target>
+
+	<target name="junitreport">
+		<junitreport todir="${report}">
+			<fileset dir="${report}" includes="*.xml" />
+			<report format="frames" todir="${report}" />
+		</junitreport>
+		<echo message="JUnit test report finished." />
+	</target>
+-->
+</project>
+
