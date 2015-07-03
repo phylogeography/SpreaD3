@@ -77,10 +77,23 @@ public class ContinuousTreeLinesParser {
 
 						Trait parentTrait = Utils.getNodeTrait(parentNode, traitName); 
 						attributes.put(Utils.START + traitName, parentTrait);
+						
+						// corner f*****g case,  tip nodes are not annotated with posterior probabilities
+						// but they will be annotated with other traits. Math.pow(Facepalm, 2).
+						if (traitName.equalsIgnoreCase(Utils.POSTERIOR) && rootedTree.isExternal(node)) {
 
-						Trait nodeTrait = Utils.getNodeTrait(node, traitName); 
-						attributes.put(Utils.END + traitName, nodeTrait);
+							// putting 1 there because what else
+							Trait nodeTrait = new Trait(1.0);
+							attributes.put(Utils.END + traitName, nodeTrait);
 
+						} else {
+							
+							Trait nodeTrait = Utils.getNodeTrait(node,
+									traitName);
+							attributes.put(Utils.END + traitName, nodeTrait);
+							
+						}//END: stupid case check
+						
 					}// END: traits loop
 				}// END: null check
 

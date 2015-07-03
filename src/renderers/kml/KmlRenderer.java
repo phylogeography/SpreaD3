@@ -254,6 +254,7 @@ public class KmlRenderer implements Renderer {
 	    // Second lines loop does the actual rendering
 		for (Line line : lines) {
 
+			// TODO: process includes also for maps, otherwise mapping can be off
 			boolean include = true;
 			if (this.settings.linesSubset != null) {
 
@@ -736,7 +737,7 @@ public class KmlRenderer implements Renderer {
 	
 	// ---POLYGONS---//
 
-	 public Feature generatePolygons(List<Polygon> polygons) throws IOException, MissingAttributeException {
+	 public Feature generatePolygons(List<Polygon> polygons) throws IOException, MissingAttributeException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("polygons");
@@ -930,9 +931,70 @@ public class KmlRenderer implements Renderer {
 				styles.add(style);
 			}
 			
+			
+			
+			
+			//TODO: polygons cutoff also when processing maps
+			///////////////////////////
+			
+			boolean include = true;
+			if (this.settings.polygonsSubset != null) {
+
+				Trait subsetTrait = polygon.getAttributes().get( settings.polygonsSubset);
+				if (subsetTrait == null) {
+					throw new MissingAttributeException(settings.linesSubset,
+							MissingAttributeException.POLYGON);
+				}//END: null check
+				
+				if (settings.polygonsCutoff != null) {
+
+					if (subsetTrait.isNumber()) {
+
+						if (subsetTrait.getValue()[0] < settings.polygonsCutoff) {
+							include = false;
+						}// END: cutoff check
+
+					} else {
+
+						throw new AnalysisException(
+								"Cutoff attribute has a non-numeric value!");
+					}// END: isNumber check
+
+				} else if (settings.polygonsValue != null) {
+
+					if (subsetTrait.isNumber()) {
+
+						if (subsetTrait.getValue()[0] != Double.valueOf(settings.polygonsValue)) {
+							include = false;
+						}// END: cutoff check
+
+					} else {
+
+						if ((String) subsetTrait.getId() != settings.polygonsValue) {
+							include = false;
+						}// END: cutoff check
+						
+					}// END: isNumber check
+					
+				} else {
+
+					throw new RuntimeException(
+							"Should never get here!");
+					
+				}//END: settings check			
+				
+			}//END: subset check
+
+			
+			
+			//////////////////////////
+			
+			if(include) {
 			Feature feature = generatePolygon(polygon, style, valueMap, minmaxMap,
 					label);
 			folder.addFeature(feature);
+			}//END: include check
+			
 		}// END: polygons loop
 		
 		return folder;

@@ -116,8 +116,11 @@ public class KmlRendererSettings {
 	// Fixed
 	public Double polygonArea = 20000.0;
 	
+	// ---SUBSETTING---//
 	
-	
+	public String polygonsSubset = null;
+	public Double polygonsCutoff = null;
+	public String polygonsValue = null;
 	
 	
 }//END: class

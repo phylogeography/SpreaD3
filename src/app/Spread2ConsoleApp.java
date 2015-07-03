@@ -88,7 +88,10 @@ public class Spread2ConsoleApp {
 	private static final String LINES_VALUE = "linesValue";
 
 	// TODO: polygon cutoffs
-
+	private static final String POLYGONS_SUBSET = "polygonsSubset";
+	private static final String POLYGONS_CUTOFF = "polygonsCutoff";
+	private static final String POLYGONS_VALUE = "polygonsValue";
+	
 	private static final String POLYGON_COLOR_MAPPING = "polygoncolormapping";
 	private static final String POLYGON_COLORS = "polygoncolors";
 	private static final String POLYGON_COLOR = "polygoncolor";
@@ -334,6 +337,15 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(LINES_VALUE, "",
 								"specify fixed value to create a subset"),
 
+								new Arguments.StringOption(POLYGONS_SUBSET, "",
+										"attribute to select a subset of values above the certain cutoff."),
+
+								new Arguments.RealOption(POLYGONS_CUTOFF,
+										"specify cutoff value to create a subset"),
+
+								new Arguments.StringOption(POLYGONS_VALUE, "",
+										"specify fixed value to create a subset"),		
+								
 				});
 
 		geojsonRenderArguments = new Arguments(new Arguments.Option[] {
@@ -1076,7 +1088,7 @@ public class Spread2ConsoleApp {
 
 					}
 
-					// ---POLYGON RADIUS---//
+					// ---POLYGON AREA---//
 
 					if (kmlRenderArguments.hasOption(POLYGON_AREA_MAPPING)) {
 
@@ -1101,6 +1113,33 @@ public class Spread2ConsoleApp {
 
 					}
 
+					
+					// ---POLYGONS SUBSET---//
+
+					if (kmlRenderArguments.hasOption(POLYGONS_SUBSET)) {
+
+						settings.kmlRendererSettings.polygonsSubset = kmlRenderArguments
+								.getStringOption(POLYGONS_SUBSET);
+
+						if (kmlRenderArguments.hasOption(POLYGONS_CUTOFF)) {
+
+							settings.kmlRendererSettings.polygonsCutoff = kmlRenderArguments
+									.getRealOption(POLYGONS_CUTOFF);
+
+						} else if (kmlRenderArguments.hasOption(POLYGONS_VALUE)) {
+
+							settings.kmlRendererSettings.polygonsValue = kmlRenderArguments
+									.getStringOption(POLYGONS_VALUE);
+
+						} else {
+
+							throw new ArgumentException(
+									"Can't create a subset from these options!");
+
+						}
+
+					}// END: option check
+					
 					// ---LINE COLOR---//
 
 					if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)) {

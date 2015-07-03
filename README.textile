@@ -20,7 +20,7 @@ h3. CONTINUOUS TREE
 h3. PARSING
 
 * parse two traits
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -traits trait1,trait2 -mrsd 2011-01-01 -output test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host,posterior -mrsd 2011-01-01 -output test.json
 
 * parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011-01-01 -output test_host.json
@@ -49,6 +49,10 @@ h4. POLYGONS
 
 * map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -output test.kml
+
+# TODO
+* polygons cutoff
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonsSubset posterior -polygonsCutoff 5 -output test.kml
 
 h4. LINES
 
@@ -197,7 +201,7 @@ h3. PARSING
 * parse overriding default settings
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
 
-* parse other numerical traits for imputing
+* parse other numerical 2D traits for imputing
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,trait2 -hpd 0.8 -intervals 20 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
 
 * mrsd in decimal format
@@ -217,8 +221,10 @@ h3. MANIPULATING JSON OUTPUT
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -locationTrait location -hpd 95 -mrsd 2011-01-01 -output test_continuous.json
 
 * read polygons and lines, merge
--read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous -output test_merge.json
+-read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous.json -output test_merge.json
 
+* render, default settings
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_merge.json -output test.kml
 
 h1. LICENSE
 
@@ -245,7 +251,7 @@ h1. TODO
     - control arc curvature [0 - 1]
 * Write tests    
 * Non-geographic locations (e.g. antigenic locations)
-* parsing BEAST2 and MrBayes output
+* parsing BEAST2 and MrBayes output [separate parsers]
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
 * Uncaught exception handler (for bug reports).
