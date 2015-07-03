@@ -25,6 +25,6 @@ public class DiscreteTreeSettings {
 	public String output = "output.json";
 
 	// moste recent sampling date string yyy-MM-dd
-	public String mrsd = null;
+	public String mrsd = "0-0-0";
 	
 }//END: class

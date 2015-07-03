@@ -18,7 +18,7 @@ public class MissingAttributeException extends Exception {
 
 	@Override
 	public String getMessage() {
-		String message = "Attribute " + attributeName + " missing from "  +  name +" attributes";
+		String message = "Attribute " + attributeName + " missing from "  +  name + " attributes";
 		return message;
 	}
 	

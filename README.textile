@@ -93,6 +93,9 @@ h3. PARSING
 * cut into 10 discrete time intervals
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011-01-01 -output test_discrete.json
 
+* mrsd in decimal format
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011.653 -output test_discrete.json
+
 h3. RENDERING
 
 * use all default settings
@@ -118,47 +121,47 @@ h4. POLYGONS
 * map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -output test.kml
 
-* override default polygon radius (in KM) settings: 
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradius 200 -output test.kml
+* override default polygon area (in KM^2) settings: 
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonarea 200000 -output test.kml
 
-* map polygon radius to count attribute values
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping count -output test.kml
+* map polygon area to count attribute values
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping count -output test.kml
 
-* map polygon radius to location attribute values
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -output test.kml
+* map polygon area to location attribute values
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -output test.kml
 
 
 h4. LINES
 
 * override default line color settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolor 250 0 0 -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolor 250 0 0 -output test.kml
 
 * map line colors to distance attribute values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping distance -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping distance -output test.kml
 
 * map line colors to locations, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
 
 * specify alpha channel for lines, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 150 -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 150 -output test.kml
 
 * map alpha channel for lines to duration attribute values, this option overwrites all previous settings, including those in color sheet. Duration attribute applies to a whole branch and colors are not interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping duration -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping duration -output test.kml
 
 * map alpha channel for lines to locations, this option overwrites all previous settings, including those in color sheet. For lines which change location line alpha will be interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -output test.kml
 
 * override default line width settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -linewidth 3 -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -linewidth 3 -output test.kml
 
 * map lines width to duration attribute values. Width can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -output test.kml
 
 * override default line altitude settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitude 100000 -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitude 100000 -output test.kml
 
 * map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonradiusmapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
 
 
 h3. BAYES FACTORS
@@ -197,6 +200,9 @@ h3. PARSING
 * parse other numerical traits for imputing
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,trait2 -hpd 0.8 -intervals 20 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
 
+* mrsd in decimal format
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -mrsd 2011.653 -output test_slice.json
+
 h3. RENDERING
 
 * use all default settings
@@ -230,13 +236,13 @@ h1. TODO
 
 * Date-time calculations
   - time scale multiplier
-  - If no date specified everything goes to 0
 * Renderers
   - D3 renderer
   - GeoJSON renderer
-  - KML renderers
+  - KML renderer
     - control arc curvature [0 - 1]
 * Non-geographic locations (e.g. antigenic locations)
+* parsing BEAST2 and MrBayes output
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
 * Uncaught exception handler (for bug reports).

@@ -350,6 +350,10 @@ public class KmlRenderer implements Renderer {
 		if (this.settings.lineColorMapping != null) { // map
 
 			double[] minmax = minmaxMap.get(settings.lineColorMapping);
+			if(minmax == null) {
+				throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
+			}
+			
 			double minValue = minmax[MIN_INDEX];
 			double maxValue = minmax[MAX_INDEX];
 			
@@ -359,6 +363,7 @@ public class KmlRenderer implements Renderer {
 				startTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
 			}
 			
+			// Discrete lines have start and end locations
 			if (startTrait == null) {
 				if (line.connectsLocations()) {
 					startTrait = new Trait(line.getStartLocation().getId());
@@ -404,6 +409,7 @@ public class KmlRenderer implements Renderer {
 				endTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
 			}
 			
+			// Discrete lines have start and end locations
 			if (endTrait == null) {
 				if (line.connectsLocations()) {
 					endTrait = new Trait(line.getEndLocation().getId());
@@ -645,8 +651,6 @@ public class KmlRenderer implements Renderer {
 
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 		
-		//TODO: move date-time calculations to TimeParser [!]
-		
 		String startTime = line.getStartTime();
 		DateTime startDate = new DateTime(startTime);
 
@@ -763,6 +767,8 @@ public class KmlRenderer implements Renderer {
 			
 			Map<String, Trait> attributes = polygon.getAttributes();
 			
+//			Utils.printMap(attributes);
+			
 			Iterator<?> it = attributes.entrySet().iterator();
 			
 			while (it.hasNext()) {
@@ -791,6 +797,8 @@ public class KmlRenderer implements Renderer {
 				}//END: contains check
 				
 				String traitName = (String) pairs.getKey();				
+				
+//				System.out.println(traitName);
 				
 				if(!minmaxMap.containsKey(traitName)) {
 					
@@ -840,6 +848,10 @@ public class KmlRenderer implements Renderer {
 			if (this.settings.polygonColorMapping != null) {// map
 
 				double[] minmax = minmaxMap.get(settings.polygonColorMapping);
+				if(minmax == null) {
+					throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
+				}
+				
 				double minValue = minmax[MIN_INDEX];	
 				double maxValue = minmax[MAX_INDEX];
 				
@@ -1007,6 +1019,8 @@ public class KmlRenderer implements Renderer {
 				
 			} // END: settings check
 			
+//			System.out.println(centroid.getId()  + ": " + area);
+			
 			points.addAll(generateCircle(centroid, area, numPoints));
 			
 		} else {
@@ -1050,6 +1064,8 @@ public class KmlRenderer implements Renderer {
 	private  List<Point> generateCircle(Location centroid, double area, int numPoints) {
 
 		double radius = Math.sqrt(area/Math.PI);
+		
+//		System.out.println(centroid.getId()  + ": " + radius);
 		
 		Double latitude = centroid.getCoordinate().getLatitude();
 		Double longitude = centroid.getCoordinate().getLongitude();

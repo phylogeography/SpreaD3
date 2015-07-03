@@ -142,6 +142,9 @@ public class DiscretePolygonsParser {
 						}// END: traits loop
 					}// END: null check
 					
+					Trait locationTrait = new Trait(location.getId());
+					attributes.put(LOCATION, locationTrait);
+					
 					Trait countTrait = new Trait(locationCount);
 					attributes.put(COUNT, countTrait);
 					

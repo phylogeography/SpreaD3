@@ -108,13 +108,13 @@ public class KmlRendererSettings {
 	
 	// For continuous attributes
 	public String polygonAreaMapping= null;
-	public Double minPolygonArea = 100.0; public Double maxPolygonRadius = 1000.0;
+	public Double minPolygonArea = 20000.0; public Double maxPolygonRadius = 200000.0;
 	
 	// For discrete attributes
-    //TODO: file with radius, make a joint CSS style sheet for all these settings
+    //TODO: make a joint CSS [?] style sheet for all these settings
 	
 	// Fixed
-	public Double polygonArea = 100.0;
+	public Double polygonArea = 20000.0;
 	
 	
 	

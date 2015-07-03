@@ -49,10 +49,11 @@ public class DiscreteTreeParser {
 
 		System.out.println("Parsing lines");
 		
-		DiscreteLinesParser linesParser = new DiscreteLinesParser(rootedTree, //
+		DiscreteTreeLinesParser linesParser = new DiscreteTreeLinesParser(rootedTree, //
 				settings.locationTrait, //
 				locationsList, //
-				settings.traits //
+				settings.traits, //
+				settings.mrsd //
 		);
 
 		linesList = linesParser.parseLines();

@@ -38,6 +38,6 @@ public class TimeSlicerSettings {
 	public String output = "output.json";
 
 	// most recent sampling date yyy/mm/dd
-	public String mrsd = null;
+	public String mrsd = "0-0-0";
 	
 }//END: class

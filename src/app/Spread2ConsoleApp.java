@@ -97,7 +97,7 @@ public class Spread2ConsoleApp {
 	private static final String POLYGON_ALPHA = "polygonalpha";
 
 	private static final String POLYGON_AREA = "polygonarea";
-	private static final String POLYGON_AREA_MAPPING = "polygonradiusmapping";
+	private static final String POLYGON_AREA_MAPPING = "polygonareamapping";
 
 	private static final String LINE_COLOR_MAPPING = "linecolormapping";
 	private static final String LINE_COLORS = "linecolors";
