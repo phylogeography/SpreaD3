@@ -25,6 +25,9 @@ h3. PARSING
 * parse one trait
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011-01-01 -output test_host.json
 
+* mrsd in decimal format
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011.653 -output test_host.json
+
 h3. RENDERING
 
 * use all default settings
@@ -221,13 +224,13 @@ h1. LICENSE
    This software is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   "GNU Lesser General Public License":http://www.gnu.org/licenses/lgpl.html for more details.
+   "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
 h1. TODO
 
 * Date-time calculations
+  - time scale multiplier
   - If no date specified everything goes to 0
-  - parse decimal dates as MRSD (i.e. 2011.653)
 * Renderers
   - D3 renderer
   - GeoJSON renderer

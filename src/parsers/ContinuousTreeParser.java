@@ -35,6 +35,8 @@ public class ContinuousTreeParser {
 
 		// ---PARSE AND FILL STRUCTURES---//
 
+		System.out.println("Parsing lines");
+		
 		ContinuousTreeLinesParser linesParser = new ContinuousTreeLinesParser(
 				rootedTree, //
 				settings.locationTrait, //
@@ -46,6 +48,8 @@ public class ContinuousTreeParser {
 
 		System.out.println("Parsed lines");
 
+		System.out.println("Parsing polygons");
+		
 		ContinuousTreePolygonsParser polygonsParser = new ContinuousTreePolygonsParser(
 				rootedTree, //
 				settings.locationTrait, //

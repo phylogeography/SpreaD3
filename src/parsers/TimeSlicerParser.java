@@ -18,7 +18,6 @@ import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
 import exceptions.AnalysisException;
-import exceptions.ArgumentException;
 
 public class TimeSlicerParser {
 
@@ -44,6 +43,8 @@ public class TimeSlicerParser {
 
 		// ---PARSE AND FILL STRUCTURES---//
 
+		System.out.println("Parsing polygons");
+		
 		TimeSlicerPolygonsParser polygonsParser = new TimeSlicerPolygonsParser(
 				rootedTree, //
 				treesImporter, //

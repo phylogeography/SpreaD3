@@ -47,6 +47,8 @@ public class DiscreteTreeParser {
 
 		System.out.println("Parsed locations");
 
+		System.out.println("Parsing lines");
+		
 		DiscreteLinesParser linesParser = new DiscreteLinesParser(rootedTree, //
 				settings.locationTrait, //
 				locationsList, //
@@ -57,6 +59,8 @@ public class DiscreteTreeParser {
 
 		System.out.println("Parsed lines");
 
+		System.out.println("Parsing polygons");
+		
 		DiscretePolygonsParser polygonsParser = new DiscretePolygonsParser(
 				rootedTree, //
 				settings.locationTrait, //

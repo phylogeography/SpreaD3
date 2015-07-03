@@ -160,7 +160,7 @@ public class Spread2ConsoleApp {
 								"number of time intervals"),
 
 						new Arguments.StringOption(MRSD, "",
-								"most recent sampling date [yyyy/mm/dd]"),
+								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
 						new Arguments.StringArrayOption(TRAITS, -1, "",
 								"traits to be parsed from nodes"),
@@ -195,8 +195,8 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(HPD, "",
 								"hpd interval attribute name"),
 
-						new Arguments.StringOption(MRSD, "",
-								"most recent sampling date [yyyy/mm/dd]"),
+								new Arguments.StringOption(MRSD, "",
+										"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
 						new Arguments.StringArrayOption(TRAITS, -1, "",
 								"traits to be parsed from nodes"),
@@ -226,8 +226,8 @@ public class Spread2ConsoleApp {
 						new Arguments.IntegerOption(INTERVALS,
 								"number of time intervals for slicing"),
 
-						new Arguments.StringOption(MRSD, "",
-										"most recent sampling date [yyyy/mm/dd]"),			
+								new Arguments.StringOption(MRSD, "",
+										"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),	
 								
 						new Arguments.IntegerOption(BURNIN,
 								"how many trees to discard as burn-in (in # trees)"),
@@ -771,6 +771,10 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), args3, e);
 
+				} catch (NumberFormatException e) {
+					
+					gracefullyExit(e.getMessage(), args3, e);
+					
 				}// END: try-catch block
 
 				System.out.println("Created JSON file");

@@ -47,9 +47,11 @@ public class Spread2App {
         System.out.println();
         centreLine(SHORT_NAME + " version " + VERSION + " (" + DATE_STRING + ")" + " -- " + CODENAME , 60);
         centreLine(LONG_NAME, 60);
-        centreLine("Authors: " + FILIP_BIELEJEC + ", " +ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and " + PHILIPPE_LEMEY, 60);
-        centreLine(FortuneCookies.nextCookie(), 60);
+        centreLine("Authors: " + FILIP_BIELEJEC + ", " + ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and " + PHILIPPE_LEMEY, 60);
+        centreLine("Thanks to: Stephan Nylinder " + "", 60);
         
+        System.out.println();        
+        centreLine(FortuneCookies.nextCookie(), 60);
         System.out.println();
 		
 	}//END: welcomeDialog

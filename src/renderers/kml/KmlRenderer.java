@@ -645,6 +645,8 @@ public class KmlRenderer implements Renderer {
 
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 		
+		//TODO: move date-time calculations to TimeParser [!]
+		
 		String startTime = line.getStartTime();
 		DateTime startDate = new DateTime(startTime);
 

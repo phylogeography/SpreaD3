@@ -22,24 +22,56 @@ public class TimeParser {
 		Integer year = 0;
 		Integer month = 0;
 		Integer day = 0;
-		String[] endDateFields = mrsd.split("-");
-		if (endDateFields.length == 3) {
-
+		
+		String[] endDateFields;
+		if(mrsd.contains(".")) {
+			
+			endDateFields = convertToYearMonthDay(Double.valueOf(mrsd));			
+			
 			year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
 			month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
 			day = Integer.valueOf(endDateFields[Utils.DAY_INDEX]);
 
-		} else if (endDateFields.length == 2) {
+			System.out.println("MRSD in a decimal date format and corresponds to: " + year +"-" + month + "-" + day);
+			
+		} else if(mrsd.contains("-")) {
+			
+			endDateFields = mrsd.split("-");
+			if (endDateFields.length == 3) {
 
-			year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
-			month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
+				year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
+				month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
+				day = Integer.valueOf(endDateFields[Utils.DAY_INDEX]);
 
-		} else if (endDateFields.length == 1) {
+			} else if (endDateFields.length == 2) {
 
-			year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
+				year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
+				month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
 
+			} else if (endDateFields.length == 1) {
+
+				year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
+
+			} else {
+				throw new AnalysisException("Unrecognised date format " + this.mrsd);
+			}
+			
+			System.out.println("MRSD is in a daytime format: " + year +"-" + month + "-" + day);
+			
 		} else {
-			throw new AnalysisException("Unrecognised date format " + this.mrsd);
+			
+			throw new AnalysisException("Unrecognised MRSD format " + this.mrsd);
+			
+		}//END: format check
+		
+		// joda monthOfYear must be [1,12] 
+		if(month == 0) {
+			month = 1;
+		}
+
+		// joda dayOfMonth must be [1,31] 
+		if(day == 0) {
+			day = 1;
 		}
 
 		this.endDate = new LocalDate(year, month, day);

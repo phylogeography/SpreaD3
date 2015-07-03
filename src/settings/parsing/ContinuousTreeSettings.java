@@ -16,7 +16,7 @@ public class ContinuousTreeSettings {
 	//---OPTIONAL---//
 
 	// most recent sampling date yyy/mm/dd
-	public String mrsd = null;
+	public String mrsd = "0-0-0";
 	
 	// node trait attribute names
 	public String[] traits = null;
