@@ -233,21 +233,21 @@ public class KmlRenderer implements Renderer {
 			}//END: iterate
 			
             // Discrete lines connect Locations, need to process them too for mapping		
-			if (line.connectsLocations()) {
-
-				Object traitStartValue = line.getStartLocation().getId();
-				if (!valueMap.containsKey(traitStartValue)) {
-					valueMap.put(traitStartValue, factorValue);
-					factorValue++;
-				}// END: contains check
-
-				Object traitEndValue = line.getEndLocation().getId();
-				if (!valueMap.containsKey(traitEndValue)) {
-					valueMap.put(traitEndValue, factorValue);
-					factorValue++;
-				}// END: contains check
-				
-			}//END: connects check
+//			if (line.connectsLocations()) {
+//
+//				Object traitStartValue = line.getStartLocation().getId();
+//				if (!valueMap.containsKey(traitStartValue)) {
+//					valueMap.put(traitStartValue, factorValue);
+//					factorValue++;
+//				}// END: contains check
+//
+//				Object traitEndValue = line.getEndLocation().getId();
+//				if (!valueMap.containsKey(traitEndValue)) {
+//					valueMap.put(traitEndValue, factorValue);
+//					factorValue++;
+//				}// END: contains check
+//				
+//			}//END: connects check
 			
 	    }//END: lines loop
 
@@ -258,7 +258,11 @@ public class KmlRenderer implements Renderer {
 			if (this.settings.linesSubset != null) {
 
 				Trait subsetTrait = line.getAttributes().get( settings.linesSubset);
-
+				if (subsetTrait == null) {
+					throw new MissingAttributeException(settings.linesSubset,
+							MissingAttributeException.LINE);
+				}//END: null check
+				
 				if (settings.linesCutoff != null) {
 
 					if (subsetTrait.isNumber()) {
@@ -349,30 +353,25 @@ public class KmlRenderer implements Renderer {
 		
 		if (this.settings.lineColorMapping != null) { // map
 
-			double[] minmax = minmaxMap.get(settings.lineColorMapping);
-			if(minmax == null) {
-				throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
-			}
-			
-			double minValue = minmax[MIN_INDEX];
-			double maxValue = minmax[MAX_INDEX];
-			
 			Trait startTrait = line.getAttributes().get(settings.lineColorMapping);
 			
+			// Check if trait changes along the line
 			if(startTrait == null) {
 				startTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
 			}
 			
-			// Discrete lines have start and end locations
-			if (startTrait == null) {
-				if (line.connectsLocations()) {
-					startTrait = new Trait(line.getStartLocation().getId());
-				}
-			}
-			
+			// if still null it's an exception
 			if(startTrait == null) {
 				throw new MissingAttributeException(settings.lineColorMapping, MissingAttributeException.LINE);
 			}
+			
+			double[] minmax = minmaxMap.get(settings.lineColorMapping);
+			if(minmax == null) {
+				minmax = minmaxMap.get(Utils.START + settings.lineColorMapping);
+			}
+			
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			if (lineColorMap.containsKey(startKey)) {
@@ -405,17 +404,12 @@ public class KmlRenderer implements Renderer {
 
 			Trait endTrait = line.getAttributes().get(settings.lineColorMapping);
 			
+			// Check if trait changes along the line
 			if(endTrait == null) {
-				endTrait = line.getAttributes().get(Utils.START + settings.lineColorMapping);
+				endTrait = line.getAttributes().get(Utils.END + settings.lineColorMapping);
 			}
 			
-			// Discrete lines have start and end locations
-			if (endTrait == null) {
-				if (line.connectsLocations()) {
-					endTrait = new Trait(line.getEndLocation().getId());
-				}
-			}
-			
+			// if still null it's an exception
 			if(endTrait == null) {
 				throw new MissingAttributeException(settings.lineColorMapping, MissingAttributeException.LINE);
 			}
@@ -469,28 +463,27 @@ public class KmlRenderer implements Renderer {
 		
 		//---LINE ALPHA CHANEL---//
 		
-		// this should overwrite any previous settings
+		// this should overwrite any previous settings in color mappings
 		if (this.settings.lineAlphaMapping != null) { // map
-			
-			double[] minmax = minmaxMap.get(settings.lineAlphaMapping);
-			double minValue = minmax[MIN_INDEX];
-			double maxValue = minmax[MAX_INDEX];
 			
             Trait startTrait = line.getAttributes().get(settings.lineAlphaMapping);
 			
+        	// Check if trait changes along the line
 			if(startTrait == null) {
 				startTrait = line.getAttributes().get(Utils.START + settings.lineAlphaMapping);
 			}
 			
-			if (startTrait == null) {
-				if (line.connectsLocations()) {
-					startTrait = new Trait(line.getStartLocation().getId());
-				}
-			}
-			
+			// if still null it's an exception			
 			if(startTrait == null) {
 				throw new MissingAttributeException(settings.lineAlphaMapping, MissingAttributeException.LINE);
 			}
+			
+			double[] minmax = minmaxMap.get(settings.lineAlphaMapping);
+			if(minmax == null) {
+				minmax = minmaxMap.get(Utils.START + settings.lineAlphaMapping);
+			}
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
 			
 			Object startKey = startTrait.isNumber() ? startTrait.getValue()[0] : (String) startTrait.getId();
 			if (lineAlphaMap.containsKey(startKey)) {
@@ -508,16 +501,12 @@ public class KmlRenderer implements Renderer {
 
 			Trait endTrait = line.getAttributes().get(settings.lineAlphaMapping);
 			
+			// Check if trait changes along the line
 			if(endTrait == null) {
-				endTrait = line.getAttributes().get(Utils.START + settings.lineAlphaMapping);
+				endTrait = line.getAttributes().get(Utils.END + settings.lineAlphaMapping);
 			}
 			
-			if (endTrait == null) {
-				if (line.connectsLocations()) {
-					endTrait = new Trait(line.getEndLocation().getId());
-				}
-			}
-			
+			// if still null it's an exception
 			if(endTrait == null) {
 				throw new MissingAttributeException(settings.lineAlphaMapping, MissingAttributeException.LINE);
 			}
@@ -563,16 +552,17 @@ public class KmlRenderer implements Renderer {
 		Double altitude = 0.0;
 		if (settings.lineAltitudeMapping != null) {// map
 
-			double[] minmax = minmaxMap.get(settings.lineAltitudeMapping);
-			double minValue = minmax[MIN_INDEX];
-			double maxValue = minmax[MAX_INDEX];
-			
 			Trait trait = line.getAttributes().get(
 					settings.lineAltitudeMapping);
 			
+			// this aesthetic can't change along the line
 			if(trait == null) {
 				throw new MissingAttributeException(settings.lineAltitudeMapping, MissingAttributeException.LINE);
 			}
+			
+			double[] minmax = minmaxMap.get(settings.lineAltitudeMapping);
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
 			
 			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 
@@ -603,16 +593,17 @@ public class KmlRenderer implements Renderer {
 		Double width = 0.0;
 		if (settings.lineWidthMapping != null) {// map
 
-			double[] minmax = minmaxMap.get(settings.lineWidthMapping);
-			double minValue = minmax[MIN_INDEX];
-			double maxValue = minmax[MAX_INDEX];
-			
 			Trait trait = line.getAttributes().get(
 					settings.lineWidthMapping);
 			
+			// this aesthetic can't change along the line			
 			if(trait == null) {
 				throw new MissingAttributeException(settings.lineWidthMapping, MissingAttributeException.LINE);
 			}
+
+			double[] minmax = minmaxMap.get(settings.lineWidthMapping);
+			double minValue = minmax[MIN_INDEX];
+			double maxValue = minmax[MAX_INDEX];
 			
 			Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 
@@ -766,9 +757,6 @@ public class KmlRenderer implements Renderer {
 	    for(Polygon polygon : polygons) {
 			
 			Map<String, Trait> attributes = polygon.getAttributes();
-			
-//			Utils.printMap(attributes);
-			
 			Iterator<?> it = attributes.entrySet().iterator();
 			
 			while (it.hasNext()) {
@@ -797,9 +785,6 @@ public class KmlRenderer implements Renderer {
 				}//END: contains check
 				
 				String traitName = (String) pairs.getKey();				
-				
-//				System.out.println(traitName);
-				
 				if(!minmaxMap.containsKey(traitName)) {
 					
 					double[] minmax = new double[2];
@@ -827,26 +812,33 @@ public class KmlRenderer implements Renderer {
 			}//END: iterate
 			
             // Discrete polygons have Locations, need to process them too for mapping			
-			if (polygon.hasLocation()) {
-				Object traitValue = polygon.getLocationId();
-				if (!valueMap.containsKey(traitValue)) {
-					valueMap.put(traitValue, factorValue);
-					factorValue++;
-				}// END: contains check
-			}// END: location check
+//			if (polygon.hasLocation()) {
+//				Object traitValue = polygon.getLocationId();
+//				if (!valueMap.containsKey(traitValue)) {
+//					valueMap.put(traitValue, factorValue);
+//					factorValue++;
+//				}// END: contains check
+//			}// END: location check
 			
 	    }//END: polygons loop
 	
-		// get Colors map
 		KmlStyle style = null;
 		for (Polygon polygon : polygons) {
 
 			String label = "";
+
+			// get Colors map
 			Color color = null;
-			
 			int red = 255, green = 255, blue = 255, alpha = 0;
 			if (this.settings.polygonColorMapping != null) {// map
 
+				Trait trait = polygon.getAttributes().get(
+						settings.polygonColorMapping);
+				
+				if(trait == null) {
+					throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
+				}
+				
 				double[] minmax = minmaxMap.get(settings.polygonColorMapping);
 				if(minmax == null) {
 					throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
@@ -854,19 +846,6 @@ public class KmlRenderer implements Renderer {
 				
 				double minValue = minmax[MIN_INDEX];	
 				double maxValue = minmax[MAX_INDEX];
-				
-				Trait trait = polygon.getAttributes().get(
-						settings.polygonColorMapping);
-				
-				if (trait == null) {
-					if (polygon.hasLocation()) {
-						trait = new Trait(polygon.getLocationId());
-					}
-				}
-				
-				if(trait == null) {
-					throw new MissingAttributeException(settings.polygonColorMapping, MissingAttributeException.POLYGON);
-				}
 				
 				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
 				
@@ -985,24 +964,18 @@ public class KmlRenderer implements Renderer {
 			double area = settings.polygonArea;
 			if (this.settings.polygonAreaMapping != null) { // map
 				
-				double[] minmax = minmaxMap.get(settings.polygonAreaMapping);
-				double minValue = minmax[MIN_INDEX];	
-				double maxValue = minmax[MAX_INDEX];
-				
 				Trait trait = polygon.getAttributes().get(
 						settings.polygonAreaMapping);
-				
-				if (trait == null) {
-					if (polygon.hasLocation()) {
-						trait = new Trait(polygon.getLocationId());
-					}
-				}
 				
 				if(trait == null) {
 					throw new MissingAttributeException(settings.polygonAreaMapping, MissingAttributeException.POLYGON);
 				}
 				
 				Object key = trait.isNumber() ? trait.getValue()[0] : (String) trait.getId();
+				
+				double[] minmax = minmaxMap.get(settings.polygonAreaMapping);
+				double minValue = minmax[MIN_INDEX];	
+				double maxValue = minmax[MAX_INDEX];
 				
 				if (polygonRadiusMap.containsKey(key)) {
 
@@ -1018,8 +991,6 @@ public class KmlRenderer implements Renderer {
 				label += (", radius[" + settings.polygonAreaMapping + "="+key.toString()+"]");
 				
 			} // END: settings check
-			
-//			System.out.println(centroid.getId()  + ": " + area);
 			
 			points.addAll(generateCircle(centroid, area, numPoints));
 			
@@ -1065,8 +1036,6 @@ public class KmlRenderer implements Renderer {
 
 		double radius = Math.sqrt(area/Math.PI);
 		
-//		System.out.println(centroid.getId()  + ": " + radius);
-		
 		Double latitude = centroid.getCoordinate().getLatitude();
 		Double longitude = centroid.getCoordinate().getLongitude();
 				
@@ -1097,7 +1066,7 @@ public class KmlRenderer implements Renderer {
 		
 		Point point = new Point();
 		point.setAltitudeMode(AltitudeModeEnum.relativeToGround);
-//		point.setAltitude(coordinate.getAltitude());
+		point.setAltitude(coordinate.getAltitude());
 		point.setLatitude(coordinate.getLatitude());
 		point.setLongitude(coordinate.getLongitude());
 		

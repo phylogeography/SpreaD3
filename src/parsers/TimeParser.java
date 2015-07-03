@@ -32,7 +32,7 @@ public class TimeParser {
 			month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
 			day = Integer.valueOf(endDateFields[Utils.DAY_INDEX]);
 
-			System.out.println("MRSD in a decimal date format and corresponds to: " + year +"-" + month + "-" + day);
+			System.out.println("MRSD in a decimal date format corresponds to: " + year +"-" + month + "-" + day);
 			
 		} else if(mrsd.contains("-")) {
 			

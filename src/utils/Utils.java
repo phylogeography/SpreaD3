@@ -34,6 +34,7 @@ public class Utils {
 	public static final String INDICATORS = "indicators";
 	public static final String DURATION = "duration";
 	public static final String DISTANCE = "distance";
+	public static final String LOCATION = "location";
 	public static final String START = "start";
 	public static final String END = "end";
 	public static final String ONE = "1";

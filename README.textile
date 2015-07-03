@@ -36,7 +36,7 @@ h3. RENDERING
 h4. POLYGONS
 
 * override default polygon color settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 0 0 255 -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 255 255 0 -output test.kml
 
 * map polygon colors to host attribute values, use built-in color schemes
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -output test.kml
@@ -45,7 +45,7 @@ h4. POLYGONS
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
 
 * specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -polygonalpha 255 -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -polygonalpha 100 -output test.kml
 
 * map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -output test.kml
@@ -83,7 +83,7 @@ h4. LINES
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitude 50000 -output test.kml
 
 * map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidthmapping duration -linealtitudemapping distance -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
 
 
 h3. DISCRETE TREE
@@ -240,7 +240,10 @@ h1. TODO
   - D3 renderer
   - GeoJSON renderer
   - KML renderer
+    - node support threshold for polygons (parse posterior support and use polygon cutoffs [TODO] )
+    - Show node ages in the kml
     - control arc curvature [0 - 1]
+* Write tests    
 * Non-geographic locations (e.g. antigenic locations)
 * parsing BEAST2 and MrBayes output
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone

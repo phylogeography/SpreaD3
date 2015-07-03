@@ -18,7 +18,7 @@ import exceptions.LocationNotFoundException;
 public class DiscretePolygonsParser {
 
 	public static final String COUNT = "count";
-	public static final String LOCATION = "location";
+//	public static final String LOCATION = "location";
 	
 	private RootedTree rootedTree;
 	private String locationTrait;
@@ -142,8 +142,9 @@ public class DiscretePolygonsParser {
 						}// END: traits loop
 					}// END: null check
 					
+					// it's just easier to add them here as well, we avoid convoluted logic in renderers 
 					Trait locationTrait = new Trait(location.getId());
-					attributes.put(LOCATION, locationTrait);
+					attributes.put(Utils.LOCATION, locationTrait);
 					
 					Trait countTrait = new Trait(locationCount);
 					attributes.put(COUNT, countTrait);

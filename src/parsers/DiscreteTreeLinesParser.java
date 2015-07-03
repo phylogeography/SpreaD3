@@ -131,6 +131,13 @@ public class DiscreteTreeLinesParser {
 					Trait distanceTrait = new Trait(distance);
 					attributes.put(Utils.DISTANCE, distanceTrait);
 
+					// it's just easier to add them here as well, we avoid convoluted logic in renderers 
+					Trait startLocationTrait = new Trait(parentLocation.getId());
+					attributes.put(Utils.START+Utils.LOCATION, startLocationTrait);
+					
+					Trait endLocationTrait = new Trait(nodeLocation.getId());
+					attributes.put(Utils.END+Utils.LOCATION, endLocationTrait);
+					
 					Line line = new Line(parentLocation, nodeLocation,
 							startTime, endTime, attributes);
 					linesList.add(line);
