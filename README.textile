@@ -249,11 +249,23 @@ h1. TODO
     - node support threshold for polygons (parse posterior support and use polygon cutoffs [TODO] )
     - Show node ages in the kml
     - control arc curvature [0 - 1]
+* Parsers
+  - parse all traits option
+  -  parsing BEAST2 and MrBayes output [separate parsers]
 * Write tests    
 * Non-geographic locations (e.g. antigenic locations)
-* parsing BEAST2 and MrBayes output [separate parsers]
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
 * Uncaught exception handler (for bug reports).
 * Processing large tree distributions on GPUs. Write a small library and JNI to it.  
+
+h1. BUGS
+
+#TODO: no Fujian
+* map polygon colors to location values, use built-in color schemes
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -output test.kml
+
+# appears
+* map polygon colors to location values, use supplied color sheet (RGB or RGBA values)
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
 
