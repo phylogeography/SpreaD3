@@ -93,16 +93,6 @@ function draw(topo) {
 
 	});
 
-	// TODO: adding some capitals from external CSV file [add locations like
-	// this]
-	// d3.csv("data/country-capitals.csv", function(err, capitals) {
-	//
-	// capitals.forEach(function(i){
-	// addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName );
-	// });
-	//
-	// });
-
 }// END: draw
 
 // ---REDRAW---//
@@ -168,27 +158,6 @@ function click() {
 	// console.log(latlon);
 }// END: click
 
-// TODO: render point, polygon, line
-
-// function to add points and text to the map (used in plotting capitals)
-function addpoint(lat, lon, text) {
-
-	var gpoint = g.append("g").attr("class", "gpoint");
-	var x = projection([ lat, lon ])[0];
-	var y = projection([ lat, lon ])[1];
-
-	gpoint.append("svg:circle").attr("cx", x).attr("cy", y).attr("class",
-			"point").attr("r", 1.5);
-
-	// conditional in case a point has no associated text
-	if (text.length > 0) {
-
-		gpoint.append("text").attr("x", x + 2).attr("y", y + 2).attr("class",
-				"text").text(text);
-	}
-
-}
-
 // ///////////////////////
 // ---GLOBAL VARIABLES---//
 // ///////////////////////
@@ -197,7 +166,7 @@ function addpoint(lat, lon, text) {
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 
-//var topo;
+// var topo;
 var projection;
 var path;
 var svg;
@@ -210,9 +179,9 @@ var graticule = d3.geo.graticule();
 var tooltip = d3.select("#container").append("div").attr("class",
 		"tooltip hidden");
 
-// /////////////////
-// ---RENDERING---//
-// /////////////////
+// //////////////////////
+// ---MAP BACKGROUND---//
+// //////////////////////
 
 d3.select(window).on("resize", throttle);
 
@@ -226,7 +195,45 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 	var countries = topojson.feature(world, world.objects.countries).features;
 
-//	topo = countries;
+	// topo = countries;
 	draw(countries);
 
 });
+
+// /////////////////
+// ---RENDERING---//
+// /////////////////
+
+
+d3.json("data/test_discrete.json", function(json) {
+
+	var locations = json.locations;
+	locations.forEach(function(location) {
+
+		generateLocation(location);
+
+	});
+
+});
+
+function generateLocation(location) {
+
+	var coordinate = location.coordinate;
+
+	var latitude = coordinate.yCoordinate;
+	var longitude = coordinate.xCoordinate;
+	var label = location.id;
+
+	var x = projection([ latitude, longitude ])[0];
+	var y = projection([ latitude, longitude ])[1];
+
+	var gpoint = g.append("g").attr("class", "gpoint");
+
+	gpoint.append("svg:circle").attr("cx", x).attr("cy", y).attr("class",
+			"point").attr("r", 1.5);
+
+	gpoint.append("text").attr("x", x + 2).attr("y", y + 2).attr("class",
+			"text").text(label);
+
+}//END: generateLocation
+
