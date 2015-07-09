@@ -76,7 +76,12 @@ public class FortuneCookies {
 
 //--- ACTION BRONSON ---//
 "Eat burgers, they're good for you -- Action Bronson",
-"I question your mother's upbringing if you don't like me  -- Action Bronson"
+"I question your mother's upbringing if you don't like me  -- Action Bronson",
+
+//---DAVE JONES---//
+
+"What a bobby dazzler",
+"...And Bob's your uncle"
 
 
 	};

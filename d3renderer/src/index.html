@@ -4,8 +4,34 @@
 <meta charset="utf-8">
 <title>Spread2 D3/JS renderer</title>
 
-<script type="text/javascript" src="../lib/d3/d3.js"></script>
+<script type="text/javascript" src="../lib/d3/d3.min.js"></script>
 <script type="text/javascript" src="../lib/topojson/topojson.v1.min.js"></script>
+<script type="text/javascript" src="../lib/jquery/jquery-1.11.3.min.js"></script>
+<!-- 
+<form action="dummyvalue">
+<select name="newurl" onchange="menu_goto(this.form)">
+<option value="" selected="selected">----- Select A Page -----</option>
+<option value="/index.html">Home</option>
+<option value="/feedback.html">Feedback</option>
+<option value="" disabled="disabled"> ---- Miscellaneous ----</option>
+<option value="/links.html">Related Links</option>
+</select>
+</form>
+ -->
+
+<form id="polygonAreaFom">
+<select id="selectAreaAttribute">
+    <option>Map polygon area to</option>
+<!--     <script> 
+        var myArray = new Array("1", "2", "3", "4", "5");
+        for(i=0; i<myArray.length; i++) {  
+            document.write('<option value="' + myArray[i] +'">' + myArray[i] + '</option>');
+        }
+     </script> -->
+</select>
+</form>
+
+
 
 <style type="text/css">
 

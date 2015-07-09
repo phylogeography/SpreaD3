@@ -205,35 +205,191 @@ d3.json("data/world-topo-min.json", function(error, world) {
 // /////////////////
 
 
+//TODO populate menus, get min-max maps
+
 d3.json("data/test_discrete.json", function(json) {
 
-	var locations = json.locations;
-	locations.forEach(function(location) {
+	var layers = json.layers;
+	layers.forEach(function(layer) {
 
-		generateLocation(location);
+		var polygons = layer.polygons;
+		populateMenus(polygons);
 
 	});
 
 });
 
-function generateLocation(location) {
+//https://sunfishempire.wordpress.com/2014/08/19/5-ways-to-use-a-javascript-hashmap/
+function populateMenus(polygons) {
+	
+//	var areaAttributes = [];
+	var minmaxMap = {};
+	
+	polygons.forEach(function(polygon) {
 
-	var coordinate = location.coordinate;
+		var attributes = polygon.attributes;
+		for ( var property in attributes) {
+			
+			
+//			if (attributes.hasOwnProperty(property)) {
+//				if (jQuery.inArray(property, areaAttributes) == -1) {
+//
+//					areaAttributes.push(property);
+//
+//				}//END: contains check
+//			}// END: property check
+			
+			
+			if( !(property in minmaxMap) ) {
+				
+				
+				
+				
+			} else {
+				
+				
+				
+			}
+			
+			
+			
+		}// END: attributes loop
 
-	var latitude = coordinate.yCoordinate;
-	var longitude = coordinate.xCoordinate;
-	var label = location.id;
+	});
+	
+}
 
-	var x = projection([ latitude, longitude ])[0];
-	var y = projection([ latitude, longitude ])[1];
 
-	var gpoint = g.append("g").attr("class", "gpoint");
 
-	gpoint.append("svg:circle").attr("cx", x).attr("cy", y).attr("class",
-			"point").attr("r", 1.5);
 
-	gpoint.append("text").attr("x", x + 2).attr("y", y + 2).attr("class",
-			"text").text(label);
 
-}//END: generateLocation
+
+
+d3.json("data/test_discrete.json", function(json) {
+
+	var locations = json.locations;
+	var locationIds = [];
+	locations.forEach(function(location) {
+
+		locationIds.push(location.id);
+
+	});
+
+	var layers = json.layers;
+	layers.forEach(function(layer) {
+
+		var polygons = layer.polygons;
+		generatePolygons(polygons, locations, locationIds);
+
+		// TODO: generate lines
+
+	});
+
+
+});
+
+function generatePolygons(polygons, locations, locationIds) {
+
+//	var areaAttributes = [];
+	polygons.forEach(function(polygon) {
+
+		generatePolygon(polygon, locations, locationIds);
+
+//		var attributes = polygon.attributes;
+//		for ( var property in attributes) {
+//			if (attributes.hasOwnProperty(property)) {
+//
+//				if (jQuery.inArray(property, areaAttributes) == -1) {
+//
+//					areaAttributes.push(property);
+//
+//				}//END: contains check
+//
+//			}// END: property check
+//		}// END: attributes loop
+
+	});
+
+//	var select = document.getElementById("selectAreaAttribute");
+//	for (var i = 0; i < areaAttributes.length; i++) {
+//		var opt = areaAttributes[i];
+//		var el = document.createElement("option");
+//		el.textContent = opt;
+//		el.value = opt;
+//		select.appendChild(el);
+//	}// END: i loop
+
+}// END: generatePolygons
+
+function generatePolygon(polygon, locations, locationIds) {
+
+	// TODO
+	// different shapes
+	// area
+	// color
+	// opacity
+
+	var minAreaMapping = 1;
+	var maxAreaMapping = 100;
+
+	var areaScale = d3.scale.linear() //
+	// TODO: max and min
+	.domain([ 1, 16 ]) //
+	.range([ minAreaMapping, maxAreaMapping ]);
+
+	// console.log(polygon.attributes.count.id);
+
+	if (polygon.hasLocation) {
+
+		var locationId = polygon.location;
+		var index = locationIds.indexOf(locationId);
+
+		var location = locations[index];
+		var coordinate = location.coordinate;
+
+		var latitude = coordinate.yCoordinate;
+		var longitude = coordinate.xCoordinate;
+		var label = location.id;
+
+		var x = projection([ latitude, longitude ])[0];
+		var y = projection([ latitude, longitude ])[1];
+
+		// TODO: scales for r, color, opacity
+		var area = areaScale(polygon.attributes.count.id);
+		var radius = Math.sqrt(area / Math.PI);
+
+		g.append("circle") //
+		.attr("cx", x) //
+		.attr("cy", y) //
+		.attr("r", radius + "px")//
+		.attr("fill", "red");
+
+	} else {
+
+		// TODO
+
+	}// END: hasLocation check
+
+}// END: generatePolygon
+
+// function generateLocation(location) {
+//
+// var coordinate = location.coordinate;
+//
+// var latitude = coordinate.yCoordinate;
+// var longitude = coordinate.xCoordinate;
+// var label = location.id;
+//
+// var x = projection([ latitude, longitude ])[0];
+// var y = projection([ latitude, longitude ])[1];
+//
+// var gpoint = g.append("g").attr("class", "gpoint");
+//
+// gpoint.append("svg:circle").attr("cx", x).attr("cy", y).attr("class",
+// "point").attr("r", 1.5);
+//
+// gpoint.append("text").attr("x", x + 2).attr("y", y + 2).attr("class",
+// "text").text(label);
+//
+// }//END: generateLocation
 
