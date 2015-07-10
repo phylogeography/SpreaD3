@@ -204,8 +204,7 @@ d3.json("data/world-topo-min.json", function(error, world) {
 // ---RENDERING---//
 // /////////////////
 
-
-//TODO populate menus, get min-max maps
+// TODO populate menus, get min-max maps
 
 d3.json("data/test_discrete.json", function(json) {
 
@@ -219,45 +218,61 @@ d3.json("data/test_discrete.json", function(json) {
 
 });
 
-//https://sunfishempire.wordpress.com/2014/08/19/5-ways-to-use-a-javascript-hashmap/
+// https://sunfishempire.wordpress.com/2014/08/19/5-ways-to-use-a-javascript-hashmap/
 function populateMenus(polygons) {
-	
-//	var areaAttributes = [];
-	var minmaxMap = {};
-	
+
+	var minmaxMap = [];
+
 	polygons.forEach(function(polygon) {
 
 		var attributes = polygon.attributes;
 		for ( var property in attributes) {
-			
-			
-//			if (attributes.hasOwnProperty(property)) {
-//				if (jQuery.inArray(property, areaAttributes) == -1) {
-//
-//					areaAttributes.push(property);
-//
-//				}//END: contains check
-//			}// END: property check
-			
-			
-			if( !(property in minmaxMap) ) {
-				
-				
-				
-				
+
+			if (!(property in minmaxMap)) {
+
+				minmaxMap[property] = {
+					min : attributes[property].id,
+					max : attributes[property].id
+				};
+
 			} else {
-				
-				
-				
-			}
-			
-			
-			
+
+				var min = minmaxMap[property].min;
+				var candidateMin = attributes[property].id;
+
+				if (candidateMin < min) {
+					minmaxMap[property].min = candidateMin;
+				}
+
+				var max = minmaxMap[property].max;
+				var candidateMax = attributes[property].id;
+
+				if (candidateMax > max) {
+					minmaxMap[property].max = candidateMax;
+				}
+
+			}// END: key check
+
 		}// END: attributes loop
 
-	});
-	
-}
+	});// END: polygons loop
+
+	// printMap(minmaxMap);
+	var keys = Object.keys(minmaxMap);
+
+	var select = document.getElementById("selectAreaAttribute");
+	for (var i = 0; i < keys.length; i++) {
+		var opt = keys[i];
+		var el = document.createElement("option");
+		el.textContent = opt;
+		el.value = opt;
+		select.appendChild(el);
+	}// END: i loop
+
+}//END: 
+
+
+
 
 
 
@@ -285,39 +300,29 @@ d3.json("data/test_discrete.json", function(json) {
 
 	});
 
-
 });
 
 function generatePolygons(polygons, locations, locationIds) {
 
-//	var areaAttributes = [];
+	// var areaAttributes = [];
 	polygons.forEach(function(polygon) {
 
 		generatePolygon(polygon, locations, locationIds);
 
-//		var attributes = polygon.attributes;
-//		for ( var property in attributes) {
-//			if (attributes.hasOwnProperty(property)) {
-//
-//				if (jQuery.inArray(property, areaAttributes) == -1) {
-//
-//					areaAttributes.push(property);
-//
-//				}//END: contains check
-//
-//			}// END: property check
-//		}// END: attributes loop
+		// var attributes = polygon.attributes;
+		// for ( var property in attributes) {
+		// if (attributes.hasOwnProperty(property)) {
+		//
+		// if (jQuery.inArray(property, areaAttributes) == -1) {
+		//
+		// areaAttributes.push(property);
+		//
+		// }//END: contains check
+		//
+		// }// END: property check
+		// }// END: attributes loop
 
 	});
-
-//	var select = document.getElementById("selectAreaAttribute");
-//	for (var i = 0; i < areaAttributes.length; i++) {
-//		var opt = areaAttributes[i];
-//		var el = document.createElement("option");
-//		el.textContent = opt;
-//		el.value = opt;
-//		select.appendChild(el);
-//	}// END: i loop
 
 }// END: generatePolygons
 
