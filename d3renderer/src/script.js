@@ -2,6 +2,30 @@
  * @fbielejec
  */
 
+// ///////////////////////
+// ---GLOBAL VARIABLES---//
+// ///////////////////////
+// size
+var width = document.getElementById('container').offsetWidth;
+var height = width / 2;
+
+// var topo;
+var projection;
+var path;
+var svg;
+var g;
+
+var throttleTimer;
+
+var graticule = d3.geo.graticule();
+
+var tooltip = d3.select("#container").append("div").attr("class",
+		"tooltip hidden");
+
+var minmaxMap = [];
+var areaSelect;
+var colorSelect;
+
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////
@@ -149,35 +173,9 @@ function throttle() {
 // ---CLICK---//
 
 function click() {
-
-	/*
-	 * Geo translation on mouse click in map
-	 */
-
-	var latlon = projection.invert(d3.mouse(this));
-	// console.log(latlon);
+	/* Geo translation on mouse click on map */
+	projection.invert(d3.mouse(this));
 }// END: click
-
-// ///////////////////////
-// ---GLOBAL VARIABLES---//
-// ///////////////////////
-
-// size
-var width = document.getElementById('container').offsetWidth;
-var height = width / 2;
-
-// var topo;
-var projection;
-var path;
-var svg;
-var g;
-
-var throttleTimer;
-
-var graticule = d3.geo.graticule();
-
-var tooltip = d3.select("#container").append("div").attr("class",
-		"tooltip hidden");
 
 // //////////////////////
 // ---MAP BACKGROUND---//
@@ -194,8 +192,6 @@ setup(width, height);
 d3.json("data/world-topo-min.json", function(error, world) {
 
 	var countries = topojson.feature(world, world.objects.countries).features;
-
-	// topo = countries;
 	draw(countries);
 
 });
@@ -218,10 +214,7 @@ d3.json("data/test_discrete.json", function(json) {
 
 });
 
-// https://sunfishempire.wordpress.com/2014/08/19/5-ways-to-use-a-javascript-hashmap/
 function populateMenus(polygons) {
-
-	var minmaxMap = [];
 
 	polygons.forEach(function(polygon) {
 
@@ -242,14 +235,14 @@ function populateMenus(polygons) {
 
 				if (candidateMin < min) {
 					minmaxMap[property].min = candidateMin;
-				}
+				}// END: min check
 
 				var max = minmaxMap[property].max;
 				var candidateMax = attributes[property].id;
 
 				if (candidateMax > max) {
 					minmaxMap[property].max = candidateMax;
-				}
+				}// END: max check
 
 			}// END: key check
 
@@ -260,25 +253,31 @@ function populateMenus(polygons) {
 	// printMap(minmaxMap);
 	var keys = Object.keys(minmaxMap);
 
-	var select = document.getElementById("selectAreaAttribute");
+	areaSelect = document.getElementById("selectAreaAttribute");
 	for (var i = 0; i < keys.length; i++) {
-		var opt = keys[i];
-		var el = document.createElement("option");
-		el.textContent = opt;
-		el.value = opt;
-		select.appendChild(el);
+
+		var option = keys[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		areaSelect.appendChild(element);
+
 	}// END: i loop
 
-}//END: 
+	colorSelect = document.getElementById("selectColorAttribute");
+	for (var i = 0; i < keys.length; i++) {
 
+		var option = keys[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
 
+		colorSelect.appendChild(element);
 
+	}// END: i loop
 
-
-
-
-
-
+}// END:
 
 d3.json("data/test_discrete.json", function(json) {
 
@@ -304,45 +303,55 @@ d3.json("data/test_discrete.json", function(json) {
 
 function generatePolygons(polygons, locations, locationIds) {
 
-	// var areaAttributes = [];
+	// area maping
+	var areaAttribute = areaSelect.options[areaSelect.selectedIndex].text;
+
+	var minArea = 1;
+	var maxArea = 100;
+
+	var areaScale = d3.scale.linear() //
+	.domain([ minmaxMap[areaAttribute].min, minmaxMap[areaAttribute].max ]) //
+	.range([ minArea, maxArea ]);
+
+	// color mapping
+	var colorAttribute = colorSelect.options[colorSelect.selectedIndex].text;
+
+	var minRed = 50;
+	var maxRed = 100;
+
+	var minGreen = 50;
+	var maxGreen = 100;
+
+	var minBlue = 100;
+	var maxBlue = 250;
+
+	var redScale = d3.scale.linear() //
+	.domain([ minmaxMap[colorAttribute].min, minmaxMap[colorAttribute].max ]) //
+	.range([ minRed, maxRed ]);
+
+	var greenScale = d3.scale.linear() //
+	.domain([ minmaxMap[colorAttribute].min, minmaxMap[colorAttribute].max ]) //
+	.range([ minGreen, maxGreen ]);
+
+	var blueScale = d3.scale.linear() //
+	.domain([ minmaxMap[colorAttribute].min, minmaxMap[colorAttribute].max ]) //
+	.range([ minBlue, maxBlue ]);
+
 	polygons.forEach(function(polygon) {
 
-		generatePolygon(polygon, locations, locationIds);
-
-		// var attributes = polygon.attributes;
-		// for ( var property in attributes) {
-		// if (attributes.hasOwnProperty(property)) {
-		//
-		// if (jQuery.inArray(property, areaAttributes) == -1) {
-		//
-		// areaAttributes.push(property);
-		//
-		// }//END: contains check
-		//
-		// }// END: property check
-		// }// END: attributes loop
+		var area = areaScale(polygon.attributes[areaAttribute].id);
+		var red = redScale(polygon.attributes[colorAttribute].id);
+		var green = greenScale(polygon.attributes[colorAttribute].id);
+		var blue = blueScale(polygon.attributes[colorAttribute].id);
+		
+		
+		generatePolygon(polygon, locations, locationIds, area, red, green, blue);
 
 	});
 
 }// END: generatePolygons
 
-function generatePolygon(polygon, locations, locationIds) {
-
-	// TODO
-	// different shapes
-	// area
-	// color
-	// opacity
-
-	var minAreaMapping = 1;
-	var maxAreaMapping = 100;
-
-	var areaScale = d3.scale.linear() //
-	// TODO: max and min
-	.domain([ 1, 16 ]) //
-	.range([ minAreaMapping, maxAreaMapping ]);
-
-	// console.log(polygon.attributes.count.id);
+function generatePolygon(polygon, locations, locationIds, area, red, green, blue) {
 
 	if (polygon.hasLocation) {
 
@@ -359,15 +368,15 @@ function generatePolygon(polygon, locations, locationIds) {
 		var x = projection([ latitude, longitude ])[0];
 		var y = projection([ latitude, longitude ])[1];
 
-		// TODO: scales for r, color, opacity
-		var area = areaScale(polygon.attributes.count.id);
 		var radius = Math.sqrt(area / Math.PI);
 
+//		console.log("rgb(" +red + "," +green + "," + blue + ")");
+		
 		g.append("circle") //
 		.attr("cx", x) //
 		.attr("cy", y) //
 		.attr("r", radius + "px")//
-		.attr("fill", "red");
+		.attr("fill",  "rgb(" +red + "," +green + "," + blue + ")");
 
 	} else {
 
@@ -376,25 +385,4 @@ function generatePolygon(polygon, locations, locationIds) {
 	}// END: hasLocation check
 
 }// END: generatePolygon
-
-// function generateLocation(location) {
-//
-// var coordinate = location.coordinate;
-//
-// var latitude = coordinate.yCoordinate;
-// var longitude = coordinate.xCoordinate;
-// var label = location.id;
-//
-// var x = projection([ latitude, longitude ])[0];
-// var y = projection([ latitude, longitude ])[1];
-//
-// var gpoint = g.append("g").attr("class", "gpoint");
-//
-// gpoint.append("svg:circle").attr("cx", x).attr("cy", y).attr("class",
-// "point").attr("r", 1.5);
-//
-// gpoint.append("text").attr("x", x + 2).attr("y", y + 2).attr("class",
-// "text").text(label);
-//
-// }//END: generateLocation
 
