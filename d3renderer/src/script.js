@@ -128,7 +128,7 @@ function redraw() {
 	height = width / 2;
 	d3.select('svg').remove();
 	setup(width, height);
-	draw(countries);
+	draw(topo);
 
 }// END: redraw
 
@@ -243,13 +243,16 @@ function populatePolygonMaps(polygons) {
 	// printMap(polygonValueMap);
 	// printMap(polygonMinMaxMap);
 
+	var i;
+	var option;
+	var element;
 	var keys = Object.keys(polygonMinMaxMap);
 
 	polygonAreaSelect = document.getElementById("selectPolygonAreaAttribute");
-	for (var i = 0; i < keys.length; i++) {
+	for (i = 0; i < keys.length; i++) {
 
-		var option = keys[i];
-		var element = document.createElement("option");
+		option = keys[i];
+		element = document.createElement("option");
 		element.textContent = option;
 		element.value = option;
 
@@ -258,10 +261,10 @@ function populatePolygonMaps(polygons) {
 	}// END: i loop
 
 	polygonColorSelect = document.getElementById("selectPolygonColorAttribute");
-	for (var i = 0; i < keys.length; i++) {
+	for (i = 0; i < keys.length; i++) {
 
-		var option = keys[i];
-		var element = document.createElement("option");
+		option = keys[i];
+		element = document.createElement("option");
 		element.textContent = option;
 		element.value = option;
 
@@ -289,9 +292,6 @@ function generatePolygons(polygons, locations, locationIds) {
 
 	// color mapping
 	var colorAttribute = polygonColorSelect.options[polygonColorSelect.selectedIndex].text;
-
-	// TODO : discrete attributes
-	// var colorAttribute = polygonColorSelect.options[1].text;
 
 	var numC = 9;
 	var cbMap;
@@ -361,7 +361,7 @@ red, green, blue//
 		var latitude = coordinate.yCoordinate;
 		var longitude = coordinate.xCoordinate;
 		// TODO: fancy koda labels
-		var label = location.id;
+		// var label = location.id;
 
 		var x = projection([ latitude, longitude ])[0];
 		var y = projection([ latitude, longitude ])[1];
@@ -473,14 +473,25 @@ d3.json("data/test_discrete.json", function(json) {
 	});
 
 	var layers = json.layers;
+	var polygons = null;
+	var lines = null;
 	layers.forEach(function(layer) {
 
-		var polygons = layer.polygons;
+		polygons = layer.polygons;
 		generatePolygons(polygons, locations, locationIds);
 
-		var lines = layer.lines;
-		// generateLines(lines, locations, locationIds);
+		lines = layer.lines;
+		generateLines(lines, locations, locationIds);
+
+	});
+
+	d3.select(polygonColorSelect).on('change', function() {
+
+		generatePolygons(polygons, locations, locationIds);
 
 	});
 
 });
+
+// ///////
+
