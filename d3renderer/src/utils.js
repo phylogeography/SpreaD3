@@ -13,3 +13,7 @@ function printMap(map) {
 	}
 
 }// END: printMap
+
+function isNumeric(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}// END: isNumeric

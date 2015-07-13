@@ -2,10 +2,9 @@
  * @fbielejec
  */
 
-// ///////////////////////
+// ////////////////////////
 // ---GLOBAL VARIABLES---//
-// ///////////////////////
-// size
+// ////////////////////////
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 
@@ -22,9 +21,10 @@ var graticule = d3.geo.graticule();
 var tooltip = d3.select("#container").append("div").attr("class",
 		"tooltip hidden");
 
-var minmaxMap = [];
-var areaSelect;
-var colorSelect;
+var polygonValueMap = [];
+var polygonMinMaxMap = [];
+var polygonAreaSelect;
+var polygonColorSelect;
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -178,63 +178,177 @@ function click() {
 	projection.invert(d3.mouse(this));
 }// END: click
 
+// ---POPULATE POLYGON MAPS---//
+
+function populatePolygonMaps(polygons) {
+
+	var factorValue = 1.0;
+	polygons.forEach(function(polygon) {
+
+		var attributes = polygon.attributes;
+		for ( var property in attributes) {
+
+			// process values
+			var value = attributes[property].id;
+			if (!(value in polygonValueMap)) {
+
+				if (isNumeric(value)) {
+
+					polygonValueMap[value] = {
+						value : value,
+					};
+
+				} else {
+
+					polygonValueMap[value] = {
+						value : factorValue,
+					};
+
+					factorValue++;
+
+				}// END: isNumeric check
+
+			} // END: contains check
+
+			// get min max values
+			if (!(property in polygonMinMaxMap)) {
+
+				polygonMinMaxMap[property] = {
+					min : polygonValueMap[value].value,
+					max : polygonValueMap[value].value
+				};
+
+			} else {
+
+				var min = polygonMinMaxMap[property].min;
+				var candidateMin = polygonValueMap[value].value;
+
+				if (candidateMin < min) {
+					polygonMinMaxMap[property].min = candidateMin;
+				}// END: min check
+
+				var max = polygonMinMaxMap[property].max;
+				var candidateMax = polygonValueMap[value].value;
+
+				if (candidateMax > max) {
+					polygonMinMaxMap[property].max = candidateMax;
+				}// END: max check
+
+			}// END: key check
+
+		}// END: attributes loop
+
+	});// END: polygons loop
+
+	// printMap(polygonValueMap);
+	// printMap(polygonMinMaxMap);
+
+	var keys = Object.keys(polygonMinMaxMap);
+
+	polygonAreaSelect = document.getElementById("selectPolygonAreaAttribute");
+	for (var i = 0; i < keys.length; i++) {
+
+		var option = keys[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		polygonAreaSelect.appendChild(element);
+
+	}// END: i loop
+
+	polygonColorSelect = document.getElementById("selectPolygonColorAttribute");
+	for (var i = 0; i < keys.length; i++) {
+
+		var option = keys[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		polygonColorSelect.appendChild(element);
+
+	}// END: i loop
+
+}// END: populatePolygonMaps
+
 // ---GENERATE POLYGONS---//
 
 function generatePolygons(polygons, locations, locationIds) {
 
 	// area maping
-	var areaAttribute = areaSelect.options[areaSelect.selectedIndex].text;
+	var areaAttribute = polygonAreaSelect.options[polygonAreaSelect.selectedIndex].text;
 
 	var minArea = 1;
 	var maxArea = 100;
 
 	var areaScale = d3.scale.linear() //
-	.domain([ minmaxMap[areaAttribute].min, minmaxMap[areaAttribute].max ]) //
+	.domain(
+			[ polygonMinMaxMap[areaAttribute].min,
+					polygonMinMaxMap[areaAttribute].max ]) //
 	.range([ minArea, maxArea ]);
 
 	// color mapping
-	var colorAttribute = colorSelect.options[colorSelect.selectedIndex].text;
+	var colorAttribute = polygonColorSelect.options[polygonColorSelect.selectedIndex].text;
 
-	var minRed = 50;
-	var maxRed = 100;
+	// TODO : discrete attributes
+	// var colorAttribute = polygonColorSelect.options[1].text;
 
-	var minGreen = 50;
-	var maxGreen = 100;
+	var numC = 9;
+	var cbMap;
 
-	var minBlue = 100;
-	var maxBlue = 250;
-
-	var redScale = d3.scale.linear() //
-	.domain([ minmaxMap[colorAttribute].min, minmaxMap[colorAttribute].max ]) //
+	cbMap = colorbrewer["Reds"];
+	var minRed = cbMap[numC][0];
+	var maxRed = cbMap[numC][numC - 1];
+	var redScale = d3.scale.linear().domain(
+			[ polygonMinMaxMap[colorAttribute].min,
+					polygonMinMaxMap[colorAttribute].max ]) //
 	.range([ minRed, maxRed ]);
 
-	var greenScale = d3.scale.linear() //
-	.domain([ minmaxMap[colorAttribute].min, minmaxMap[colorAttribute].max ]) //
+	cbMap = colorbrewer["Greens"];
+	var minGreen = cbMap[numC][0];
+	var maxGreen = cbMap[numC][numC - 1];
+	var greenScale = d3.scale.linear().domain(
+			[ polygonMinMaxMap[colorAttribute].min,
+					polygonMinMaxMap[colorAttribute].max ]) //
 	.range([ minGreen, maxGreen ]);
 
-	var blueScale = d3.scale.linear() //
-	.domain([ minmaxMap[colorAttribute].min, minmaxMap[colorAttribute].max ]) //
+	cbMap = colorbrewer["Blues"];
+	var minBlue = cbMap[numC][0];
+	var maxBlue = cbMap[numC][numC - 1];
+	var blueScale = d3.scale.linear().domain(
+			[ polygonMinMaxMap[colorAttribute].min,
+					polygonMinMaxMap[colorAttribute].max ]) //
 	.range([ minBlue, maxBlue ]);
 
-	polygons
-			.forEach(function(polygon) {
+	var attribute;
+	var value;
+	polygons.forEach(function(polygon) {
 
-				var area = areaScale(polygon.attributes[areaAttribute].id);
-				var red = redScale(polygon.attributes[colorAttribute].id);
-				var green = greenScale(polygon.attributes[colorAttribute].id);
-				var blue = blueScale(polygon.attributes[colorAttribute].id);
+		attribute = polygon.attributes[areaAttribute].id;
+		value = polygonValueMap[attribute].value;
+		var area = areaScale(value);
 
-				generatePolygon(polygon, locations, locationIds, area, red,
-						green, blue);
+		attribute = polygon.attributes[colorAttribute].id;
+		value = polygonValueMap[attribute].value;
+		var red = d3.rgb(redScale(value)).r;
+		var green = d3.rgb(greenScale(value)).g;
+		var blue = d3.rgb(blueScale(value)).b;
 
-			});
+		generatePolygon(polygon, locations, locationIds, //
+		area, //
+		red, green, blue //
+		);
+
+	});
 
 }// END: generatePolygons
 
 // ---GENERATE POLYGON---//
 
-function generatePolygon(polygon, locations, locationIds, area, red, green,
-		blue) {
+function generatePolygon(polygon, locations, locationIds, //
+area, // 
+red, green, blue//
+) {
 
 	if (polygon.hasLocation) {
 
@@ -273,7 +387,7 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 // ---GENERATE LINES--//
 
 function generateLines(lines, locations, locationIds) {
-	
+
 	lines.forEach(function(line) {
 
 		var locationId = line.startLocation;
@@ -285,7 +399,7 @@ function generateLines(lines, locations, locationIds) {
 		index = locationIds.indexOf(locationId);
 		location = locations[index];
 		endCoordinate = location.coordinate;
-		
+
 		generateLine(line, startCoordinate, endCoordinate);
 
 	});
@@ -296,20 +410,19 @@ function generateLines(lines, locations, locationIds) {
 
 function generateLine(line, startCoordinate, endCoordinate) {
 
-	
 	var startLatitude = startCoordinate.xCoordinate;
 	var startLongitude = startCoordinate.yCoordinate;
-	
+
 	var endLatitude = endCoordinate.xCoordinate;
 	var endLongitude = endCoordinate.yCoordinate;
-	
-	g.append("path")
-    .datum({type: "LineString", coordinates: [[startLongitude, startLatitude], [endLongitude, endLatitude]]})
-    .attr("class", "arc")
-    .attr("d", path)
-	.attr("fill", "none")
-	.attr("stroke", "red")
-	.attr("stroke-width", "3px");
+
+	g.append("path").datum(
+			{
+				type : "LineString",
+				coordinates : [ [ startLongitude, startLatitude ],
+						[ endLongitude, endLatitude ] ]
+			}).attr("class", "arc").attr("d", path).attr("fill", "none").attr(
+			"stroke", "red").attr("stroke-width", "3px");
 
 }// END: generateLine
 
@@ -334,15 +447,14 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 });
 
-// TODO populate menus, get min-max maps
-
+// populate menus, get min-max maps
 d3.json("data/test_discrete.json", function(json) {
 
 	var layers = json.layers;
 	layers.forEach(function(layer) {
 
 		var polygons = layer.polygons;
-		populateMenus(polygons);
+		populatePolygonMaps(polygons);
 
 	});
 
@@ -367,74 +479,8 @@ d3.json("data/test_discrete.json", function(json) {
 		generatePolygons(polygons, locations, locationIds);
 
 		var lines = layer.lines;
-		generateLines(lines, locations, locationIds);
+		// generateLines(lines, locations, locationIds);
 
 	});
 
 });
-
-function populateMenus(polygons) {
-
-	polygons.forEach(function(polygon) {
-
-		var attributes = polygon.attributes;
-		for ( var property in attributes) {
-
-			if (!(property in minmaxMap)) {
-
-				minmaxMap[property] = {
-					min : attributes[property].id,
-					max : attributes[property].id
-				};
-
-			} else {
-
-				var min = minmaxMap[property].min;
-				var candidateMin = attributes[property].id;
-
-				if (candidateMin < min) {
-					minmaxMap[property].min = candidateMin;
-				}// END: min check
-
-				var max = minmaxMap[property].max;
-				var candidateMax = attributes[property].id;
-
-				if (candidateMax > max) {
-					minmaxMap[property].max = candidateMax;
-				}// END: max check
-
-			}// END: key check
-
-		}// END: attributes loop
-
-	});// END: polygons loop
-
-	// printMap(minmaxMap);
-	var keys = Object.keys(minmaxMap);
-
-	areaSelect = document.getElementById("selectAreaAttribute");
-	for (var i = 0; i < keys.length; i++) {
-
-		var option = keys[i];
-		var element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		areaSelect.appendChild(element);
-
-	}// END: i loop
-
-	colorSelect = document.getElementById("selectColorAttribute");
-	for (var i = 0; i < keys.length; i++) {
-
-		var option = keys[i];
-		var element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		colorSelect.appendChild(element);
-
-	}// END: i loop
-
-}// END:
-

@@ -5,25 +5,14 @@ public class Trait {
 	private Object id;
 	private Object[] array;
 	private boolean isMultivariate = false;
-//	private double height;
-	
+
 	public Trait(Object obj) {
 		this.id = obj;
 		if (obj instanceof Object[]) {
 			isMultivariate = true;
 			array = (Object[]) obj;
 		}
-//		this.height = 0.0;
 	}
-
-//	public Trait(Object obj, double height) {
-//		this.id = obj;
-//		if (obj instanceof Object[]) {
-//			isMultivariate = true;
-//			array = (Object[]) obj;
-//		}
-////		this.height = height;
-//	}
 
 	public boolean isMultivariate() {
 		return isMultivariate;
@@ -54,10 +43,6 @@ public class Trait {
 		return result;
 	}
 
-//	public double getHeight() {
-//		return height;
-//	}
-
 	public void multiplyBy(double factor) {
 		if (!isMultivariate) {
 			id = ((Double) id * factor);
@@ -80,5 +65,5 @@ public class Trait {
 	public Object getId() {
 		return id;
 	}
-	
+
 }// END: class
