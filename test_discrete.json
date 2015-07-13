@@ -397,26 +397,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Fujian",
           "connectsLocations": true,
           "startTime": "2005-07-05",
           "endTime": "2007-03-27"
@@ -440,26 +422,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Fujian",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2006-08-03",
           "endTime": "2008-09-06"
@@ -483,26 +447,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Fujian",
           "connectsLocations": true,
           "startTime": "2006-03-10",
           "endTime": "2006-08-03"
@@ -526,26 +472,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Henan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 33.875,
-              "yCoordinate": 113.5,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Henan",
           "connectsLocations": true,
           "startTime": "2006-03-10",
           "endTime": "2007-09-24"
@@ -569,26 +497,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Fujian",
           "connectsLocations": true,
           "startTime": "2010-03-25",
           "endTime": "2010-09-21"
@@ -612,26 +522,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "HongKong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.3,
-              "yCoordinate": 114.167,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "HongKong",
+          "endLocation": "Guangdong",
           "connectsLocations": true,
           "startTime": "2007-02-24",
           "endTime": "2010-03-25"
@@ -655,26 +547,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "HongKong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.3,
-              "yCoordinate": 114.167,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangxi",
+          "endLocation": "HongKong",
           "connectsLocations": true,
           "startTime": "2006-08-08",
           "endTime": "2007-02-24"
@@ -698,26 +572,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "HongKong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.3,
-              "yCoordinate": 114.167,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "HongKong",
           "connectsLocations": true,
           "startTime": "2007-01-11",
           "endTime": "2007-08-21"
@@ -741,26 +597,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Henan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 33.875,
-              "yCoordinate": 113.5,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Henan",
           "connectsLocations": true,
           "startTime": "2007-06-13",
           "endTime": "2007-11-26"
@@ -784,26 +622,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "HongKong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.3,
-              "yCoordinate": 114.167,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangxi",
+          "endLocation": "HongKong",
           "connectsLocations": true,
           "startTime": "2009-05-07",
           "endTime": "2009-09-28"
@@ -827,26 +647,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangxi",
+          "endLocation": "Guangdong",
           "connectsLocations": true,
           "startTime": "2009-06-27",
           "endTime": "2009-07-19"
@@ -870,26 +672,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Hunan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 27.383,
-              "yCoordinate": 111.517,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangxi",
+          "endLocation": "Hunan",
           "connectsLocations": true,
           "startTime": "2009-12-03",
           "endTime": "2010-07-20"
@@ -913,26 +697,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2008-08-07",
           "endTime": "2009-02-07"
@@ -956,26 +722,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Hunan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 27.383,
-              "yCoordinate": 111.517,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Hunan",
           "connectsLocations": true,
           "startTime": "2008-12-31",
           "endTime": "2010-08-25"
@@ -999,26 +747,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangxi",
+          "endLocation": "Guangdong",
           "connectsLocations": true,
           "startTime": "2006-07-02",
           "endTime": "2006-10-29"
@@ -1042,26 +772,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2006-04-06",
           "endTime": "2006-07-02"
@@ -1085,26 +797,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Henan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 33.875,
-              "yCoordinate": 113.5,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Henan",
           "connectsLocations": true,
           "startTime": "2006-03-18",
           "endTime": "2008-05-13"
@@ -1128,26 +822,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2006-03-18",
           "endTime": "2006-06-15"
@@ -1171,26 +847,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "HongKong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.3,
-              "yCoordinate": 114.167,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "HongKong",
+          "endLocation": "Guangdong",
           "connectsLocations": true,
           "startTime": "1999-10-07",
           "endTime": "2001-03-23"
@@ -1214,26 +872,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2002-05-21",
           "endTime": "2005-01-02"
@@ -1257,26 +897,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Henan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 33.875,
-              "yCoordinate": 113.5,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Fujian",
+          "endLocation": "Henan",
           "connectsLocations": true,
           "startTime": "2007-03-27",
           "endTime": "2008-01-02"
@@ -1300,26 +922,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Hebei",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 39.3583,
-              "yCoordinate": 116.6417,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Fujian",
+          "endLocation": "Hebei",
           "connectsLocations": true,
           "startTime": "2007-06-25",
           "endTime": "2008-01-02"
@@ -1343,26 +947,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Fujian",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2007-09-18",
           "endTime": "2008-01-02"
@@ -1386,26 +972,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Henan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 33.875,
-              "yCoordinate": 113.5,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Hunan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 27.383,
-              "yCoordinate": 111.517,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Henan",
+          "endLocation": "Hunan",
           "connectsLocations": true,
           "startTime": "2009-04-15",
           "endTime": "2010-01-02"
@@ -1429,26 +997,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Fujian",
           "connectsLocations": true,
           "startTime": "2008-04-28",
           "endTime": "2011-01-01"
@@ -1472,26 +1022,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Fujian",
           "connectsLocations": true,
           "startTime": "2005-11-26",
           "endTime": "2007-01-02"
@@ -1515,26 +1047,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Henan",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 33.875,
-              "yCoordinate": 113.5,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Hebei",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 39.3583,
-              "yCoordinate": 116.6417,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Henan",
+          "endLocation": "Hebei",
           "connectsLocations": true,
           "startTime": "2008-05-13",
           "endTime": "2011-01-01"
@@ -1558,26 +1072,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Hebei",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 39.3583,
-              "yCoordinate": 116.6417,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangxi",
+          "endLocation": "Hebei",
           "connectsLocations": true,
           "startTime": "2006-06-15",
           "endTime": "2007-01-02"
@@ -1601,26 +1097,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Guangxi",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 23.6417,
-              "yCoordinate": 108.1,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Guangxi",
           "connectsLocations": true,
           "startTime": "2005-05-27",
           "endTime": "2007-01-02"
@@ -1644,26 +1122,8 @@
               "isMultivariate": false
             }
           },
-          "startLocation": {
-            "attributes": {},
-            "id": "Guangdong",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 22.87,
-              "yCoordinate": 113.483,
-              "altitude": 0.0
-            }
-          },
-          "endLocation": {
-            "attributes": {},
-            "id": "Fujian",
-            "description": "",
-            "coordinate": {
-              "xCoordinate": 25.917,
-              "yCoordinate": 118.283,
-              "altitude": 0.0
-            }
-          },
+          "startLocation": "Guangdong",
+          "endLocation": "Fujian",
           "connectsLocations": true,
           "startTime": "2004-07-15",
           "endTime": "2006-01-02"

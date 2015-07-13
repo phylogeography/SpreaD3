@@ -242,11 +242,9 @@ h1. TODO
 
 * Date-time calculations
   - time scale multiplier
-* Renderers
-  - D3 renderer
-  - GeoJSON renderer
-  - KML renderer
-    - node support threshold for polygons (parse posterior support and use polygon cutoffs [TODO] )
+* D3 renderer
+ - rolling map: http://bl.ocks.org/patricksurry/6621971
+* KML renderer
     - Show node ages in the kml
     - control arc curvature [0 - 1]
 * Parsers

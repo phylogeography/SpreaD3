@@ -232,23 +232,6 @@ public class KmlRenderer implements Renderer {
 				
 			}//END: iterate
 			
-            // Discrete lines connect Locations, need to process them too for mapping		
-//			if (line.connectsLocations()) {
-//
-//				Object traitStartValue = line.getStartLocation().getId();
-//				if (!valueMap.containsKey(traitStartValue)) {
-//					valueMap.put(traitStartValue, factorValue);
-//					factorValue++;
-//				}// END: contains check
-//
-//				Object traitEndValue = line.getEndLocation().getId();
-//				if (!valueMap.containsKey(traitEndValue)) {
-//					valueMap.put(traitEndValue, factorValue);
-//					factorValue++;
-//				}// END: contains check
-//				
-//			}//END: connects check
-			
 	    }//END: lines loop
 
 	    // Second lines loop does the actual rendering
