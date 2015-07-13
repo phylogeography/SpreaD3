@@ -154,7 +154,7 @@ public class DiscreteTreeLinesParser {
 					Trait endLocationTrait = new Trait(nodeLocation.getId());
 					attributes.put(Utils.END+Utils.LOCATION, endLocationTrait);
 					
-					Line line = new Line(parentLocation, nodeLocation,
+					Line line = new Line(parentLocation.getId(), nodeLocation.getId(),
 							startTime, endTime, attributes);
 					linesList.add(line);
 

@@ -14,15 +14,22 @@ public class Line {
 	private final Coordinate startCoordinate;
 	private final Coordinate endCoordinate;
 
-	private final Location startLocation;
-	private final Location endLocation;
+//	private final Location startLocation;
+//	private final Location endLocation;
+	private final String startLocation;
+	private final String endLocation;
+	
+
 	private final boolean connectsLocations;
 
 	private final String startTime;
 	private final String endTime;
 
-	public Line(Location startLocation, //
-			Location endLocation, //
+	public Line(
+			String startLocation, //
+			String endLocation, //
+//			Location startLocation, //
+//			Location endLocation, //
 			String startTime, //
 			String endTime, //
 			Map<String, Trait> attributes //
@@ -44,8 +51,10 @@ public class Line {
 
 	}// END: Constructor
 
-	public Line(Location startLocation, //
-			Location endLocation, //
+	public Line(String startLocation, //
+			String endLocation, //
+//			Location startLocation, //
+//			Location endLocation, //
 			Map<String, Trait> attributes //
 	) {
 
@@ -103,13 +112,21 @@ public class Line {
 		return endTime;
 	}
 
-	public Location getStartLocation() {
+	public String getStartLocationId() {
 		return startLocation;
 	}
 
-	public Location getEndLocation() {
+	public String getEndLocationId() {
 		return endLocation;
 	}
+	
+//	public Location getStartLocation() {
+//		return startLocation;
+//	}
+//
+//	public Location getEndLocation() {
+//		return endLocation;
+//	}
 
 	public boolean connectsLocations() {
 		return connectsLocations;

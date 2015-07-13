@@ -82,7 +82,7 @@ public class BayesFactorLinesParser {
 			
 //			Utils.printMap(attributes);
 			
-			Line line = new Line(fromLocation, toLocation, attributes);
+			Line line = new Line(fromLocation.getId(), toLocation.getId(), attributes);
 			linesList.add(line);
 
 		}// END: i loop

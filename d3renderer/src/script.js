@@ -296,7 +296,9 @@ d3.json("data/test_discrete.json", function(json) {
 		generatePolygons(polygons, locations, locationIds);
 
 		// TODO: generate lines
-
+        var lines = layer.lines;
+//		console.log(lines);
+        
 	});
 
 });

@@ -251,7 +251,7 @@ h1. TODO
     - control arc curvature [0 - 1]
 * Parsers
   - parse all traits option
-  -  parsing BEAST2 and MrBayes output [separate parsers]
+  - parsing BEAST2 and MrBayes output [separate parsers]
 * Write tests    
 * Non-geographic locations (e.g. antigenic locations)
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone

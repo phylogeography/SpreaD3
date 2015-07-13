@@ -329,9 +329,16 @@ public class KmlRenderer implements Renderer {
 		Coordinate endCoordinate;
 		if (line.connectsLocations()) {
 
-			Location startLocation = line.getStartLocation();
-			Location endLocation = line.getEndLocation();
-
+			String startLocationId = line.getStartLocationId();
+			Location dummy = new Location(startLocationId, "", new Coordinate(0.0, 0.0), null);
+			Integer index = data.getLocations().indexOf(dummy);
+			Location startLocation =data.getLocations().get(index);
+			
+			String endLocationId = line.getEndLocationId();
+			 dummy = new Location(endLocationId, "", new Coordinate(0.0, 0.0), null);
+			 index = data.getLocations().indexOf(dummy);
+			Location endLocation =data.getLocations().get(index);
+			
 			 name = startLocation.getId() + " to " + endLocation.getId();
 			
 			startCoordinate = startLocation.getCoordinate();
