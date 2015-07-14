@@ -2,8 +2,10 @@
 //---VARIABLES---//
 ///////////////////
 
-var START = /^start/;
-var END = /^end/;
+var START_STRING = "start";
+var END_STRING = "end";
+var START_PREFIX = /^start/;
+var END_PREFIX = /^end/;
 var EARTH_RADIUS = 6371.0;
 var LONGITUDE = 0;
 var LATITUDE = 1;

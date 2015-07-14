@@ -8,7 +8,7 @@
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 
-var sliceCount = 10;
+var sliceCount = 2;
 
 var topo;
 var projection;
@@ -100,8 +100,6 @@ function draw(topo) {
 	country.on(
 			"mouseover",
 			function(d, i) {
-
-				// console.log("FUBAR");
 
 				var mouse = d3.mouse(svg.node()).map(function(d) {
 					return parseInt(d);
@@ -352,10 +350,8 @@ function generatePolygons(polygons, locations, locationIds) {
 
 // ---GENERATE POLYGON---//
 
-function generatePolygon(polygon, locations, locationIds, //
-area, // 
-red, green, blue//
-) {
+function generatePolygon(polygon, locations, locationIds, area, red, green,
+		blue) {
 
 	if (polygon.hasLocation) {
 
@@ -393,6 +389,7 @@ red, green, blue//
 }// END: generatePolygon
 
 // ---POPULATE LINE MAPS---//
+
 function populateLineMaps(lines) {
 
 	var factorValue = 1.0;
@@ -424,7 +421,8 @@ function populateLineMaps(lines) {
 			} // END: contains check
 
 			// lines have start and end attributes
-			property = property.replace(START, '').replace(END, '');
+			property = property.replace(START_PREFIX, '').replace(END_PREFIX,
+					'');
 
 			// get min max values
 			if (!(property in lineMinMaxMap)) {
@@ -494,6 +492,40 @@ function populateLineMaps(lines) {
 
 function generateLines(lines, locations, locationIds) {
 
+	// color scale
+	// var colorAttribute =
+	// lineColorSelect.options[lineColorSelect.selectedIndex].text;
+	var colorAttribute = lineColorSelect.options[2].text;
+
+	var numC = 9;
+	var cbMap;
+
+	cbMap = colorbrewer["Reds"];
+	var minRed = cbMap[numC][0];
+	var maxRed = cbMap[numC][numC - 1];
+	var redScale = d3.scale.linear().domain(
+			[ lineMinMaxMap[colorAttribute].min,
+					lineMinMaxMap[colorAttribute].max ]) //
+	.range([ minRed, maxRed ]);
+
+	cbMap = colorbrewer["Greens"];
+	var minGreen = cbMap[numC][0];
+	var maxGreen = cbMap[numC][numC - 1];
+	var greenScale = d3.scale.linear().domain(
+			[ lineMinMaxMap[colorAttribute].min,
+					lineMinMaxMap[colorAttribute].max ]) //
+	.range([ minGreen, maxGreen ]);
+
+	cbMap = colorbrewer["Blues"];
+	var minBlue = cbMap[numC][0];
+	var maxBlue = cbMap[numC][numC - 1];
+	var blueScale = d3.scale.linear().domain(
+			[ lineMinMaxMap[colorAttribute].min,
+					lineMinMaxMap[colorAttribute].max ]) //
+	.range([ minBlue, maxBlue ]);
+
+	var startAttribute;
+	var endAttribute;
 	lines.forEach(function(line) {
 
 		var locationId = line.startLocation;
@@ -506,7 +538,41 @@ function generateLines(lines, locations, locationIds) {
 		location = locations[index];
 		endCoordinate = location.coordinate;
 
-		generateLine(line, startCoordinate, endCoordinate);
+		// get start attribute value
+		startAttribute = line.attributes[colorAttribute];
+		if (!startAttribute) {
+
+			// colorAttribute = START_STRING + colorAttribute;
+			startAttribute = line.attributes[START_STRING + colorAttribute].id;
+
+		}// END: null check
+
+		value = lineValueMap[startAttribute].value;
+
+		// map start value to colors
+		var startRed = d3.rgb(redScale(value)).r;
+		var startGreen = d3.rgb(greenScale(value)).g;
+		var startBlue = d3.rgb(blueScale(value)).b;
+
+		// get end attribute value
+		endAttribute = line.attributes[colorAttribute];
+		if (!endAttribute) {
+
+			endAttribute = line.attributes[END_STRING + colorAttribute].id;
+
+		}// END: null check
+
+		value = lineValueMap[endAttribute].value;
+		var endRed = d3.rgb(redScale(value)).r;
+		var endGreen = d3.rgb(greenScale(value)).g;
+		var endBlue = d3.rgb(blueScale(value)).b;
+
+		// console.log("start: " + startAttribute+ " " + startRed +","
+		// +startGreen +"," + startBlue + " end: " +endAttribute +" " +endRed
+		// +"," + endGreen +"," + endBlue );
+
+		generateLine(line, startCoordinate, endCoordinate, startRed,
+				startGreen, startBlue, endRed, endGreen, endBlue);
 
 	});
 
@@ -514,7 +580,8 @@ function generateLines(lines, locations, locationIds) {
 
 // ---GENERATE LINE--//
 
-function generateLine(line, startCoordinate, endCoordinate) {
+function generateLine(line, startCoordinate, endCoordinate, startRed,
+		startGreen, startBlue, endRed, endGreen, endBlue) {
 
 	var startLatitude = startCoordinate.xCoordinate;
 	var startLongitude = startCoordinate.yCoordinate;
@@ -523,9 +590,12 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	var endLongitude = endCoordinate.yCoordinate;
 	var coords = getIntermediateCoords(startLongitude, startLatitude,
 			endLongitude, endLatitude, sliceCount);
-	// console.log(coords);
 
-	// TODO: time and duration
+	var redStep = (endRed - startRed) / sliceCount;
+	var greenStep = (endGreen - startGreen) / sliceCount;
+	var blueStep = (endBlue - startBlue) / sliceCount;
+
+	// TODO: time and duration for animation
 
 	for (var i = 0; i < sliceCount; i++) {
 
@@ -535,17 +605,24 @@ function generateLine(line, startCoordinate, endCoordinate) {
 		var segmentEndLongitude = coords[i + 1][LONGITUDE];
 		var segmentEndLatitude = coords[i + 1][LATITUDE];
 
-		generateLineSegment(segmentStartLongitude, segmentStartLatitude, segmentEndLongitude,
-				segmentEndLatitude, "red", "1px");
-		
-		
-	}// END: slices loop
+		// TODO: interpolate colors
+		var segmentRed = (startRed + redStep * i);
+		var segmentGreen = (startGreen + greenStep * i);
+		var segmentBlue = (startBlue + blueStep * i);
 
+		//TODO
+		console.log(segmentRed+", "+segmentGreen + ", "+segmentBlue);
+		
+		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
+				segmentEndLongitude, segmentEndLatitude, segmentRed,
+				segmentGreen, segmentBlue, "1px");
+
+	}// END: slices loop
 
 }// END: generateLine
 
 function generateLineSegment(startLongitude, startLatitude, endLongitude,
-		endLatitude, color, width) {
+		endLatitude, segmentRed, segmentGreen, segmentBlue, width) {
 
 	g.append("path").datum(
 			{
@@ -555,7 +632,8 @@ function generateLineSegment(startLongitude, startLatitude, endLongitude,
 			}) //
 	.attr("d", path).attr("fill", "none") //
 	.attr("class", "arc") //
-	.attr("stroke", color) //
+	.attr("stroke",
+			"rgb(" + segmentRed + "," + segmentGreen + "," + segmentBlue + ")") //
 	.attr("stroke-width", width);
 
 }// END: generateLineSegment
