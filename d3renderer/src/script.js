@@ -8,6 +8,8 @@
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 
+var sliceCount = 10;
+
 var topo;
 var projection;
 var path;
@@ -25,6 +27,11 @@ var polygonValueMap = [];
 var polygonMinMaxMap = [];
 var polygonAreaSelect;
 var polygonColorSelect;
+
+var lineValueMap = [];
+var lineMinMaxMap = [];
+var lineWidthSelect;
+var lineColorSelect;
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -153,7 +160,7 @@ function move() {
 	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
 	// adjust the country hover stroke width based on zoom level
-	d3.selectAll(".country")//
+	d3.selectAll(".country") //
 	.style("stroke-width", 1.5 / s) //
 	;
 
@@ -371,9 +378,10 @@ red, green, blue//
 		// console.log("rgb(" +red + "," +green + "," + blue + ")");
 
 		g.append("circle") //
+		.attr("class", "polygon") //
 		.attr("cx", x) //
 		.attr("cy", y) //
-		.attr("r", radius + "px")//
+		.attr("r", radius + "px") //
 		.attr("fill", "rgb(" + red + "," + green + "," + blue + ")");
 
 	} else {
@@ -383,6 +391,104 @@ red, green, blue//
 	}// END: hasLocation check
 
 }// END: generatePolygon
+
+// ---POPULATE LINE MAPS---//
+function populateLineMaps(lines) {
+
+	var factorValue = 1.0;
+	lines.forEach(function(line) {
+
+		var attributes = line.attributes;
+		for ( var property in attributes) {
+
+			// process values
+			var value = attributes[property].id;
+			if (!(value in lineValueMap)) {
+
+				if (isNumeric(value)) {
+
+					lineValueMap[value] = {
+						value : value,
+					};
+
+				} else {
+
+					lineValueMap[value] = {
+						value : factorValue,
+					};
+
+					factorValue++;
+
+				}// END: isNumeric check
+
+			} // END: contains check
+
+			// lines have start and end attributes
+			property = property.replace(START, '').replace(END, '');
+
+			// get min max values
+			if (!(property in lineMinMaxMap)) {
+
+				lineMinMaxMap[property] = {
+					min : lineValueMap[value].value,
+					max : lineValueMap[value].value
+				};
+
+			} else {
+
+				var min = lineMinMaxMap[property].min;
+				var candidateMin = lineValueMap[value].value;
+
+				if (candidateMin < min) {
+					lineMinMaxMap[property].min = candidateMin;
+				}// END: min check
+
+				var max = lineMinMaxMap[property].max;
+				var candidateMax = lineValueMap[value].value;
+
+				if (candidateMax > max) {
+					lineMinMaxMap[property].max = candidateMax;
+				}// END: max check
+
+			}// END: key check
+
+		}// END: attributes loop
+
+	});// END: polygons loop
+
+	// printMap(lineValueMap);
+	// printMap(lineMinMaxMap);
+
+	var i;
+	var option;
+	var element;
+	var keys = Object.keys(lineMinMaxMap);
+
+	lineWidthSelect = document.getElementById("selectLineWidthAttribute");
+	for (i = 0; i < keys.length; i++) {
+
+		option = keys[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineWidthSelect.appendChild(element);
+
+	}// END: i loop
+
+	lineColorSelect = document.getElementById("selectLineColorAttribute");
+	for (i = 0; i < keys.length; i++) {
+
+		option = keys[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineColorSelect.appendChild(element);
+
+	}// END: i loop
+
+}// END: populateLineMaps
 
 // ---GENERATE LINES--//
 
@@ -415,16 +521,44 @@ function generateLine(line, startCoordinate, endCoordinate) {
 
 	var endLatitude = endCoordinate.xCoordinate;
 	var endLongitude = endCoordinate.yCoordinate;
+	var coords = getIntermediateCoords(startLongitude, startLatitude,
+			endLongitude, endLatitude, sliceCount);
+	// console.log(coords);
+
+	// TODO: time and duration
+
+	for (var i = 0; i < sliceCount; i++) {
+
+		var segmentStartLongitude = coords[i][LONGITUDE];
+		var segmentStartLatitude = coords[i][LATITUDE];
+
+		var segmentEndLongitude = coords[i + 1][LONGITUDE];
+		var segmentEndLatitude = coords[i + 1][LATITUDE];
+
+		generateLineSegment(segmentStartLongitude, segmentStartLatitude, segmentEndLongitude,
+				segmentEndLatitude, "red", "1px");
+		
+		
+	}// END: slices loop
+
+
+}// END: generateLine
+
+function generateLineSegment(startLongitude, startLatitude, endLongitude,
+		endLatitude, color, width) {
 
 	g.append("path").datum(
 			{
 				type : "LineString",
 				coordinates : [ [ startLongitude, startLatitude ],
 						[ endLongitude, endLatitude ] ]
-			}).attr("class", "arc").attr("d", path).attr("fill", "none").attr(
-			"stroke", "red").attr("stroke-width", "3px");
+			}) //
+	.attr("d", path).attr("fill", "none") //
+	.attr("class", "arc") //
+	.attr("stroke", color) //
+	.attr("stroke-width", width);
 
-}// END: generateLine
+}// END: generateLineSegment
 
 // /////////////////
 // ---RENDERING---//
@@ -447,19 +581,6 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 });
 
-// populate menus, get min-max maps
-d3.json("data/test_discrete.json", function(json) {
-
-	var layers = json.layers;
-	layers.forEach(function(layer) {
-
-		var polygons = layer.polygons;
-		populatePolygonMaps(polygons);
-
-	});
-
-});
-
 // ---DRAW DATA---//
 
 d3.json("data/test_discrete.json", function(json) {
@@ -472,21 +593,31 @@ d3.json("data/test_discrete.json", function(json) {
 
 	});
 
-	var layers = json.layers;
 	var polygons = null;
 	var lines = null;
+	var layers = json.layers;
 	layers.forEach(function(layer) {
 
 		polygons = layer.polygons;
+		populatePolygonMaps(polygons);
 		generatePolygons(polygons, locations, locationIds);
 
 		lines = layer.lines;
+		populateLineMaps(lines);
 		generateLines(lines, locations, locationIds);
+
+	});
+
+	d3.select(polygonAreaSelect).on('change', function() {
+
+		g.selectAll(".polygon").remove();
+		generatePolygons(polygons, locations, locationIds);
 
 	});
 
 	d3.select(polygonColorSelect).on('change', function() {
 
+		g.selectAll(".polygon").remove();
 		generatePolygons(polygons, locations, locationIds);
 
 	});
