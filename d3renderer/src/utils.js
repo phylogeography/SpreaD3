@@ -10,7 +10,6 @@ var EARTH_RADIUS = 6371.0;
 var LONGITUDE = 0;
 var LATITUDE = 1;
 
-
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////
@@ -80,7 +79,7 @@ function rhumbDistance(startLongitude, startLatitude, endLongitude, endLatitude)
 
 	var dPhi = Math.log(Math.tan(rlat2 / 2 + Math.PI / 4)
 			/ Math.tan(rlat1 / 2 + Math.PI / 4));
-	var q = ( isNaN(dLat / dPhi)) ? dLat / dPhi : Math.cos(rlat1);
+	var q = (isNaN(dLat / dPhi)) ? dLat / dPhi : Math.cos(rlat1);
 
 	if (dLon > Math.PI) {
 		dLon = 2 * Math.PI - dLon;
@@ -111,12 +110,12 @@ function longNormalise(lon) {
 }// END: longNormalise
 
 Math.toRadians = function(degrees) {
-  return degrees * Math.PI / 180;
-};
- 
+	return degrees * Math.PI / 180;
+};// END: toRadians
+
 Math.toDegrees = function(radians) {
-  return radians * 180 / Math.PI;
-};
+	return radians * 180 / Math.PI;
+};// END: toDegrees
 
 function printMap(map) {
 
@@ -137,3 +136,13 @@ function printMap(map) {
 function isNumeric(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }// END: isNumeric
+
+// //////////////////////
+// ---MONKEY PATCHES---//
+// //////////////////////
+
+if (typeof String.prototype.startsWith != 'function') {
+	String.prototype.startsWith = function(str) {
+		return this.slice(0, str.length) == str;
+	};
+}

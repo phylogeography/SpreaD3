@@ -8,7 +8,7 @@
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 
-var sliceCount = 10;
+var sliceCount = 5;
 
 var topo;
 var projection;
@@ -41,7 +41,6 @@ var lineColorSelect;
 function setup(width, height) {
 
 	projection = d3.geo.mercator() //
-
 	.translate([ (width / 2), (height / 2) ]) //
 	.scale(width / 2 / Math.PI);
 
@@ -143,7 +142,7 @@ function move() {
 
 	var t = d3.event.translate;
 	var s = d3.event.scale;
-	zscale = s;
+	// zscale = s;
 	var h = height / 4;
 
 	t[0] = Math.min((width / height) * (s - 1), //
@@ -364,8 +363,6 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 
 		var latitude = coordinate.yCoordinate;
 		var longitude = coordinate.xCoordinate;
-		// TODO: fancy koda labels
-		// var label = location.id;
 
 		var x = projection([ latitude, longitude ])[0];
 		var y = projection([ latitude, longitude ])[1];
@@ -393,7 +390,9 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 
 function populateLineMaps(lines) {
 
+	var attributeInclude = [];
 	var factorValue = 1.0;
+
 	lines.forEach(function(line) {
 
 		var attributes = line.attributes;
@@ -421,9 +420,29 @@ function populateLineMaps(lines) {
 
 			} // END: contains check
 
-			// lines have start and end attributes
-			property = property.replace(START_PREFIX, '').replace(END_PREFIX,
-					'');
+			// process includes and attribute names for choosers
+			var include = true;
+			if (property.startsWith(START_STRING)
+					|| property.startsWith(END_STRING)) {
+
+				// lines have start and end attributes, but we keep only the
+				// core name
+				property = property.replace(START_PREFIX, '').replace(
+						END_PREFIX, '');
+
+				// attributes with no start/end cannot be used with some
+				// aesthetics
+				include = false;
+
+			} else {
+
+				include = true;
+
+			}// END: prefix check
+
+			attributeInclude[property] = {
+				include : include
+			};
 
 			// get min max values
 			if (!(property in lineMinMaxMap)) {
@@ -467,11 +486,13 @@ function populateLineMaps(lines) {
 	for (i = 0; i < keys.length; i++) {
 
 		option = keys[i];
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
+		if (attributeInclude[option].include) {
+			element = document.createElement("option");
+			element.textContent = option;
+			element.value = option;
 
-		lineWidthSelect.appendChild(element);
+			lineWidthSelect.appendChild(element);
+		}
 
 	}// END: i loop
 
@@ -493,10 +514,20 @@ function populateLineMaps(lines) {
 
 function generateLines(lines, locations, locationIds) {
 
-	// color scale
-	// var colorAttribute =
-	// lineColorSelect.options[lineColorSelect.selectedIndex].text;
-	var colorAttribute = lineColorSelect.options[2].text;
+	// width maping
+	var widthAttribute = lineWidthSelect.options[lineWidthSelect.selectedIndex].text;
+
+	var minWidth = 0.1;
+	var maxWidth = 0.5;
+
+	var widthScale = d3.scale.linear() //
+	.domain(
+			[ lineMinMaxMap[widthAttribute].min,
+					lineMinMaxMap[widthAttribute].max ]) //
+	.range([ minWidth, maxWidth ]);
+
+	// color maping
+	var colorAttribute = lineColorSelect.options[lineColorSelect.selectedIndex].text;
 
 	var numC = 9;
 	var cbMap;
@@ -525,8 +556,8 @@ function generateLines(lines, locations, locationIds) {
 					lineMinMaxMap[colorAttribute].max ]) //
 	.range([ minBlue, maxBlue ]);
 
-	var startAttribute;
-	var endAttribute;
+	var attribute;
+	var value;
 	lines.forEach(function(line) {
 
 		var locationId = line.startLocation;
@@ -537,43 +568,51 @@ function generateLines(lines, locations, locationIds) {
 		locationId = line.endLocation;
 		index = locationIds.indexOf(locationId);
 		location = locations[index];
-		endCoordinate = location.coordinate;
+		var endCoordinate = location.coordinate;
 
-		// get start attribute value
-		startAttribute = line.attributes[colorAttribute];
-		if (!startAttribute) {
+		// get width attribute value
+		attribute = line.attributes[widthAttribute].id;
+		value = lineValueMap[attribute].value;
+		var width = widthScale(value);
 
-			// colorAttribute = START_STRING + colorAttribute;
-			startAttribute = line.attributes[START_STRING + colorAttribute].id;
+		// get start color attribute value
+		attribute = line.attributes[colorAttribute];
+
+		if (!attribute) {
+
+			attribute = line.attributes[START_STRING + colorAttribute];
 
 		}// END: null check
 
-		value = lineValueMap[startAttribute].value;
+		value = lineValueMap[attribute.id].value;
 
 		// map start value to colors
 		var startRed = d3.rgb(redScale(value)).r;
 		var startGreen = d3.rgb(greenScale(value)).g;
 		var startBlue = d3.rgb(blueScale(value)).b;
 
-		// get end attribute value
-		endAttribute = line.attributes[colorAttribute];
-		if (!endAttribute) {
+		// get end color attribute value
+		attribute = line.attributes[colorAttribute];
+		if (!attribute) {
 
-			endAttribute = line.attributes[END_STRING + colorAttribute].id;
+			attribute = line.attributes[END_STRING + colorAttribute];
 
 		}// END: null check
 
-		value = lineValueMap[endAttribute].value;
+		value = lineValueMap[attribute.id].value;
+
+		// get colors from scale
 		var endRed = d3.rgb(redScale(value)).r;
 		var endGreen = d3.rgb(greenScale(value)).g;
 		var endBlue = d3.rgb(blueScale(value)).b;
 
 		// console.log("start: " + startAttribute+ " " + startRed +","
-		// +startGreen +"," + startBlue + " end: " +endAttribute +" " +endRed
+		// +startGreen +"," + startBlue + " end: " +endAttribute +" "
+		// +endRed
 		// +"," + endGreen +"," + endBlue );
 
 		generateLine(line, startCoordinate, endCoordinate, startRed,
-				startGreen, startBlue, endRed, endGreen, endBlue);
+				startGreen, startBlue, endRed, endGreen, endBlue, width);
 
 	});
 
@@ -582,7 +621,7 @@ function generateLines(lines, locations, locationIds) {
 // ---GENERATE LINE--//
 
 function generateLine(line, startCoordinate, endCoordinate, startRed,
-		startGreen, startBlue, endRed, endGreen, endBlue) {
+		startGreen, startBlue, endRed, endGreen, endBlue, width) {
 
 	var startLatitude = startCoordinate.xCoordinate;
 	var startLongitude = startCoordinate.yCoordinate;
@@ -610,23 +649,19 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 		var segmentGreen = Math.round(startGreen + greenStep * i);
 		var segmentBlue = Math.round(startBlue + blueStep * i);
 
-//		console.log(segmentRed+", "+segmentGreen + ", "+segmentBlue);
-		
+		var segmentWidth = width;
+
 		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
 				segmentEndLongitude, segmentEndLatitude, segmentRed,
-				segmentGreen, segmentBlue, "0.3px");
+				segmentGreen, segmentBlue, segmentWidth);
 
 	}// END: slices loop
 
 }// END: generateLine
 
 function generateLineSegment(startLongitude, startLatitude, endLongitude,
-		endLatitude, segmentRed, segmentGreen, segmentBlue, width) {
+		endLatitude, segmentRed, segmentGreen, segmentBlue, segmentWidth) {
 
-//	segmentRed = 50; 
-//	segmentGreen = 50; 
-//	segmentBlue = 250;
-	
 	g.append("path").datum(
 			{
 				type : "LineString",
@@ -634,10 +669,10 @@ function generateLineSegment(startLongitude, startLatitude, endLongitude,
 						[ endLongitude, endLatitude ] ]
 			}) //
 	.attr("d", path).attr("fill", "none") //
-	.attr("class", "arc") //
+	.attr("class", "line") //
 	.attr("stroke",
 			"rgb(" + segmentRed + "," + segmentGreen + "," + segmentBlue + ")") //
-	.attr("stroke-width", width);
+	.attr("stroke-width", segmentWidth + "px");
 
 }// END: generateLineSegment
 
@@ -700,6 +735,13 @@ d3.json("data/test_discrete.json", function(json) {
 
 		g.selectAll(".polygon").remove();
 		generatePolygons(polygons, locations, locationIds);
+
+	});
+
+	d3.select(lineColorSelect).on('change', function() {
+
+		g.selectAll(".line").remove();
+		generateLines(lines, locations, locationIds);
 
 	});
 
