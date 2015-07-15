@@ -8,7 +8,7 @@
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 
-var sliceCount = 2;
+var sliceCount = 10;
 
 var topo;
 var projection;
@@ -302,6 +302,7 @@ function generatePolygons(polygons, locations, locationIds) {
 	var cbMap;
 
 	cbMap = colorbrewer["Reds"];
+	// TODO: min/max should be chosen from a pallete by the user
 	var minRed = cbMap[numC][0];
 	var maxRed = cbMap[numC][numC - 1];
 	var redScale = d3.scale.linear().domain(
@@ -502,7 +503,7 @@ function generateLines(lines, locations, locationIds) {
 
 	cbMap = colorbrewer["Reds"];
 	var minRed = cbMap[numC][0];
-	var maxRed = cbMap[numC][numC - 1];
+	var maxRed = cbMap[numC][numC - 0];
 	var redScale = d3.scale.linear().domain(
 			[ lineMinMaxMap[colorAttribute].min,
 					lineMinMaxMap[colorAttribute].max ]) //
@@ -518,7 +519,7 @@ function generateLines(lines, locations, locationIds) {
 
 	cbMap = colorbrewer["Blues"];
 	var minBlue = cbMap[numC][0];
-	var maxBlue = cbMap[numC][numC - 1];
+	var maxBlue = cbMap[numC][numC - 0];
 	var blueScale = d3.scale.linear().domain(
 			[ lineMinMaxMap[colorAttribute].min,
 					lineMinMaxMap[colorAttribute].max ]) //
@@ -605,17 +606,15 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 		var segmentEndLongitude = coords[i + 1][LONGITUDE];
 		var segmentEndLatitude = coords[i + 1][LATITUDE];
 
-		// TODO: interpolate colors
-		var segmentRed = (startRed + redStep * i);
-		var segmentGreen = (startGreen + greenStep * i);
-		var segmentBlue = (startBlue + blueStep * i);
+		var segmentRed = Math.round(startRed + redStep * i);
+		var segmentGreen = Math.round(startGreen + greenStep * i);
+		var segmentBlue = Math.round(startBlue + blueStep * i);
 
-		//TODO
-		console.log(segmentRed+", "+segmentGreen + ", "+segmentBlue);
+//		console.log(segmentRed+", "+segmentGreen + ", "+segmentBlue);
 		
 		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
 				segmentEndLongitude, segmentEndLatitude, segmentRed,
-				segmentGreen, segmentBlue, "1px");
+				segmentGreen, segmentBlue, "0.3px");
 
 	}// END: slices loop
 
@@ -624,6 +623,10 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 function generateLineSegment(startLongitude, startLatitude, endLongitude,
 		endLatitude, segmentRed, segmentGreen, segmentBlue, width) {
 
+//	segmentRed = 50; 
+//	segmentGreen = 50; 
+//	segmentBlue = 250;
+	
 	g.append("path").datum(
 			{
 				type : "LineString",
