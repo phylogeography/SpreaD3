@@ -50,8 +50,7 @@ function setup(width, height) {
 	.attr("width", width) //
 	.attr("height", height) //
 	.call(zoom) //
-	.on("click", click) //
-	.append("g");
+	.on("click", click);
 
 	g = svg.append("g");
 
@@ -701,6 +700,13 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 d3.json("data/test_discrete.json", function(json) {
 
+	//TODO: slider
+//	var slider = d3.slider().axis(true).min(2000).max(2100).step(5);
+	
+//			d3.select(".timeLine").add(slider);
+	
+	d3.select('#timeLine').call(d3.slider().scale(d3.time.scale().domain([new Date(2011,1,1), new Date(2014,1,1)])).axis(d3.svg.axis()));
+	
 	var locations = json.locations;
 	var locationIds = [];
 	locations.forEach(function(location) {
