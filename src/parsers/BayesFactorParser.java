@@ -9,6 +9,7 @@ import data.SpreadData;
 import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
+import data.structure.TimeLine;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
 
@@ -29,6 +30,7 @@ public class BayesFactorParser {
 	public SpreadData parse() throws IOException, IllegalCharacterException,
 			LocationNotFoundException {
 
+		TimeLine timeLine = null;
 		LinkedList<Location> locationsList = null;
 		LinkedList<Line> linesList = null;
 
@@ -67,7 +69,7 @@ public class BayesFactorParser {
 
 		layersList.add(discreteLayer);
 
-		SpreadData data = new SpreadData(locationsList, layersList);
+		SpreadData data = new SpreadData(timeLine, locationsList, layersList);
 
 		System.out.println("Bayes Factors table: ");
 		this.printBfTable();

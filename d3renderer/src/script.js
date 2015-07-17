@@ -23,11 +23,15 @@ var graticule = d3.geo.graticule();
 var tooltip = d3.select("#container").append("div").attr("class",
 		"tooltip hidden");
 
+var locations;
+
+var polygons;
 var polygonValueMap = [];
 var polygonMinMaxMap = [];
 var polygonAreaSelect;
 var polygonColorSelect;
 
+var lines;
 var lineValueMap = [];
 var lineMinMaxMap = [];
 var lineWidthSelect;
@@ -181,7 +185,6 @@ function click() {
 	projection.invert(d3.mouse(this));
 }// END: click
 
-
 // /////////////////
 // ---RENDERING---//
 // /////////////////
@@ -207,11 +210,33 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 d3.json("data/test_discrete.json", function(json) {
 
-	//TODO: slider listener
+	var dateFormat = d3.time.format("%Y-%m-%d");
 	
-	d3.select('#timeSlider').call(d3.slider().scale(d3.time.scale().domain([new Date(2011,1,1), new Date(2014,1,1)])).axis(d3.svg.axis()));
+	var timeLine = json.timeLine;
+	var startDate = new Date(timeLine.startTime);
+	var endDate = new Date(timeLine.endTime);
+
+	// initial value
+	var currentDate = d3.select('#currentDate').text(dateFormat(startDate));
 	
-	var locations = json.locations;
+	var timeScale = d3.time.scale().domain([ startDate, endDate ] );// .range([0, 1  ]);
+	var timeSlider = d3.slider().scale( timeScale ) .axis(d3.svg.axis());
+	d3.select('#timeSlider').call(timeSlider);
+	
+	timeSlider.on('slide', function(evt, value) {
+
+		currentDate.text( dateFormat(timeScale.invert(timeScale(value))));
+		
+	});
+
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	locations = json.locations;
 	var locationIds = [];
 	locations.forEach(function(location) {
 
@@ -219,8 +244,6 @@ d3.json("data/test_discrete.json", function(json) {
 
 	});
 
-	var polygons = null;
-	var lines = null;
 	var layers = json.layers;
 	layers.forEach(function(layer) {
 

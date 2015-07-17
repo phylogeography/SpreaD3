@@ -1,4 +1,8 @@
 {
+  "timeLine": {
+    "startTime": "1999-10-07",
+    "endTime": "2011-01-01"
+  },
   "locations": [
     {
       "attributes": {},

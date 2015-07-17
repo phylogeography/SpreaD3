@@ -12,6 +12,7 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import data.structure.TimeLine;
 import exceptions.AnalysisException;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
@@ -28,6 +29,7 @@ public class DiscreteTreeParser {
 			LocationNotFoundException, IllegalCharacterException,
 			AnalysisException {
 
+		TimeLine timeLine = null;
 		LinkedList<Location> locationsList = null;
 		LinkedList<Polygon> polygonsList = null;
 		LinkedList<Line> linesList = null;
@@ -40,6 +42,10 @@ public class DiscreteTreeParser {
 
 		// ---PARSE AND FILL STRUCTURES---//
 
+		TimeParser timeParser = new TimeParser(settings.mrsd);
+		timeParser.parseTime();
+		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree.getRootNode()));
+		
 		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
 				settings.locations //
 		);
@@ -82,7 +88,7 @@ public class DiscreteTreeParser {
 
 		layersList.add(discreteLayer);
 
-		SpreadData data = new SpreadData(locationsList, layersList);
+		SpreadData data = new SpreadData(timeLine, locationsList, layersList);
 
 		return data;
 	}// END: parse

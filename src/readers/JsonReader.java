@@ -13,6 +13,7 @@ import data.structure.Layer;
 import data.structure.Line;
 import data.structure.Location;
 import data.structure.Polygon;
+import data.structure.TimeLine;
 import settings.reading.JsonReaderSettings;
 
 public class JsonReader {
@@ -27,11 +28,16 @@ public class JsonReader {
 
 	public SpreadData read() throws FileNotFoundException {
 
+		TimeLine timeLine = null;
 		LinkedList<Location> locationsList = null;
 		LinkedList<Line> linesList = null;
 		LinkedList<Polygon> polygonsList = null;
 		String name = "";
 
+		// ---TIME LINE---//
+		
+		//TODO: big ass todo; compare dates and grow if neccessary
+		
 		// ---LOCATIONS---//
 
 		if (settings.locations != null) {
@@ -106,7 +112,7 @@ public class JsonReader {
 				polygonsList);
 		layersList.add(layer);
 
-		SpreadData data = new SpreadData(locationsList, layersList);
+		SpreadData data = new SpreadData(timeLine, locationsList, layersList);
 
 		return data;
 	}// END: read
