@@ -15,7 +15,7 @@ import data.structure.Polygon;
 import exceptions.AnalysisException;
 import exceptions.LocationNotFoundException;
 
-public class DiscretePolygonsParser {
+public class DiscreteTreePolygonsParser {
 
 	public static final String COUNT = "count";
 //	public static final String LOCATION = "location";
@@ -28,7 +28,7 @@ public class DiscretePolygonsParser {
 	private String[] traits;
 	private String mrsd;
 	
-	public DiscretePolygonsParser(
+	public DiscreteTreePolygonsParser(
 			RootedTree rootedTree, //
 			String locationTrait, // 
 			Integer intervals, //

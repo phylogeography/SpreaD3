@@ -2,8 +2,8 @@ package parsers;
 
 import org.joda.time.LocalDate;
 
+import data.structure.TimeLine;
 import exceptions.AnalysisException;
-
 import utils.Utils;
 
 public class TimeParser {
@@ -77,6 +77,16 @@ public class TimeParser {
 		this.endDate = new LocalDate(year, month, day);
 	}// END: parseTime
 
+	public TimeLine getTimeLine(double rootNodeHeight) {
+		
+		String startDate = this.getNodeDate(rootNodeHeight);
+		String endDate = this.endDate.toString();
+		
+		TimeLine timeLine = new TimeLine(startDate, endDate);
+		
+		return timeLine;
+	}//END: getTimeLine
+	
 	public String getNodeDate(double nodeHeight) {
 
 		String[] fields = convertToYearMonthDay(nodeHeight);

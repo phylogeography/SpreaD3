@@ -62,7 +62,7 @@ public class DiscreteTreeParser {
 
 		System.out.println("Parsing polygons");
 		
-		DiscretePolygonsParser polygonsParser = new DiscretePolygonsParser(
+		DiscreteTreePolygonsParser polygonsParser = new DiscreteTreePolygonsParser(
 				rootedTree, //
 				settings.locationTrait, //
 				settings.intervals, //
