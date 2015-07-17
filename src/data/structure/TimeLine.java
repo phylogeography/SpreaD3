@@ -1,26 +1,23 @@
 package data.structure;
 
-import java.util.Date;
-
 public class TimeLine {
 
-//	Integer intervals;
+	private final String startTime;
+	private final String endTime;
 
-	
-	// startHeight in beast units (goes to 0)
-	private final double startHeight;
-	private final double endHeight;
-	
-//	private  String startDate;
-//	private  String endDate;
-	
-	public TimeLine(double startHeight, double endHeight) {
-		
-		this.startHeight = startHeight;
-		this.endHeight = endHeight;
+	public TimeLine(String startTime, String endTime) {
 
-		
-	}//END: Constructor
-	
-	
-}//END: class
+		this.startTime = startTime;
+		this.endTime = endTime;
+
+	}// END: Constructor
+
+	public String getStartTime() {
+		return startTime;
+	}// END: getStartTime
+
+	public String getEndTime() {
+		return endTime;
+	}// END: getEndTime
+
+}// END: class
