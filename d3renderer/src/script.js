@@ -211,31 +211,61 @@ d3.json("data/world-topo-min.json", function(error, world) {
 d3.json("data/test_discrete.json", function(json) {
 
 	var dateFormat = d3.time.format("%Y-%m-%d");
-	
+
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
 
 	// initial value
-	var currentDate = d3.select('#currentDate').text(dateFormat(startDate));
-	
-	var timeScale = d3.time.scale().domain([ startDate, endDate ] );// .range([0, 1  ]);
-	var timeSlider = d3.slider().scale( timeScale ) .axis(d3.svg.axis());
+	var currentDateDisplay = d3.select('#currentDate').text(dateFormat(startDate));
+
+	var timeScale = d3.time.scale().domain([ startDate, endDate ]).range([0,1]);
+	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
-	
+
+//	time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
-		currentDate.text( dateFormat(timeScale.invert(timeScale(value))));
+		var currentDate = timeScale.invert(timeScale(value));
+		currentDateDisplay.text(dateFormat(currentDate));
+
+//		console.log(currentDate);
+		
+		// TODO: paint polygons up to current date		
+		var layers = json.layers;
+		var poly2=null;
+		layers.forEach(function(layer) {
+			
+			var poly = layer.polygons;
+			
+			 poly2 = poly.filter(
+					function(d) { 
+						
+						var polygonStartDate = new Date(d.startTime);
+						if(polygonStartDate <= value) {
+							return d;
+						}
+						
+					}
+					) ;
+			
+		});
+		
+		console.log(poly2);
 		
 	});
 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	locations = json.locations;
 	var locationIds = [];
 	locations.forEach(function(location) {
@@ -278,7 +308,15 @@ d3.json("data/test_discrete.json", function(json) {
 
 	});
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 });
 
-// ///////
 
