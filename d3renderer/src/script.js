@@ -25,13 +25,16 @@ var tooltip = d3.select("#container").append("div").attr("class",
 
 var locations;
 
-var polygons;
-var polygonValueMap = [];
-var polygonMinMaxMap = [];
+var polygonsMap = [];
+var currentPolygons = null;
+//var polygonsMap = {};
+var polygonAttributeValues = [];
+var polygonAttributeMinMax = [];
 var polygonAreaSelect;
 var polygonColorSelect;
 
 var lines;
+//var lineSegmentsMap = {};
 var lineValueMap = [];
 var lineMinMaxMap = [];
 var lineWidthSelect;
@@ -209,9 +212,9 @@ d3.json("data/world-topo-min.json", function(error, world) {
 // ---DRAW DATA---//
 
 d3.json("data/test_discrete.json", function(json) {
-
+	
 	var dateFormat = d3.time.format("%Y-%m-%d");
-
+	
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
@@ -222,49 +225,6 @@ d3.json("data/test_discrete.json", function(json) {
 	var timeScale = d3.time.scale().domain([ startDate, endDate ]).range([0,1]);
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
-
-//	time slider listener
-	timeSlider.on('slide', function(evt, value) {
-
-		var currentDate = timeScale.invert(timeScale(value));
-		currentDateDisplay.text(dateFormat(currentDate));
-
-//		console.log(currentDate);
-		
-		// TODO: paint polygons up to current date		
-		var layers = json.layers;
-		var poly2=null;
-		layers.forEach(function(layer) {
-			
-			var poly = layer.polygons;
-			
-			 poly2 = poly.filter(
-					function(d) { 
-						
-						var polygonStartDate = new Date(d.startTime);
-						if(polygonStartDate <= value) {
-							return d;
-						}
-						
-					}
-					) ;
-			
-		});
-		
-		console.log(poly2);
-		
-	});
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	locations = json.locations;
 	var locationIds = [];
@@ -275,48 +235,171 @@ d3.json("data/test_discrete.json", function(json) {
 	});
 
 	var layers = json.layers;
+	var polygons=null ;
 	layers.forEach(function(layer) {
 
 		polygons = layer.polygons;
 		populatePolygonMaps(polygons);
 		generatePolygons(polygons, locations, locationIds);
-
-		lines = layer.lines;
-		populateLineMaps(lines);
-		generateLines(lines, locations, locationIds);
+		
+		currentPolygons = polygonsMap;
+        paintPolygons(currentPolygons);
+		
+		
+		
+//		lines = layer.lines;
+//		populateLineMaps(lines);
+//		generateLines(lines, locations, locationIds);
 
 	});
-
+	
+	
+	// polygon area listener
 	d3.select(polygonAreaSelect).on('change', function() {
-
-		g.selectAll(".polygon").remove();
-		generatePolygons(polygons, locations, locationIds);
-
-	});
-
-	d3.select(polygonColorSelect).on('change', function() {
-
-		g.selectAll(".polygon").remove();
-		generatePolygons(polygons, locations, locationIds);
-
-	});
-
-	d3.select(lineColorSelect).on('change', function() {
-
-		g.selectAll(".line").remove();
-		generateLines(lines, locations, locationIds);
-
-	});
-
 	
+			generatePolygons(polygons, locations, locationIds);
+			paintPolygons(currentPolygons);
+			 
+		});
 	
+	// polygon color listener
+		d3.select(polygonColorSelect).on('change', function() {
 	
+			generatePolygons(polygons, locations, locationIds);
+			paintPolygons(currentPolygons);
+			 
+		});
 	
-	
-	
-	
+	    // time slider listener
+		timeSlider.on('slide', function(evt, value) {
+
+			var currentDate = timeScale.invert(timeScale(value));
+			currentDateDisplay.text(dateFormat(currentDate));
+
+			// paint polygons up to current date		
+			var layers = json.layers;
+			layers.forEach(function(layer) {
+				
+				currentPolygons = polygonsMap.filter(
+						function(polygon) { 
+							
+							var polygonStartDate = new Date(polygon.startTime);
+							if(polygonStartDate <= value) {
+								return polygon;
+							}
+							
+						}
+						) ;
+				
+			});
+			
+			 paintPolygons(currentPolygons);
+			
+		});
 	
 	
 });
+
+//d3.json("data/test_discrete.json", function(json) {
+//
+//	var dateFormat = d3.time.format("%Y-%m-%d");
+//
+//	var timeLine = json.timeLine;
+//	var startDate = new Date(timeLine.startTime);
+//	var endDate = new Date(timeLine.endTime);
+//
+//	// initial value
+//	var currentDateDisplay = d3.select('#currentDate').text(dateFormat(startDate));
+//
+//	var timeScale = d3.time.scale().domain([ startDate, endDate ]).range([0,1]);
+//	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+//	d3.select('#timeSlider').call(timeSlider);
+//
+////	time slider listener
+//	timeSlider.on('slide', function(evt, value) {
+//
+//		var currentDate = timeScale.invert(timeScale(value));
+//		currentDateDisplay.text(dateFormat(currentDate));
+//
+////		console.log(currentDate);
+//		
+//		// TODO: paint polygons up to current date		
+//		var layers = json.layers;
+//		var poly2=null;
+//		layers.forEach(function(layer) {
+//			
+//			var poly = layer.polygons;
+//			
+//			 poly2 = poly.filter(
+//					function(d) { 
+//						
+//						var polygonStartDate = new Date(d.startTime);
+//						if(polygonStartDate <= value) {
+//							return d;
+//						}
+//						
+//					}
+//					) ;
+//			
+//		});
+//		
+//		console.log(poly2);
+//		
+//	});
+//
+//	
+//	
+//	
+//	
+//	
+//	
+//	
+//	
+//	
+//	
+//	
+//	locations = json.locations;
+//	var locationIds = [];
+//	locations.forEach(function(location) {
+//
+//		locationIds.push(location.id);
+//
+//	});
+//
+//	var layers = json.layers;
+//	layers.forEach(function(layer) {
+//
+//		polygons = layer.polygons;
+//		populatePolygonMaps(polygons);
+//		generatePolygons(polygons, locations, locationIds);
+//
+//		lines = layer.lines;
+//		populateLineMaps(lines);
+//		generateLines(lines, locations, locationIds);
+//
+//	});
+//
+//	d3.select(polygonAreaSelect).on('change', function() {
+//
+//		g.selectAll(".polygon").remove();
+//		generatePolygons(polygons, locations, locationIds);
+//
+//	});
+//
+//	d3.select(polygonColorSelect).on('change', function() {
+//
+//		g.selectAll(".polygon").remove();
+//		generatePolygons(polygons, locations, locationIds);
+//
+//	});
+//
+//	d3.select(lineColorSelect).on('change', function() {
+//
+//		g.selectAll(".line").remove();
+//		generateLines(lines, locations, locationIds);
+//
+//	});
+//
+//});
 
 

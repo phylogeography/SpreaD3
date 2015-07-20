@@ -10,17 +10,17 @@ function populatePolygonMaps(polygons) {
 
 			// process values
 			var value = attributes[property].id;
-			if (!(value in polygonValueMap)) {
+			if (!(value in polygonAttributeValues)) {
 
 				if (isNumeric(value)) {
 
-					polygonValueMap[value] = {
+					polygonAttributeValues[value] = {
 						value : value,
 					};
 
 				} else {
 
-					polygonValueMap[value] = {
+					polygonAttributeValues[value] = {
 						value : factorValue,
 					};
 
@@ -31,27 +31,27 @@ function populatePolygonMaps(polygons) {
 			} // END: contains check
 
 			// get min max values
-			if (!(property in polygonMinMaxMap)) {
+			if (!(property in polygonAttributeMinMax)) {
 
-				polygonMinMaxMap[property] = {
-					min : polygonValueMap[value].value,
-					max : polygonValueMap[value].value
+				polygonAttributeMinMax[property] = {
+					min : polygonAttributeValues[value].value,
+					max : polygonAttributeValues[value].value
 				};
 
 			} else {
 
-				var min = polygonMinMaxMap[property].min;
-				var candidateMin = polygonValueMap[value].value;
+				var min = polygonAttributeMinMax[property].min;
+				var candidateMin = polygonAttributeValues[value].value;
 
 				if (candidateMin < min) {
-					polygonMinMaxMap[property].min = candidateMin;
+					polygonAttributeMinMax[property].min = candidateMin;
 				}// END: min check
 
-				var max = polygonMinMaxMap[property].max;
-				var candidateMax = polygonValueMap[value].value;
+				var max = polygonAttributeMinMax[property].max;
+				var candidateMax = polygonAttributeValues[value].value;
 
 				if (candidateMax > max) {
-					polygonMinMaxMap[property].max = candidateMax;
+					polygonAttributeMinMax[property].max = candidateMax;
 				}// END: max check
 
 			}// END: key check
@@ -60,13 +60,13 @@ function populatePolygonMaps(polygons) {
 
 	});// END: polygons loop
 
-	// printMap(polygonValueMap);
-	// printMap(polygonMinMaxMap);
+	// printMap(polygonAttributeValues);
+	// printMap(polygonAttributeMinMax);
 
 	var i;
 	var option;
 	var element;
-	var keys = Object.keys(polygonMinMaxMap);
+	var keys = Object.keys(polygonAttributeMinMax);
 
 	polygonAreaSelect = document.getElementById("selectPolygonAreaAttribute");
 	for (i = 0; i < keys.length; i++) {
@@ -106,8 +106,8 @@ function generatePolygons(polygons, locations, locationIds) {
 
 	var areaScale = d3.scale.linear() //
 	.domain(
-			[ polygonMinMaxMap[areaAttribute].min,
-					polygonMinMaxMap[areaAttribute].max ]) //
+			[ polygonAttributeMinMax[areaAttribute].min,
+					polygonAttributeMinMax[areaAttribute].max ]) //
 	.range([ minArea, maxArea ]);
 
 	// color mapping
@@ -121,24 +121,24 @@ function generatePolygons(polygons, locations, locationIds) {
 	var minRed = cbMap[numC][0];
 	var maxRed = cbMap[numC][numC - 1];
 	var redScale = d3.scale.linear().domain(
-			[ polygonMinMaxMap[colorAttribute].min,
-					polygonMinMaxMap[colorAttribute].max ]) //
+			[ polygonAttributeMinMax[colorAttribute].min,
+					polygonAttributeMinMax[colorAttribute].max ]) //
 	.range([ minRed, maxRed ]);
 
 	cbMap = colorbrewer["Greens"];
 	var minGreen = cbMap[numC][0];
 	var maxGreen = cbMap[numC][numC - 1];
 	var greenScale = d3.scale.linear().domain(
-			[ polygonMinMaxMap[colorAttribute].min,
-					polygonMinMaxMap[colorAttribute].max ]) //
+			[ polygonAttributeMinMax[colorAttribute].min,
+					polygonAttributeMinMax[colorAttribute].max ]) //
 	.range([ minGreen, maxGreen ]);
 
 	cbMap = colorbrewer["Blues"];
 	var minBlue = cbMap[numC][0];
 	var maxBlue = cbMap[numC][numC - 1];
 	var blueScale = d3.scale.linear().domain(
-			[ polygonMinMaxMap[colorAttribute].min,
-					polygonMinMaxMap[colorAttribute].max ]) //
+			[ polygonAttributeMinMax[colorAttribute].min,
+					polygonAttributeMinMax[colorAttribute].max ]) //
 	.range([ minBlue, maxBlue ]);
 
 	var attribute;
@@ -146,11 +146,11 @@ function generatePolygons(polygons, locations, locationIds) {
 	polygons.forEach(function(polygon) {
 
 		attribute = polygon.attributes[areaAttribute].id;
-		value = polygonValueMap[attribute].value;
+		value = polygonAttributeValues[attribute].value;
 		var area = areaScale(value);
 
 		attribute = polygon.attributes[colorAttribute].id;
-		value = polygonValueMap[attribute].value;
+		value = polygonAttributeValues[attribute].value;
 		var red = d3.rgb(redScale(value)).r;
 		var green = d3.rgb(greenScale(value)).g;
 		var blue = d3.rgb(blueScale(value)).b;
@@ -185,15 +185,41 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 
 		var radius = Math.sqrt(area / Math.PI);
 
-		// console.log("rgb(" +red + "," +green + "," + blue + ")");
-
-		g.append("circle") //
-		.attr("class", "polygon") //
-		.attr("cx", x) //
-		.attr("cy", y) //
-		.attr("r", radius + "px") //
-		.attr("fill", "rgb(" + red + "," + green + "," + blue + ")");
-
+      var startTime = polygon.startTime;
+      
+		var poly = {
+				startTime : startTime, //
+				x : x, //
+				y : y, //
+				radius : radius, //
+				red : red, //
+				green : green, //
+				blue : blue
+			//  
+			};
+		
+		polygonsMap.push(poly);
+		
+		
+		
+//      if (!(startTime in polygonsMap)) {
+//
+//		  var list = [  ];
+//    	  list.push(poly);
+//    	  
+//    	  polygonsMap[startTime] = {
+//    			  value : list
+//    	  };
+//    	  
+//      } else {
+//    	  
+//    	  polygonsMap[startTime].value.push(poly); 
+//
+//      }//END: key check
+      
+		
+		
+		
 	} else {
 
 		// TODO
@@ -201,3 +227,40 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 	}// END: hasLocation check
 
 }// END: generatePolygon
+
+function paintPolygons(currentPolygons) {
+	
+	g.selectAll(".polygon").remove();
+	
+	$.each(currentPolygons, function ( i ) {
+	
+		var polygon = currentPolygons[i];
+		
+			g.append("circle") //
+			.attr("class", "polygon") //
+			.attr("cx", polygon.x) //
+			.attr("cy", polygon.y) //
+			.attr("r", polygon.radius + "px") //
+			.attr("fill", "rgb(" + polygon.red + "," + polygon.green + "," + polygon.blue + ")");
+		
+	});
+		
+//	$.each(polygonsMap, function (key, value) {
+//
+//		    for (var i = 0; i < polygonsMap[key].value.length; i++) {
+//		  
+//		  	    	var polygon = polygonsMap[key].value[i];
+//		  	    	
+//		  			g.append("circle") //
+//		  			.attr("class", "polygon") //
+//		  			.attr("cx", polygon.x) //
+//		  			.attr("cy", polygon.y) //
+//		  			.attr("r", polygon.radius + "px") //
+//		  			.attr("fill", "rgb(" + polygon.red + "," + polygon.green + "," + polygon.blue + ")");
+//		  	    	
+//		  	    }// END: i loop
+//		
+//	});
+	
+	
+}//END: paintPolygons

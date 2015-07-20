@@ -287,3 +287,11 @@ function generateLineSegment(startLongitude, startLatitude, endLongitude,
 	.attr("stroke-width", segmentWidth + "px");
 
 }// END: generateLineSegment
+
+
+function paintLineSegments(lineSegmentsMap) {
+	
+	
+	
+	
+}
