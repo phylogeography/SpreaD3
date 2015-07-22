@@ -248,6 +248,8 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 	var blueStep = (endBlue - startBlue) / sliceCount;
 
 	// TODO: time and duration for animation
+	var startTime = line.startTime;
+	var endTime = line.endTime;
 
 	for (var i = 0; i < sliceCount; i++) {
 
@@ -263,16 +265,19 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 
 		var segmentWidth = width;
 
+		var segmentStartTime = startTime;
+		
 		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
 				segmentEndLongitude, segmentEndLatitude, segmentRed,
-				segmentGreen, segmentBlue, segmentWidth);
+				segmentGreen, segmentBlue, segmentWidth, segmentStartTime);
 
 	}// END: slices loop
 
 }// END: generateLine
 
 function generateLineSegment(startLongitude, startLatitude, endLongitude,
-		endLatitude, segmentRed, segmentGreen, segmentBlue, segmentWidth) {
+		endLatitude, segmentRed, segmentGreen, segmentBlue, segmentWidth,
+		segmentStartTime) {
 
 	g.append("path").datum(
 			{
@@ -280,18 +285,12 @@ function generateLineSegment(startLongitude, startLatitude, endLongitude,
 				coordinates : [ [ startLongitude, startLatitude ],
 						[ endLongitude, endLatitude ] ]
 			}) //
-	.attr("d", path).attr("fill", "none") //
 	.attr("class", "line") //
+	.attr("startTime", segmentStartTime) //
+	.attr("d", path).attr("fill", "none") //
 	.attr("stroke",
 			"rgb(" + segmentRed + "," + segmentGreen + "," + segmentBlue + ")") //
 	.attr("stroke-width", segmentWidth + "px");
 
 }// END: generateLineSegment
 
-
-function paintLineSegments(lineSegmentsMap) {
-	
-	
-	
-	
-}

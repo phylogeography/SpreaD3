@@ -187,38 +187,14 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 
       var startTime = polygon.startTime;
       
-		var poly = {
-				startTime : startTime, //
-				x : x, //
-				y : y, //
-				radius : radius, //
-				red : red, //
-				green : green, //
-				blue : blue
-			//  
-			};
-		
-		polygonsMap.push(poly);
-		
-		
-		
-//      if (!(startTime in polygonsMap)) {
-//
-//		  var list = [  ];
-//    	  list.push(poly);
-//    	  
-//    	  polygonsMap[startTime] = {
-//    			  value : list
-//    	  };
-//    	  
-//      } else {
-//    	  
-//    	  polygonsMap[startTime].value.push(poly); 
-//
-//      }//END: key check
+  	g.append("circle") //
+  	.attr("class", "polygon") //
+  	.attr("startTime", startTime) //
+	.attr("cx",  x) //
+	.attr("cy",  y) //
+	.attr("r",  radius + "px") //
+	.attr("fill", "rgb(" +  red + "," +  green + "," +  blue + ")");
       
-		
-		
 		
 	} else {
 
@@ -228,39 +204,3 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 
 }// END: generatePolygon
 
-function paintPolygons(currentPolygons) {
-	
-	g.selectAll(".polygon").remove();
-	
-	$.each(currentPolygons, function ( i ) {
-	
-		var polygon = currentPolygons[i];
-		
-			g.append("circle") //
-			.attr("class", "polygon") //
-			.attr("cx", polygon.x) //
-			.attr("cy", polygon.y) //
-			.attr("r", polygon.radius + "px") //
-			.attr("fill", "rgb(" + polygon.red + "," + polygon.green + "," + polygon.blue + ")");
-		
-	});
-		
-//	$.each(polygonsMap, function (key, value) {
-//
-//		    for (var i = 0; i < polygonsMap[key].value.length; i++) {
-//		  
-//		  	    	var polygon = polygonsMap[key].value[i];
-//		  	    	
-//		  			g.append("circle") //
-//		  			.attr("class", "polygon") //
-//		  			.attr("cx", polygon.x) //
-//		  			.attr("cy", polygon.y) //
-//		  			.attr("r", polygon.radius + "px") //
-//		  			.attr("fill", "rgb(" + polygon.red + "," + polygon.green + "," + polygon.blue + ")");
-//		  	    	
-//		  	    }// END: i loop
-//		
-//	});
-	
-	
-}//END: paintPolygons
