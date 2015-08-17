@@ -215,7 +215,7 @@ d3.json("data/test_discrete.json", function(json) {
 
 	// paint it all, then manipulate visibility according to dates
 	
-	var dateFormat = d3.time.format("%Y-%m-%d");
+//	var dateFormat = d3.time.format("%Y-%m-%d");
 
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
@@ -225,7 +225,7 @@ d3.json("data/test_discrete.json", function(json) {
 	var currentDateDisplay = d3.select('#currentDate').text(
 			dateFormat(startDate));
 
-	var timeScale = d3.time.scale().domain([ startDate, endDate ]).range(
+	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
 			[ 0, 1 ]);
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
@@ -240,15 +240,16 @@ d3.json("data/test_discrete.json", function(json) {
 
 	var layers = json.layers;
 	var polygons = null;
+	var lines = null;
 	layers.forEach(function(layer) {
 
 		polygons = layer.polygons;
 		populatePolygonMaps(polygons);
 		generatePolygons(polygons, locations, locationIds);
 
-		// lines = layer.lines;
-		// populateLineMaps(lines);
-		// generateLines(lines, locations, locationIds);
+		 lines = layer.lines;
+		 populateLineMaps(lines);
+		 generateLines(lines, locations, locationIds);
 
 	});
 
@@ -268,13 +269,23 @@ d3.json("data/test_discrete.json", function(json) {
 
 	});
 
+	// line color listener
+	 d3.select(lineColorSelect).on('change', function() {
+	
+	 g.selectAll(".line").remove();
+	 generateLines(lines, locations, locationIds);
+	
+	 });
+	
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
 		var currentDate = timeScale.invert(timeScale(value));
 		currentDateDisplay.text(dateFormat(currentDate));
 
-		// TODO: set transparency (opacity) on polygons up to current date
+		// set transparency (opacity) on elements up to current date
+		
+		// polygons
 		d3.selectAll(".polygon")[0].filter(function(polygon) {
 
 			var polygonStartDate = new Date(polygon.attributes.startTime.value);
@@ -291,111 +302,28 @@ d3.json("data/test_discrete.json", function(json) {
 		});//END: filter
 
 		
+		// lines
+		d3.selectAll(".line")[0].filter(function(line) {
+		
+			var lineStartDate = new Date(line.attributes.startTime.value);
+			if (lineStartDate <= value) {
+
+				line.setAttribute('visibility', "visible");
+				
+			} else {
+				
+				line.setAttribute('visibility', "hidden");
+				
+			}//END: date check
+			
+			
+			
+		});//END: filter
+		
+		
 		
 	});//END: slide
 
 });
 
-// d3.json("data/test_discrete.json", function(json) {
-//
-// var dateFormat = d3.time.format("%Y-%m-%d");
-//
-// var timeLine = json.timeLine;
-// var startDate = new Date(timeLine.startTime);
-// var endDate = new Date(timeLine.endTime);
-//
-// // initial value
-// var currentDateDisplay =
-// d3.select('#currentDate').text(dateFormat(startDate));
-//
-// var timeScale = d3.time.scale().domain([ startDate, endDate ]).range([0,1]);
-// var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-// d3.select('#timeSlider').call(timeSlider);
-//
-// // time slider listener
-// timeSlider.on('slide', function(evt, value) {
-//
-// var currentDate = timeScale.invert(timeScale(value));
-// currentDateDisplay.text(dateFormat(currentDate));
-//
-// // console.log(currentDate);
-//		
-// // TODO: paint polygons up to current date
-// var layers = json.layers;
-// var poly2=null;
-// layers.forEach(function(layer) {
-//			
-// var poly = layer.polygons;
-//			
-// poly2 = poly.filter(
-// function(d) {
-//						
-// var polygonStartDate = new Date(d.startTime);
-// if(polygonStartDate <= value) {
-// return d;
-// }
-//						
-// }
-// ) ;
-//			
-// });
-//		
-// console.log(poly2);
-//		
-// });
-//
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-// locations = json.locations;
-// var locationIds = [];
-// locations.forEach(function(location) {
-//
-// locationIds.push(location.id);
-//
-// });
-//
-// var layers = json.layers;
-// layers.forEach(function(layer) {
-//
-// polygons = layer.polygons;
-// populatePolygonMaps(polygons);
-// generatePolygons(polygons, locations, locationIds);
-//
-// lines = layer.lines;
-// populateLineMaps(lines);
-// generateLines(lines, locations, locationIds);
-//
-// });
-//
-// d3.select(polygonAreaSelect).on('change', function() {
-//
-// g.selectAll(".polygon").remove();
-// generatePolygons(polygons, locations, locationIds);
-//
-// });
-//
-// d3.select(polygonColorSelect).on('change', function() {
-//
-// g.selectAll(".polygon").remove();
-// generatePolygons(polygons, locations, locationIds);
-//
-// });
-//
-// d3.select(lineColorSelect).on('change', function() {
-//
-// g.selectAll(".line").remove();
-// generateLines(lines, locations, locationIds);
-//
-// });
-//
-// });
 

@@ -17,13 +17,13 @@ function populateLineMaps(lines) {
 				if (isNumeric(value)) {
 
 					lineValueMap[value] = {
-						value : value,
+						value : value
 					};
 
 				} else {
 
 					lineValueMap[value] = {
-						value : factorValue,
+						value : factorValue
 					};
 
 					factorValue++;
@@ -247,10 +247,13 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 	var greenStep = (endGreen - startGreen) / sliceCount;
 	var blueStep = (endBlue - startBlue) / sliceCount;
 
-	// TODO: time and duration for animation
-	var startTime = line.startTime;
-	var endTime = line.endTime;
-
+//	var startTime = Date.parse("1969-01-01");
+	
+	var startTime = Date.parse(line.startTime);
+	var endTime =Date.parse( line.endTime);
+	var millis = endTime - startTime;
+	var segmentMillis = millis / (sliceCount - 1);
+	
 	for (var i = 0; i < sliceCount; i++) {
 
 		var segmentStartLongitude = coords[i][LONGITUDE];
@@ -265,7 +268,10 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 
 		var segmentWidth = width;
 
-		var segmentStartTime = startTime;
+		var duration = segmentMillis * i;
+		var segmentStartTime = dateFormat(new Date(startTime + duration));
+		
+//		console.log(segmentStartTime);
 		
 		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
 				segmentEndLongitude, segmentEndLatitude, segmentRed,

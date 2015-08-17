@@ -10,6 +10,8 @@ var EARTH_RADIUS = 6371.0;
 var LONGITUDE = 0;
 var LATITUDE = 1;
 
+var dateFormat = d3.time.format("%Y-%m-%d");
+
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////

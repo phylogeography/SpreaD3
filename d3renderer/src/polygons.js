@@ -15,13 +15,13 @@ function populatePolygonMaps(polygons) {
 				if (isNumeric(value)) {
 
 					polygonAttributeValues[value] = {
-						value : value,
+						value : value
 					};
 
 				} else {
 
 					polygonAttributeValues[value] = {
-						value : factorValue,
+						value : factorValue
 					};
 
 					factorValue++;
