@@ -247,7 +247,7 @@ d3.json("data/test_discrete.json", function(json) {
 
 		 lines = layer.lines;
 		 populateLineMaps(lines);
-		 generateLines(lines, locations, locationIds);
+//		 generateLines(lines, locations, locationIds);
 
 	});
 
@@ -284,14 +284,27 @@ d3.json("data/test_discrete.json", function(json) {
 		// set transparency (opacity) on elements up to current date
 		
 		// polygons
-		d3.selectAll(".polygon")[0].filter(function(polygon) {
+		d3.selectAll(".polygon")[0]
+		.filter(function(polygon) {
 
 			var polygonStartDate = new Date(polygon.attributes.startTime.value);
 			if (polygonStartDate <= value) {
 
 				// TODO: transition
 				
-				polygon.setAttribute('opacity', 1);
+//				polygon.setAttribute('opacity', 1);
+				
+				
+					
+					d3.select(polygon) //
+					.transition() //
+			    .duration(750)//
+			    .attr("opacity", 1);
+				
+//				console.log(tmp);
+//				tmp.transition()
+//			    .duration(750)
+//			    .style("fill", "steelblue");
 				
 			} else {
 				
@@ -300,9 +313,6 @@ d3.json("data/test_discrete.json", function(json) {
 			}//END: date check
 
 		})
-		
-		.transition()
-		
 		;//END: filter
 
 		
