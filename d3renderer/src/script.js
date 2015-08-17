@@ -289,6 +289,8 @@ d3.json("data/test_discrete.json", function(json) {
 			var polygonStartDate = new Date(polygon.attributes.startTime.value);
 			if (polygonStartDate <= value) {
 
+				// TODO: transition
+				
 				polygon.setAttribute('opacity', 1);
 				
 			} else {
@@ -297,7 +299,11 @@ d3.json("data/test_discrete.json", function(json) {
 				
 			}//END: date check
 
-		});//END: filter
+		})
+		
+		.transition()
+		
+		;//END: filter
 
 		
 		// lines
