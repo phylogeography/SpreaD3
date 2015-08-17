@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spread2 D3/JS renderer</title>
+
+<!-- libs -->
+<script type="text/javascript" src="../lib/d3/d3.min.js"></script>
+<script type="text/javascript" src="../lib/topojson/topojson.v1.min.js"></script>
+<script type="text/javascript" src="../lib/jquery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../lib/colorbrewer/colorbrewer.js"></script>
+<script type="text/javascript" src="../lib/d3.slider/d3.slider.js"></script>
+<link rel="stylesheet" href="../lib/d3.slider/d3.slider.css" />
+
+<!-- sources -->
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="polygons.js"></script>
+<script type="text/javascript" src="lines.js"></script>
+
+<style type="text/css">
+.selectors {
+	margin-top: 1.5cm;
+	float: left;
+}
+
+#container {
+	margin-top: 1.5cm;
+	/*  margin: 10px 10%; */
+	border: 2px solid #000;
+	border-radius: 5px;
+	height: 100%;
+	overflow: hidden;
+	background: #F0F8FF;
+}
+
+.country:hover {
+	stroke: #fff;
+	stroke-width: 1.5px;
+}
+
+.text {
+	font-size: 10px;
+	text-transform: capitalize;
+}
+
+.hidden {
+	display: none;
+}
+
+div.tooltip {
+	color: #222;
+	background: #fff;
+	padding: .5em;
+	text-shadow: #f5f5f5 0 1px 0;
+	border-radius: 2px;
+	box-shadow: 0px 0px 2px 0px #a6a6a6;
+	opacity: 0.9;
+	position: absolute;
+}
+
+.graticule {
+	fill: none;
+	stroke: #bbb;
+	stroke-width: .5px;
+	stroke-opacity: .5;
+}
+
+.equator {
+	stroke: #ccc;
+	stroke-width: 1px;
+}
+</style>
+</head>
+
+
+<body>
+
+	<div class="all" style="display: block;">
+
+		<div id="controls">
+			<h2>
+				Current date: <span id="currentDate"> 0 </span>
+			</h2>
+			<div id="timeSlider"></div>
+		</div>
+
+		<div class="selectorsANDcontainer" style="display: inline;">
+
+			<div class="selectors" style="display: block;">
+
+				<!-- SELECTORS -->
+
+				<div class="attributeSelector" style="display: block;"
+					id="polygonAreaForm">
+					<label>Select polygon area attribute: <select
+						id="selectPolygonAreaAttribute">
+					</select>
+					</label>
+				</div>
+
+				<div class="attributeSelector" style="display: block;"
+					id="polygonAreaForm">
+					<label>Select polygon color attribute: <select
+						id="selectPolygonColorAttribute">
+					</select>
+					</label>
+				</div>
+
+				<div class="attributeSelector" style="display: block;"
+					id="lineWidthForm">
+					<label>Select line width attribute: <select
+						id="selectLineWidthAttribute">
+					</select>
+					</label>
+				</div>
+
+				<div class="attributeSelector" style="display: block;"
+					id="lineWidthForm">
+					<label>Select line color attribute: <select
+						id="selectLineColorAttribute">
+					</select>
+					</label>
+				</div>
+
+			</div>
+			<!-- END: selectors-->
+
+			<div id="container"></div>
+
+		</div>
+		<!-- END: selectorsANDcontainer-->
+
+	</div>
+	<!-- END: all-->
+
+	<script type="text/javascript" src="script.js">
+    
+</script>
+</body>
+</html>
