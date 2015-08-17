@@ -213,10 +213,8 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 d3.json("data/test_discrete.json", function(json) {
 
-	// paint it all, then manipulate visibility according to dates
+	// paint all, then manipulate visibility according to dates
 	
-//	var dateFormat = d3.time.format("%Y-%m-%d");
-
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
@@ -291,11 +289,11 @@ d3.json("data/test_discrete.json", function(json) {
 			var polygonStartDate = new Date(polygon.attributes.startTime.value);
 			if (polygonStartDate <= value) {
 
-				polygon.setAttribute('visibility', "visible");
+				polygon.setAttribute('opacity', 1);
 				
 			} else {
 				
-				polygon.setAttribute('visibility', "hidden");
+				polygon.setAttribute('opacity', 0);
 				
 			}//END: date check
 
@@ -308,11 +306,11 @@ d3.json("data/test_discrete.json", function(json) {
 			var lineStartDate = new Date(line.attributes.startTime.value);
 			if (lineStartDate <= value) {
 
-				line.setAttribute('visibility', "visible");
+				line.setAttribute('opacity', 1);
 				
 			} else {
 				
-				line.setAttribute('visibility', "hidden");
+				line.setAttribute('opacity', 0);
 				
 			}//END: date check
 			
