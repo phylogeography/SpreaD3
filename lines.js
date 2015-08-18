@@ -247,13 +247,13 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 	var greenStep = (endGreen - startGreen) / sliceCount;
 	var blueStep = (endBlue - startBlue) / sliceCount;
 
-//	var startTime = Date.parse("1969-01-01");
-	
+	// var startTime = Date.parse("1969-01-01");
+
 	var startTime = Date.parse(line.startTime);
-	var endTime =Date.parse( line.endTime);
+	var endTime = Date.parse(line.endTime);
 	var millis = endTime - startTime;
 	var segmentMillis = millis / (sliceCount - 1);
-	
+
 	for (var i = 0; i < sliceCount; i++) {
 
 		var segmentStartLongitude = coords[i][LONGITUDE];
@@ -270,9 +270,9 @@ function generateLine(line, startCoordinate, endCoordinate, startRed,
 
 		var duration = segmentMillis * i;
 		var segmentStartTime = dateFormat(new Date(startTime + duration));
-		
-//		console.log(segmentStartTime);
-		
+
+		// console.log(segmentStartTime);
+
 		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
 				segmentEndLongitude, segmentEndLatitude, segmentRed,
 				segmentGreen, segmentBlue, segmentWidth, segmentStartTime);
@@ -294,9 +294,10 @@ function generateLineSegment(startLongitude, startLatitude, endLongitude,
 	.attr("class", "line") //
 	.attr("startTime", segmentStartTime) //
 	.attr("d", path).attr("fill", "none") //
+	.attr("stroke-width", segmentWidth + "px") //
 	.attr("stroke",
 			"rgb(" + segmentRed + "," + segmentGreen + "," + segmentBlue + ")") //
-	.attr("stroke-width", segmentWidth + "px");
+	.attr("opacity", 1);
 
 }// END: generateLineSegment
 

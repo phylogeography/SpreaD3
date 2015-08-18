@@ -193,9 +193,9 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 	.attr("cx",  x) //
 	.attr("cy",  y) //
 	.attr("r",  radius + "px") //
-	.attr("fill", "rgb(" +  red + "," +  green + "," +  blue + ")");
+	.attr("fill", "rgb(" +  red + "," +  green + "," +  blue + ")") //
+	.attr("opacity", 1);
       
-		
 	} else {
 
 		// TODO

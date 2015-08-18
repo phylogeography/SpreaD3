@@ -44,6 +44,18 @@ var lineColorSelect;
 // ---FUNCTIONS---//
 // /////////////////
 
+
+//find the top left and bottom right of current projection
+function mercatorBounds(projection, maxlat) {
+ 
+	var yaw = projection.rotate()[0],
+     xymax = projection([-yaw+180-1e-6,-maxlat]),
+     xymin = projection([-yaw-180+1e-6, maxlat]);
+ 
+ return [xymin,xymax];
+
+}
+
 // ---SETUP---//
 function setup(width, height) {
 
@@ -132,14 +144,45 @@ function draw(topo) {
 
 // ---REDRAW---//
 
-function redraw() {
+// TODO
 
+var tlast = [0, 0];
+
+// set up the scale extent and initial scale for the projection
+var b = mercatorBounds(projection, maxlat);
+var s = width / (b[1][0] - b[0][0]);
+var scaleExtent = [s, 10 * s];
+
+//////////
+
+function redraw() {
+	
 	width = document.getElementById('container').offsetWidth;
 	height = width / 2;
 	d3.select('svg').remove();
 	setup(width, height);
+	
+	
+	//TODO
+		
+	var t = d3.event.translate;      
+	
+	
+	var dx = t[0] - tlast[0];
+	var dy = t[1] - tlast[1];
+	var yaw = projection.rotate()[0];
+	var tp = projection.translate();
+	
+	// use x translation to rotate based on current scale
+    projection.rotate([yaw + 360.0 * dx / width * scaleExtent[0] / scale, 0, 0]);
+	
+	 tlast = t;
+	
+	////////////
+	
+	
 	draw(topo);
-
+	
 }// END: redraw
 
 // ---MOVE---//
@@ -213,9 +256,7 @@ d3.json("data/world-topo-min.json", function(error, world) {
 
 d3.json("data/test_discrete.json", function(json) {
 
-	// paint it all, then manipulate visibility according to dates
-	
-//	var dateFormat = d3.time.format("%Y-%m-%d");
+	// paint all, then manipulate visibility according to dates
 
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
@@ -247,15 +288,18 @@ d3.json("data/test_discrete.json", function(json) {
 		populatePolygonMaps(polygons);
 		generatePolygons(polygons, locations, locationIds);
 
-		 lines = layer.lines;
-		 populateLineMaps(lines);
-		 generateLines(lines, locations, locationIds);
+		lines = layer.lines;
+		populateLineMaps(lines);
+		generateLines(lines, locations, locationIds);
 
 	});
 
 	// polygon area listener
 	d3.select(polygonAreaSelect).on('change', function() {
-		//TODO: listeners should also 'rewind time', or set the visibility to current setting on the slider
+		
+		// TODO: listeners should also 'rewind time', or set the visibility to
+		// current setting on the slider
+		
 		g.selectAll(".polygon").remove();
 		generatePolygons(polygons, locations, locationIds);
 
@@ -270,13 +314,13 @@ d3.json("data/test_discrete.json", function(json) {
 	});
 
 	// line color listener
-	 d3.select(lineColorSelect).on('change', function() {
-	
-	 g.selectAll(".line").remove();
-	 generateLines(lines, locations, locationIds);
-	
-	 });
-	
+	d3.select(lineColorSelect).on('change', function() {
+
+		g.selectAll(".line").remove();
+		generateLines(lines, locations, locationIds);
+
+	});
+
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
@@ -284,46 +328,51 @@ d3.json("data/test_discrete.json", function(json) {
 		currentDateDisplay.text(dateFormat(currentDate));
 
 		// set transparency (opacity) on elements up to current date
-		
+
 		// polygons
-		d3.selectAll(".polygon")[0].filter(function(polygon) {
+		d3.selectAll(".polygon")[0]
+				.filter(function(polygon) {
 
-			var polygonStartDate = new Date(polygon.attributes.startTime.value);
-			if (polygonStartDate <= value) {
+					var polygonStartDate = new Date(
+							polygon.attributes.startTime.value);
+					if (polygonStartDate <= value) {
 
-				polygon.setAttribute('visibility', "visible");
-				
-			} else {
-				
-				polygon.setAttribute('visibility', "hidden");
-				
-			}//END: date check
+						d3.select(polygon) //
+						.transition() //
+						.duration(750) //
+						.attr("opacity", 1);
 
-		});//END: filter
+					} else {
 
-		
+						d3.select(polygon).attr("opacity", 0);
+						
+//						polygon.setAttribute('opacity', 0);
+
+					}// END: date check
+
+				});// END: filter
+
 		// lines
 		d3.selectAll(".line")[0].filter(function(line) {
-		
+
 			var lineStartDate = new Date(line.attributes.startTime.value);
 			if (lineStartDate <= value) {
 
-				line.setAttribute('visibility', "visible");
-				
+				d3.select(line) //
+				.transition() //
+				.duration(750) //
+				.attr("opacity", 1);
+
 			} else {
+
+				d3.select(line).attr("opacity", 0);
 				
-				line.setAttribute('visibility', "hidden");
-				
-			}//END: date check
-			
-			
-			
-		});//END: filter
-		
-		
-		
-	});//END: slide
+//				line.setAttribute('opacity', 0);
+
+			}// END: date check
+
+		});// END: filter
+
+	});// END: slide
 
 });
-
-
