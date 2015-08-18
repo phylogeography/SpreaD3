@@ -45,17 +45,6 @@ var lineColorSelect;
 // /////////////////
 
 
-//find the top left and bottom right of current projection
-function mercatorBounds(projection, maxlat) {
- 
-	var yaw = projection.rotate()[0],
-     xymax = projection([-yaw+180-1e-6,-maxlat]),
-     xymin = projection([-yaw-180+1e-6, maxlat]);
- 
- return [xymin,xymax];
-
-}
-
 // ---SETUP---//
 function setup(width, height) {
 
@@ -144,42 +133,12 @@ function draw(topo) {
 
 // ---REDRAW---//
 
-// TODO
-
-var tlast = [0, 0];
-
-// set up the scale extent and initial scale for the projection
-var b = mercatorBounds(projection, maxlat);
-var s = width / (b[1][0] - b[0][0]);
-var scaleExtent = [s, 10 * s];
-
-//////////
-
 function redraw() {
 	
 	width = document.getElementById('container').offsetWidth;
 	height = width / 2;
 	d3.select('svg').remove();
 	setup(width, height);
-	
-	
-	//TODO
-		
-	var t = d3.event.translate;      
-	
-	
-	var dx = t[0] - tlast[0];
-	var dy = t[1] - tlast[1];
-	var yaw = projection.rotate()[0];
-	var tp = projection.translate();
-	
-	// use x translation to rotate based on current scale
-    projection.rotate([yaw + 360.0 * dx / width * scaleExtent[0] / scale, 0, 0]);
-	
-	 tlast = t;
-	
-	////////////
-	
 	
 	draw(topo);
 	
