@@ -59,7 +59,8 @@ public class DiscreteTreeParser {
 				settings.locationTrait, //
 				locationsList, //
 				settings.traits, //
-				settings.mrsd //
+				settings.mrsd, //
+				settings.timescaleMultiplier //
 		);
 
 		linesList = linesParser.parseLines();
@@ -74,7 +75,8 @@ public class DiscreteTreeParser {
 				settings.intervals, //
 				locationsList, //
 				settings.traits, //
-				settings.mrsd //
+				settings.mrsd, //
+				settings.timescaleMultiplier //
 		);
 
 		polygonsList = polygonsParser.parseDiscretePolygons();

@@ -35,7 +35,8 @@ public class TimeSlicerPolygonsParser {
 	private String[] traits;
 	private int assumedTrees;
 	private String mrsd;
-
+    private double timescaleMultiplier;
+	
 	public TimeSlicerPolygonsParser(
 			double[] sliceHeights,
 			NexusImporter treesImporter, //
@@ -44,7 +45,9 @@ public class TimeSlicerPolygonsParser {
 			int burnIn, //
 			int gridSize, //
 			double hpdValue, //
-			String mrsd) {
+			String mrsd,//
+			double timescaleMultiplier //
+			) {
 
 		this.sliceHeights = sliceHeights;
 		this.treesImporter = treesImporter;
@@ -54,7 +57,8 @@ public class TimeSlicerPolygonsParser {
 		this.gridSize = gridSize;
 		this.hpdLevel = hpdValue;
 		this.mrsd = mrsd;
-
+        this.timescaleMultiplier = timescaleMultiplier;
+		
 		this.assumedTrees = 10000;
 
 	}// END: Constructor
@@ -190,7 +194,7 @@ public class TimeSlicerPolygonsParser {
 					Trait attributeName = new Trait(traitName);
 					attributes.put(Utils.TRAIT, attributeName);
 
-					String startTime = timeParser.getNodeDate(sliceHeight);
+					String startTime = timeParser.getNodeDate(sliceHeight * timescaleMultiplier);
 
 					Polygon polygon = new Polygon(coordinateList, //
 							startTime, //

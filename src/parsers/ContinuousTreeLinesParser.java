@@ -16,19 +16,22 @@ public class ContinuousTreeLinesParser {
 
 	private RootedTree rootedTree;
 	private String locationTrait;
-	private String mrsd;
 	private String[] traits;
+	private String mrsd;
+	private double timescaleMultiplier;
 	
 	public ContinuousTreeLinesParser(RootedTree rootedTree, //
 			String locationTrait, //
 			String traits[], //
-			String mrsd //
+			String mrsd, //
+			double timescaleMultiplier
 			) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;
 		this.traits = traits;
 		this.mrsd = mrsd;
+		this.timescaleMultiplier = timescaleMultiplier;
 		
 	}//END: Constructor
 	
@@ -52,7 +55,7 @@ public class ContinuousTreeLinesParser {
 				Double parentLatitude = (Double) Utils.getObjectNodeAttribute(
 						parentNode, latitudeName);
 
-				Double parentHeight = Utils.getNodeHeight(rootedTree, parentNode);
+				Double parentHeight = Utils.getNodeHeight(rootedTree, parentNode) * timescaleMultiplier;
 				
 				String startTime = timeParser.getNodeDate(parentHeight);
 				
@@ -62,7 +65,7 @@ public class ContinuousTreeLinesParser {
 				Double nodeLatitude = (Double) Utils.getObjectNodeAttribute(node,
 						latitudeName);
 
-				Double nodeHeight = Utils.getNodeHeight(rootedTree, node);
+				Double nodeHeight = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
 
 				String endTime = timeParser.getNodeDate(nodeHeight);
 				
@@ -82,7 +85,7 @@ public class ContinuousTreeLinesParser {
 						// but they will be annotated with other traits. Math.pow(Facepalm, 2).
 						if (traitName.equalsIgnoreCase(Utils.POSTERIOR) && rootedTree.isExternal(node)) {
 
-							// putting 1 there because what else
+							// putting 1 there because what else can I do
 							Trait nodeTrait = new Trait(1.0);
 							attributes.put(Utils.END + traitName, nodeTrait);
 

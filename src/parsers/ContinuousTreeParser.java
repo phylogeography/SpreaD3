@@ -43,7 +43,8 @@ public class ContinuousTreeParser {
 				rootedTree, //
 				settings.locationTrait, //
 				settings.traits, //
-				settings.mrsd //
+				settings.mrsd, //
+				settings.timescaleMultiplier //
 		);
 
 		linesList = linesParser.parseLines();
@@ -57,7 +58,8 @@ public class ContinuousTreeParser {
 				settings.locationTrait, //
 				settings.hpd, //
 				settings.traits, //
-				settings.mrsd //
+				settings.mrsd, //
+				settings.timescaleMultiplier //
 		);
 
 		polygonsList = polygonsParser.parsePolygons();

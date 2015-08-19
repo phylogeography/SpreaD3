@@ -76,6 +76,7 @@ public class Spread2ConsoleApp {
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
 	private static final String MRSD = "mrsd";
+	private static final String TIMESCALE_MULTIPLIER = "timescaleMultiplier";
 	
 	// ---RENDERING---//
 
@@ -165,6 +166,9 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(MRSD, "",
 								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
+						new Arguments.RealOption(TIMESCALE_MULTIPLIER, 
+										"multiplier for the tree branches time scale. By default 1 unit = 1 year."),		
+								
 						new Arguments.StringArrayOption(TRAITS, -1, "",
 								"traits to be parsed from nodes"),
 
@@ -198,9 +202,12 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(HPD, "",
 								"hpd interval attribute name"),
 
-								new Arguments.StringOption(MRSD, "",
+						new Arguments.StringOption(MRSD, "",
 										"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
+						new Arguments.RealOption(TIMESCALE_MULTIPLIER, 
+												"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
+										
 						new Arguments.StringArrayOption(TRAITS, -1, "",
 								"traits to be parsed from nodes"),
 
@@ -229,9 +236,12 @@ public class Spread2ConsoleApp {
 						new Arguments.IntegerOption(INTERVALS,
 								"number of time intervals for slicing"),
 
-								new Arguments.StringOption(MRSD, "",
+						new Arguments.StringOption(MRSD, "",
 										"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),	
-								
+						
+						new Arguments.RealOption(TIMESCALE_MULTIPLIER, 
+												"multiplier for the tree branches time scale. By default 1 unit = 1 year."),				
+										
 						new Arguments.IntegerOption(BURNIN,
 								"how many trees to discard as burn-in (in # trees)"),
 
@@ -563,6 +573,11 @@ public class Spread2ConsoleApp {
 								.getStringOption(MRSD);
 					}
 					
+					if (args1.hasOption(TIMESCALE_MULTIPLIER)) {
+						settings.discreteTreeSettings.timescaleMultiplier = args1
+								.getRealOption(TIMESCALE_MULTIPLIER);
+					}
+					
 					if (args1.hasOption(TRAITS)) {
 
 						settings.discreteTreeSettings.traits = args1
@@ -735,6 +750,11 @@ public class Spread2ConsoleApp {
 								.getStringOption(MRSD);
 					}
 					
+					if (args3.hasOption(TIMESCALE_MULTIPLIER)) {
+						settings.continuousTreeSettings.timescaleMultiplier = args3
+								.getRealOption(TIMESCALE_MULTIPLIER);
+					}
+					
 					if (args3.hasOption(TRAITS)) {
 						settings.continuousTreeSettings.traits = args3
 								.getStringArrayOption(TRAITS);
@@ -878,6 +898,11 @@ public class Spread2ConsoleApp {
 					if (args4.hasOption(MRSD)) {
 						settings.timeSlicerSettings.mrsd = args4
 								.getStringOption(MRSD);
+					}
+					
+					if (args4.hasOption(TIMESCALE_MULTIPLIER)) {
+						settings.timeSlicerSettings.timescaleMultiplier = args4
+								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 					
 					if (args4.hasOption(OUTPUT)) {

@@ -23,18 +23,23 @@ public class ContinuousTreePolygonsParser {
 	private String hpd;
 	private String[] traits;
 	private String mrsd;
+	private double timescaleMultiplier;
 	
 	public ContinuousTreePolygonsParser(RootedTree rootedTree, //
 			String locationTrait, //
 			String hpd, //
 			String[] traits, //
-			String mrsd ) {
+			String mrsd, //
+			double timescaleMultiplier //
+			) {
 		
 		this.rootedTree = rootedTree;
 		this.locationTrait = locationTrait;
 		this.hpd = hpd;
 		this.traits = traits;
 		this.mrsd = mrsd;
+		this.timescaleMultiplier = timescaleMultiplier;
+		
 		
 	}//END: Constructor
 	
@@ -60,7 +65,7 @@ public class ContinuousTreePolygonsParser {
 
 					// System.out.println("modality for the node: " + modality);
 
-					double nodeHeight = Utils.getNodeHeight(rootedTree, node);
+					double nodeHeight = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier ;
 					String startTime = timeParser.getNodeDate(nodeHeight);
 					
 					for (int m = 1; m <= modality; m++) {

@@ -39,5 +39,8 @@ public class TimeSlicerSettings {
 
 	// most recent sampling date yyy/mm/dd
 	public String mrsd = "0-0-0";
+
+	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
+	public double timescaleMultiplier = 1.0;
 	
 }//END: class

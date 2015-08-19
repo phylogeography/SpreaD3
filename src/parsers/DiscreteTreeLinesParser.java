@@ -24,12 +24,14 @@ public class DiscreteTreeLinesParser {
 	private RootedTree rootedTree;
 	private String[] traits;
 	private String mrsd;
+	private double timescaleMultiplier;
 	
 	public DiscreteTreeLinesParser(RootedTree rootedTree, //
 			String locationTrait, //
 			List<Location> locationsList, //
 			String traits[], //
-			String mrsd //
+			String mrsd, //
+			double timescaleMultiplier //
 	) {
 
 		this.locationTrait = locationTrait;
@@ -37,6 +39,7 @@ public class DiscreteTreeLinesParser {
 		this.rootedTree = rootedTree;
 		this.traits = traits;
 		this.mrsd = mrsd;
+		this.timescaleMultiplier = timescaleMultiplier;
 		
 	}// END: Constructor
 
@@ -96,10 +99,10 @@ public class DiscreteTreeLinesParser {
 				if (!(parentLocation.equals(nodeLocation))) {
 
 					Double parentHeight = Utils.getNodeHeight(rootedTree,
-							parentNode);
+							parentNode) * timescaleMultiplier;
 					String startTime = timeParser.getNodeDate(parentHeight);
 
-					Double nodeHeight = Utils.getNodeHeight(rootedTree, node);
+					Double nodeHeight = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
 					String endTime = timeParser.getNodeDate(nodeHeight);
 
 					Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();

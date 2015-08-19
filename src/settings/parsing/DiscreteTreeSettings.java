@@ -26,5 +26,8 @@ public class DiscreteTreeSettings {
 
 	// moste recent sampling date string yyy-MM-dd
 	public String mrsd = "0-0-0";
+
+	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
+	public double timescaleMultiplier = 1;
 	
 }//END: class

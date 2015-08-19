@@ -58,7 +58,7 @@ public class TimeSlicerParser {
 			
 			throw new AnalysisException("Error parsing slice heights!");
 			
-		}
+		}//END: settings check
 		
 		// sort them in ascending order
 		Arrays.sort(sliceHeights);
@@ -76,20 +76,18 @@ public class TimeSlicerParser {
 		
 		TimeSlicerPolygonsParser polygonsParser = new TimeSlicerPolygonsParser(
 				sliceHeights,
-//				rootedTree, //
 				treesImporter, //
 				settings.traits, //
-//				settings.intervals, //
 //				settings.locationTrait, //
 				settings.burnIn, //
 				settings.gridSize, //
 				settings.hpdLevel, //
 //				settings.traits //
-				settings.mrsd
+				settings.mrsd, //
+				settings.timescaleMultiplier //
 		);
 
 		int assumedTrees = getAssumedTrees(settings.trees);
-		
 		if(settings.burnIn >= assumedTrees) {
 			throw new AnalysisException("Trying to burn too many trees!");
 		}
@@ -128,6 +126,7 @@ public class TimeSlicerParser {
 	
 	private int getAssumedTrees(String file) throws IOException {
 		// TODO: this method is a hack
+		
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
 
 		try {

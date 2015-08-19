@@ -3,7 +3,6 @@ package data.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import exceptions.MissingAttributeException;
 import utils.Trait;
 
 public class Line {

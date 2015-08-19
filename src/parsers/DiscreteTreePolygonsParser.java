@@ -27,6 +27,7 @@ public class DiscreteTreePolygonsParser {
 	private Integer intervals;
 	private String[] traits;
 	private String mrsd;
+	private double timescaleMultiplier;
 	
 	public DiscreteTreePolygonsParser(
 			RootedTree rootedTree, //
@@ -34,7 +35,8 @@ public class DiscreteTreePolygonsParser {
 			Integer intervals, //
 			List<Location> locationsList, // 
 			String[] traits, //
-			String mrsd //
+			String mrsd, //
+			double timescaleMultiplier //
 			) {
 		
 		this.rootedTree = rootedTree;
@@ -43,10 +45,11 @@ public class DiscreteTreePolygonsParser {
 		this.intervals = intervals;
 		this.traits = traits;
 		this.mrsd = mrsd;
+		this.timescaleMultiplier = timescaleMultiplier;
 		
 	}//END: Constructor
 	
-	public  LinkedList<Polygon> parseDiscretePolygons() throws LocationNotFoundException, AnalysisException {
+	public LinkedList<Polygon> parseDiscretePolygons() throws LocationNotFoundException, AnalysisException {
 		
 		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 		
@@ -64,7 +67,7 @@ public class DiscreteTreePolygonsParser {
         Location dummy;
 		for (int i = 0; i < sliceHeights.length; i++) {
 
-			double sliceHeight = sliceHeights[i];
+			double sliceHeight = sliceHeights[i] * timescaleMultiplier;
 			String startTime = timeParser.getNodeDate(sliceHeight);
 			
 			for (Location location : locationsList) {
