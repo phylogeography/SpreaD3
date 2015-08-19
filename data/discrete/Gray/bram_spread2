@@ -1,0 +1,4 @@
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/Gray/locations1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/Gray/Gray_constant-logistic_9_asymmMCCannot.tre -locationTrait location -intervals 10 -mrsd 2014-03-27 -output test_discrete.json
+
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -output test.kml
+
