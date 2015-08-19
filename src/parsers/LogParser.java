@@ -64,10 +64,6 @@ public class LogParser {
 
 		}// END: row loop
 		
-//		System.out.println(indicators.length);
-//		Utils.print2DArray(indicators, 5);	
-//		Utils.print2DArray(indicators, indicators.length);		
-		
 		return indicators;
 	}//END: parseLog
 	

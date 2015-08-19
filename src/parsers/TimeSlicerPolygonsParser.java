@@ -2,7 +2,6 @@ package parsers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -25,9 +24,9 @@ import exceptions.AnalysisException;
 
 public class TimeSlicerPolygonsParser {
 
-	private RootedTree rootedTree;
+	private double[] sliceHeights;
 	private NexusImporter treesImporter;
-	private int numberOfIntervals;
+	
 	// how many trees to burn in (in #trees)
 	private int burnIn;
 	// private String locationTrait;
@@ -37,20 +36,19 @@ public class TimeSlicerPolygonsParser {
 	private int assumedTrees;
 	private String mrsd;
 
-	public TimeSlicerPolygonsParser(RootedTree rootedTree, //
+	public TimeSlicerPolygonsParser(
+			double[] sliceHeights,
 			NexusImporter treesImporter, //
 			String[] traits, //
-			int numberOfIntervals, //
 			// String locationTrait, //
 			int burnIn, //
 			int gridSize, //
 			double hpdValue, //
 			String mrsd) {
 
-		this.rootedTree = rootedTree;
+		this.sliceHeights = sliceHeights;
 		this.treesImporter = treesImporter;
 		this.traits = traits;
-		this.numberOfIntervals = numberOfIntervals;
 		this.burnIn = burnIn;
 		// this.locationTrait = locationTrait;
 		this.gridSize = gridSize;
@@ -65,14 +63,7 @@ public class TimeSlicerPolygonsParser {
 			ImportException, AnalysisException {
 
 		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
-		double[] sliceHeights = generateSliceHeights(rootedTree,
-				numberOfIntervals);
-		// sort them in ascending order
-		Arrays.sort(sliceHeights);
-
-		System.out.println("Using as slice times: ");
-		Utils.printArray(sliceHeights);
-
+		
 		TimeParser timeParser = new TimeParser(mrsd);
 		timeParser.parseTime();
 
@@ -223,21 +214,6 @@ public class TimeSlicerPolygonsParser {
 
 		return polygonsList;
 	}// END: parsePolygons
-
-	private double[] generateSliceHeights(RootedTree rootedTree,
-			int numberOfIntervals) {
-
-		double rootHeight = rootedTree.getHeight(rootedTree.getRootNode());
-		double[] timeSlices = new double[numberOfIntervals];
-
-		for (int i = 0; i < numberOfIntervals; i++) {
-
-			timeSlices[i] = rootHeight
-					- (rootHeight / (double) numberOfIntervals) * ((double) i);
-		}
-
-		return timeSlices;
-	}// END: generateTimeSlices
 
 	public void setAssumedTrees(int assumedTrees) {
 		this.assumedTrees = assumedTrees;

@@ -816,12 +816,12 @@ public class Spread2ConsoleApp {
 					} else if (args4.hasOption(TREE)
 							&& args4.hasOption(SLICE_HEIGHTS)) {
 
-						throw new ArgumentException("Can't use both a" + TREES
+						throw new ArgumentException("Can't use both a" + TREE
 								+ " and " + SLICE_HEIGHTS + " argument.");
 
 					} else {
 
-						throw new ArgumentException("Must specify" + TREES
+						throw new ArgumentException("Must specify" + TREE
 								+ " or " + SLICE_HEIGHTS + " argument.");
 
 					}// END: option check

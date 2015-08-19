@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import jebl.evolution.io.ImportException;
@@ -39,7 +40,33 @@ public class TimeSlicerParser {
 
 		// ---IMPORT---//
 
+		// import slice heights
+		
+		double sliceHeights[] = null;
+		if(settings.sliceHeights != null) {
+			
+			SliceHeightsParser sliceHeightsParser = new SliceHeightsParser(settings.sliceHeights);
+			sliceHeights = sliceHeightsParser.parseSliceHeights();
+			
+		} else if(settings.tree != null) {
+			
 		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
+		sliceHeights = generateSliceHeights(rootedTree,
+					settings.intervals);
+			
+		} else {
+			
+			throw new AnalysisException("Error parsing slice heights!");
+			
+		}
+		
+		// sort them in ascending order
+		Arrays.sort(sliceHeights);
+	
+		System.out.println("Using as slice heights: ");
+		Utils.printArray(sliceHeights);	
+		
+		// import trees
 		NexusImporter treesImporter = new NexusImporter(new FileReader(
 				settings.trees));
 
@@ -48,10 +75,11 @@ public class TimeSlicerParser {
 		System.out.println("Parsing polygons");
 		
 		TimeSlicerPolygonsParser polygonsParser = new TimeSlicerPolygonsParser(
-				rootedTree, //
+				sliceHeights,
+//				rootedTree, //
 				treesImporter, //
 				settings.traits, //
-				settings.intervals, //
+//				settings.intervals, //
 //				settings.locationTrait, //
 				settings.burnIn, //
 				settings.gridSize, //
@@ -83,6 +111,21 @@ public class TimeSlicerParser {
 		return data;
 	}// END: parse
 
+	private double[] generateSliceHeights(RootedTree rootedTree,
+			int numberOfIntervals) {
+
+		double rootHeight = rootedTree.getHeight(rootedTree.getRootNode());
+		double[] timeSlices = new double[numberOfIntervals];
+
+		for (int i = 0; i < numberOfIntervals; i++) {
+
+			timeSlices[i] = rootHeight
+					- (rootHeight / (double) numberOfIntervals) * ((double) i);
+		}
+
+		return timeSlices;
+	}// END: generateSliceHeights
+	
 	private int getAssumedTrees(String file) throws IOException {
 		// TODO: this method is a hack
 		InputStream is = new BufferedInputStream(new FileInputStream(file));

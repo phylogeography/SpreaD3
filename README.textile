@@ -207,6 +207,9 @@ h3. PARSING
 * mrsd in decimal format
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -mrsd 2011.653 -output test_slice.json
 
+* custom slice heights
+-parse -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -burnin 5 -mrsd 2011.653 -output test_slice.json
+
 h3. RENDERING
 
 * use all default settings

@@ -12,11 +12,11 @@ public class TimeSlicerSettings {
 	// path to tree file
 	public String tree = null;
 	
-	// path to trees file
-	public String trees = null;
-
 	// path to slice heights file
 	public String sliceHeights = null;
+	
+	// path to trees file
+	public String trees = null;
 
 	// location attribute name
 	public String locationTrait = null;

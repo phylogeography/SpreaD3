@@ -139,9 +139,6 @@ public class Utils {
 		return array;
 	}//END: getDoubleArrayNodeAttribute
 	
-	
-	
-	
 	public static String[] readLines(String filename, String comment)
 			throws IOException {
 
