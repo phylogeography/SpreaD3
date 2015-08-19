@@ -28,6 +28,9 @@ h3. PARSING
 * mrsd in decimal format
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011.653 -output test_host.json
 
+* time scale multiplier option
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011.653 -timescaleMultiplier 10 -output test_host.json
+
 h3. RENDERING
 
 * use all default settings
@@ -99,6 +102,9 @@ h3. PARSING
 
 * mrsd in decimal format
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011.653 -output test_discrete.json
+
+* time scale multiplier option
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011.653 -timescaleMultiplier 10 -output test_discrete.json
 
 h3. RENDERING
 
@@ -210,6 +216,9 @@ h3. PARSING
 * custom slice heights
 -parse -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -burnin 5 -mrsd 2011.653 -output test_slice.json
 
+* time scale multiplier option
+-parse -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -traits location -hpd 0.8 -burnin 5 -mrsd 2011.653 -timescaleMultiplier 10 -output test_slice.json
+
 h3. RENDERING
 
 * use all default settings
@@ -243,8 +252,6 @@ h1. LICENSE
 
 h1. TODO
 
-* Date-time calculations
-  - time scale multiplier
 * D3 renderer
  - rolling map: http://bl.ocks.org/patricksurry/6621971
 * KML renderer
@@ -258,7 +265,7 @@ h1. TODO
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
 * Display warning if one or more of the discrete states are not found. 
 * Uncaught exception handler (for bug reports).
-* Processing large tree distributions on GPUs. Write a small library and JNI to it.  
+* Processing large tree distributions on GPUs. Write small library and JNI to it.  
 
 h1. BUGS
 

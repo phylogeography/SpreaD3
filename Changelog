@@ -1,5 +1,4 @@
-2015: SPREAD version 2.0.0 rc
-------------------------------------------------
-
-
-
+2015: SPREAD version 0.0.1 rc
+-----------------------------
+* implemented custom slice heights
+* reinstated time scale multiplier option
