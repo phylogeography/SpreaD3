@@ -1158,7 +1158,8 @@ public class KmlRenderer implements Renderer {
 		 * @param toHigh - interval
 		 * @return the mapped value
 		 */
-		return (value - fromLow) / (fromHigh - fromLow) * (toHigh - toLow) + toLow;
+//		return (value - fromLow) / (fromHigh - fromLow) * (toHigh - toLow) + toLow;
+		  return( toHigh + (toLow - toHigh) * ((value - fromLow) / (fromHigh - fromLow)) );
 	}// END: map
 	
 	private LinkedList<Coordinate> getIntermediateCoords(
