@@ -19,6 +19,9 @@ h3. CONTINUOUS TREE
 
 h3. PARSING
 
+* TODO: parse all traits
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits all -mrsd 2011-01-01 -output test.json
+
 * parse two traits
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host,posterior -mrsd 2011-01-01 -output test.json
 

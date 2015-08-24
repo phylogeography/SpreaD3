@@ -1145,7 +1145,6 @@ public class KmlRenderer implements Renderer {
 				+ (r.length() < 2 ? "0" : "") + r;
 	}//END: getKMLColor
 	
-	
 	private double map(double value, double fromLow, double fromHigh,
 			double toLow, double toHigh) {
 		/**
@@ -1159,7 +1158,7 @@ public class KmlRenderer implements Renderer {
 		 * @return the mapped value
 		 */
 //		return (value - fromLow) / (fromHigh - fromLow) * (toHigh - toLow) + toLow;
-		  return( toHigh + (toLow - toHigh) * ((value - fromLow) / (fromHigh - fromLow)) );
+   return( toLow + (toHigh - toLow ) * ((value - fromLow) / (fromHigh - fromLow)) );
 	}// END: map
 	
 	private LinkedList<Coordinate> getIntermediateCoords(

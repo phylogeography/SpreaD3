@@ -81,7 +81,8 @@ public class FortuneCookies {
 //---DAVE JONES---//
 
 "What a bobby dazzler",
-"...And Bob's your uncle"
+"...And Bob's your uncle",
+"Good enough for Australia"
 
 
 	};
