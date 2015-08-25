@@ -82,7 +82,22 @@ public class FortuneCookies {
 
 "What a bobby dazzler",
 "...And Bob's your uncle",
-"Good enough for Australia"
+"Good enough for Australia",
+
+
+// --- Bruce Campbell --- //
+
+"Good, bad, I'm the guy with the gun" ,
+"Groovy" ,
+"Do not question my authority for it is supreme",
+"Bruce Campbell has fought the Army of the Dead",
+"Bruce Campbell cut off his own hand and replaced it with a chainsaw",
+"Bruce Campbell fought Guan Di, the Chinese protector of the dead",
+"Bruce Campbell escaped from the highest security prison in the galaxy",
+"Bruce Campbell went to the moon",
+"Bruce Campbell is an ex CIA operative",
+"Bruce Campbell will lead the human slaves against the alien invasion",
+"Bruce Campbell Slays Deadites and Slings One-liners",
 
 
 	};

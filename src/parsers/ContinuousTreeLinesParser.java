@@ -124,7 +124,7 @@ public class ContinuousTreeLinesParser {
 
 					} // END: attributes loop
 
-				} // END: null check
+				} // END: traits check
 
 				// branch attribute traits
 				double branchDuration = parentHeight - nodeHeight;

@@ -96,7 +96,7 @@ h4. LINES
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
 
 * mapping aesthetic to other parsed traits. Usefull when parsing all univariate traits found on branches. 
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -polygoncolormapping host.rate -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host.rate -output test.kml 
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -polygoncolormapping host.prob -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host.rate -output test.kml 
 
 
 h3. DISCRETE TREE
@@ -264,7 +264,6 @@ h1. TODO
     - Show node ages in the kml
     - control arc curvature [0 - 1]
 * Parsers
-  - parse all traits option
   - parsing BEAST2 and MrBayes output [separate parsers]
 * Write tests    
 * Non-geographic locations (e.g. antigenic locations)

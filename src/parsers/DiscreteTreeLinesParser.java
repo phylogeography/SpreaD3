@@ -136,7 +136,34 @@ public class DiscreteTreeLinesParser {
 							}//END: stupid case check
 							
 						}// END: traits loop
-					}// END: null check
+						
+					} else { // parse all traits
+
+						// TODO: posterior prob
+						for (String traitName : node.getAttributeNames()) {
+
+							Object nodeAttribute = node.getAttribute(traitName);
+							Object parentAttribute = parentNode.getAttribute(traitName);
+
+							if (nodeAttribute == null || parentAttribute == null) {
+								continue;
+							} // END: skip traits which don't have START and END
+
+							Trait parentTrait = new Trait(parentAttribute);
+							
+							if (!parentTrait.isMultivariate()) {
+								attributes.put(Utils.START + traitName, parentTrait);
+							}// END: multivariate check
+
+							Trait nodeTrait = new Trait(nodeAttribute);
+							
+							if (!nodeTrait.isMultivariate()) {
+								attributes.put(Utils.END + traitName, nodeTrait);
+							} // END: multivariate check
+
+						} // END: attributes loop
+
+					} // END: traits check
 
 					// branch attribute traits
 

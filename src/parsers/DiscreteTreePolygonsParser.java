@@ -18,7 +18,6 @@ import exceptions.LocationNotFoundException;
 public class DiscreteTreePolygonsParser {
 
 	public static final String COUNT = "count";
-//	public static final String LOCATION = "location";
 	
 	private RootedTree rootedTree;
 	private String locationTrait;

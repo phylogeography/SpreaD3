@@ -124,7 +124,7 @@ public class ContinuousTreePolygonsParser {
 							
 							}// END: attributes loop
 							
-						}// END: null check
+						}// END: traits check
 
 						Trait modalityTrait = new Trait(m);
 						attributes.put(MODALITY, modalityTrait);
