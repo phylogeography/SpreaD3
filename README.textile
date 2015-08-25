@@ -19,8 +19,8 @@ h3. CONTINUOUS TREE
 
 h3. PARSING
 
-* TODO: parse all traits
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits all -mrsd 2011-01-01 -output test.json
+* parse all traits (a default)
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -mrsd 2011-01-01 -output test.json
 
 * parse two traits
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host,posterior -mrsd 2011-01-01 -output test.json
@@ -94,6 +94,9 @@ h4. LINES
 
 * map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
+
+* mapping aesthetic to other parsed traits. Usefull when parsing all univariate traits found on branches. 
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -polygoncolormapping host.rate -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host.rate -output test.kml 
 
 
 h3. DISCRETE TREE

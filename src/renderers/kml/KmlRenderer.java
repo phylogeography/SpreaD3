@@ -164,15 +164,14 @@ public class KmlRenderer implements Renderer {
 
 		/**
 		 * Map trait values (String | Double) to numerical values (Double). This
-		 * code creates two maps valueMap maps between attribute (trait) values
+		 * code creates two maps: valueMap maps between attribute (trait) values
 		 * which can be numeric/factor to actual numerical values needed for
-		 * interpolating minmaxMap maps between attribute name and the scale it
+		 * interpolating, minmaxMap maps between attribute name and the scale it
 		 * lives on.
 		 * */
 		Double factorValue = 1.0;
 		Map<Object, Double> valueMap = new LinkedHashMap<Object, Double>();
 		Map<String, double[]> minmaxMap = new LinkedHashMap<String, double[]>();
-		
 	    for(Line line : lines) {
 			
 	    	// Get the mapping for node attributes
@@ -286,6 +285,54 @@ public class KmlRenderer implements Renderer {
 				
 			}//END: subset check
 
+			// check if all lines have all atts
+				for (String traitName : minmaxMap.keySet()) {
+					
+					if(!line.getAttributes().containsKey(traitName)) {
+						
+						// remove START or END
+						String s = traitName.replaceAll(Utils.START, "").replaceAll(Utils.END, "");
+						
+						/**COLOR**/
+						
+						if(settings.lineColorMapping!=null && settings.lineColorMapping.equalsIgnoreCase(s)) {
+
+							System.out.println("Line color attribute " + s + " is missing from the line. Line will not be rendered.");
+							include = false;
+							
+						}//END: color settings check
+
+						/**ALPHA**/
+						
+						if(settings.lineAlphaMapping != null && settings.lineAlphaMapping.equalsIgnoreCase(s)) {
+
+							System.out.println("Line alpha attribute " + s + " is missing from the line. Line will not be rendered.");
+							include = false;
+							
+						}//END: color settings check
+						
+						/**ALTITUDE**/
+		
+						if(settings.lineAltitudeMapping != null && settings.lineAltitudeMapping.equalsIgnoreCase(s)) {
+
+							System.out.println("Line altitude attribute " + s + " is missing from the line. Line will not be rendered.");
+							include = false;
+							
+						}//END: color settings check
+						
+						/**WIDTH**/
+
+						if(settings.lineWidthMapping != null && settings.lineWidthMapping.equalsIgnoreCase(s)) {
+
+							System.out.println("Line width attribute " + s + " is missing from the line. Line will not be rendered.");
+							include = false;
+							
+						}//END: color settings check
+						
+					}//END: line att check
+					
+			}//END: attribute loop
+				
 			if (include) {
 				folder.addFeature(generateLine(line, valueMap, minmaxMap));
 			}
@@ -925,8 +972,6 @@ public class KmlRenderer implements Renderer {
 			
 			
 			//TODO: polygons cutoff also when processing maps
-			///////////////////////////
-			
 			boolean include = true;
 			if (this.settings.polygonsSubset != null) {
 

@@ -36,6 +36,7 @@ public class Utils {
 	public static final String DISTANCE = "distance";
 	public static final String LOCATION = "location";
 	public static final String POSTERIOR = "posterior";
+//	public static final String HPD = "hpd";
 	public static final String START = "start";
 	public static final String END = "end";
 	public static final String ONE = "1";
