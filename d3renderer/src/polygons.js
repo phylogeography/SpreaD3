@@ -60,7 +60,7 @@ function populatePolygonMaps(polygons) {
 
 	});// END: polygons loop
 
-	// printMap(polygonAttributeValues);
+//	 printMap(polygonAttributeValues);
 	// printMap(polygonAttributeMinMax);
 
 	var i;
@@ -68,7 +68,7 @@ function populatePolygonMaps(polygons) {
 	var element;
 	var keys = Object.keys(polygonAttributeMinMax);
 
-	polygonAreaSelect = document.getElementById("selectPolygonAreaAttribute");
+	polygonAreaSelect = document.getElementById("polygonAreaAttribute");
 	for (i = 0; i < keys.length; i++) {
 
 		option = keys[i];
@@ -80,7 +80,7 @@ function populatePolygonMaps(polygons) {
 
 	}// END: i loop
 
-	polygonColorSelect = document.getElementById("selectPolygonColorAttribute");
+	polygonColorSelect = document.getElementById("polygonColorAttribute");
 	for (i = 0; i < keys.length; i++) {
 
 		option = keys[i];
@@ -187,7 +187,7 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 
       var startTime = polygon.startTime;
       
-  	g.append("circle") //
+  	svg.append("circle") //
   	.attr("class", "polygon") //
   	.attr("startTime", startTime) //
 	.attr("cx",  x) //
@@ -203,4 +203,3 @@ function generatePolygon(polygon, locations, locationIds, area, red, green,
 	}// END: hasLocation check
 
 }// END: generatePolygon
-

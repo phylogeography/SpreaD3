@@ -94,7 +94,7 @@ function populateLineMaps(lines) {
 	var element;
 	var keys = Object.keys(lineMinMaxMap);
 
-	lineWidthSelect = document.getElementById("selectLineWidthAttribute");
+	lineWidthSelect = document.getElementById("lineWidthAttribute");
 	for (i = 0; i < keys.length; i++) {
 
 		option = keys[i];
@@ -108,7 +108,7 @@ function populateLineMaps(lines) {
 
 	}// END: i loop
 
-	lineColorSelect = document.getElementById("selectLineColorAttribute");
+	lineColorSelect = document.getElementById("lineColorAttribute");
 	for (i = 0; i < keys.length; i++) {
 
 		option = keys[i];
@@ -285,7 +285,7 @@ function generateLineSegment(startLongitude, startLatitude, endLongitude,
 		endLatitude, segmentRed, segmentGreen, segmentBlue, segmentWidth,
 		segmentStartTime) {
 
-	g.append("path").datum(
+	svg.append("path").datum(
 			{
 				type : "LineString",
 				coordinates : [ [ startLongitude, startLatitude ],

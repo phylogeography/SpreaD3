@@ -5,44 +5,34 @@
 // ///////////////////
 // --- VARIABLES ---//
 // ///////////////////
+//
+// ---MAP---//
+//
+var width = document.getElementById('container').offsetWidth; // 600;
+var height = width / 2; // 400;
 
-//---MAP---//
+// [-60, 0] becomes initial center of projection
+var rotate = 20; // 60
 
-var width = document.getElementById('container').offsetWidth;
-var height = width / 2;
-var rotate = 60;
+// clip northern and southern poles (infinite in mercator)
 var maxlat = 83;
 
-var projection = d3.geo.mercator() //
-.rotate([ rotate, 0 ]) //
-.scale(1) //
-.translate([ width / 2, height / 2 ]);
+var projection = d3.geo.mercator().rotate([ rotate, 0 ]).scale(1).translate(
+		[ width / 2, height / 2 ]);
 
 // set up the scale extent and initial scale for the projection
-var b = mercatorBounds(projection, maxlat);
-var s = width / (b[1][0] - b[0][0]);
-var scaleExtent = [ s, 10 * s ];
+var b = mercatorBounds(projection, maxlat), s = width / (b[1][0] - b[0][0]), scaleExtent = [
+		s, 10 * s ];
 
+// track last translation and scale event we processed
 var tlast = [ 0, 0 ];
 var slast = null;
 
-var zoom = d3.behavior.zoom() //
-.scaleExtent(scaleExtent) //
-//.scale(projection.scale()) //
-//.translate([ 0, 0 ]) //
-.on("zoom", redraw);
-
-//var topo;
-var path;
-var svg;
-var g;
-
 var graticule = d3.geo.graticule();
 
-var throttleTimer;
-
+//
 //---DATA---//
-
+//
 var sliceCount = 5;
 
 var locations;
@@ -56,7 +46,7 @@ var polygonAreaSelect;
 var polygonColorSelect;
 
 var lines;
-// var lineSegmentsMap = {};
+//var lineSegmentsMap = {};
 var lineValueMap = [];
 var lineMinMaxMap = [];
 var lineWidthSelect;
@@ -66,65 +56,37 @@ var lineColorSelect;
 // ---FUNCTIONS---//
 // /////////////////
 
+// find the top left and bottom right of current projection
 function mercatorBounds(projection, maxlat) {
-
-	var yaw = projection.rotate()[0];
-	var xymax = projection([ -yaw + 180 - 1e-6, -maxlat ]);
-	var xymin = projection([ -yaw - 180 + 1e-6, maxlat ]);
+	var yaw = projection.rotate()[0], xymax = projection([ -yaw + 180 - 1e-6,
+			-maxlat ]), xymin = projection([ -yaw - 180 + 1e-6, maxlat ]);
 
 	return [ xymin, xymax ];
 }// END: mercatorBounds
 
-function click() {
-	projection.invert(d3.mouse(this));
-}// END: click
-
-function throttle() {
-
-	window.clearTimeout(throttleTimer);
-	throttleTimer = window.setTimeout(function() {
-		redraw();
-	}, 200);
-
-}// END: throttle
-
-function setup(width, height) {
-
-	 path = d3.geo.path().projection(projection);
-
-	 svg = d3.select("#container").append("svg") //
-	.attr("width", width) //
-	.attr("height", height) //
-	.call(zoom) //
-	 .on("click", click);
-
-	 g = svg.append("g");
-
-}// END: setup
-
-function redraw(topo) {
-
+function redraw() {
 	if (d3.event) {
 
 		var scale = d3.event.scale;
 		var t = d3.event.translate;
 
+		// if scaling changes, ignore translation (otherwise touch zooms are
+		// weird)
 		if (scale != slast) {
 
 			projection.scale(scale);
 
 		} else {
 
-			var dx = t[0] - tlast[0], dy = t[1] - tlast[1];
-			var yaw = projection.rotate()[0];
-			var tp = projection.translate();
+			var dx = t[0] - tlast[0], dy = t[1] - tlast[1], yaw = projection
+					.rotate()[0], tp = projection.translate();
 
 			// use x translation to rotate based on current scale
 			projection.rotate([
 					yaw + 360. * dx / width * scaleExtent[0] / scale, 0, 0 ]);
+
 			// use y translation to translate projection, clamped by min/max
 			var b = mercatorBounds(projection, maxlat);
-
 			if (b[0][1] + dy > 0) {
 
 				dy = -b[0][1];
@@ -136,52 +98,18 @@ function redraw(topo) {
 			}
 
 			projection.translate([ tp[0], tp[1] + dy ]);
-		}
+		}// END: scale check
 
-		// save last values. resetting zoom.translate() and scale() would
-		// seem equivalent but doesn't seem to work reliably?
+		// save last values
 		slast = scale;
 		tlast = t;
-
-	}
-
-	// grid of longitude and latitude lines
-	svg.append("path") //
-	.datum(graticule) //
-	.attr("class", "graticule") //
-	.attr("d", path);
-
-	// equator
-	g.append("path") //
-	.datum(
-			{
-				type : "LineString",
-				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
-						[ 180, 0 ] ]
-			}) //
-	.attr("class", "equator") //
-	.attr("d", path);
+	}// END: event check
 
 	// re-project path data
-	var country = g.selectAll(".country").data(topo);
-
-	country.enter().insert("path") //
-	.attr("class", "country") //
-	.attr("d", path) //
-	 .style("fill", "rgb(194, 178, 128)") //
-	 .style("stroke", "rgb(0, 0, 0)")
-	 ;
-	
-	// adjust the country hover stroke width based on zoom level
-	d3.selectAll(".country") //
-	.style("stroke-width", 1.5 / slast) ;
-	
-	// re-project path data
-//	 svg.selectAll('path') //
-//	 .attr("class", "country") //
-//	 .attr('d', path) //
-//	 .style("fill", "rgb(194, 178, 128)") //
-//	 .style("stroke", "rgb(0, 0, 0)");
+	svg.selectAll('path.country')
+	.attr("class", "country").attr('d', path)
+			.style("stroke-width", .5).style("fill", "rgb(194, 178, 128)")
+			.style("stroke", "rgb(0, 0, 0)");
 
 }// END: redraw
 
@@ -191,31 +119,50 @@ function redraw(topo) {
 
 // ---DRAW MAP BACKGROUND---//
 
-d3.select(window).on("resize", throttle);
-
 projection.scale(scaleExtent[0]);
 
-setup(width, height);
+var zoom = d3.behavior.zoom().scaleExtent(scaleExtent)
+		.scale(projection.scale()).translate([ 0, 0 ]).on("zoom", redraw);
 
-d3.json("data/world-topo-min.json", function(error, world) {
+var path = d3.geo.path().projection(projection);
 
-	 topo = topojson.feature(world, world.objects.countries).features;
+var svg = d3.select("#container").append('svg').attr('width', width).attr(
+		'height', height).call(zoom);
 
-//	 svg.selectAll('path') //
-//	 .data(topo) //
-//	 .enter() //
-//	 .append('path');
+//var topo = svg.append("g").attr("class", "topo");
 
-	redraw(topo);
+d3.json("data/world-topo-min.json", function ready(error, world) {
 
+	svg.append("path") 
+	.datum(graticule) 
+	.attr("class", "graticule") 
+	.attr("d", path);
+
+	svg.append("path") 
+	.datum(
+			{
+				type : "LineString",
+				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
+						[ 180, 0 ] ]
+			}) 
+	.attr("class", "equator") 
+	.attr("d", path);
+
+//	topo
+	svg
+	.selectAll('path').data(
+			topojson.feature(world, world.objects.countries).features).enter()
+			.append('path').attr("class", "country");
+
+	// update path data
+	redraw();
 });
 
-//---DRAW DATA---//
+// ---DRAW DATA---//
 
 d3.json("data/test_discrete.json", function(json) {
 
-	// paint all, then manipulate visibility according to dates
-
+	// --Time Slider--//
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
@@ -229,6 +176,8 @@ d3.json("data/test_discrete.json", function(json) {
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
+	// --Locations--//
+	
 	locations = json.locations;
 	var locationIds = [];
 	locations.forEach(function(location) {
@@ -236,7 +185,9 @@ d3.json("data/test_discrete.json", function(json) {
 		locationIds.push(location.id);
 
 	});
-
+	
+	// --Lines & Polygons--//
+	
 	var layers = json.layers;
 	var polygons = null;
 	var lines = null;
@@ -246,19 +197,19 @@ d3.json("data/test_discrete.json", function(json) {
 		populatePolygonMaps(polygons);
 		generatePolygons(polygons, locations, locationIds);
 
-		lines = layer.lines;
-		populateLineMaps(lines);
-		generateLines(lines, locations, locationIds);
+//		lines = layer.lines;
+//		populateLineMaps(lines);
+//		generateLines(lines, locations, locationIds);
 
 	});
-
+	
+	// TODO: listeners should also 'rewind time', or set the visibility to
+	// current setting on the slider
+	
 	// polygon area listener
 	d3.select(polygonAreaSelect).on('change', function() {
 		
-		// TODO: listeners should also 'rewind time', or set the visibility to
-		// current setting on the slider
-		
-		g.selectAll(".polygon").remove();
+		svg.selectAll(".polygon").remove();
 		generatePolygons(polygons, locations, locationIds);
 
 	});
@@ -266,7 +217,7 @@ d3.json("data/test_discrete.json", function(json) {
 	// polygon color listener
 	d3.select(polygonColorSelect).on('change', function() {
 
-		g.selectAll(".polygon").remove();
+		svg.selectAll(".polygon").remove();
 		generatePolygons(polygons, locations, locationIds);
 
 	});
@@ -274,7 +225,7 @@ d3.json("data/test_discrete.json", function(json) {
 	// line color listener
 	d3.select(lineColorSelect).on('change', function() {
 
-		g.selectAll(".line").remove();
+		svg.selectAll(".line").remove();
 		generateLines(lines, locations, locationIds);
 
 	});
@@ -332,5 +283,12 @@ d3.json("data/test_discrete.json", function(json) {
 		});// END: filter
 
 	});// END: slide
-
+	
+	
+	
+	
+	
+	
+	
+	
 });

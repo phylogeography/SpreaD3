@@ -2,3 +2,4 @@
 -----------------------------
 * implemented custom slice heights
 * reinstated time scale multiplier option
+* Discrete and Continuous annotated tree parsers: by default all univariate traits found on branches are parsed
