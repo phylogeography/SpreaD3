@@ -7,14 +7,8 @@
 <!-- libs -->
 <script type="text/javascript" src="../lib/d3/d3.js"></script>
 <script type="text/javascript" src="../lib/topojson/topojson.v1.min.js"></script>
-<script type="text/javascript" src="../lib/d3.slider/d3.slider.js"></script>
-<link rel="stylesheet" href="../lib/d3.slider/d3.slider.css" />
-<script type="text/javascript" src="../lib/colorbrewer/colorbrewer.js"></script>
 
 <!-- sources -->
-<script type="text/javascript" src="utils.js"></script>
-<script type="text/javascript" src="polygons.js"></script>
-<script type="text/javascript" src="lines.js"></script>
 
 
 <style type="text/css">
@@ -45,63 +39,9 @@
 
 <body>
 
-	<div class="all" style="display: block;">
 
-		<div id="controls">
-			<h2>
-				Current date: <span id="currentDate"> 0 </span>
-			</h2>
-			<div id="timeSlider"></div>
-		</div>
-
-		<div class="selectorsANDcontainer" style="display: inline;">
-
-			<div class="selectors" style="display: block;">
-
-				<!-- SELECTORS -->
-
-				<div class="attributeSelector" style="display: block;"
-					id="polygonAreaForm">
-					<label>Polygon area attribute: <select
-						id="polygonAreaAttribute">
-					</select>
-					</label>
-				</div>
-
-				<div class="attributeSelector" style="display: block;"
-					id="polygonColorForm">
-					<label>Polygon color attribute: <select
-						id="polygonColorAttribute">
-					</select>
-					</label>
-				</div>
-
-				<div class="attributeSelector" style="display: block;"
-					id="lineWidthForm">
-					<label>Line width attribute: <select
-						id="lineWidthAttribute">
-					</select>
-					</label>
-				</div>
-
-				<div class="attributeSelector" style="display: block;"
-					id="lineColorForm">
-					<label>Line color attribute: <select
-						id="lineColorAttribute">
-					</select>
-					</label>
-				</div>
-
-			</div>
-			<!-- END: selectors-->
 
 			<div id="container"></div>
-
-		</div>
-		<!-- END: selectorsANDcontainer-->
-
-	</div>
-	<!-- END: all-->
 
 	<script type="text/javascript" src="script.js"></script>
 
