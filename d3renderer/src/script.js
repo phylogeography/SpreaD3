@@ -126,7 +126,6 @@ d3.json("data/test_discrete.json", function(json) {
 	d3.select('#timeSlider').call(timeSlider);
 
 	
-	var linePath;
 	
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
@@ -135,39 +134,33 @@ d3.json("data/test_discrete.json", function(json) {
 		currentDateDisplay.text(dateFormat(currentDate));
 
 		// TODO: animate travel
-//		http://zevross.com/blog/2014/09/30/use-the-amazing-d3-library-to-animate-a-path-on-a-leaflet-map/
-//		http://bl.ocks.org/duopixel/4063326
 		
 		
 		// lines
 		d3.selectAll(".line")[0].filter(function(line) {
 
-//			console.log(line);
-			
 			var lineEndDate = new Date(line.attributes.endTime.value);
+			
 			if (lineEndDate <= value) {
 
-				 linePath = d3.select(line)
-					.transition() //
-					.duration(750) //
-					.attr("opacity", 1);
-				 
-//				d3.select(line) //
-//				.transition() //
-//				.duration(750) //
-//				.attr("opacity", 1);
-
-//				d3.select(line)
-//				.transition()
-//		        .duration(7500)
-//		        .attrTween("stroke-dasharray", tweenDash)
-//		        .each("end", function() {
-//		            d3.select(this).call(transition);// infinite loop
-//		            ptFeatures.style("opacity", 1)
-//		        }); 
+				var linePath = d3.select(line);
+			    var totalLength = linePath.node().getTotalLength();
+				
+//			    http://bl.ocks.org/duopixel/4063326
+			    
+			    linePath
+			    .attr("stroke-dasharray", totalLength + " " + totalLength)
+			      .attr("stroke-dashoffset", totalLength)
+			      .transition()
+			        .duration(750)
+			        .ease("linear")
+			        .attr("stroke-dashoffset", 1);
+			    
 				
 			} else {
-				d3.select(line).attr("opacity", 0);
+				
+//				d3.select(line).attr("opacity", 0);
+				
 			}// END: date check
 
 		});// END: filter
@@ -175,6 +168,31 @@ d3.json("data/test_discrete.json", function(json) {
 	});// END: slide
 	
 });
+
+function tweenDash() {
+
+    return function(t) {
+        // In original version of this post the next two lines of JS were
+        // outside this return which led to odd behavior on zoom
+        // Thanks to Martin Raifer for the suggested fix.
+
+        //total length of path (single value)
+        var l = linePath.node().getTotalLength(); 
+        interpolate = d3.interpolateString("0," + l, l + "," + l); 
+
+        //t is fraction of time 0-1 since transition began
+        var marker = d3.select("#marker");
+        
+        // p is the point on the line (coordinates) at a given length
+        // along the line. In this case if l=50 and we're midway through
+        // the time then this would 25.
+        var p = linePath.node().getPointAtLength(t * l);
+
+        //Move the marker to that point
+        marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); //move marker
+        return interpolate(t);
+    }
+}
 
 function generateLines(lines, locations, locationIds) {
 
