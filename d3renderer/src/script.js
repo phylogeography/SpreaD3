@@ -24,8 +24,8 @@ function draw() {
 
 	// project path data
 	g.selectAll('path.country').attr("class", "country").attr('d', path).style(
-			"stroke-width", .5)//
-	.style("fill", "rgb(194, 178, 128)").style("stroke", "rgb(0, 0, 0)");
+			"stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
+			"stroke", "rgb(0, 0, 0)");
 
 }// END: draw
 
@@ -35,13 +35,11 @@ function move() {
 	var s = d3.event.scale;
 	var h = height / 4;
 
-	t[0] = Math.min((width / height) * (s - 1), //
-	Math.max(width * (1 - s), t[0]) //
-	);
+	t[0] = Math
+			.min((width / height) * (s - 1), Math.max(width * (1 - s), t[0]));
 
-	t[1] = Math.min(h * (s - 1) + h * s, //
-	Math.max(height * (1 - s) - h * s, t[1]) //
-	);
+	t[1] = Math.min(h * (s - 1) + h * s, Math.max(height * (1 - s) - h * s,
+			t[1]));
 
 	zoom.translate(t);
 	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
@@ -57,9 +55,7 @@ function move() {
 
 // ---DRAW MAP BACKGROUND---//
 
-var zoom = d3.behavior.zoom() //
-.scaleExtent([ 1, 9 ]) //
-.on("zoom", move);
+var zoom = d3.behavior.zoom().scaleExtent([ 1, 9 ]).on("zoom", move);
 
 var path = d3.geo.path().projection(projection);
 
@@ -87,3 +83,168 @@ d3.json("data/world-topo-min.json", function ready(error, world) {
 	// draw path data
 	draw();
 });
+
+// //////////////////////////////////
+// --TODO: experiments with arcs---//
+// //////////////////////////////////
+
+
+d3.json("data/test_discrete.json", function(json) {
+
+	// -- DATA-- //
+	
+	locations = json.locations;
+	var locationIds = [];
+	locations.forEach(function(location) {
+
+		locationIds.push(location.id);
+
+	});
+
+	var layers = json.layers;
+	var lines = null;
+	layers.forEach(function(layer) {
+
+		lines = layer.lines;
+		generateLines(lines, locations, locationIds);
+
+	});
+
+	// -- TIME-- //
+	var dateFormat = d3.time.format("%Y-%m-%d");
+	var timeLine = json.timeLine;
+	var startDate = new Date(timeLine.startTime);
+	var endDate = new Date(timeLine.endTime);
+
+	// initial value
+	var currentDateDisplay = d3.select('#currentDate').text(
+			dateFormat(startDate));
+
+	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
+			[ 0, 1 ]);
+	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+	d3.select('#timeSlider').call(timeSlider);
+
+	
+	var linePath;
+	
+	// time slider listener
+	timeSlider.on('slide', function(evt, value) {
+
+		var currentDate = timeScale.invert(timeScale(value));
+		currentDateDisplay.text(dateFormat(currentDate));
+
+		// TODO: animate travel
+//		http://zevross.com/blog/2014/09/30/use-the-amazing-d3-library-to-animate-a-path-on-a-leaflet-map/
+//		http://bl.ocks.org/duopixel/4063326
+		
+		
+		// lines
+		d3.selectAll(".line")[0].filter(function(line) {
+
+//			console.log(line);
+			
+			var lineEndDate = new Date(line.attributes.endTime.value);
+			if (lineEndDate <= value) {
+
+				 linePath = d3.select(line)
+					.transition() //
+					.duration(750) //
+					.attr("opacity", 1);
+				 
+//				d3.select(line) //
+//				.transition() //
+//				.duration(750) //
+//				.attr("opacity", 1);
+
+//				d3.select(line)
+//				.transition()
+//		        .duration(7500)
+//		        .attrTween("stroke-dasharray", tweenDash)
+//		        .each("end", function() {
+//		            d3.select(this).call(transition);// infinite loop
+//		            ptFeatures.style("opacity", 1)
+//		        }); 
+				
+			} else {
+				d3.select(line).attr("opacity", 0);
+			}// END: date check
+
+		});// END: filter
+
+	});// END: slide
+	
+});
+
+function generateLines(lines, locations, locationIds) {
+
+	lines.forEach(function(line) {
+
+		var locationId = line.startLocation;
+		var index = locationIds.indexOf(locationId);
+		var location = locations[index];
+		var startCoordinate = location.coordinate;
+
+		locationId = line.endLocation;
+		index = locationIds.indexOf(locationId);
+		location = locations[index];
+		var endCoordinate = location.coordinate;
+
+		generateLine(line, startCoordinate, endCoordinate);
+
+	});
+}
+
+function generateLine(line, startCoordinate, endCoordinate) {
+
+	bend = 1;
+
+	var startLatitude = startCoordinate.xCoordinate;
+	var startLongitude = startCoordinate.yCoordinate;
+
+	var endLatitude = endCoordinate.xCoordinate;
+	var endLongitude = endCoordinate.yCoordinate;
+
+	var sourceXY = projection([ startLongitude, startLatitude ]);
+	var targetXY = projection([ endLongitude, endLatitude ]);
+
+	var sourceX = sourceXY[0]; // lat
+	var sourceY = sourceXY[1]; // long
+
+	var targetX = targetXY[0];
+	var targetY = targetXY[1];
+
+	var dx = targetX - sourceX;
+	var dy = targetY - sourceY;
+	var dr = Math.sqrt(dx * dx + dy * dy) * bend;
+
+	var west_of_source = (targetX - sourceX) < 0;
+	var bearing;
+	if (west_of_source) {
+		bearing = "M" + targetX + "," + targetY + "A" + dr + "," + dr
+				+ " 0 0,1 " + sourceX + "," + sourceY;
+	} else {
+
+		bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr
+				+ " 0 0,1 " + targetX + "," + targetY;
+	}
+
+	var startTime = line.startTime;
+	var endTime = line.endTime;
+	
+//	 var line = d3.svg.line()
+//     .interpolate("cardinal")
+//     .x(function(d,i) {return x(i);})
+//     .y(function(d) {return y(d);})
+	
+	g.append("path") //
+	.attr("class", "line") //
+	.attr("d", bearing) //
+	.attr("fill", "none") //
+	.attr("stroke-width", 1 + "px") //
+	.attr("stroke", "rgb(" + 0 + "," + 0 + "," + 0 + ")") //
+	.attr("startTime", startTime) //
+	.attr("endTime", endTime) //
+	.attr("opacity", 1);
+
+}
