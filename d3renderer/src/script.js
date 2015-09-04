@@ -88,11 +88,10 @@ d3.json("data/world-topo-min.json", function ready(error, world) {
 // --TODO: experiments with arcs---//
 // //////////////////////////////////
 
-
 d3.json("data/test_discrete.json", function(json) {
 
 	// -- DATA-- //
-	
+
 	locations = json.locations;
 	var locationIds = [];
 	locations.forEach(function(location) {
@@ -125,89 +124,77 @@ d3.json("data/test_discrete.json", function(json) {
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
-	
-	
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
 		var currentDate = timeScale.invert(timeScale(value));
 		currentDateDisplay.text(dateFormat(currentDate));
 
-		// TODO: animate travel
-//	    http://bl.ocks.org/duopixel/4063326
-		
 		// lines
 		d3.selectAll(".line")[0].filter(function(line) {
 
 			var linePath = d3.select(line)
-			  var totalLength = linePath.node().getTotalLength();
-			
+			var totalLength = linePath.node().getTotalLength();
+
 			var lineEndDate = new Date(line.attributes.endTime.value);
-			
+
+			// TODO:
+			// https://jakearchibald.com/2013/animated-line-drawing-svg/
+			// animate only once
+			// animation begins at the startTime, ends at the endTime
+
 			if (lineEndDate <= value) {
-				
-//				console.log("Slider:" + dateFormat(new Date(value)));
-//				console.log(line.attributes.startTime.value);
-				
-				
-//			    http://stackoverflow.com/questions/18847266/explanation-of-d3-animated-line-drawing-required
-//			    https://jakearchibald.com/2013/animated-line-drawing-svg/
-			    
-			    linePath
-			    .attr("stroke-dasharray", totalLength + " " + totalLength)
-			      .attr("stroke-dashoffset", totalLength)
-			      .transition()
-			        .duration(750)
-			        .ease("linear")
-			        .attr("stroke-dashoffset", 0);
-			    
-			    linePath .attr("opacity", 1);
-				
+
+				// console.log("Slider:" + dateFormat(new Date(value)));
+				console.log(line.attributes.startTime.value);
+
+				linePath.attr("stroke-dasharray",
+						totalLength + " " + totalLength) //
+				.attr("stroke-dashoffset", totalLength) //
+				.transition() //
+				.duration(750) //
+				.ease("linear") //
+				.attr("stroke-dashoffset", 0);
+
 			} else {
-				
-			    linePath
-//			    .attr("stroke-dasharray", totalLength + " " + totalLength)
-////			      .attr("stroke-dashoffset", totalLength)
-////			      .transition()
-////			        .duration(750)
-////			        .ease("linear")
-			        .attr("stroke-dashoffset", totalLength)
-			        ;
-				
-				
-			    linePath .attr("opacity", 0);
-				
+
+				linePath
+				 .attr("stroke-dasharray", totalLength + " " + totalLength)
+				.attr("stroke-dashoffset", totalLength);
+
+
 			}// END: date check
 
 		});// END: filter
 
 	});// END: slide
-	
+
 });
 
 function tweenDash() {
 
-    return function(t) {
-        // In original version of this post the next two lines of JS were
-        // outside this return which led to odd behavior on zoom
-        // Thanks to Martin Raifer for the suggested fix.
+	return function(t) {
+		// In original version of this post the next two lines of JS were
+		// outside this return which led to odd behavior on zoom
+		// Thanks to Martin Raifer for the suggested fix.
 
-        //total length of path (single value)
-        var l = linePath.node().getTotalLength(); 
-        interpolate = d3.interpolateString("0," + l, l + "," + l); 
+		// total length of path (single value)
+		var l = linePath.node().getTotalLength();
+		interpolate = d3.interpolateString("0," + l, l + "," + l);
 
-        //t is fraction of time 0-1 since transition began
-        var marker = d3.select("#marker");
-        
-        // p is the point on the line (coordinates) at a given length
-        // along the line. In this case if l=50 and we're midway through
-        // the time then this would 25.
-        var p = linePath.node().getPointAtLength(t * l);
+		// t is fraction of time 0-1 since transition began
+		var marker = d3.select("#marker");
 
-        //Move the marker to that point
-        marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); //move marker
-        return interpolate(t);
-    }
+		// p is the point on the line (coordinates) at a given length
+		// along the line. In this case if l=50 and we're midway through
+		// the time then this would 25.
+		var p = linePath.node().getPointAtLength(t * l);
+
+		// Move the marker to that point
+		marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); // move
+		// marker
+		return interpolate(t);
+	}
 }
 
 function generateLines(lines, locations, locationIds) {
@@ -265,12 +252,12 @@ function generateLine(line, startCoordinate, endCoordinate) {
 
 	var startTime = line.startTime;
 	var endTime = line.endTime;
-	
-//	 var line = d3.svg.line()
-//     .interpolate("cardinal")
-//     .x(function(d,i) {return x(i);})
-//     .y(function(d) {return y(d);})
-	
+
+	// var line = d3.svg.line()
+	// .interpolate("cardinal")
+	// .x(function(d,i) {return x(i);})
+	// .y(function(d) {return y(d);})
+
 	g.append("path") //
 	.attr("class", "line") //
 	.attr("d", bearing) //
