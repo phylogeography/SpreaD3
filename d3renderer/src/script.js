@@ -134,19 +134,24 @@ d3.json("data/test_discrete.json", function(json) {
 		currentDateDisplay.text(dateFormat(currentDate));
 
 		// TODO: animate travel
-		
+//	    http://bl.ocks.org/duopixel/4063326
 		
 		// lines
 		d3.selectAll(".line")[0].filter(function(line) {
 
+			var linePath = d3.select(line)
+			  var totalLength = linePath.node().getTotalLength();
+			
 			var lineEndDate = new Date(line.attributes.endTime.value);
 			
 			if (lineEndDate <= value) {
-
-				var linePath = d3.select(line);
-			    var totalLength = linePath.node().getTotalLength();
 				
-//			    http://bl.ocks.org/duopixel/4063326
+//				console.log("Slider:" + dateFormat(new Date(value)));
+//				console.log(line.attributes.startTime.value);
+				
+				
+//			    http://stackoverflow.com/questions/18847266/explanation-of-d3-animated-line-drawing-required
+//			    https://jakearchibald.com/2013/animated-line-drawing-svg/
 			    
 			    linePath
 			    .attr("stroke-dasharray", totalLength + " " + totalLength)
@@ -154,12 +159,23 @@ d3.json("data/test_discrete.json", function(json) {
 			      .transition()
 			        .duration(750)
 			        .ease("linear")
-			        .attr("stroke-dashoffset", 1);
+			        .attr("stroke-dashoffset", 0);
 			    
+			    linePath .attr("opacity", 1);
 				
 			} else {
 				
-//				d3.select(line).attr("opacity", 0);
+			    linePath
+//			    .attr("stroke-dasharray", totalLength + " " + totalLength)
+////			      .attr("stroke-dashoffset", totalLength)
+////			      .transition()
+////			        .duration(750)
+////			        .ease("linear")
+			        .attr("stroke-dashoffset", totalLength)
+			        ;
+				
+				
+			    linePath .attr("opacity", 0);
 				
 			}// END: date check
 
