@@ -2,9 +2,8 @@
  * @fbielejec
  */
 
-				// console.log("Slider:" + dateFormat(new Date(value)));
-				// console.log(line.attributes.startTime.value);
-
+// console.log("Slider:" + dateFormat(new Date(value)));
+// console.log(line.attributes.startTime.value);
 // ///////////////////
 // --- VARIABLES ---//
 // ///////////////////
@@ -133,134 +132,73 @@ d3.json("data/test_discrete.json", function(json) {
 		var currentDate = timeScale.invert(timeScale(value));
 		currentDateDisplay.text(dateFormat(currentDate));
 
-//		var linePath =d3.selectAll(".line");
-//		var totalLength = linePath.node().getTotalLength();
-//		linePath
-//		.attr("stroke-dasharray",
-//				totalLength + " " + totalLength) //
-//		.attr("stroke-dashoffset", totalLength) //
-//		.transition() //
-//		.duration(750) //
-//		.ease("linear") //
-//		.attr("stroke-dashoffset", 0) //
-//		;
-		
-		
 		// TODO:
-		// https://jakearchibald.com/2013/animated-line-drawing-svg/
-		// animate only once
 		// animation begins at the startTime, ends at the endTime
-		d3.selectAll(".line")[0].filter(function(line) {
+		d3.selectAll(".line")[0]
+				.filter(function(line) {
 
-			var linePath = d3.select(line)
-			var totalLength = linePath.node().getTotalLength();
+					var linePath = d3.select(line)
+					var totalLength = linePath.node().getTotalLength();
 
-			var lineEndDate = new Date(line.attributes.endTime.value);
+					var lineStartDate = new Date(
+							linePath.node().attributes.startTime.value);
+					var lineEndDate = new Date(
+							linePath.node().attributes.endTime.value);
 
+					if (lineEndDate <= value) {
 
-			if (lineEndDate <= value) {
-				
-//				console.log(d3.select(line));
-				
-				linePath.attr("stroke-dasharray",
-						totalLength + " " + totalLength) //
-				.attr("stroke-dashoffset", totalLength) //
-				.transition() //
-				.duration(750) //
-				.ease("linear") //
-				.attr("stroke-dashoffset", 0) //
-				;
-				
-//				return(line);
-				
-			} 
-			
-			else {
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", totalLength) //
+						.attr("opacity", 0)//
+						.transition() //
+						.duration(750) //
+						.ease("linear") //
+						.attr("stroke-dashoffset", 0) //
+						.attr("opacity", 1);
 
-				linePath.attr("stroke-dasharray",
-						totalLength + " " + totalLength) //
-				.attr("stroke-dashoffset", totalLength) //
-				;
+					} else {
 
-			}// END: date check
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", totalLength) //
+						.attr("opacity", 0);
 
-		})
-		;// END: filter
+					}// END: date check
+
+				});// END: filter
 
 	});// END: slide
 
 });
 
-function generateLines(lines, locations, locationIds) {
 
-	lines.forEach(function(line) {
 
-		var locationId = line.startLocation;
-		var index = locationIds.indexOf(locationId);
-		var location = locations[index];
-		var startCoordinate = location.coordinate;
+//var first = document.getElementById("first");
 
-		locationId = line.endLocation;
-		index = locationIds.indexOf(locationId);
-		location = locations[index];
-		var endCoordinate = location.coordinate;
+//$('#first').collapsible('accordion');
 
-		generateLine(line, startCoordinate, endCoordinate);
 
-	});
-}
 
-function generateLine(line, startCoordinate, endCoordinate) {
 
-	bend = 1;
 
-	var startLatitude = startCoordinate.xCoordinate;
-	var startLongitude = startCoordinate.yCoordinate;
 
-	var endLatitude = endCoordinate.xCoordinate;
-	var endLongitude = endCoordinate.yCoordinate;
 
-	var sourceXY = projection([ startLongitude, startLatitude ]);
-	var targetXY = projection([ endLongitude, endLatitude ]);
+// TODO
+// gradients
+// https://gist.github.com/mbostock/4163057
+// http://www.d3noob.org/2013/01/applying-colour-gradient-to-graph-line.html
 
-	var sourceX = sourceXY[0]; // lat
-	var sourceY = sourceXY[1]; // long
 
-	var targetX = targetXY[0];
-	var targetY = targetXY[1];
 
-	var dx = targetX - sourceX;
-	var dy = targetY - sourceY;
-	var dr = Math.sqrt(dx * dx + dy * dy) * bend;
 
-	var west_of_source = (targetX - sourceX) < 0;
-	var bearing;
-	if (west_of_source) {
-		bearing = "M" + targetX + "," + targetY + "A" + dr + "," + dr
-				+ " 0 0,1 " + sourceX + "," + sourceY;
-	} else {
 
-		bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr
-				+ " 0 0,1 " + targetX + "," + targetY;
-	}
 
-	var startTime = line.startTime;
-	var endTime = line.endTime;
 
-	// var line = d3.svg.line()
-	// .interpolate("cardinal")
-	// .x(function(d,i) {return x(i);})
-	// .y(function(d) {return y(d);})
 
-	g.append("path") //
-	.attr("class", "line") //
-	.attr("d", bearing) //
-	.attr("fill", "none") //
-	.attr("stroke-width", 1 + "px") //
-	.attr("stroke", "rgb(" + 0 + "," + 0 + "," + 0 + ")") //
-	.attr("startTime", startTime) //
-	.attr("endTime", endTime) //
-	// .attr("opacity", 1) //
-	.attr("animated", false);
 
-}
+
+
+
+
+

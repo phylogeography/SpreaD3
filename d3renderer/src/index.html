@@ -11,11 +11,12 @@
 <script type="text/javascript" src="../lib/colorbrewer/colorbrewer.js"></script>
 <script type="text/javascript" src="../lib/d3.slider/d3.slider.js"></script>
 <link rel="stylesheet" href="../lib/d3.slider/d3.slider.css" />
+<script type="text/javascript" src="../lib/collabsible/collabsible.js"></script>
 
 <!-- sources -->
+<script type="text/javascript" src="lines.js"></script>
 
 <style type="text/css">
-
 #container {
 	margin-top: 1.5cm;
 	/*  margin: 10px 10%; */
@@ -38,6 +39,61 @@
 	stroke-width: 1px;
 }
 
+.selectors {
+	margin-top: 1.5cm;
+	float: left;
+}
+
+/* styling for collapsible panels */
+.panel, .panelcollapsed {
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+/* panel heading */
+.panel h2, .panelcollapsed h2 {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 0px;
+	padding: 4px;
+	padding-left: 20px;
+	/*	background: #EEEEEE; */
+	background-image: url('img/arrow-up.gif');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-top: 1px solid #CCC;
+	/*	border-bottom: 1px solid #CCC;
+			border-right: 1px solid #CCC;
+			border-left: 1px solid #CCC;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			*/
+}
+
+/* panel heading on rollover */
+.panel h2:hover, .panelcollapsed h2:hover {
+	background-color: #F5F7F9;
+}
+
+/* heading of a collapsed panel */
+.panelcollapsed h2 {
+	/*	background: #DDDDDD; */
+	background-image: url('img/arrow-dn.gif');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-color: #CCC;
+}
+
+/* panel content - do not set borders or paddings */
+.panelcontent {
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+/* collapsed panel content */
+.panelcollapsed .panelcontent {
+	display: none;
+}
 </style>
 </head>
 
@@ -52,8 +108,29 @@
 			<div id="timeSlider"></div>
 		</div>
 
+		<div class="selectorsANDcontainer" style="display: inline;">
+
+			<div class="selectors" style="display: inline;">
+
+				<!-- SELECTORS -->
+
+				<div id="first" class="panel">
+					<h2>Line color attribute</h2>
+					<div class="panelcontent">
+						<select id="linecolor">
+						<option >host1</option>
+						<option >host2</option>
+						</select>
+					</div>
+				</div>
+
+			</div>
+			<!-- END: selectors-->
 
 			<div id="container"></div>
+
+		</div>
+		<!-- END: selectorsANDcontainer-->
 
 	</div>
 	<!-- END: all-->
