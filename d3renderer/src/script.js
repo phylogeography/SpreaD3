@@ -2,6 +2,9 @@
  * @fbielejec
  */
 
+				// console.log("Slider:" + dateFormat(new Date(value)));
+				// console.log(line.attributes.startTime.value);
+
 // ///////////////////
 // --- VARIABLES ---//
 // ///////////////////
@@ -130,7 +133,23 @@ d3.json("data/test_discrete.json", function(json) {
 		var currentDate = timeScale.invert(timeScale(value));
 		currentDateDisplay.text(dateFormat(currentDate));
 
-		// lines
+//		var linePath =d3.selectAll(".line");
+//		var totalLength = linePath.node().getTotalLength();
+//		linePath
+//		.attr("stroke-dasharray",
+//				totalLength + " " + totalLength) //
+//		.attr("stroke-dashoffset", totalLength) //
+//		.transition() //
+//		.duration(750) //
+//		.ease("linear") //
+//		.attr("stroke-dashoffset", 0) //
+//		;
+		
+		
+		// TODO:
+		// https://jakearchibald.com/2013/animated-line-drawing-svg/
+		// animate only once
+		// animation begins at the startTime, ends at the endTime
 		d3.selectAll(".line")[0].filter(function(line) {
 
 			var linePath = d3.select(line)
@@ -138,64 +157,39 @@ d3.json("data/test_discrete.json", function(json) {
 
 			var lineEndDate = new Date(line.attributes.endTime.value);
 
-			// TODO:
-			// https://jakearchibald.com/2013/animated-line-drawing-svg/
-			// animate only once
-			// animation begins at the startTime, ends at the endTime
 
 			if (lineEndDate <= value) {
-
-				// console.log("Slider:" + dateFormat(new Date(value)));
-				console.log(line.attributes.startTime.value);
-
+				
+//				console.log(d3.select(line));
+				
 				linePath.attr("stroke-dasharray",
 						totalLength + " " + totalLength) //
 				.attr("stroke-dashoffset", totalLength) //
 				.transition() //
 				.duration(750) //
 				.ease("linear") //
-				.attr("stroke-dashoffset", 0);
+				.attr("stroke-dashoffset", 0) //
+				;
+				
+//				return(line);
+				
+			} 
+			
+			else {
 
-			} else {
-
-				linePath
-				 .attr("stroke-dasharray", totalLength + " " + totalLength)
-				.attr("stroke-dashoffset", totalLength);
-
+				linePath.attr("stroke-dasharray",
+						totalLength + " " + totalLength) //
+				.attr("stroke-dashoffset", totalLength) //
+				;
 
 			}// END: date check
 
-		});// END: filter
+		})
+		;// END: filter
 
 	});// END: slide
 
 });
-
-function tweenDash() {
-
-	return function(t) {
-		// In original version of this post the next two lines of JS were
-		// outside this return which led to odd behavior on zoom
-		// Thanks to Martin Raifer for the suggested fix.
-
-		// total length of path (single value)
-		var l = linePath.node().getTotalLength();
-		interpolate = d3.interpolateString("0," + l, l + "," + l);
-
-		// t is fraction of time 0-1 since transition began
-		var marker = d3.select("#marker");
-
-		// p is the point on the line (coordinates) at a given length
-		// along the line. In this case if l=50 and we're midway through
-		// the time then this would 25.
-		var p = linePath.node().getPointAtLength(t * l);
-
-		// Move the marker to that point
-		marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); // move
-		// marker
-		return interpolate(t);
-	}
-}
 
 function generateLines(lines, locations, locationIds) {
 
@@ -266,6 +260,7 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("stroke", "rgb(" + 0 + "," + 0 + "," + 0 + ")") //
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
-	.attr("opacity", 1);
+	// .attr("opacity", 1) //
+	.attr("animated", false);
 
 }
