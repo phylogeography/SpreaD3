@@ -9,26 +9,26 @@ import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 import utils.Trait;
 import utils.Utils;
-import data.structure.Coordinate;
 import data.structure.Location;
-import data.structure.Polygon;
+import data.structure.attributable.Area;
+import data.structure.primitive.Coordinate;
+import data.structure.primitive.Polygon;
 import exceptions.AnalysisException;
 import exceptions.LocationNotFoundException;
 
-public class DiscreteTreePolygonsParser {
+public class DiscreteSpreadDataAreaParser {
 
 	public static final String COUNT = "count";
 	
 	private RootedTree rootedTree;
 	private String locationTrait;
 	private List<Location> locationsList;
-	
 	private Integer intervals;
 	private String[] traits;
 	private String mrsd;
 	private double timescaleMultiplier;
 	
-	public DiscreteTreePolygonsParser(
+	public DiscreteSpreadDataAreaParser(
 			RootedTree rootedTree, //
 			String locationTrait, // 
 			Integer intervals, //
@@ -48,9 +48,9 @@ public class DiscreteTreePolygonsParser {
 		
 	}//END: Constructor
 	
-	public LinkedList<Polygon> parseDiscretePolygons() throws LocationNotFoundException, AnalysisException {
+	public LinkedList<Area> parseDiscretePolygons() throws LocationNotFoundException, AnalysisException {
 		
-		LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
+		LinkedList<Area> areasList = new LinkedList<Area>();
 		
     	double rootHeight = rootedTree.getHeight(rootedTree.getRootNode());
         double delta = rootHeight / intervals;
@@ -66,9 +66,11 @@ public class DiscreteTreePolygonsParser {
         Location dummy;
 		for (int i = 0; i < sliceHeights.length; i++) {
 
+			
 			double sliceHeight = sliceHeights[i] * timescaleMultiplier;
 			String startTime = timeParser.getNodeDate(sliceHeight);
 			
+			LinkedList<Polygon> polygonsList = new LinkedList<Polygon>();
 			for (Location location : locationsList) {
 
 				int locationCount = 0;
@@ -100,7 +102,7 @@ public class DiscreteTreePolygonsParser {
 						}//END: tie check
 						
 					
-						dummy = new Location(parentState, "", new Coordinate(0.0, 0.0), null);
+						dummy = new Location(parentState);
 						int parentLocationIndex = Integer.MAX_VALUE;
 						if(locationsList.contains(dummy)) {
 							 parentLocationIndex = locationsList.indexOf(dummy);
@@ -108,7 +110,7 @@ public class DiscreteTreePolygonsParser {
 							throw new LocationNotFoundException(dummy);
 						}
 						
-						dummy = new Location(nodeState, "", new Coordinate(0.0, 0.0), null);
+						dummy = new Location(nodeState);
 						int nodeLocationIndex = Integer.MAX_VALUE;
 						if(locationsList.contains(dummy)) {
 							 nodeLocationIndex = locationsList.indexOf(dummy);
@@ -151,16 +153,18 @@ public class DiscreteTreePolygonsParser {
 					Trait countTrait = new Trait(locationCount);
 					attributes.put(COUNT, countTrait);
 					
-					Polygon polygon = new Polygon(location.getId(), startTime, attributes);
-					polygonsList.add(polygon);
+//					LinkedList<Coordinate> coordinates
+					polygonsList.add(null);
 
 				}// END: positive count check
 				
 			}// END: locations loop
 
+			Area area = null;//new Area(polygonsList, startTime, attributes);
+			areasList.add(area);
 		}// END: i loop
 		
-		return polygonsList;
+		return areasList;
 	}//END: parseDiscretePolygons
 	
 }//END: class

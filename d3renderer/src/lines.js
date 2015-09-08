@@ -1,4 +1,6 @@
 
+// ---GENERATE LINES--//
+
 function generateLines(lines, locations, locationIds) {
 
 	lines.forEach(function(line) {
@@ -17,6 +19,8 @@ function generateLines(lines, locations, locationIds) {
 
 	});
 }
+
+//---GENERATE LINE--//
 
 function generateLine(line, startCoordinate, endCoordinate) {
 

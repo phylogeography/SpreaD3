@@ -9,15 +9,18 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import data.SpreadData;
+import exceptions.AnalysisException;
+import exceptions.ArgumentException;
+import exceptions.IllegalCharacterException;
+import exceptions.LocationNotFoundException;
+import exceptions.MissingAttributeException;
 import jebl.evolution.io.ImportException;
 import kmlframework.kml.KmlException;
-import parsers.BayesFactorParser;
-import parsers.ContinuousTreeParser;
-import parsers.DiscreteTreeParser;
-import parsers.TimeSlicerParser;
-import readers.JsonReader;
-import renderers.geojson.GeoJSONRenderer;
-import renderers.kml.KmlRenderer;
+import parsers.DiscreteSpreadDataParser;
 import settings.Settings;
 import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
@@ -28,16 +31,6 @@ import settings.rendering.GeoJSONRendererSettings;
 import settings.rendering.KmlRendererSettings;
 import utils.Arguments;
 import utils.Utils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import data.SpreadData;
-import exceptions.AnalysisException;
-import exceptions.ArgumentException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
-import exceptions.MissingAttributeException;
 
 public class Spread2ConsoleApp {
 
@@ -600,9 +593,11 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					DiscreteTreeParser parser = new DiscreteTreeParser(
-							settings.discreteTreeSettings);
+//					DiscreteTreeParserOld parser = new DiscreteTreeParserOld(
+//							settings.discreteTreeSettings);
 
+					DiscreteSpreadDataParser parser = new DiscreteSpreadDataParser(settings.discreteTreeSettings);
+					
 					SpreadData data = parser.parse();
 
 					// ---EXPORT TO JSON---//
@@ -693,10 +688,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					BayesFactorParser parser = new BayesFactorParser(
-							settings.bayesFactorsSettings);
+//					BayesFactorParser parser = new BayesFactorParser(
+//							settings.bayesFactorsSettings);
 
-					SpreadData data = parser.parse();
+					System.out.println("Bayes factor not yet implemented!");
+					System.exit(0);
+					
+					SpreadData data = null;//parser.parse();
 
 					// ---EXPORT TO JSON---//
 					
@@ -714,10 +712,10 @@ public class Spread2ConsoleApp {
 
 				} catch (IOException e) {
 					gracefullyExit(e.getMessage(), args2, e);
-				} catch (IllegalCharacterException e) {
-					gracefullyExit(e.getMessage(), args2, e);
-				} catch (LocationNotFoundException e) {
-					gracefullyExit(e.getMessage(), args2, e);
+//				} catch (IllegalCharacterException e) {
+//					gracefullyExit(e.getMessage(), args2, e);
+//				} catch (LocationNotFoundException e) {
+//					gracefullyExit(e.getMessage(), args2, e);
 				}// END: try-catch
 
 			} else if (settings.continuousTree) {
@@ -774,10 +772,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					ContinuousTreeParser parser = new ContinuousTreeParser(
-							settings.continuousTreeSettings);
+//					ContinuousTreeParser parser = new ContinuousTreeParser(
+//							settings.continuousTreeSettings);
 
-					SpreadData data = parser.parse();
+					System.out.println("Continuous Tree Parser not yet implemented!");
+					System.exit(0);
+					
+					SpreadData data = null;//parser.parse();
 
 					// ---EXPORT TO JSON---//
 
@@ -795,17 +796,17 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), args3, e);
 
-				} catch (ImportException e) {
-
-					gracefullyExit(e.getMessage(), args3, e);
-
-				} catch (AnalysisException e) {
-
-					gracefullyExit(e.getMessage(), args3, e);
-
-				} catch (NumberFormatException e) {
-					
-					gracefullyExit(e.getMessage(), args3, e);
+//				} catch (ImportException e) {
+//
+//					gracefullyExit(e.getMessage(), args3, e);
+//
+//				} catch (AnalysisException e) {
+//
+//					gracefullyExit(e.getMessage(), args3, e);
+//
+//				} catch (NumberFormatException e) {
+//					
+//					gracefullyExit(e.getMessage(), args3, e);
 					
 				}// END: try-catch block
 
@@ -918,10 +919,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					TimeSlicerParser parser = new TimeSlicerParser(
-							settings.timeSlicerSettings);
+//					TimeSlicerParser parser = new TimeSlicerParser(
+//							settings.timeSlicerSettings);
 
-					SpreadData data = parser.parse();
+					System.out.println("Time Slicer Parser not yet implemented!");
+					System.exit(0);
+					
+					SpreadData data = null;// parser.parse();
 
 					// ---EXPORT TO JSON---//
 
@@ -937,10 +941,10 @@ public class Spread2ConsoleApp {
 
 				} catch (IOException e) {
 					gracefullyExit(e.getMessage(), args4, e);
-				} catch (ImportException e) {
-					gracefullyExit(e.getMessage(), args4, e);
-				} catch (AnalysisException e) {
-					gracefullyExit(e.getMessage(), args4, e);
+//				} catch (ImportException e) {
+//					gracefullyExit(e.getMessage(), args4, e);
+//				} catch (AnalysisException e) {
+//					gracefullyExit(e.getMessage(), args4, e);
 				} catch(UnsupportedClassVersionError e) {
 					String message = "Java version found " + System.getProperty("java.version") + " is too old. Please update";
 					gracefullyExit(message, args4, new AnalysisException(e.getMessage()));
@@ -1004,8 +1008,8 @@ public class Spread2ConsoleApp {
 
 			try {
 
-				JsonReader reader = new JsonReader(settings.jsonReaderSettings);
-				SpreadData data = reader.read();
+//				JsonReader reader = new JsonReader(settings.jsonReaderSettings);
+				SpreadData data = null;//reader.read();
 
 				// ---EXPORT TO JSON---//
 
@@ -1307,27 +1311,27 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-					KmlRenderer renderer = new KmlRenderer(input,
-							settings.kmlRendererSettings);
-					renderer.render();
+//					KmlRenderer renderer = new KmlRenderer(input,
+//							settings.kmlRendererSettings);
+//					renderer.render();
 
 					System.out.println("Rendered KML.");
 
-				} catch (KmlException e) {
-
-					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+//				} catch (KmlException e) {
+//
+//					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
 				} catch (IOException e) {
 
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
-				} catch (MissingAttributeException e) {
-
-					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-
-				} catch (AnalysisException e) {
-
-					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+//				} catch (MissingAttributeException e) {
+//
+//					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+//
+//				} catch (AnalysisException e) {
+//
+//					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
 				}// END: Exception handling
 
@@ -1356,9 +1360,12 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-					GeoJSONRenderer renderer = new GeoJSONRenderer(input,
-							settings.geoJSONRendererSettings);
-					renderer.render();
+					System.out.println("Geo JSON renderer not yet implemented!");
+					System.exit(0);
+					
+//					GeoJSONRenderer renderer = new GeoJSONRenderer(input,
+//							settings.geoJSONRendererSettings);
+//					renderer.render();
 
 					System.out.println("Rendered GeoJSON.");
 
@@ -1366,13 +1373,13 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
 
-				} catch (IOException e) {
-
-					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
-
-				} catch (MissingAttributeException e) {
-
-					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+//				} catch (IOException e) {
+//
+//					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+//
+//				} catch (MissingAttributeException e) {
+//
+//					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
 
 				}// END: Exception handling
 

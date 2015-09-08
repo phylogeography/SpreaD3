@@ -18,7 +18,9 @@ public class SpreadData {
 	private final LinkedList<Location> locations;
 	private final LinkedList<Layer> layers;
 
-	public SpreadData(TimeLine timeLine, LinkedList<Location> locations, LinkedList<Layer> layers) {
+	public SpreadData(TimeLine timeLine, 
+			LinkedList<Location> locations,
+			LinkedList<Layer> layers) {
 
 		this.timeLine = timeLine; 
 		this.locations = locations;
@@ -26,16 +28,16 @@ public class SpreadData {
 
 	}// END: Constructor
 
-	public List<Location> getLocations() {
-		return locations;
-	}
-
 	public List<Layer> getLayers() {
 		return layers;
 	}
 
 	public TimeLine getTimeLine() {
 		return timeLine;
+	}
+
+	public LinkedList<Location> getLocations() {
+		return locations;
 	}
 
 }// END: class

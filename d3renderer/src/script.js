@@ -18,6 +18,13 @@ var projection = d3.geo.mercator().translate([ (width / 2), (height / 2) ])
 
 var graticule = d3.geo.graticule();
 
+//
+//---DATA---//
+//
+
+var lineValueMap = [];
+var lineMinMaxMap = [];
+
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////
@@ -107,8 +114,12 @@ d3.json("data/test_discrete.json", function(json) {
 	layers.forEach(function(layer) {
 
 		lines = layer.lines;
+		
+		populatePanels(lines);
+		
 		generateLines(lines, locations, locationIds);
 
+		
 	});
 
 	// -- TIME-- //

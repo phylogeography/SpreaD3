@@ -3,54 +3,62 @@ package data.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.structure.attributable.Area;
+import data.structure.attributable.Line;
+import data.structure.attributable.Point;
+
 public class Layer {
-	
+
 	private final String id;
 	private final String description;
-	private final List<Polygon> polygons;
+	private final List<Area> areas;
 	private final List<Line> lines;
-	private boolean hasPolygons;
+	private final List<Point> points;
+
+	private boolean hasAreas;
 
 	public Layer(String id, //
 			String description, //
-			List<Line> lines, //
-			List<Polygon> polygons //
+			List<Point> points, List<Line> lines, //
+			List<Area> areas //
 	) {
-		
-//		super();
 
-		
-		this.hasPolygons = true;
-		this.polygons = new ArrayList<Polygon>();
+		this.hasAreas = true;
+		this.areas = new ArrayList<Area>();
 		this.lines = new ArrayList<Line>();
+		this.points = points;
 
 		if (lines != null) {
 			this.lines.addAll(lines);
 		}
-		
-		if (polygons != null) {
-			this.polygons.addAll(polygons);
+
+		if (areas != null) {
+			this.areas.addAll(areas);
 		} else {
-			this.hasPolygons = false;
+			this.hasAreas = false;
 		}
 
 		this.id = id;
 		this.description = description;
 
-	}//END: Constructor
+	}// END: Constructor
 
 	public List<Line> getLines() {
 		return lines;
 	}
 
-	public boolean hasPolygons() {
-		return hasPolygons;
+	public boolean hasAreas() {
+		return hasAreas;
 	}
-	
-	public List<Polygon> getPolygons() {
-		return polygons;
+
+	public List<Area> getAreas() {
+		return areas;
 	}
-	
+
+	public List<Point> getPoints() {
+		return points;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -59,4 +67,4 @@ public class Layer {
 		return description;
 	}
 
-}//END: class
+}// END: class

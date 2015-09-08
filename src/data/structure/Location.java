@@ -3,14 +3,23 @@ package data.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import data.structure.primitive.Coordinate;
+import data.structure.primitive.Polygon;
+
 public class Location {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
 	private final String id;
-	private final String description;	
+//	private final String description;
 	private final Polygon polygon;
 	private final Coordinate coordinate;
+
+	public Location(String id) {
+		this.id = id;
+		this.coordinate = null;
+		this.polygon = null;
+	}
 
 	public Location(String id, //
 			String description, //
@@ -21,7 +30,6 @@ public class Location {
 		super();
 
 		this.id = id;
-		this.description = description;
 		this.coordinate = null;
 		this.polygon = polygon;
 
@@ -40,7 +48,6 @@ public class Location {
 		super();
 
 		this.id = id;
-		this.description = description;
 		this.coordinate = coordinate;
 		this.polygon = null;
 
@@ -54,10 +61,6 @@ public class Location {
 		return id;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-	
 	public Polygon getPolygon() {
 		return polygon;
 	}
@@ -76,7 +79,7 @@ public class Location {
 
 	@Override
 	public boolean equals(Object obj) {
-		
+
 		if (obj == null) {
 			return false;
 		}
@@ -84,11 +87,11 @@ public class Location {
 		if (obj == this) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof Location)) {
 			return false;
 		}
-		
+
 		Location location = (Location) obj;
 		if (location.getId().equals(this.id)) {
 			return true;
