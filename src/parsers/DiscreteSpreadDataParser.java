@@ -2,15 +2,16 @@ package parsers;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Set;
 
 import data.SpreadData;
+import data.structure.Attribute;
 import data.structure.Layer;
 import data.structure.Location;
 import data.structure.TimeLine;
 import data.structure.attributable.Area;
 import data.structure.attributable.Line;
 import data.structure.attributable.Point;
-import data.structure.primitive.Polygon;
 import exceptions.AnalysisException;
 import exceptions.IllegalCharacterException;
 import exceptions.LocationNotFoundException;
@@ -31,8 +32,13 @@ public class DiscreteSpreadDataParser {
 			LocationNotFoundException {
 
 		TimeLine timeLine = null;
+		LinkedList<Attribute> uniqueAttributes = null;
 		LinkedList<Location> locationsList = null;
+
 		LinkedList<Layer> layersList = null;
+		LinkedList<Point> pointsList = null;
+		LinkedList<Line> linesList = null;
+		LinkedList<Area> areasList = null;
 
 		// ---IMPORT---//
 
@@ -46,8 +52,7 @@ public class DiscreteSpreadDataParser {
 
 		System.out.println("Parsed time line");
 
-		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(settings.locations //
-		);
+		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(settings.locations);
 		locationsList = locationsParser.parseLocations();
 
 		System.out.println("Parsed locations");
@@ -60,17 +65,25 @@ public class DiscreteSpreadDataParser {
 		);
 		treeParser.parseTree();
 
-		LinkedList<Point> pointsList = treeParser.getPointsList();
-		LinkedList<Line> linesList = treeParser.getLinesList();
-		LinkedList<Area> areasList = null;
+		pointsList = treeParser.getPointsList();
+		linesList = treeParser.getLinesList();
+		areasList = null;
 
+		uniqueAttributes = treeParser.getUniqueAttributes();
+		
 		System.out.println("Parsed the tree");
 
 		layersList = new LinkedList<Layer>();
-		Layer discreteLayer = new Layer(settings.tree, "Discrete tree visualisation", pointsList, linesList, areasList);
+		Layer discreteLayer = new Layer(settings.tree, //
+				"Discrete tree visualisation", //
+				pointsList, //
+				areasList, //
+				linesList //
+		);
+
 		layersList.add(discreteLayer);
 
-		SpreadData data = new SpreadData(timeLine, locationsList, layersList);
+		SpreadData data = new SpreadData(timeLine, uniqueAttributes, locationsList, layersList);
 
 		return data;
 	}// END: parse

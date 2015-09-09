@@ -11,16 +11,17 @@ public class Layer {
 
 	private final String id;
 	private final String description;
+	private final List<Point> points;
 	private final List<Area> areas;
 	private final List<Line> lines;
-	private final List<Point> points;
 
 	private boolean hasAreas;
 
 	public Layer(String id, //
 			String description, //
-			List<Point> points, List<Line> lines, //
-			List<Area> areas //
+			List<Point> points, //
+			List<Area> areas, //
+			List<Line> lines //
 	) {
 
 		this.hasAreas = true;

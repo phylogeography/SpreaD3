@@ -1,20 +1,20 @@
 
 // ---GENERATE LINES--//
 
-function generateLines(lines, locations, locationIds) {
+function generateLines(lines, points) {
 
 	lines.forEach(function(line) {
 
-		var locationId = line.startLocation;
-		var index = locationIds.indexOf(locationId);
-		var location = locations[index];
-		var startCoordinate = location.coordinate;
-
-		locationId = line.endLocation;
-		index = locationIds.indexOf(locationId);
-		location = locations[index];
-		var endCoordinate = location.coordinate;
-
+		var startNodeId = line.startNodeId;
+		var startPoint = getObject(points, "id", startNodeId);
+		line['startPoint'] = startPoint;
+		var startCoordinate = startPoint.location.coordinate;
+		
+		var endNodeId = line.endNodeId;
+		var endPoint = getObject(points, "id", endNodeId);
+		line['endPoint'] = endPoint;
+		var endCoordinate = line.endPoint.location.coordinate;
+		
 		generateLine(line, startCoordinate, endCoordinate);
 
 	});
@@ -59,11 +59,6 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	var startTime = line.startTime;
 	var endTime = line.endTime;
 
-	// var line = d3.svg.line()
-	// .interpolate("cardinal")
-	// .x(function(d,i) {return x(i);})
-	// .y(function(d) {return y(d);})
-
 	g.append("path") //
 	.attr("class", "line") //
 	.attr("d", bearing) //
@@ -72,6 +67,6 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("stroke", "rgb(" + 0 + "," + 0 + "," + 0 + ")") //
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
-	.attr("opacity", 0);
+	.attr("opacity", 1);
 
 }

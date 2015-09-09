@@ -5,16 +5,14 @@ import java.util.Map;
 
 import data.structure.Location;
 import data.structure.primitive.Coordinate;
-import utils.Trait;
 
 public class Point {
 
-	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-
+	private final String id;
 	private final Location location;
 	private final Coordinate coordinate;
 	private final String startTime;
-	private final String id;
+	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 	
 	public String getId() {
 		return id;
@@ -23,16 +21,16 @@ public class Point {
 	public Point(String id) {
 		this.id = id;
 		this.location = null;
-		this.startTime = null;
 		this.coordinate = null;
+		this.startTime = null;
 	}
 	
-	public Point(String id, Location location, String startTime, Map<String, Trait> attributes) {
+	public Point(String id, Location location, String startTime, Map<String, Object> attributes) {
 
 		this.id = id;
 		this.location = location;
-		this.startTime = startTime;
 		this.coordinate = null;
+		this.startTime = startTime;
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
@@ -40,12 +38,12 @@ public class Point {
 
 	}// END: Constructor
 
-	public Point(String id, Coordinate coordinate, String startTime, Map<String, Trait> attributes) {
+	public Point(String id, Coordinate coordinate, String startTime, Map<String, Object> attributes) {
 
 		this.id = id;
 		this.coordinate = coordinate;
-		this.startTime = startTime;
 		this.location = null;
+		this.startTime = startTime;
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
@@ -65,11 +63,11 @@ public class Point {
 		return coordinate;
 	}
 
-	public Map<String, Trait> getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
 	
-	public void addAttribute(String name, Trait trait) {
+	public void addAttribute(String name, Object trait) {
 		attributes.put(name, trait);
 	}
 	

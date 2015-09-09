@@ -1,90 +1,11 @@
-
 // ---POPULATE PANELS---//
 
-function populatePanels(lines) {
-
-	var factorValue = 1.0;
-	
-	lines.forEach(function(line) {
-
-		var attributes = line.attributes;
-	
-		for ( var property in attributes) {
-
-			// process values
-			var value = attributes[property].id;
-			
-			
-			if (!(value in lineValueMap)) {
-
-				if (isNumeric(value)) {
-
-					lineValueMap[value] = {
-						value : value
-					};
-
-				} else {
-
-					lineValueMap[value] = {
-						value : factorValue
-					};
-
-					factorValue++;
-
-				}// END: isNumeric check
-
-			} // END: contains check
-
-			// process attribute names for choosers
-			if (property.startsWith(START_STRING)
-					|| property.startsWith(END_STRING)) {
-
-				// lines have start and end attributes, but we keep only the
-				// core name
-				property = property.replace(START_PREFIX, '').replace(
-						END_PREFIX, '');
-
-			}// END: prefix check
-
-			// get min max values
-			if (!(property in lineMinMaxMap)) {
-
-				lineMinMaxMap[property] = {
-					min : lineValueMap[value].value,
-					max : lineValueMap[value].value
-				};
-
-			} else {
-
-				var min = lineMinMaxMap[property].min;
-				var candidateMin = lineValueMap[value].value;
-
-				if (candidateMin < min) {
-					lineMinMaxMap[property].min = candidateMin;
-				}// END: min check
-
-				var max = lineMinMaxMap[property].max;
-				var candidateMax = lineValueMap[value].value;
-
-				if (candidateMax > max) {
-					lineMinMaxMap[property].max = candidateMax;
-				}// END: max check
-
-			}// END: key check
-
-		}// END: attributes loop
-
-	});// END: polygons loop
-
-	var i;
-	var option;
-	var element;
-	var keys = Object.keys(lineMinMaxMap);
+function populatePanels(attributes) {
 
 	lineColorSelect = document.getElementById("linecolor");
-	for (i = 0; i < keys.length; i++) {
+	for (i = 0; i < attributes.length; i++) {
 
-		option = keys[i];
+		option = attributes[i].id;
 		element = document.createElement("option");
 		element.textContent = option;
 		element.value = option;
@@ -92,5 +13,59 @@ function populatePanels(lines) {
 		lineColorSelect.appendChild(element);
 
 	}// END: i loop
+	
 
-}// END: populateLineMaps
+	// line color listener
+	d3
+			.select(lineColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorAttribute = lineColorSelect.options[lineColorSelect.selectedIndex].text;
+
+						var attribute = getObject(attributes, "id",
+								colorAttribute);
+
+						if (attribute.scale == ORDINAL) {
+
+							 data = attribute.domain;
+							 scale = d3.scale.category20().domain(data);
+
+							$('#linesColorLegend').html('');
+
+							colorlegend("#linesColorLegend", scale, "ordinal",
+									{
+										title : "",
+										boxHeight : 20,
+										boxWidth : 6,
+										vertical : true
+									});
+
+						} else {
+
+							 data = attribute.range;
+							 scale = d3.scale.linear().domain(data).range(
+									[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
+
+							$('#linesColorLegend').html('');
+
+							colorlegend("#linesColorLegend", scale, "linear", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+						}
+
+						d3.select('#linesColorLegend .colorlegend-title').style('font-size', '20px')
+						
+					});
+
+
+//	d3.select(lineColorSelect).call('change');
+
+	
+}// END: populatePanels
+

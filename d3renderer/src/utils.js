@@ -2,10 +2,13 @@
 //---VARIABLES---//
 ///////////////////
 
-var START_STRING = "start";
-var END_STRING = "end";
-var START_PREFIX = /^start/;
-var END_PREFIX = /^end/;
+//var START_STRING = "start";
+//var END_STRING = "end";
+//var START_PREFIX = /^start/;
+//var END_PREFIX = /^end/;
+
+var ORDINAL = "ordinal";
+var LINEAR = "linear";
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -30,6 +33,21 @@ function printMap(map) {
 	}
 
 }// END: printMap
+
+function getObject(obj, key, val) {
+	var newObj = false;
+	$.each(obj, function() {
+		var testObject = this;
+		$.each(testObject, function(k, v) {
+			// alert(k);
+			if (val == v && k == key) {
+				newObj = testObject;
+			}
+		});
+	});
+
+	return newObj;
+}
 
 // //////////////////////
 // ---MONKEY PATCHES---//

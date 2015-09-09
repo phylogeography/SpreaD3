@@ -4,11 +4,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import data.structure.primitive.Polygon;
-import utils.Trait;
 
 public class Area {
 
-	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
+	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 	
 	private final Polygon polygon;
 	private final String startTime;
@@ -32,7 +31,7 @@ public class Area {
 		return startTime;
 	}
 	
-	public Map<String, Trait> getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
 	

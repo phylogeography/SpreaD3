@@ -3,23 +3,21 @@ package data.structure.attributable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import utils.Trait;
-
 public class Line {
-
-	private final Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
 
 	private final String startNodeId;
 	private final String endNodeId;
 
 	private final String startTime;
 	private final String endTime;
-
+	
+	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+	
 	public Line(String startNodeId, //
 			String endNodeId, //
 			String startTime, //
 			String endTime, //
-			Map<String, Trait> attributes //
+			Map<String, Object> attributes //
 	) {
 
 		this.startNodeId = startNodeId;
@@ -36,7 +34,7 @@ public class Line {
 
 	public Line(String startNodeId, //
 			String endNodeId, //
-			Map<String, Trait> attributes //
+			Map<String, Object> attributes //
 	) {
 
 		this.startNodeId = startNodeId;
@@ -67,7 +65,7 @@ public class Line {
 		return endNodeId;
 	}
 
-	public Map<String, Trait> getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
 

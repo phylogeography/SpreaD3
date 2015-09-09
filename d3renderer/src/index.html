@@ -12,6 +12,7 @@
 <script type="text/javascript" src="../lib/d3.slider/d3.slider.js"></script>
 <link rel="stylesheet" href="../lib/d3.slider/d3.slider.css" />
 <script type="text/javascript" src="../lib/collabsible/collabsible.js"></script>
+<script type="text/javascript" src="../lib/colorlegend/colorlegend.js"></script>
 
 <!-- sources -->
 <script type="text/javascript" src=utils.js></script>
@@ -96,6 +97,16 @@
 .panelcollapsed .panelcontent {
 	display: none;
 }
+
+/* color legends */
+.legend {
+	background-color: #fff;
+	width: 100px;
+	height: 300px;
+/*  	border: 1px solid #bbb; */
+/* 	margin: 10px; */
+/* 	float: left; */
+}
 </style>
 </head>
 
@@ -120,9 +131,10 @@
 					<h2>Line color attribute</h2>
 					<div class="panelcontent">
 						<select id="linecolor">
-<!-- 						<option >host1</option> -->
-<!-- 						<option >host2</option> -->
+							<!-- 						<option >host1</option> -->
+							<!-- 						<option >host2</option> -->
 						</select>
+						<div id="linesColorLegend" class="legend"></div>
 					</div>
 				</div>
 

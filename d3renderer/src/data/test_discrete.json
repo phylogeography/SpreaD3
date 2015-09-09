@@ -3,11 +3,87 @@
     "startTime": "1999-10-07",
     "endTime": "2011-01-01"
   },
+  "uniqueAttributes": [
+    {
+      "id": "height_median",
+      "scale": "linear",
+      "range": [
+        0.75,
+        11.06
+      ]
+    },
+    {
+      "id": "height",
+      "scale": "linear",
+      "range": [
+        0.77,
+        11.24
+      ]
+    },
+    {
+      "id": "rate",
+      "scale": "linear",
+      "range": [
+        0.0,
+        0.01
+      ]
+    },
+    {
+      "id": "posterior",
+      "scale": "linear",
+      "range": [
+        0.21,
+        1.0
+      ]
+    },
+    {
+      "id": "rate_median",
+      "scale": "linear",
+      "range": [
+        0.0,
+        0.01
+      ]
+    },
+    {
+      "id": "length",
+      "scale": "linear",
+      "range": [
+        0.0,
+        3.3
+      ]
+    },
+    {
+      "id": "length_median",
+      "scale": "linear",
+      "range": [
+        0.1,
+        3.36
+      ]
+    },
+    {
+      "id": "states",
+      "scale": "ordinal",
+      "domain": [
+        "Guangxi",
+        "Henan",
+        "Fujian",
+        "HongKong",
+        "Guangdong"
+      ]
+    },
+    {
+      "id": "states.prob",
+      "scale": "linear",
+      "range": [
+        0.35,
+        0.98
+      ]
+    }
+  ],
   "locations": [
     {
       "attributes": {},
       "id": "Fujian",
-      "description": "",
       "coordinate": {
         "xCoordinate": 25.917,
         "yCoordinate": 118.283,
@@ -17,7 +93,6 @@
     {
       "attributes": {},
       "id": "Guangdong",
-      "description": "",
       "coordinate": {
         "xCoordinate": 22.87,
         "yCoordinate": 113.483,
@@ -27,7 +102,6 @@
     {
       "attributes": {},
       "id": "Guangxi",
-      "description": "",
       "coordinate": {
         "xCoordinate": 23.6417,
         "yCoordinate": 108.1,
@@ -37,7 +111,6 @@
     {
       "attributes": {},
       "id": "Hebei",
-      "description": "",
       "coordinate": {
         "xCoordinate": 39.3583,
         "yCoordinate": 116.6417,
@@ -47,7 +120,6 @@
     {
       "attributes": {},
       "id": "Henan",
-      "description": "",
       "coordinate": {
         "xCoordinate": 33.875,
         "yCoordinate": 113.5,
@@ -57,7 +129,6 @@
     {
       "attributes": {},
       "id": "HongKong",
-      "description": "",
       "coordinate": {
         "xCoordinate": 22.3,
         "yCoordinate": 114.167,
@@ -67,7 +138,6 @@
     {
       "attributes": {},
       "id": "Hunan",
-      "description": "",
       "coordinate": {
         "xCoordinate": 27.383,
         "yCoordinate": 111.517,
@@ -79,3109 +149,1737 @@
     {
       "id": "/home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre",
       "description": "Discrete tree visualisation",
-      "polygons": [
+      "points": [
         {
-          "attributes": {
-            "count": {
-              "id": 1,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "HongKong",
-              "isMultivariate": false
+          "id": "point_28",
+          "location": {
+            "attributes": {},
+            "id": "Henan",
+            "coordinate": {
+              "xCoordinate": 33.875,
+              "yCoordinate": 113.5,
+              "altitude": 0.0
             }
           },
-          "location": "HongKong",
-          "hasLocation": true,
-          "startTime": "2000-11-21"
+          "startTime": "2006-03-18",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.41579371474617244,
+            "height_median": 4.776800686785427,
+            "rate": 0.004557164636030674,
+            "height": 4.788803361069075,
+            "posterior": 0.826782145236509,
+            "rate_median": 0.003749879028366106,
+            "length": 0.2781595881074173,
+            "length_median": 0.23511419674285072
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_23",
+          "location": {
+            "attributes": {},
+            "id": "Hunan",
+            "coordinate": {
+              "xCoordinate": 27.383,
+              "yCoordinate": 111.517,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2002-01-06"
+          "startTime": "2008-12-31",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5668073136427567,
+            "height_median": 1.9870369638095715,
+            "rate": 0.004422631523053006,
+            "height": 2.0017056538841036,
+            "posterior": 0.9473684210526315,
+            "rate_median": 0.0036273228677296265,
+            "length": 0.4014213503629491,
+            "length_median": 0.3396963599696564
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 7,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "HongKong",
-              "isMultivariate": false
+          "id": "point_38",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
             }
           },
-          "location": "HongKong",
-          "hasLocation": true,
-          "startTime": "2002-01-06"
+          "startTime": "2007-09-18",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.856388595564942,
+            "height_median": 3.2631909951914775,
+            "rate": 0.0047553981289792805,
+            "height": 3.2864996185794872,
+            "posterior": 0.6309127248501,
+            "rate_median": 0.0039229750024177305,
+            "length": 0.1700203376247063,
+            "length_median": 0.1373936495828696
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_2",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2003-02-18"
+          "startTime": "2006-08-03",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.558294470353098,
+            "height_median": 4.382896265213859,
+            "rate": 0.007699262299847184,
+            "height": 4.415120780844838,
+            "posterior": 1.0,
+            "rate_median": 0.006583314318120008,
+            "length": 0.3963952575316627,
+            "length_median": 0.3610679013145264
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 1,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "HongKong",
-              "isMultivariate": false
+          "id": "point_33",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
             }
           },
-          "location": "HongKong",
-          "hasLocation": true,
-          "startTime": "2003-02-18"
+          "startTime": "2002-05-21",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6412940057088488,
+            "height_median": 8.64759546629184,
+            "rate": 0.0030942418418425347,
+            "height": 8.614201845223123,
+            "posterior": 0.7001998667554963,
+            "rate_median": 0.0024909267125270873,
+            "length": 0.7502307399778048,
+            "length_median": 0.5273026181322731
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_9",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2004-04-04"
+          "startTime": "2006-08-08",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.5061728395061729,
+            "height_median": 4.372335996542147,
+            "rate": 0.00401779987278009,
+            "height": 4.400652340829041,
+            "posterior": 0.32378414390406396,
+            "rate_median": 0.0032107914267288226,
+            "length": 0.13984701057644783,
+            "length_median": 0.09850296187170882
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 4,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_25",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2005-05-20"
+          "startTime": "2006-07-02",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.4677852348993289,
+            "height_median": 4.478779408401366,
+            "rate": 0.0057003922782309265,
+            "height": 4.499100318062085,
+            "posterior": 0.9926715522984677,
+            "rate_median": 0.004567016243200262,
+            "length": 0.2385719883652646,
+            "length_median": 0.20637235301669588
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 3,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_5",
+          "location": {
+            "attributes": {},
+            "id": "Henan",
+            "coordinate": {
+              "xCoordinate": 33.875,
+              "yCoordinate": 113.5,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2006-07-04"
+          "startTime": "2006-03-10",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.3784326858673811,
+            "height_median": 4.789793651004473,
+            "rate": 0.004994243024664679,
+            "height": 4.811802722526657,
+            "posterior": 0.9946702198534311,
+            "rate_median": 0.004115057671758296,
+            "length": 0.30186433615507774,
+            "length_median": 0.2636037852082147
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangxi",
-              "isMultivariate": false
+          "id": "point_13",
+          "location": {
+            "attributes": {},
+            "id": "Henan",
+            "coordinate": {
+              "xCoordinate": 33.875,
+              "yCoordinate": 113.5,
+              "altitude": 0.0
             }
           },
-          "location": "Guangxi",
-          "hasLocation": true,
-          "startTime": "2006-07-04"
+          "startTime": "2007-06-13",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.44220183486238535,
+            "height_median": 3.5365913429022733,
+            "rate": 0.004965867948851344,
+            "height": 3.550481655477302,
+            "posterior": 0.36309127248501,
+            "rate_median": 0.003959759120453468,
+            "length": 0.12534488289929308,
+            "length_median": 0.10080312263084323
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Fujian",
-              "isMultivariate": false
+          "id": "point_12",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
             }
           },
-          "location": "Fujian",
-          "hasLocation": true,
-          "startTime": "2007-08-19"
+          "startTime": "2007-06-13",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.44220183486238535,
+            "height_median": 3.5365913429022733,
+            "rate": 0.004965867948851344,
+            "height": 3.550481655477302,
+            "posterior": 0.36309127248501,
+            "rate_median": 0.003959759120453468,
+            "length": 0.12534488289929308,
+            "length_median": 0.10080312263084323
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 5,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_3",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2007-08-19"
+          "startTime": "2006-08-03",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.558294470353098,
+            "height_median": 4.382896265213859,
+            "rate": 0.007699262299847184,
+            "height": 4.415120780844838,
+            "posterior": 1.0,
+            "rate_median": 0.006583314318120008,
+            "length": 0.3963952575316627,
+            "length_median": 0.3610679013145264
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 1,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "HongKong",
-              "isMultivariate": false
+          "id": "point_42",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
             }
           },
-          "location": "HongKong",
-          "hasLocation": true,
-          "startTime": "2007-08-19"
+          "startTime": "2008-04-28",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.4843437708194537,
+            "height_median": 2.671100604135125,
+            "rate": 0.006425894517476475,
+            "height": 2.6753209989021975,
+            "posterior": 1.0,
+            "rate_median": 0.005698325646085845,
+            "length": 0.8906155371658443,
+            "length_median": 0.8666861511141537
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 4,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_1",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2008-10-03"
+          "startTime": "2005-07-05",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.9091760299625468,
+            "height_median": 5.379049630507802,
+            "rate": 0.0025798379575009563,
+            "height": 5.492948966735233,
+            "posterior": 0.7115256495669554,
+            "rate_median": 0.0020799187292468934,
+            "length": 0.6034798194019034,
+            "length_median": 0.5041817344876889
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangxi",
-              "isMultivariate": false
+          "id": "point_10",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
             }
           },
-          "location": "Guangxi",
-          "hasLocation": true,
-          "startTime": "2008-10-03"
+          "startTime": "2007-01-11",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.3845070422535211,
+            "height_median": 3.9681350260295183,
+            "rate": 0.004319598228494641,
+            "height": 3.974775248964047,
+            "posterior": 0.47301798800799466,
+            "rate_median": 0.003538193567486171,
+            "length": 0.19242510560186415,
+            "length_median": 0.14456302264321175
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 5,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Henan",
-              "isMultivariate": false
+          "id": "point_8",
+          "location": {
+            "attributes": {},
+            "id": "HongKong",
+            "coordinate": {
+              "xCoordinate": 22.3,
+              "yCoordinate": 114.167,
+              "altitude": 0.0
             }
           },
-          "location": "Henan",
-          "hasLocation": true,
-          "startTime": "2008-10-03"
+          "startTime": "2007-02-24",
+          "attributes": {
+            "states": "HongKong",
+            "states.prob": 0.352046783625731,
+            "height_median": 3.8592235269881296,
+            "rate": 0.0026874364299703953,
+            "height": 3.846002805082477,
+            "posterior": 0.569620253164557,
+            "rate_median": 0.002150442516275414,
+            "length": 0.5348411829961586,
+            "length_median": 0.46386315900026576
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "HongKong",
-              "isMultivariate": false
+          "id": "point_47",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
             }
           },
-          "location": "HongKong",
-          "hasLocation": true,
-          "startTime": "2008-10-03"
+          "startTime": "2005-05-27",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6782145236508994,
+            "height_median": 5.58014676544232,
+            "rate": 0.008381924260856334,
+            "height": 5.59668026622774,
+            "posterior": 1.0,
+            "rate_median": 0.007187955075694095,
+            "length": 0.5135152667702401,
+            "length_median": 0.46069090924702394
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 5,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangdong",
-              "isMultivariate": false
+          "id": "point_48",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
             }
           },
-          "location": "Guangdong",
-          "hasLocation": true,
-          "startTime": "2009-11-17"
+          "startTime": "2005-05-27",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6782145236508994,
+            "height_median": 5.58014676544232,
+            "rate": 0.008381924260856334,
+            "height": 5.59668026622774,
+            "posterior": 1.0,
+            "rate_median": 0.007187955075694095,
+            "length": 0.5135152667702401,
+            "length_median": 0.46069090924702394
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 16,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Guangxi",
-              "isMultivariate": false
+          "id": "point_45",
+          "location": {
+            "attributes": {},
+            "id": "Hebei",
+            "coordinate": {
+              "xCoordinate": 39.3583,
+              "yCoordinate": 116.6417,
+              "altitude": 0.0
             }
           },
-          "location": "Guangxi",
-          "hasLocation": true,
-          "startTime": "2009-11-17"
+          "startTime": "2008-05-13",
+          "attributes": {
+            "states": "Henan",
+            "states.prob": 0.36109260493004663,
+            "height_median": 2.589374460660167,
+            "rate": 0.0041308214975824065,
+            "height": 2.6362936423442296,
+            "posterior": 1.0,
+            "rate_median": 0.003747692378961145,
+            "length": 2.1430623073275146,
+            "length_median": 2.1496522795647275
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 5,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "Henan",
-              "isMultivariate": false
+          "id": "point_19",
+          "location": {
+            "attributes": {},
+            "id": "Hunan",
+            "coordinate": {
+              "xCoordinate": 27.383,
+              "yCoordinate": 111.517,
+              "altitude": 0.0
             }
           },
-          "location": "Henan",
-          "hasLocation": true,
-          "startTime": "2009-11-17"
+          "startTime": "2009-12-03",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.9776536312849162,
+            "height_median": 1.0809785446963662,
+            "rate": 0.003918484748985172,
+            "height": 1.079232984784777,
+            "posterior": 0.5962691538974018,
+            "rate_median": 0.003280727601125352,
+            "length": 0.16260726789783297,
+            "length_median": 0.1321034825323617
+          }
         },
         {
-          "attributes": {
-            "count": {
-              "id": 2,
-              "isMultivariate": false
-            },
-            "location": {
-              "id": "HongKong",
-              "isMultivariate": false
+          "id": "point_0",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
             }
           },
-          "location": "HongKong",
-          "hasLocation": true,
-          "startTime": "2009-11-17"
+          "startTime": "2005-07-05",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.9091760299625468,
+            "height_median": 5.379049630507802,
+            "rate": 0.0025798379575009563,
+            "height": 5.492948966735233,
+            "posterior": 0.7115256495669554,
+            "rate_median": 0.0020799187292468934,
+            "length": 0.6034798194019034,
+            "length_median": 0.5041817344876889
+          }
+        },
+        {
+          "id": "point_50",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2004-07-15",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5483011325782812,
+            "height_median": 6.343959594129311,
+            "rate": 0.002215722082783735,
+            "height": 6.4640149548698265,
+            "posterior": 1.0,
+            "rate_median": 0.0019135712345078302,
+            "length": 2.701340163245936,
+            "length_median": 2.7025227295166747
+          }
+        },
+        {
+          "id": "point_31",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "1999-10-07",
+          "attributes": {
+            "height_median": 11.061573662111547,
+            "height": 11.235506975963181,
+            "posterior": 1.0,
+            "length": 0.0,
+            "states": "HongKong",
+            "states.prob": 0.5516322451698867
+          }
+        },
+        {
+          "id": "point_44",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2005-11-26",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6070287539936102,
+            "height_median": 5.080852319157756,
+            "rate": 0.003417816591026991,
+            "height": 5.097880199882182,
+            "posterior": 0.20852764823451034,
+            "rate_median": 0.002819507889969693,
+            "length": 0.2658268398274294,
+            "length_median": 0.19961826202807398
+          }
+        },
+        {
+          "id": "point_17",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-06-27",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.5946666666666667,
+            "height_median": 1.5069404021917023,
+            "rate": 0.0035859466904407545,
+            "height": 1.5102859338542933,
+            "posterior": 0.2498334443704197,
+            "rate_median": 0.003000880201485875,
+            "length": 0.23489571156483338,
+            "length_median": 0.19949956298403304
+          }
+        },
+        {
+          "id": "point_24",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2006-07-02",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.4677852348993289,
+            "height_median": 4.478779408401366,
+            "rate": 0.0057003922782309265,
+            "height": 4.499100318062085,
+            "posterior": 0.9926715522984677,
+            "rate_median": 0.004567016243200262,
+            "length": 0.2385719883652646,
+            "length_median": 0.20637235301669588
+          }
+        },
+        {
+          "id": "point_46",
+          "location": {
+            "attributes": {},
+            "id": "Hebei",
+            "coordinate": {
+              "xCoordinate": 39.3583,
+              "yCoordinate": 116.6417,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2006-06-15",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.4817204301075269,
+            "height_median": 4.520253201141455,
+            "rate": 0.0051486973321281685,
+            "height": 4.543532976051744,
+            "posterior": 0.9293804130579614,
+            "rate_median": 0.004270761652953291,
+            "length": 0.275868590714089,
+            "length_median": 0.24420127953167992
+          }
+        },
+        {
+          "id": "point_7",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2010-03-25",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.7801465689540307,
+            "height_median": 0.7485949488750272,
+            "rate": 0.004460514050293543,
+            "height": 0.7690810051733499,
+            "posterior": 1.0,
+            "rate_median": 0.004277652940701361,
+            "length": 3.301109414419452,
+            "length_median": 3.360502711208496
+          }
+        },
+        {
+          "id": "point_40",
+          "location": {
+            "attributes": {},
+            "id": "Hunan",
+            "coordinate": {
+              "xCoordinate": 27.383,
+              "yCoordinate": 111.517,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-04-15",
+          "attributes": {
+            "states": "Henan",
+            "states.prob": 0.8667554963357762,
+            "height_median": 1.6670840928603425,
+            "rate": 0.004399365565223547,
+            "height": 1.7107413040656023,
+            "posterior": 1.0,
+            "rate_median": 0.003630093643393395,
+            "length": 0.6615815585176554,
+            "length_median": 0.6037016315735126
+          }
+        },
+        {
+          "id": "point_49",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2004-07-15",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5483011325782812,
+            "height_median": 6.343959594129311,
+            "rate": 0.002215722082783735,
+            "height": 6.4640149548698265,
+            "posterior": 1.0,
+            "rate_median": 0.0019135712345078302,
+            "length": 2.701340163245936,
+            "length_median": 2.7025227295166747
+          }
+        },
+        {
+          "id": "point_20",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2008-08-07",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.4974910394265233,
+            "height_median": 2.397786567559087,
+            "rate": 0.005037913254882831,
+            "height": 2.4014286181439704,
+            "posterior": 0.9293804130579614,
+            "rate_median": 0.004211646873225271,
+            "length": 0.2797626010030409,
+            "length_median": 0.2414182010592878
+          }
+        },
+        {
+          "id": "point_29",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2006-03-18",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.41579371474617244,
+            "height_median": 4.776800686785427,
+            "rate": 0.004557164636030674,
+            "height": 4.788803361069075,
+            "posterior": 0.826782145236509,
+            "rate_median": 0.003749879028366106,
+            "length": 0.2781595881074173,
+            "length_median": 0.23511419674285072
+          }
+        },
+        {
+          "id": "point_6",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2010-03-25",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.7801465689540307,
+            "height_median": 0.7485949488750272,
+            "rate": 0.004460514050293543,
+            "height": 0.7690810051733499,
+            "posterior": 1.0,
+            "rate_median": 0.004277652940701361,
+            "length": 3.301109414419452,
+            "length_median": 3.360502711208496
+          }
+        },
+        {
+          "id": "point_39",
+          "location": {
+            "attributes": {},
+            "id": "Henan",
+            "coordinate": {
+              "xCoordinate": 33.875,
+              "yCoordinate": 113.5,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-04-15",
+          "attributes": {
+            "states": "Henan",
+            "states.prob": 0.8667554963357762,
+            "height_median": 1.6670840928603425,
+            "rate": 0.004399365565223547,
+            "height": 1.7107413040656023,
+            "posterior": 1.0,
+            "rate_median": 0.003630093643393395,
+            "length": 0.6615815585176554,
+            "length_median": 0.6037016315735126
+          }
+        },
+        {
+          "id": "point_34",
+          "location": {
+            "attributes": {},
+            "id": "Henan",
+            "coordinate": {
+              "xCoordinate": 33.875,
+              "yCoordinate": 113.5,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2007-03-27",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.5549633577614923,
+            "height_median": 3.7202435380255006,
+            "rate": 0.005522285583649495,
+            "height": 3.762583029753047,
+            "posterior": 1.0,
+            "rate_median": 0.005159755285157464,
+            "length": 1.8900003485349735,
+            "length_median": 1.817260942465201
+          }
+        },
+        {
+          "id": "point_14",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-05-07",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.8142292490118577,
+            "height_median": 1.6335383037502726,
+            "rate": 0.0050114234996696564,
+            "height": 1.6514398151011973,
+            "posterior": 0.5056628914057295,
+            "rate_median": 0.004109692069788183,
+            "length": 0.1445844408159498,
+            "length_median": 0.12199655498760076
+          }
+        },
+        {
+          "id": "point_11",
+          "location": {
+            "attributes": {},
+            "id": "HongKong",
+            "coordinate": {
+              "xCoordinate": 22.3,
+              "yCoordinate": 114.167,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2007-01-11",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.3845070422535211,
+            "height_median": 3.9681350260295183,
+            "rate": 0.004319598228494641,
+            "height": 3.974775248964047,
+            "posterior": 0.47301798800799466,
+            "rate_median": 0.003538193567486171,
+            "length": 0.19242510560186415,
+            "length_median": 0.14456302264321175
+          }
+        },
+        {
+          "id": "point_21",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2008-08-07",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.4974910394265233,
+            "height_median": 2.397786567559087,
+            "rate": 0.005037913254882831,
+            "height": 2.4014286181439704,
+            "posterior": 0.9293804130579614,
+            "rate_median": 0.004211646873225271,
+            "length": 0.2797626010030409,
+            "length_median": 0.2414182010592878
+          }
+        },
+        {
+          "id": "point_30",
+          "location": {
+            "attributes": {},
+            "id": "HongKong",
+            "coordinate": {
+              "xCoordinate": 22.3,
+              "yCoordinate": 114.167,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "1999-10-07",
+          "attributes": {
+            "height_median": 11.061573662111547,
+            "height": 11.235506975963181,
+            "posterior": 1.0,
+            "length": 0.0,
+            "states": "HongKong",
+            "states.prob": 0.5516322451698867
+          }
+        },
+        {
+          "id": "point_26",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2006-04-06",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5023317788141239,
+            "height_median": 4.71879459902516,
+            "rate": 0.006618502102287954,
+            "height": 4.737398826163935,
+            "posterior": 1.0,
+            "rate_median": 0.005498457577711602,
+            "length": 0.3755494052678468,
+            "length_median": 0.3432030912755035
+          }
+        },
+        {
+          "id": "point_43",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2005-11-26",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6070287539936102,
+            "height_median": 5.080852319157756,
+            "rate": 0.003417816591026991,
+            "height": 5.097880199882182,
+            "posterior": 0.20852764823451034,
+            "rate_median": 0.002819507889969693,
+            "length": 0.2658268398274294,
+            "length_median": 0.19961826202807398
+          }
+        },
+        {
+          "id": "point_22",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2008-12-31",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5668073136427567,
+            "height_median": 1.9870369638095715,
+            "rate": 0.004422631523053006,
+            "height": 2.0017056538841036,
+            "posterior": 0.9473684210526315,
+            "rate_median": 0.0036273228677296265,
+            "length": 0.4014213503629491,
+            "length_median": 0.3396963599696564
+          }
+        },
+        {
+          "id": "point_18",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-12-03",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.9776536312849162,
+            "height_median": 1.0809785446963662,
+            "rate": 0.003918484748985172,
+            "height": 1.079232984784777,
+            "posterior": 0.5962691538974018,
+            "rate_median": 0.003280727601125352,
+            "length": 0.16260726789783297,
+            "length_median": 0.1321034825323617
+          }
+        },
+        {
+          "id": "point_36",
+          "location": {
+            "attributes": {},
+            "id": "Hebei",
+            "coordinate": {
+              "xCoordinate": 39.3583,
+              "yCoordinate": 116.6417,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2007-06-25",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.7378752886836027,
+            "height_median": 3.4864820611880596,
+            "rate": 0.004471398015199426,
+            "height": 3.51676739799219,
+            "posterior": 0.5769487008660893,
+            "rate_median": 0.003560037897895954,
+            "length": 0.24971853390121682,
+            "length_median": 0.19025940495343985
+          }
+        },
+        {
+          "id": "point_32",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2002-05-21",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6412940057088488,
+            "height_median": 8.64759546629184,
+            "rate": 0.0030942418418425347,
+            "height": 8.614201845223123,
+            "posterior": 0.7001998667554963,
+            "rate_median": 0.0024909267125270873,
+            "length": 0.7502307399778048,
+            "length_median": 0.5273026181322731
+          }
+        },
+        {
+          "id": "point_15",
+          "location": {
+            "attributes": {},
+            "id": "HongKong",
+            "coordinate": {
+              "xCoordinate": 22.3,
+              "yCoordinate": 114.167,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-05-07",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.8142292490118577,
+            "height_median": 1.6335383037502726,
+            "rate": 0.0050114234996696564,
+            "height": 1.6514398151011973,
+            "posterior": 0.5056628914057295,
+            "rate_median": 0.004109692069788183,
+            "length": 0.1445844408159498,
+            "length_median": 0.12199655498760076
+          }
+        },
+        {
+          "id": "point_27",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2006-03-18",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.41579371474617244,
+            "height_median": 4.776800686785427,
+            "rate": 0.004557164636030674,
+            "height": 4.788803361069075,
+            "posterior": 0.826782145236509,
+            "rate_median": 0.003749879028366106,
+            "length": 0.2781595881074173,
+            "length_median": 0.23511419674285072
+          }
+        },
+        {
+          "id": "point_16",
+          "location": {
+            "attributes": {},
+            "id": "Guangxi",
+            "coordinate": {
+              "xCoordinate": 23.6417,
+              "yCoordinate": 108.1,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2009-06-27",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.5946666666666667,
+            "height_median": 1.5069404021917023,
+            "rate": 0.0035859466904407545,
+            "height": 1.5102859338542933,
+            "posterior": 0.2498334443704197,
+            "rate_median": 0.003000880201485875,
+            "length": 0.23489571156483338,
+            "length_median": 0.19949956298403304
+          }
+        },
+        {
+          "id": "point_4",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2006-03-10",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.3784326858673811,
+            "height_median": 4.789793651004473,
+            "rate": 0.004994243024664679,
+            "height": 4.811802722526657,
+            "posterior": 0.9946702198534311,
+            "rate_median": 0.004115057671758296,
+            "length": 0.30186433615507774,
+            "length_median": 0.2636037852082147
+          }
+        },
+        {
+          "id": "point_35",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2007-06-25",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.7378752886836027,
+            "height_median": 3.4864820611880596,
+            "rate": 0.004471398015199426,
+            "height": 3.51676739799219,
+            "posterior": 0.5769487008660893,
+            "rate_median": 0.003560037897895954,
+            "length": 0.24971853390121682,
+            "length_median": 0.19025940495343985
+          }
+        },
+        {
+          "id": "point_41",
+          "location": {
+            "attributes": {},
+            "id": "Guangdong",
+            "coordinate": {
+              "xCoordinate": 22.87,
+              "yCoordinate": 113.483,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2008-04-28",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.4843437708194537,
+            "height_median": 2.671100604135125,
+            "rate": 0.006425894517476475,
+            "height": 2.6753209989021975,
+            "posterior": 1.0,
+            "rate_median": 0.005698325646085845,
+            "length": 0.8906155371658443,
+            "length_median": 0.8666861511141537
+          }
+        },
+        {
+          "id": "point_37",
+          "location": {
+            "attributes": {},
+            "id": "Fujian",
+            "coordinate": {
+              "xCoordinate": 25.917,
+              "yCoordinate": 118.283,
+              "altitude": 0.0
+            }
+          },
+          "startTime": "2007-09-18",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.856388595564942,
+            "height_median": 3.2631909951914775,
+            "rate": 0.0047553981289792805,
+            "height": 3.2864996185794872,
+            "posterior": 0.6309127248501,
+            "rate_median": 0.0039229750024177305,
+            "length": 0.1700203376247063,
+            "length_median": 0.1373936495828696
+          }
         }
       ],
+      "areas": [],
       "lines": [
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.9091760299625468,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.5549633577614923,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 5.379049630507802,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.7202435380255006,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0025798379575009563,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.005522285583649495,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 5.492948966735233,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.762583029753047,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.7115256495669554,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.0020799187292468934,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.005159755285157464,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.6034798194019034,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.8900003485349735,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.5041817344876889,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 1.817260942465201,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.730365936982186,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 592.4500914956086,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Fujian",
-          "connectsLocations": true,
+          "startNodeId": "point_0",
+          "endNodeId": "point_1",
           "startTime": "2005-07-05",
-          "endTime": "2007-03-27"
+          "endTime": "2005-07-05",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.9091760299625468,
+            "height_median": 5.379049630507802,
+            "rate": 0.0025798379575009563,
+            "height": 5.492948966735233,
+            "posterior": 0.7115256495669554,
+            "rate_median": 0.0020799187292468934,
+            "length": 0.6034798194019034,
+            "length_median": 0.5041817344876889
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.558294470353098,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.9187208527648234,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.382896265213859,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 2.282364100052188,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.007699262299847184,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007069681316903108,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.415120780844838,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 2.319890715558225,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.006583314318120008,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006745712765581564,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.3963952575316627,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 2.0952300652866116,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.3610679013145264,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 2.1227194869915786,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 2.0952300652866125,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1058.6263447232902,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Fujian",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_2",
+          "endNodeId": "point_3",
           "startTime": "2006-08-03",
-          "endTime": "2008-09-06"
+          "endTime": "2006-08-03",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.558294470353098,
+            "height_median": 4.382896265213859,
+            "rate": 0.007699262299847184,
+            "height": 4.415120780844838,
+            "posterior": 1.0,
+            "rate_median": 0.006583314318120008,
+            "length": 0.3963952575316627,
+            "length_median": 0.3610679013145264
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.3784326858673811,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.558294470353098,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.789793651004473,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.382896265213859,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004994243024664679,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007699262299847184,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.811802722526657,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.415120780844838,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.9946702198534311,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004115057671758296,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006583314318120008,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.30186433615507774,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.3963952575316627,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.2636037852082147,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.3610679013145264,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.3966819416818197,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 592.4500914956086,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Fujian",
-          "connectsLocations": true,
+          "startNodeId": "point_4",
+          "endNodeId": "point_2",
           "startTime": "2006-03-10",
-          "endTime": "2006-08-03"
+          "endTime": "2006-08-03",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.558294470353098,
+            "height_median": 4.382896265213859,
+            "rate": 0.007699262299847184,
+            "height": 4.415120780844838,
+            "posterior": 1.0,
+            "rate_median": 0.006583314318120008,
+            "length": 0.3963952575316627,
+            "length_median": 0.3610679013145264
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.3784326858673811,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.7555257870060281,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.789793651004473,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.1974856708033172,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004994243024664679,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.002028134401702086,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.811802722526657,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.26811474457276,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.9946702198534311,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.9946702198534311,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004115057671758296,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.0017382939139427955,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.30186433615507774,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.5436096000955781,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.2636037852082147,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 1.59479690211696,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.5436879779538977,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1223.7012925494153,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Henan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Henan",
-          "connectsLocations": true,
+          "startNodeId": "point_4",
+          "endNodeId": "point_5",
           "startTime": "2006-03-10",
-          "endTime": "2007-09-24"
+          "endTime": "2006-03-10",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.3784326858673811,
+            "height_median": 4.789793651004473,
+            "rate": 0.004994243024664679,
+            "height": 4.811802722526657,
+            "posterior": 0.9946702198534311,
+            "rate_median": 0.004115057671758296,
+            "length": 0.30186433615507774,
+            "length_median": 0.2636037852082147
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.7801465689540307,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.950033311125916,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 0.7485949488750272,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 0.2508749774911063,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004460514050293543,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.004725508908802291,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 0.7690810051733499,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 0.27770314593822043,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004277652940701361,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.003952353392664539,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 3.301109414419452,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.34315432512477245,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 3.360502711208496,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.3133830460879469,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.4913778592351292,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 592.4500914956086,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Fujian",
-          "connectsLocations": true,
+          "startNodeId": "point_6",
+          "endNodeId": "point_7",
           "startTime": "2010-03-25",
-          "endTime": "2010-09-21"
+          "endTime": "2010-03-25",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.7801465689540307,
+            "height_median": 0.7485949488750272,
+            "rate": 0.004460514050293543,
+            "height": 0.7690810051733499,
+            "posterior": 1.0,
+            "rate_median": 0.004277652940701361,
+            "length": 3.301109414419452,
+            "length_median": 3.360502711208496
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.352046783625731,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.7801465689540307,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 3.8592235269881296,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 0.7485949488750272,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0026874364299703953,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.004460514050293543,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 3.846002805082477,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 0.7690810051733499,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.569620253164557,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.002150442516275414,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.004277652940701361,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.5348411829961586,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 3.301109414419452,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.46386315900026576,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 3.360502711208496,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 3.076921799909128,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 94.59702983030482,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "HongKong",
-          "endLocation": "Guangdong",
-          "connectsLocations": true,
+          "startNodeId": "point_8",
+          "endNodeId": "point_6",
           "startTime": "2007-02-24",
-          "endTime": "2010-03-25"
+          "endTime": "2010-03-25",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.7801465689540307,
+            "height_median": 0.7485949488750272,
+            "rate": 0.004460514050293543,
+            "height": 0.7690810051733499,
+            "posterior": 1.0,
+            "rate_median": 0.004277652940701361,
+            "length": 3.301109414419452,
+            "length_median": 3.360502711208496
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5061728395061729,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.352046783625731,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.372335996542147,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.8592235269881296,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.00401779987278009,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0026874364299703953,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.400652340829041,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.846002805082477,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.32378414390406396,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.569620253164557,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.0032107914267288226,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.002150442516275414,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.13984701057644783,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.5348411829961586,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.09850296187170882,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.46386315900026576,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.554649535746564,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 638.7719514637947,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "HongKong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangxi",
-          "endLocation": "HongKong",
-          "connectsLocations": true,
+          "startNodeId": "point_9",
+          "endNodeId": "point_8",
           "startTime": "2006-08-08",
-          "endTime": "2007-02-24"
+          "endTime": "2007-02-24",
+          "attributes": {
+            "states": "HongKong",
+            "states.prob": 0.352046783625731,
+            "height_median": 3.8592235269881296,
+            "rate": 0.0026874364299703953,
+            "height": 3.846002805082477,
+            "posterior": 0.569620253164557,
+            "rate_median": 0.002150442516275414,
+            "length": 0.5348411829961586,
+            "length_median": 0.46386315900026576
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.3845070422535211,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.9713524317121919,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 3.9681350260295183,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.3383065137427606,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004319598228494641,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007780620341836495,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 3.974775248964047,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.3628114890821776,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.47301798800799466,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003538193567486171,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006958916743609311,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.19242510560186415,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.6670402770957915,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.14456302264321175,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.6570587752242489,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.6119637598818688,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 94.59702983030465,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "HongKong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "HongKong",
-          "connectsLocations": true,
+          "startNodeId": "point_10",
+          "endNodeId": "point_11",
           "startTime": "2007-01-11",
-          "endTime": "2007-08-21"
+          "endTime": "2007-01-11",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.3845070422535211,
+            "height_median": 3.9681350260295183,
+            "rate": 0.004319598228494641,
+            "height": 3.974775248964047,
+            "posterior": 0.47301798800799466,
+            "rate_median": 0.003538193567486171,
+            "length": 0.19242510560186415,
+            "length_median": 0.14456302264321175
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.44220183486238535,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.9786808794137242,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 3.5365913429022733,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.078286287542804,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004965867948851344,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.010821734361921293,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 3.550481655477302,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.098173023037176,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.36309127248501,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003959759120453468,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.009643651928423612,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.12534488289929308,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.46447841095081877,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.10080312263084323,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.4502477232682902,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.4523086324401273,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1223.7012925494153,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Henan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Henan",
-          "connectsLocations": true,
+          "startNodeId": "point_12",
+          "endNodeId": "point_13",
           "startTime": "2007-06-13",
-          "endTime": "2007-11-26"
+          "endTime": "2007-06-13",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.44220183486238535,
+            "height_median": 3.5365913429022733,
+            "rate": 0.004965867948851344,
+            "height": 3.550481655477302,
+            "posterior": 0.36309127248501,
+            "rate_median": 0.003959759120453468,
+            "length": 0.12534488289929308,
+            "length_median": 0.10080312263084323
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.8142292490118577,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.988674217188541,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 1.6335383037502726,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 1.2376089867637248,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0050114234996696564,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.008224804813446347,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 1.6514398151011973,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 1.2575924168911774,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.5056628914057295,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004109692069788183,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.007239824193764046,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.1445844408159498,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.44758719825419113,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.12199655498760076,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.42276843625069693,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.39384739821002057,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 638.7719514637947,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "HongKong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangxi",
-          "endLocation": "HongKong",
-          "connectsLocations": true,
+          "startNodeId": "point_14",
+          "endNodeId": "point_15",
           "startTime": "2009-05-07",
-          "endTime": "2009-09-28"
+          "endTime": "2009-05-07",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.8142292490118577,
+            "height_median": 1.6335383037502726,
+            "rate": 0.0050114234996696564,
+            "height": 1.6514398151011973,
+            "posterior": 0.5056628914057295,
+            "rate_median": 0.004109692069788183,
+            "length": 0.1445844408159498,
+            "length_median": 0.12199655498760076
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5946666666666667,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.7536534446764092,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 1.5069404021917023,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 1.418329829991393,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0035859466904407545,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.003526681040786876,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 1.5102859338542933,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 1.4513947866630859,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.2498334443704197,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.31912058627581613,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003000880201485875,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.002956279787408594,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.23489571156483338,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.225493850474947,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.19949956298403304,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.1670607828465347,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.05889114719120769,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538838,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangxi",
-          "endLocation": "Guangdong",
-          "connectsLocations": true,
+          "startNodeId": "point_16",
+          "endNodeId": "point_17",
           "startTime": "2009-06-27",
-          "endTime": "2009-07-19"
+          "endTime": "2009-06-27",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.5946666666666667,
+            "height_median": 1.5069404021917023,
+            "rate": 0.0035859466904407545,
+            "height": 1.5102859338542933,
+            "posterior": 0.2498334443704197,
+            "rate_median": 0.003000880201485875,
+            "length": 0.23489571156483338,
+            "length_median": 0.19949956298403304
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Hunan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.9776536312849162,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.9533644237175216,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 1.0809785446963662,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 0.42448689315478383,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.003918484748985172,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.004106267787872738,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 1.079232984784777,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 0.4497280331230757,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.5962691538974018,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003280727601125352,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.003579925972735354,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.16260726789783297,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.6996027300211203,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.1321034825323617,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.7073777491903084,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.6295049516617013,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 539.0641608643655,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Hunan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangxi",
-          "endLocation": "Hunan",
-          "connectsLocations": true,
+          "startNodeId": "point_18",
+          "endNodeId": "point_19",
           "startTime": "2009-12-03",
-          "endTime": "2010-07-20"
+          "endTime": "2009-12-03",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.9776536312849162,
+            "height_median": 1.0809785446963662,
+            "rate": 0.003918484748985172,
+            "height": 1.079232984784777,
+            "posterior": 0.5962691538974018,
+            "rate_median": 0.003280727601125352,
+            "length": 0.16260726789783297,
+            "length_median": 0.1321034825323617
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.4974910394265233,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.6455696202531646,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 2.397786567559087,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 1.88217019393492,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.005037913254882831,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007517340411938156,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 2.4014286181439704,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 1.8935206344259743,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.9293804130579614,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004211646873225271,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.00636836716754614,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.2797626010030409,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.5074797182033673,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.2414182010592878,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.4752617090086464,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.5079079837179954,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538868,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_20",
+          "endNodeId": "point_21",
           "startTime": "2008-08-07",
-          "endTime": "2009-02-07"
+          "endTime": "2008-08-07",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.4974910394265233,
+            "height_median": 2.397786567559087,
+            "rate": 0.005037913254882831,
+            "height": 2.4014286181439704,
+            "posterior": 0.9293804130579614,
+            "rate_median": 0.004211646873225271,
+            "length": 0.2797626010030409,
+            "length_median": 0.2414182010592878
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Hunan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5668073136427567,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.9973351099267155,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 1.9870369638095715,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 0.3276992988923446,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004422631523053006,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0073736462018143215,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 2.0017056538841036,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 0.3540846910028279,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.9473684210526315,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.0036273228677296265,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006947742638522824,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.4014213503629491,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.6729185260159518,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.3396963599696564,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 1.6680763605643587,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.647620962881275,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 539.4166180011598,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Hunan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Hunan",
-          "connectsLocations": true,
+          "startNodeId": "point_22",
+          "endNodeId": "point_23",
           "startTime": "2008-12-31",
-          "endTime": "2010-08-25"
+          "endTime": "2008-12-31",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5668073136427567,
+            "height_median": 1.9870369638095715,
+            "rate": 0.004422631523053006,
+            "height": 2.0017056538841036,
+            "posterior": 0.9473684210526315,
+            "rate_median": 0.0036273228677296265,
+            "length": 0.4014213503629491,
+            "length_median": 0.3396963599696564
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.4677852348993289,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.43510928961748635,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.478779408401366,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.158161597939216,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0057003922782309265,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.00600079442058797,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.499100318062085,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.174263425677124,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.9926715522984677,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.9753497668221186,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004567016243200262,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.005073111508535161,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.2385719883652646,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.23899675922648503,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.20637235301669588,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.21413291227460984,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.32483689238496183,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538838,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangxi",
-          "endLocation": "Guangdong",
-          "connectsLocations": true,
+          "startNodeId": "point_24",
+          "endNodeId": "point_25",
           "startTime": "2006-07-02",
-          "endTime": "2006-10-29"
+          "endTime": "2006-07-02",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.4677852348993289,
+            "height_median": 4.478779408401366,
+            "rate": 0.0057003922782309265,
+            "height": 4.499100318062085,
+            "posterior": 0.9926715522984677,
+            "rate_median": 0.004567016243200262,
+            "length": 0.2385719883652646,
+            "length_median": 0.20637235301669588
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5023317788141239,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.4677852348993289,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.71879459902516,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.478779408401366,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.006618502102287954,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0057003922782309265,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.737398826163935,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.499100318062085,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.9926715522984677,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.005498457577711602,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.004567016243200262,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.3755494052678468,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.2385719883652646,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.3432030912755035,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.20637235301669588,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.23829850810184983,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538868,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_26",
+          "endNodeId": "point_24",
           "startTime": "2006-04-06",
-          "endTime": "2006-07-02"
+          "endTime": "2006-07-02",
+          "attributes": {
+            "states": "Guangxi",
+            "states.prob": 0.4677852348993289,
+            "height_median": 4.478779408401366,
+            "rate": 0.0057003922782309265,
+            "height": 4.499100318062085,
+            "posterior": 0.9926715522984677,
+            "rate_median": 0.004567016243200262,
+            "length": 0.2385719883652646,
+            "length_median": 0.20637235301669588
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.41579371474617244,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.36109260493004663,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.776800686785427,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 2.589374460660167,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004557164636030674,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0041308214975824065,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.788803361069075,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 2.6362936423442296,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.826782145236509,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003749879028366106,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.003747692378961145,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.2781595881074173,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 2.1430623073275146,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.23511419674285072,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 2.1496522795647275,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 2.152509718724845,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1223.7012925494153,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Henan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Henan",
-          "connectsLocations": true,
+          "startNodeId": "point_27",
+          "endNodeId": "point_28",
           "startTime": "2006-03-18",
-          "endTime": "2008-05-13"
+          "endTime": "2006-03-18",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.41579371474617244,
+            "height_median": 4.776800686785427,
+            "rate": 0.004557164636030674,
+            "height": 4.788803361069075,
+            "posterior": 0.826782145236509,
+            "rate_median": 0.003749879028366106,
+            "length": 0.2781595881074173,
+            "length_median": 0.23511419674285072
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.41579371474617244,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.4817204301075269,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.776800686785427,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.520253201141455,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004557164636030674,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0051486973321281685,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.788803361069075,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.543532976051744,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 0.826782145236509,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.9293804130579614,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003749879028366106,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.004270761652953291,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.2781595881074173,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.275868590714089,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.23511419674285072,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.24420127953167992,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.24527038501733056,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538868,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_27",
+          "endNodeId": "point_29",
           "startTime": "2006-03-18",
-          "endTime": "2006-06-15"
+          "endTime": "2006-03-18",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.41579371474617244,
+            "height_median": 4.776800686785427,
+            "rate": 0.004557164636030674,
+            "height": 4.788803361069075,
+            "posterior": 0.826782145236509,
+            "rate_median": 0.003749879028366106,
+            "length": 0.2781595881074173,
+            "length_median": 0.23511419674285072
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5516322451698867,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 0.7372577171572147,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 11.061573662111547,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 9.683357020853139,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 11.235506975963181,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 9.774167252427123,
-              "isMultivariate": false
-            },
-            "startposterior": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "endposterior": {
-              "id": 0.9280479680213192,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.0,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.3883468699570212,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.4613397235360583,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 94.59702983030482,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "HongKong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "HongKong",
-          "endLocation": "Guangdong",
-          "connectsLocations": true,
+          "startNodeId": "point_30",
+          "endNodeId": "point_31",
           "startTime": "1999-10-07",
-          "endTime": "2001-03-23"
+          "endTime": "1999-10-07",
+          "attributes": {
+            "height_median": 11.061573662111547,
+            "height": 11.235506975963181,
+            "posterior": 1.0,
+            "length": 0.0,
+            "states": "HongKong",
+            "states.prob": 0.5516322451698867
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.6412940057088488,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 8.64759546629184,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 6.000000000000002,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0030942418418425347,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007191335902020833,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 8.614201845223123,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 6.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.0024909267125270873,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006372145042357026,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.7502307399778048,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 2.9518348357207302,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.5273026181322731,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 2.9507409989107583,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 2.614201845223123,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538868,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_32",
+          "endNodeId": "point_33",
           "startTime": "2002-05-21",
-          "endTime": "2005-01-02"
+          "endTime": "2002-05-21",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6412940057088488,
+            "height_median": 8.64759546629184,
+            "rate": 0.0030942418418425347,
+            "height": 8.614201845223123,
+            "posterior": 0.7001998667554963,
+            "rate_median": 0.0024909267125270873,
+            "length": 0.7502307399778048,
+            "length_median": 0.5273026181322731
+          }
         },
         {
+          "startNodeId": "point_1",
+          "endNodeId": "point_34",
+          "startTime": "2005-07-05",
+          "endTime": "2007-03-27",
           "attributes": {
-            "startstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5549633577614923,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 3.7202435380255006,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.0000000000000018,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.005522285583649495,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0042509251596305935,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 3.762583029753047,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.005159755285157464,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.0036137640334779953,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 1.8900003485349735,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.6303225643834525,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 1.817260942465201,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.5924142680406979,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.7625830297530474,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 997.5218107211888,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Henan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Fujian",
-          "endLocation": "Henan",
-          "connectsLocations": true,
-          "startTime": "2007-03-27",
-          "endTime": "2008-01-02"
+            "states": "Fujian",
+            "states.prob": 0.5549633577614923,
+            "height_median": 3.7202435380255006,
+            "rate": 0.005522285583649495,
+            "height": 3.762583029753047,
+            "posterior": 1.0,
+            "rate_median": 0.005159755285157464,
+            "length": 1.8900003485349735,
+            "length_median": 1.817260942465201
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Hebei",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.7378752886836027,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 3.4864820611880596,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.0000000000000018,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004471398015199426,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.005497286613956292,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 3.51676739799219,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003560037897895954,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.004799392677303986,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.24971853390121682,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.46141914194650985,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.19025940495343985,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.42846400355929326,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.5167673979921901,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1502.4194697934627,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Hebei",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Fujian",
-          "endLocation": "Hebei",
-          "connectsLocations": true,
+          "startNodeId": "point_35",
+          "endNodeId": "point_36",
           "startTime": "2007-06-25",
-          "endTime": "2008-01-02"
+          "endTime": "2007-06-25",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.7378752886836027,
+            "height_median": 3.4864820611880596,
+            "rate": 0.004471398015199426,
+            "height": 3.51676739799219,
+            "posterior": 0.5769487008660893,
+            "rate_median": 0.003560037897895954,
+            "length": 0.24971853390121682,
+            "length_median": 0.19025940495343985
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.856388595564942,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 3.2631909951914775,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 3.0000000000000018,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0047553981289792805,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007716691366850636,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 3.2864996185794872,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 3.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.0039229750024177305,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006396141258021132,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.1700203376247063,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.43414555626176715,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.1373936495828696,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.3489792262314806,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.28649961857948725,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1058.6263447232902,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Fujian",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_37",
+          "endNodeId": "point_38",
           "startTime": "2007-09-18",
-          "endTime": "2008-01-02"
+          "endTime": "2007-09-18",
+          "attributes": {
+            "states": "Fujian",
+            "states.prob": 0.856388595564942,
+            "height_median": 3.2631909951914775,
+            "rate": 0.0047553981289792805,
+            "height": 3.2864996185794872,
+            "posterior": 0.6309127248501,
+            "rate_median": 0.0039229750024177305,
+            "length": 0.1700203376247063,
+            "length_median": 0.1373936495828696
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Hunan",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.8667554963357762,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 1.6670840928603425,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 1.0000000000000018,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.004399365565223547,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007068690674869685,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 1.7107413040656023,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 1.0000000000000002,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003630093643393395,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.006193306080382267,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.6615815585176554,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.7107413040655995,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.6037016315735126,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.6670840928603363,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.7107413040656017,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 746.3520811552422,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Hunan",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Henan",
-          "endLocation": "Hunan",
-          "connectsLocations": true,
+          "startNodeId": "point_39",
+          "endNodeId": "point_40",
           "startTime": "2009-04-15",
-          "endTime": "2010-01-02"
+          "endTime": "2009-04-15",
+          "attributes": {
+            "states": "Henan",
+            "states.prob": 0.8667554963357762,
+            "height_median": 1.6670840928603425,
+            "rate": 0.004399365565223547,
+            "height": 1.7107413040656023,
+            "posterior": 1.0,
+            "rate_median": 0.003630093643393395,
+            "length": 0.6615815585176554,
+            "length_median": 0.6037016315735126
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.4843437708194537,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 2.671100604135125,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 1.7763568394002505E-15,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.006425894517476475,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0047266387956110606,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 2.6753209989021975,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 1.6130408874767098E-15,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.005698325646085845,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.00458653432746712,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.8906155371658443,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 2.6639449992260773,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.8666861511141537,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 2.661909480058007,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 2.6753209989021958,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 592.4500914956086,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Fujian",
-          "connectsLocations": true,
+          "startNodeId": "point_41",
+          "endNodeId": "point_42",
           "startTime": "2008-04-28",
-          "endTime": "2011-01-01"
+          "endTime": "2008-04-28",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.4843437708194537,
+            "height_median": 2.671100604135125,
+            "rate": 0.006425894517476475,
+            "height": 2.6753209989021975,
+            "posterior": 1.0,
+            "rate_median": 0.005698325646085845,
+            "length": 0.8906155371658443,
+            "length_median": 0.8666861511141537
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.6070287539936102,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 5.080852319157756,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.000000000000002,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.003417816591026991,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.0034583179179807763,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 5.097880199882182,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.002819507889969693,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.0030938549429108597,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.2658268398274294,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.285797601738092,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.19961826202807398,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 1.2814141444377274,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.0978801998821819,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 592.4500914956086,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Fujian",
-          "connectsLocations": true,
+          "startNodeId": "point_43",
+          "endNodeId": "point_44",
           "startTime": "2005-11-26",
-          "endTime": "2007-01-02"
+          "endTime": "2005-11-26",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6070287539936102,
+            "height_median": 5.080852319157756,
+            "rate": 0.003417816591026991,
+            "height": 5.097880199882182,
+            "posterior": 0.20852764823451034,
+            "rate_median": 0.002819507889969693,
+            "length": 0.2658268398274294,
+            "length_median": 0.19961826202807398
+          }
         },
         {
+          "startNodeId": "point_28",
+          "endNodeId": "point_45",
+          "startTime": "2006-03-18",
+          "endTime": "2008-05-13",
           "attributes": {
-            "startstates": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Hebei",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.36109260493004663,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 2.589374460660167,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 1.7763568394002505E-15,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0041308214975824065,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007313879413937552,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 2.6362936423442296,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 1.5526849922006187E-15,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.003747692378961145,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.007057762319612971,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 2.1430623073275146,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 2.6362936423442287,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 2.1496522795647275,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 2.5893744606601663,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 2.636293642344228,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 671.0055790902932,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Henan",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Hebei",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Henan",
-          "endLocation": "Hebei",
-          "connectsLocations": true,
-          "startTime": "2008-05-13",
-          "endTime": "2011-01-01"
+            "states": "Henan",
+            "states.prob": 0.36109260493004663,
+            "height_median": 2.589374460660167,
+            "rate": 0.0041308214975824065,
+            "height": 2.6362936423442296,
+            "posterior": 1.0,
+            "rate_median": 0.003747692378961145,
+            "length": 2.1430623073275146,
+            "length_median": 2.1496522795647275
+          }
         },
         {
+          "startNodeId": "point_29",
+          "endNodeId": "point_46",
+          "startTime": "2006-03-18",
+          "endTime": "2006-06-15",
           "attributes": {
-            "startstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Hebei",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.4817204301075269,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 4.520253201141455,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.000000000000002,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.0051486973321281685,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.005799598247095962,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 4.543532976051744,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.004270761652953291,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.0050096742403837515,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.275868590714089,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 0.5429268034497268,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.24420127953167992,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 0.518954711935411,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 0.5435329760517442,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 1924.2507454075412,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Hebei",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangxi",
-          "endLocation": "Hebei",
-          "connectsLocations": true,
-          "startTime": "2006-06-15",
-          "endTime": "2007-01-02"
+            "states": "Guangxi",
+            "states.prob": 0.4817204301075269,
+            "height_median": 4.520253201141455,
+            "rate": 0.0051486973321281685,
+            "height": 4.543532976051744,
+            "posterior": 0.9293804130579614,
+            "rate_median": 0.004270761652953291,
+            "length": 0.275868590714089,
+            "length_median": 0.24420127953167992
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.6782145236508994,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 5.58014676544232,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 4.000000000000002,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.008381924260856334,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.007656414182503571,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 5.59668026622774,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 4.0,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.007187955075694095,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.007111838375436096,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 0.5135152667702401,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.3508410294175681,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 0.46069090924702394,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 1.3191250868803257,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.5966802662277404,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 556.5784385538868,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Guangxi",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Guangxi",
-          "connectsLocations": true,
+          "startNodeId": "point_47",
+          "endNodeId": "point_48",
           "startTime": "2005-05-27",
-          "endTime": "2007-01-02"
+          "endTime": "2005-05-27",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.6782145236508994,
+            "height_median": 5.58014676544232,
+            "rate": 0.008381924260856334,
+            "height": 5.59668026622774,
+            "posterior": 1.0,
+            "rate_median": 0.007187955075694095,
+            "length": 0.5135152667702401,
+            "length_median": 0.46069090924702394
+          }
         },
         {
-          "attributes": {
-            "startstates": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endstates": {
-              "id": "Fujian",
-              "isMultivariate": false
-            },
-            "startstates.prob": {
-              "id": 0.5483011325782812,
-              "isMultivariate": false
-            },
-            "endstates.prob": {
-              "id": 1.0,
-              "isMultivariate": false
-            },
-            "startheight_median": {
-              "id": 6.343959594129311,
-              "isMultivariate": false
-            },
-            "endheight_median": {
-              "id": 5.000000000000002,
-              "isMultivariate": false
-            },
-            "startrate": {
-              "id": 0.002215722082783735,
-              "isMultivariate": false
-            },
-            "endrate": {
-              "id": 0.002681033507861212,
-              "isMultivariate": false
-            },
-            "startheight": {
-              "id": 6.4640149548698265,
-              "isMultivariate": false
-            },
-            "endheight": {
-              "id": 5.000000000000001,
-              "isMultivariate": false
-            },
-            "startrate_median": {
-              "id": 0.0019135712345078302,
-              "isMultivariate": false
-            },
-            "endrate_median": {
-              "id": 0.002344426653632339,
-              "isMultivariate": false
-            },
-            "startlength": {
-              "id": 2.701340163245936,
-              "isMultivariate": false
-            },
-            "endlength": {
-              "id": 1.464014954869829,
-              "isMultivariate": false
-            },
-            "startlength_median": {
-              "id": 2.7025227295166747,
-              "isMultivariate": false
-            },
-            "endlength_median": {
-              "id": 1.343959594129311,
-              "isMultivariate": false
-            },
-            "duration": {
-              "id": 1.4640149548698256,
-              "isMultivariate": false
-            },
-            "distance": {
-              "id": 592.4500914956086,
-              "isMultivariate": false
-            },
-            "startlocation": {
-              "id": "Guangdong",
-              "isMultivariate": false
-            },
-            "endlocation": {
-              "id": "Fujian",
-              "isMultivariate": false
-            }
-          },
-          "startLocation": "Guangdong",
-          "endLocation": "Fujian",
-          "connectsLocations": true,
+          "startNodeId": "point_49",
+          "endNodeId": "point_50",
           "startTime": "2004-07-15",
-          "endTime": "2006-01-02"
+          "endTime": "2004-07-15",
+          "attributes": {
+            "states": "Guangdong",
+            "states.prob": 0.5483011325782812,
+            "height_median": 6.343959594129311,
+            "rate": 0.002215722082783735,
+            "height": 6.4640149548698265,
+            "posterior": 1.0,
+            "rate_median": 0.0019135712345078302,
+            "length": 2.701340163245936,
+            "length_median": 2.7025227295166747
+          }
         }
       ],
-      "hasPolygons": true
+      "hasAreas": false
     }
   ]
 }

@@ -38,7 +38,7 @@ public class Utils {
 	public static final String DISTANCE = "distance";
 	public static final String LOCATION = "location";
 	public static final String POSTERIOR = "posterior";
-//	public static final String HPD = "hpd";
+	// public static final String HPD = "hpd";
 	public static final String START = "start";
 	public static final String END = "end";
 	public static final String ONE = "1";
@@ -52,98 +52,87 @@ public class Utils {
 	public static final int YEAR_INDEX = 0;
 	public static final int MONTH_INDEX = 1;
 	public static final int DAY_INDEX = 2;
-	
+
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 
 		Double nodeHeight = tree.getHeight(node);
 
 		if (nodeHeight == null) {
-			throw new RuntimeException(
-					"Height attribute missing from the node. \n");
+			throw new RuntimeException("Height attribute missing from the node. \n");
 		}
 
 		return nodeHeight;
 	}// END: getHeight
 
-	public static Trait getNodeTrait(Node node, String traitName) throws AnalysisException {
-		
+	public static Object getNodeAttribute(Node node, String traitName) throws AnalysisException {
+
 		Object nodeAttribute = node.getAttribute(traitName);
-		
+
 		if (nodeAttribute == null) {
-			throw new AnalysisException("Attribute " + traitName
-					+ " missing from the node. \n");
+			throw new AnalysisException("Attribute " + traitName + " missing from the node. \n");
 		}
-		
-		return new Trait(nodeAttribute);
-	}//END: getNodeTrait
-	
+
+		return nodeAttribute;
+	}// END: getNodeTrait
+
 	public static Object getObjectNodeAttribute(Node node, String attributeName) throws AnalysisException {
 
 		Object nodeAttribute = node.getAttribute(attributeName);
 
 		if (nodeAttribute == null) {
-			throw new AnalysisException("Attribute " + attributeName
-					+ " missing from the node. \n");
+			throw new AnalysisException("Attribute " + attributeName + " missing from the node. \n");
 		}
 
 		return nodeAttribute;
 	}// END: getObjectNodeAttribute
 
-	public static Object[] getObjectArrayNodeAttribute(Node node,
-			String attributeName) throws AnalysisException {
+	public static Object[] getObjectArrayNodeAttribute(Node node, String attributeName) throws AnalysisException {
 
-		Object[] nodeAttributeArray = (Object[]) node
-				.getAttribute(attributeName);
+		Object[] nodeAttributeArray = (Object[]) node.getAttribute(attributeName);
 
 		if (nodeAttributeArray == null) {
-			throw new AnalysisException("Attribute " + attributeName
-					+ " missing from the node. \n");
+			throw new AnalysisException("Attribute " + attributeName + " missing from the node. \n");
 		}
 
 		return nodeAttributeArray;
 	}// END: getObjectArrayNodeAttribute
 
-	public static Double[] getDoubleArrayNodeAttribute(Node node,
-			String attributeName) throws AnalysisException {
-		
+	public static Double[] getDoubleArrayNodeAttribute(Node node, String attributeName) throws AnalysisException {
+
 		Object[] o = getObjectArrayNodeAttribute(node, attributeName);
-		
+
 		Double[] array = new Double[o.length];
 		for (int i = 0; i < o.length; i++) {
 			array[i] = Double.valueOf(o[i].toString());
 		}
-		
+
 		return array;
-	}//END: getDoubleArrayNodeAttribute
-	
-	public static Object[] getObjectArrayTreeAttribute(RootedTree tree,
-			String attributeName) {
-		
+	}// END: getDoubleArrayNodeAttribute
+
+	public static Object[] getObjectArrayTreeAttribute(RootedTree tree, String attributeName) {
+
 		Object o = tree.getAttribute(attributeName);
-		
+
 		if (o == null) {
-			throw new RuntimeException("Attribute " + attributeName
-					+ " missing from the tree. \n");
+			throw new RuntimeException("Attribute " + attributeName + " missing from the tree. \n");
 		}
 
 		return (Object[]) o;
-	}//END: getObjectArrayTreeAttribute
-	
-	public static Double[] getDoubleArrayTreeAttribute(RootedTree tree,
-			String attributeName) {
-		
+	}// END: getObjectArrayTreeAttribute
+
+	public static Double[] getDoubleArrayTreeAttribute(RootedTree tree, String attributeName) {
+
 		Object[] o = getObjectArrayTreeAttribute(tree, attributeName);
-		
+
 		Double[] array = new Double[o.length];
 		for (int i = 0; i < o.length; i++) {
 			array[i] = Double.valueOf(o[i].toString());
 		}
-		
+
 		return array;
-	}//END: getDoubleArrayNodeAttribute
-	
-	public static String[] readLines(String filename, String comment)
-			throws IOException {
+	}// END: getDoubleArrayNodeAttribute
+
+	public static String[] readLines(String filename, String comment) throws IOException {
 
 		FileReader fileReader = new FileReader(filename);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -155,9 +144,9 @@ public class Utils {
 			// skip commented lines
 			if (!line.contains(comment)) {
 				lines.add(line);
-			}// END: commented line check
-			
-		}//END: lines loop
+			} // END: commented line check
+
+		} // END: lines loop
 
 		bufferedReader.close();
 
@@ -172,8 +161,7 @@ public class Utils {
 		return state;
 	}// END: breakTiesRandomly
 
-	public static RootedTree importRootedTree(String tree) throws IOException,
-			ImportException {
+	public static RootedTree importRootedTree(String tree) throws IOException, ImportException {
 		TreeImporter importer = new NexusImporter(new FileReader(tree));
 		RootedTree rootedTree = (RootedTree) importer.importNextTree();
 
@@ -204,7 +192,7 @@ public class Utils {
 		}
 		System.out.println();
 	}// END: printArray
-	
+
 	public static void printMap(Map<?, ?> map) {
 
 		Iterator<?> it = map.entrySet().iterator();
@@ -220,7 +208,7 @@ public class Utils {
 		}
 		System.out.println();
 	}// END: printArray
-	
+
 	public static void print2DArray(Object[][] array, int nrow) {
 		for (int row = 0; row < nrow; row++) {
 			for (int col = 0; col < array[row].length; col++) {
@@ -229,8 +217,8 @@ public class Utils {
 			System.out.print("\n");
 		}
 	}// END: print2DArray
-	
-	public static  void printProgressBar(double progressPercentage, int barLength) {
+
+	public static void printProgressBar(double progressPercentage, int barLength) {
 
 		System.out.print("\r[");
 		int i = 0;
@@ -244,7 +232,15 @@ public class Utils {
 
 		System.out.print("]");
 	}// END: updateProgress
-	
+
+	// ///////////////////////////
+	// ---MATH UTILS---//
+	// ///////////////////////////
+
+	public static double round(double value, double precision) {
+		return (double) Math.round(value * precision) / precision;
+	}//END: round
+
 	// ///////////////////////////
 	// ---RANDOM NUMB3R UTILS---//
 	// ///////////////////////////
@@ -258,8 +254,7 @@ public class Utils {
 	// ---GEOGRAPHY UTILS---//
 	// ///////////////////////
 
-	public static double rhumbDistance(Coordinate startCoordinate,
-			Coordinate endCoordinate) {
+	public static double rhumbDistance(Coordinate startCoordinate, Coordinate endCoordinate) {
 		/**
 		 * Returns the distance from start point to the end point in km,
 		 * travelling along a rhumb line
@@ -276,8 +271,7 @@ public class Utils {
 		double dLat = (rlat2 - rlat1);
 		double dLon = Math.abs(rlon2 - rlon1);
 
-		double dPhi = Math.log(Math.tan(rlat2 / 2 + Math.PI / 4)
-				/ Math.tan(rlat1 / 2 + Math.PI / 4));
+		double dPhi = Math.log(Math.tan(rlat2 / 2 + Math.PI / 4) / Math.tan(rlat1 / 2 + Math.PI / 4));
 		double q = (!Double.isNaN(dLat / dPhi)) ? dLat / dPhi : Math.cos(rlat1); // E-W
 		// line
 		// gives
@@ -285,8 +279,7 @@ public class Utils {
 		// if dLon over 180° take shorter rhumb across 180° meridian:
 		if (dLon > Math.PI)
 			dLon = 2 * Math.PI - dLon;
-		double distance = Math.sqrt(dLat * dLat + q * q * dLon * dLon)
-				* Utils.EARTH_RADIUS;
+		double distance = Math.sqrt(dLat * dLat + q * q * dLon * dLon) * Utils.EARTH_RADIUS;
 
 		return distance;
 	}// END: rhumbDistance

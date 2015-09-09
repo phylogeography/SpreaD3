@@ -22,8 +22,10 @@ var graticule = d3.geo.graticule();
 //---DATA---//
 //
 
-var lineValueMap = [];
-var lineMinMaxMap = [];
+var attributes;
+
+//var lineValueMap = [];
+//var lineMinMaxMap = [];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -101,27 +103,15 @@ d3.json("data/test_discrete.json", function(json) {
 
 	// -- DATA-- //
 
-	locations = json.locations;
-	var locationIds = [];
-	locations.forEach(function(location) {
+//	locations = json.locations;
+//	var locationIds = [];
+//	locations.forEach(function(location) {
+//
+//		locationIds.push(location.id);
+//
+//	});
 
-		locationIds.push(location.id);
-
-	});
-
-	var layers = json.layers;
-	var lines = null;
-	layers.forEach(function(layer) {
-
-		lines = layer.lines;
-		
-		populatePanels(lines);
-		
-		generateLines(lines, locations, locationIds);
-
-		
-	});
-
+	
 	// -- TIME-- //
 	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
@@ -137,6 +127,30 @@ d3.json("data/test_discrete.json", function(json) {
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
+	
+	//---ATTRIBUTES---//
+	
+	 attributes = json.uniqueAttributes;
+	populatePanels(attributes);
+	
+//	console.log(attributes);
+	
+	//---LAYERS---//
+	
+	var layers = json.layers;
+	var lines = null;
+	layers.forEach(function(layer) {
+
+		points = layer.points;
+		lines = layer.lines;
+		
+//		populatePanels(lines);
+		generateLines(lines, points);
+		
+	});
+	
+	//---LISTENERS---//
+	
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
@@ -148,34 +162,34 @@ d3.json("data/test_discrete.json", function(json) {
 		d3.selectAll(".line")[0]
 				.filter(function(line) {
 
-					var linePath = d3.select(line)
-					var totalLength = linePath.node().getTotalLength();
-
-					var lineStartDate = new Date(
-							linePath.node().attributes.startTime.value);
-					var lineEndDate = new Date(
-							linePath.node().attributes.endTime.value);
-
-					if (lineEndDate <= value) {
-
-						linePath.attr("stroke-dasharray",
-								totalLength + " " + totalLength) //
-						.attr("stroke-dashoffset", totalLength) //
-						.attr("opacity", 0)//
-						.transition() //
-						.duration(750) //
-						.ease("linear") //
-						.attr("stroke-dashoffset", 0) //
-						.attr("opacity", 1);
-
-					} else {
-
-						linePath.attr("stroke-dasharray",
-								totalLength + " " + totalLength) //
-						.attr("stroke-dashoffset", totalLength) //
-						.attr("opacity", 0);
-
-					}// END: date check
+//					var linePath = d3.select(line)
+//					var totalLength = linePath.node().getTotalLength();
+//
+//					var lineStartDate = new Date(
+//							linePath.node().attributes.startTime.value);
+//					var lineEndDate = new Date(
+//							linePath.node().attributes.endTime.value);
+//
+//					if (lineEndDate <= value) {
+//
+//						linePath.attr("stroke-dasharray",
+//								totalLength + " " + totalLength) //
+//						.attr("stroke-dashoffset", totalLength) //
+//						.attr("opacity", 0)//
+//						.transition() //
+//						.duration(750) //
+//						.ease("linear") //
+//						.attr("stroke-dashoffset", 0) //
+//						.attr("opacity", 1);
+//
+//					} else {
+//
+//						linePath.attr("stroke-dasharray",
+//								totalLength + " " + totalLength) //
+//						.attr("stroke-dashoffset", totalLength) //
+//						.attr("opacity", 0);
+//
+//					}// END: date check
 
 				});// END: filter
 
