@@ -1,4 +1,3 @@
-
 // ---GENERATE LINES--//
 
 function generateLines(lines, points) {
@@ -9,18 +8,18 @@ function generateLines(lines, points) {
 		var startPoint = getObject(points, "id", startNodeId);
 		line['startPoint'] = startPoint;
 		var startCoordinate = startPoint.location.coordinate;
-		
+
 		var endNodeId = line.endNodeId;
 		var endPoint = getObject(points, "id", endNodeId);
 		line['endPoint'] = endPoint;
 		var endCoordinate = line.endPoint.location.coordinate;
-		
+
 		generateLine(line, startCoordinate, endCoordinate);
 
 	});
 }
 
-//---GENERATE LINE--//
+// ---GENERATE LINE--//
 
 function generateLine(line, startCoordinate, endCoordinate) {
 
@@ -69,4 +68,14 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("endTime", endTime) //
 	.attr("opacity", 1);
 
-}
+	var l = g.selectAll("path.line").last();
+	var attributes = line.attributes;
+	for ( var property in attributes) {
+		if (attributes.hasOwnProperty(property)) {
+
+			l.attr(property, attributes[property]);
+
+		}
+	}
+
+}// END: generate line

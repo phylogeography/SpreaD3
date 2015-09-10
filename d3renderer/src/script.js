@@ -23,7 +23,7 @@ var graticule = d3.geo.graticule();
 //
 
 var attributes;
-
+var lines;
 //var lineValueMap = [];
 //var lineMinMaxMap = [];
 
@@ -138,7 +138,6 @@ d3.json("data/test_discrete.json", function(json) {
 	//---LAYERS---//
 	
 	var layers = json.layers;
-	var lines = null;
 	layers.forEach(function(layer) {
 
 		points = layer.points;
@@ -162,34 +161,34 @@ d3.json("data/test_discrete.json", function(json) {
 		d3.selectAll(".line")[0]
 				.filter(function(line) {
 
-//					var linePath = d3.select(line)
-//					var totalLength = linePath.node().getTotalLength();
-//
-//					var lineStartDate = new Date(
-//							linePath.node().attributes.startTime.value);
-//					var lineEndDate = new Date(
-//							linePath.node().attributes.endTime.value);
-//
-//					if (lineEndDate <= value) {
-//
-//						linePath.attr("stroke-dasharray",
-//								totalLength + " " + totalLength) //
-//						.attr("stroke-dashoffset", totalLength) //
-//						.attr("opacity", 0)//
-//						.transition() //
-//						.duration(750) //
-//						.ease("linear") //
-//						.attr("stroke-dashoffset", 0) //
-//						.attr("opacity", 1);
-//
-//					} else {
-//
-//						linePath.attr("stroke-dasharray",
-//								totalLength + " " + totalLength) //
-//						.attr("stroke-dashoffset", totalLength) //
-//						.attr("opacity", 0);
-//
-//					}// END: date check
+					var linePath = d3.select(line)
+					var totalLength = linePath.node().getTotalLength();
+
+					var lineStartDate = new Date(
+							linePath.node().attributes.startTime.value);
+					var lineEndDate = new Date(
+							linePath.node().attributes.endTime.value);
+
+					if (lineEndDate <= value) {
+
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", totalLength) //
+						.attr("opacity", 0)//
+						.transition() //
+						.duration(750) //
+						.ease("linear") //
+						.attr("stroke-dashoffset", 0) //
+						.attr("opacity", 1);
+
+					} else {
+
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", totalLength) //
+						.attr("opacity", 0);
+
+					}// END: date check
 
 				});// END: filter
 
