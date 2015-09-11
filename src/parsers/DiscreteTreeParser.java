@@ -66,47 +66,61 @@ public class DiscreteTreeParser {
 		timeParser.parseTime();
 
 		int index = 0;
+		int locationIndex;
 		Location dummy;
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
 
-				Node parentNode = rootedTree.getParent(node);
-
-				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
-				if (parentState.contains("+")) {
-					String message = "Found tied state " + parentState + ".";
-					parentState = Utils.breakTiesRandomly(parentState);
-					message += (" randomly choosing " + parentState + ".");
-					System.out.println(message);
-				} // END: tie check
-
+				// node parsed first
+				
 				String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
 				if (nodeState.contains("+")) {
-					String message = "Found tied state " + nodeState + ".";
+					String message = "Found tied state " + nodeState ;
 					nodeState = Utils.breakTiesRandomly(nodeState);
-					message += (" Randomly choosing " + nodeState + ".");
+					message += (" randomly choosing " + nodeState);
 					System.out.println(message);
 				} // END: tie check
-
-				dummy = new Location(parentState);
-				int locationIndex = Integer.MAX_VALUE;
-				if (locationsList.contains(dummy)) {
-					locationIndex = locationsList.indexOf(dummy);
-				} else {
-					throw new LocationNotFoundException(dummy);
-				}
-
-				Location parentLocation = locationsList.get(locationIndex);
 
 				dummy = new Location(nodeState);
 				locationIndex = Integer.MAX_VALUE;
 				if (locationsList.contains(dummy)) {
 					locationIndex = locationsList.indexOf(dummy);
 				} else {
-					throw new LocationNotFoundException(dummy);
+					
+					String message1 = "Location " + dummy.getId() + " could not be found in the locations file.";
+					String message2 = "Resulting file may be incomplete!";
+					System.out.println(message1 + " " +message2);
+					continue;
+					
 				}
 
 				Location nodeLocation = locationsList.get(locationIndex);
+				
+				// parent node parsed second
+				
+				Node parentNode = rootedTree.getParent(node);
+
+				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
+				if (parentState.contains("+")) {
+					String message = "Found tied state " + parentState ;
+					parentState = Utils.breakTiesRandomly(parentState);
+					message += (" randomly choosing " + parentState );
+					System.out.println(message);
+				} // END: tie check
+				
+				
+				dummy = new Location(parentState);
+				 locationIndex = Integer.MAX_VALUE;
+				if (locationsList.contains(dummy)) {
+					locationIndex = locationsList.indexOf(dummy);
+				} else {
+					throw new LocationNotFoundException(dummy, LocationNotFoundException.Type.PARENT);
+//					System.out.println();
+//					continue;
+				}
+
+				Location parentLocation = locationsList.get(locationIndex);
+
 
 				if (!parentLocation.equals(nodeLocation)) {
 

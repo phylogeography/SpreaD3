@@ -29,5 +29,7 @@ public class DiscreteTreeSettings {
 
 	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
 	public double timescaleMultiplier = 1;
+
+	public boolean header = false;
 	
 }//END: class

@@ -60,6 +60,9 @@ public class Spread2ConsoleApp {
 	private static final String TREES = "trees";
 	private static final String SLICE_HEIGHTS = "sliceHeights";
 	private static final String LOCATIONS = "locations";
+	private static final String HEADER = "header";
+	private static final String TRUE = "true";
+	private static final String FALSE = "false";
 	private static final String LOG = "log";
 	private static final String BURNIN = "burnin";
 	private static final String LOCATION_TRAIT = "locationTrait";
@@ -70,7 +73,7 @@ public class Spread2ConsoleApp {
 	private static final String JSON = "json";
 	private static final String MRSD = "mrsd";
 	private static final String TIMESCALE_MULTIPLIER = "timescaleMultiplier";
-	
+
 	// ---RENDERING---//
 
 	private static final String RENDER = "render";
@@ -85,7 +88,7 @@ public class Spread2ConsoleApp {
 	private static final String POLYGONS_SUBSET = "polygonsSubset";
 	private static final String POLYGONS_CUTOFF = "polygonsCutoff";
 	private static final String POLYGONS_VALUE = "polygonsValue";
-	
+
 	private static final String POLYGON_COLOR_MAPPING = "polygoncolormapping";
 	private static final String POLYGON_COLORS = "polygoncolors";
 	private static final String POLYGON_COLOR = "polygoncolor";
@@ -123,19 +126,20 @@ public class Spread2ConsoleApp {
 
 		// ---MODES---//
 
-		modeArguments = new Arguments(new Arguments.Option[] {
+		modeArguments = new Arguments(
+				new Arguments.Option[] {
 
-		new Arguments.Option(HELP, "print this information and exit"),
+				new Arguments.Option(HELP, "print this information and exit"),
 
-		new Arguments.Option(READ, "read existing JSON file"),
+				new Arguments.Option(READ, "read existing JSON file"),
 
-		new Arguments.Option(PARSE, "create JSON from input files"),
+				new Arguments.Option(PARSE, "create JSON from input files"),
 
 				// new Arguments.Option(RENDER, "render from JSON file"),
 
 				new Arguments.StringOption(RENDER, new String[] { KML, //
 						GEOJSON //
-						}, false, "render from JSON file"),
+				}, false, "render from JSON file"),
 
 		});
 
@@ -145,41 +149,40 @@ public class Spread2ConsoleApp {
 		args1 = new Arguments(
 				new Arguments.Option[] {
 
-						new Arguments.StringOption(LOCATIONS, "",
-								"location coordinates file"),
+				new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
 
-						new Arguments.StringOption(TREE, "", "tree file name"),
+				new Arguments.StringOption(HEADER, new String[] { TRUE, //
+						FALSE //
+				}, false, "locations file has header line"),
 
-						new Arguments.StringOption(LOCATION_TRAIT, "",
-								"location trait name"),
+				new Arguments.StringOption(TREE, "", "tree file name"),
 
-						new Arguments.IntegerOption(INTERVALS,
-								"number of time intervals"),
+				new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
 
-						new Arguments.StringOption(MRSD, "",
-								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
+				new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
 
-						new Arguments.RealOption(TIMESCALE_MULTIPLIER, 
-										"multiplier for the tree branches time scale. By default 1 unit = 1 year."),		
-								
-						new Arguments.StringArrayOption(TRAITS, -1, "",
-								"traits to be parsed from nodes"),
+				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
-						new Arguments.StringOption(OUTPUT, "",
-								"json output file name"),
+				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
+						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-				});
+				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
+
+				new Arguments.StringOption(OUTPUT, "", "json output file name"),
+
+		});
 
 		// bayes factor arguments
-		args2 = new Arguments(new Arguments.Option[] {
+		args2 = new Arguments(
+				new Arguments.Option[] {
 
-		new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
+				new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
 
-		new Arguments.StringOption(LOG, "", "tree file name"),
+				new Arguments.StringOption(LOG, "", "tree file name"),
 
-		new Arguments.RealOption(BURNIN, "log file burning in %"),
+				new Arguments.RealOption(BURNIN, "log file burning in %"),
 
-		new Arguments.StringOption(OUTPUT, "", "json output file name")
+				new Arguments.StringOption(OUTPUT, "", "json output file name")
 
 		});
 
@@ -187,188 +190,151 @@ public class Spread2ConsoleApp {
 		args3 = new Arguments(
 				new Arguments.Option[] {
 
-						new Arguments.StringOption(TREE, "", "tree file name"),
+				new Arguments.StringOption(TREE, "", "tree file name"),
 
-						new Arguments.StringOption(LOCATION_TRAIT, "",
-								"location trait name"),
+				new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
 
-						new Arguments.StringOption(HPD, "",
-								"hpd interval attribute name"),
+				new Arguments.StringOption(HPD, "", "hpd interval attribute name"),
 
-						new Arguments.StringOption(MRSD, "",
-										"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
+				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
-						new Arguments.RealOption(TIMESCALE_MULTIPLIER, 
-												"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
-										
-						new Arguments.StringArrayOption(TRAITS, -1, "",
-								"traits to be parsed from nodes"),
+				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
+						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-						new Arguments.StringOption(OUTPUT, "",
-								"json output file name"),
+				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 
-				});
+				new Arguments.StringOption(OUTPUT, "", "json output file name"),
+
+		});
 
 		// time slicer arguments
 		args4 = new Arguments(
 				new Arguments.Option[] {
 
-						new Arguments.StringOption(TREE, "", "tree file name"),
+				new Arguments.StringOption(TREE, "", "tree file name"),
 
-						new Arguments.StringOption(TREES, "", "trees file name"),
+				new Arguments.StringOption(TREES, "", "trees file name"),
 
-						new Arguments.StringOption(SLICE_HEIGHTS, "",
-								"slice heights file name"),
+				new Arguments.StringOption(SLICE_HEIGHTS, "", "slice heights file name"),
 
-						new Arguments.StringArrayOption(TRAITS, -1, "",
-								"traits to be parsed from nodes"),
+				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 
-						// new Arguments.StringOption(LOCATION_TRAIT, "",
-						// "location trait name"),
+				// new Arguments.StringOption(LOCATION_TRAIT, "",
+				// "location trait name"),
 
-						new Arguments.IntegerOption(INTERVALS,
-								"number of time intervals for slicing"),
+				new Arguments.IntegerOption(INTERVALS, "number of time intervals for slicing"),
 
-						new Arguments.StringOption(MRSD, "",
-										"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),	
-						
-						new Arguments.RealOption(TIMESCALE_MULTIPLIER, 
-												"multiplier for the tree branches time scale. By default 1 unit = 1 year."),				
-										
-						new Arguments.IntegerOption(BURNIN,
-								"how many trees to discard as burn-in (in # trees)"),
+				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
-						new Arguments.RealOption(HPD,
-								"hpd level for contouring"),
+				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
+						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-						new Arguments.StringOption(OUTPUT, "",
-								"json output file name"),
+				new Arguments.IntegerOption(BURNIN, "how many trees to discard as burn-in (in # trees)"),
 
-				});
+				new Arguments.RealOption(HPD, "hpd level for contouring"),
+
+				new Arguments.StringOption(OUTPUT, "", "json output file name"),
+
+		});
 
 		// ---RENDERERS---//
 
 		kmlRenderArguments = new Arguments(
 				new Arguments.Option[] {
 
-						new Arguments.StringOption(JSON, "",
-								"json input file name"),
+				new Arguments.StringOption(JSON, "", "json input file name"),
 
-						new Arguments.StringOption(OUTPUT, "",
-								"kml output file name"),
+				new Arguments.StringOption(OUTPUT, "", "kml output file name"),
 
-						// ---LINE WIDTH---//
+				// ---LINE WIDTH---//
 
-						new Arguments.RealOption(LINE_WIDTH,
-								"specify line width"),
+				new Arguments.RealOption(LINE_WIDTH, "specify line width"),
 
-						new Arguments.StringOption(LINE_WIDTH_MAPPING,
-								new String[] { Utils.DISTANCE, //
-										Utils.DURATION //
-								}, false, "attribute to map line width"),
+				new Arguments.StringOption(LINE_WIDTH_MAPPING, new String[] { Utils.DISTANCE, //
+						Utils.DURATION //
+				}, false, "attribute to map line width"),
 
-						// ---LINE ALTITUDE---//
+				// ---LINE ALTITUDE---//
 
-						new Arguments.RealOption(LINE_ALTITUDE,
-								"specify line altitude"),
+				new Arguments.RealOption(LINE_ALTITUDE, "specify line altitude"),
 
-						new Arguments.StringOption(LINE_ALTITUDE_MAPPING,
-								new String[] { Utils.DISTANCE, //
-										Utils.DURATION //
-								}, false, "attribute to map line altitude"),
+				new Arguments.StringOption(LINE_ALTITUDE_MAPPING, new String[] { Utils.DISTANCE, //
+						Utils.DURATION //
+				}, false, "attribute to map line altitude"),
 
-						// ---LINE COLORS---//
+				// ---LINE COLORS---//
 
-						// TODO: this should read RGB or RGBA
-						new Arguments.RealArrayOption(LINE_COLOR, 3,
-								"specify RGB value"),
+				// TODO: this should read RGB or RGBA
+						new Arguments.RealArrayOption(LINE_COLOR, 3, "specify RGB value"),
 
-						new Arguments.StringOption(LINE_COLOR_MAPPING, "",
-								"attribute to map RGB aesthetics"),
+				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
 
-						new Arguments.StringOption(LINE_COLORS, "",
-								"file with RGB(A) colors to map attribute values."),
+				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map attribute values."),
 
-						// ---LINE ALPHA CHANEL---//
+				// ---LINE ALPHA CHANEL---//
 
-						new Arguments.RealOption(LINE_ALPHA, "specify A value"),
+				new Arguments.RealOption(LINE_ALPHA, "specify A value"),
 
-						new Arguments.StringOption(
-								LINE_ALPHA_MAPPING,
-								"",
-								"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
+				new Arguments.StringOption(LINE_ALPHA_MAPPING, "",
+						"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
 
-						// ---POLYGON COLORS---//
+				// ---POLYGON COLORS---//
 
-						// TODO: this should read RGB or RGBA
-						new Arguments.RealArrayOption(POLYGON_COLOR, 3,
-								"specify RGB value"),
+				// TODO: this should read RGB or RGBA
+						new Arguments.RealArrayOption(POLYGON_COLOR, 3, "specify RGB value"),
 
-						new Arguments.StringOption(POLYGON_COLOR_MAPPING, "",
-								"attribute to map RGB aesthetics"),
+				new Arguments.StringOption(POLYGON_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
 
-						new Arguments.StringOption(POLYGON_COLORS, "",
-								"file with RGB(A) colors to map attribute values"),
+				new Arguments.StringOption(POLYGON_COLORS, "", "file with RGB(A) colors to map attribute values"),
 
-						// ---POLYGON ALPHA CHANEL---//
+				// ---POLYGON ALPHA CHANEL---//
 
-						new Arguments.RealOption(
-								POLYGON_ALPHA,
-								"specify A value. Higher values are more opaque, lower values more translucent."),
+				new Arguments.RealOption(POLYGON_ALPHA,
+						"specify A value. Higher values are more opaque, lower values more translucent."),
 
-						new Arguments.StringOption(
-								POLYGON_ALPHA_MAPPING,
-								"",
-								"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent."),
+				new Arguments.StringOption(POLYGON_ALPHA_MAPPING, "",
+						"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent."),
 
-						// ---POLYGON RADIUS---//
+				// ---POLYGON RADIUS---//
 
-						new Arguments.RealOption(POLYGON_AREA,
-								"specify circular polygons area. Makes sense only for polygons with locations."),
+				new Arguments.RealOption(POLYGON_AREA,
+						"specify circular polygons area. Makes sense only for polygons with locations."),
 
-						new Arguments.StringOption(
-								POLYGON_AREA_MAPPING,
-								"",
-								"attribute to map circular polygons area aesthetic. Only makes sense for polygons with locations."),
+				new Arguments.StringOption(POLYGON_AREA_MAPPING, "",
+						"attribute to map circular polygons area aesthetic. Only makes sense for polygons with locations."),
 
-						new Arguments.StringOption(LINES_SUBSET, "",
-								"attribute to select a subset of values above the certain cutoff."),
+				new Arguments.StringOption(LINES_SUBSET, "",
+						"attribute to select a subset of values above the certain cutoff."),
 
-						new Arguments.RealOption(LINES_CUTOFF,
-								"specify cutoff value to create a subset"),
+				new Arguments.RealOption(LINES_CUTOFF, "specify cutoff value to create a subset"),
 
-						new Arguments.StringOption(LINES_VALUE, "",
-								"specify fixed value to create a subset"),
+				new Arguments.StringOption(LINES_VALUE, "", "specify fixed value to create a subset"),
 
-								new Arguments.StringOption(POLYGONS_SUBSET, "",
-										"attribute to select a subset of values above the certain cutoff."),
+				new Arguments.StringOption(POLYGONS_SUBSET, "",
+						"attribute to select a subset of values above the certain cutoff."),
 
-								new Arguments.RealOption(POLYGONS_CUTOFF,
-										"specify cutoff value to create a subset"),
+				new Arguments.RealOption(POLYGONS_CUTOFF, "specify cutoff value to create a subset"),
 
-								new Arguments.StringOption(POLYGONS_VALUE, "",
-										"specify fixed value to create a subset"),		
-								
-				});
+				new Arguments.StringOption(POLYGONS_VALUE, "", "specify fixed value to create a subset"),
+
+		});
 
 		geojsonRenderArguments = new Arguments(new Arguments.Option[] {
 
-		// TODO: fill with options
+				// TODO: fill with options
 
-				});
+		});
 
 		// ---READER---//
 
-		jsonReaderArguments = new Arguments(new Arguments.Option[] {
+		jsonReaderArguments = new Arguments(
+				new Arguments.Option[] {
 
-				new Arguments.StringArrayOption(LOCATIONS, -1, "",
-						"json file names with locations to read"),
+				new Arguments.StringArrayOption(LOCATIONS, -1, "", "json file names with locations to read"),
 
-				new Arguments.StringArrayOption(LINES, -1, "",
-						"json file names with lines to read"),
+				new Arguments.StringArrayOption(LINES, -1, "", "json file names with lines to read"),
 
-				new Arguments.StringArrayOption(POLYGONS, -1, "",
-						"json file names with polygons to read"),
+				new Arguments.StringArrayOption(POLYGONS, -1, "", "json file names with polygons to read"),
 
 				new Arguments.StringOption(OUTPUT, "", "json output file name")
 
@@ -386,7 +352,7 @@ public class Spread2ConsoleApp {
 
 			gracefullyExit("Empty or incorrect arguments list.", null, null);
 
-		}// END: help check
+		} // END: help check
 
 		// ---SPLIT---//
 
@@ -446,20 +412,19 @@ public class Spread2ConsoleApp {
 
 				settings.kml = true;
 
-			} else if (modeArguments.getStringOption(RENDER).equalsIgnoreCase(
-					GEOJSON)) {
+			} else if (modeArguments.getStringOption(RENDER).equalsIgnoreCase(GEOJSON)) {
 
 				settings.geojson = true;
 
 			} else {
 				gracefullyExit("Unrecognized option", modeArguments, null);
-			}// END: render arg check
+			} // END: render arg check
 
 		} else {
 
 			gracefullyExit("Unrecognized option", modeArguments, null);
 
-		}// END: mode check
+		} // END: mode check
 
 		if (settings.parse) {
 
@@ -482,15 +447,14 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit("Unrecognized option", null, null);
 
-				}// END: tree/log input check
+				} // END: tree/log input check
 
 			} else {
 
 				System.out.println("In Continuous mode");
 
 				if (Arrays.asList(otherArgs).contains("-" + TREES)
-						|| Arrays.asList(otherArgs).contains(
-								"-" + SLICE_HEIGHTS)) {
+						|| Arrays.asList(otherArgs).contains("-" + SLICE_HEIGHTS)) {
 
 					System.out.println("In time slicer mode");
 					settings.timeSlicer = true;
@@ -504,9 +468,9 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit("Unrecognized option", null, null);
 
-				}// END: continuous modes
+				} // END: continuous modes
 
-			}// END: get intent logic
+			} // END: get intent logic
 
 			if (settings.discreteTree) {
 
@@ -520,84 +484,82 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(LOCATIONS)) {
 
-						settings.discreteTreeSettings.locations = args1
-								.getStringOption(LOCATIONS);
+						settings.discreteTreeSettings.locations = args1.getStringOption(LOCATIONS);
 
 					} else {
 
-						throw new ArgumentException("Required argument "
-								+ LOCATIONS + " is missing.");
+						throw new ArgumentException("Required argument " + LOCATIONS + " is missing.");
 
-					}// END: option check
+					} // END: option check
+
+					if (args1.hasOption(HEADER)) {
+
+						String option = args1.getStringOption(HEADER);
+						if (option.equalsIgnoreCase(TRUE)) {
+							settings.discreteTreeSettings.header = true;
+						}
+
+					} // END: option check
 
 					if (args1.hasOption(TREE)) {
 
-						settings.discreteTreeSettings.tree = args1
-								.getStringOption(TREE);
+						settings.discreteTreeSettings.tree = args1.getStringOption(TREE);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + TREE
-								+ " is missing.");
+						throw new ArgumentException("Required argument " + TREE + " is missing.");
 
-					}// END: option check
+					} // END: option check
 
 					if (args1.hasOption(LOCATION_TRAIT)) {
 
-						settings.discreteTreeSettings.locationTrait = args1
-								.getStringOption(LOCATION_TRAIT);
+						settings.discreteTreeSettings.locationTrait = args1.getStringOption(LOCATION_TRAIT);
 
 					} else {
 
-						throw new ArgumentException("Required argument "
-								+ LOCATION_TRAIT + " is missing.");
+						throw new ArgumentException("Required argument " + LOCATION_TRAIT + " is missing.");
 
-					}// END: option check
+					} // END: option check
 
 					if (args1.hasOption(INTERVALS)) {
 
-						settings.discreteTreeSettings.intervals = args1
-								.getIntegerOption(INTERVALS);
+						settings.discreteTreeSettings.intervals = args1.getIntegerOption(INTERVALS);
 
-					}// END: option check
+					} // END: option check
 
 					if (args1.hasOption(MRSD)) {
-						settings.discreteTreeSettings.mrsd = args1
-								.getStringOption(MRSD);
+						settings.discreteTreeSettings.mrsd = args1.getStringOption(MRSD);
 					}
-					
+
 					if (args1.hasOption(TIMESCALE_MULTIPLIER)) {
-						settings.discreteTreeSettings.timescaleMultiplier = args1
-								.getRealOption(TIMESCALE_MULTIPLIER);
+						settings.discreteTreeSettings.timescaleMultiplier = args1.getRealOption(TIMESCALE_MULTIPLIER);
 					}
-					
+
 					if (args1.hasOption(TRAITS)) {
 
-						settings.discreteTreeSettings.traits = args1
-								.getStringArrayOption(TRAITS);
+						settings.discreteTreeSettings.traits = args1.getStringArrayOption(TRAITS);
 
-					}// END: option check
+					} // END: option check
 
 					if (args1.hasOption(OUTPUT)) {
 
-						settings.discreteTreeSettings.output = args1
-								.getStringOption(OUTPUT);
+						settings.discreteTreeSettings.output = args1.getStringOption(OUTPUT);
 
 					} // END: option check
 
 				} catch (ArgumentException e) {
 					gracefullyExit(e.getMessage(), args1, e);
-				}// END: try-catch
+				} // END: try-catch
 
 				// ---RUN---//
 
 				try {
 
-//					DiscreteTreeParserOld parser = new DiscreteTreeParserOld(
-//							settings.discreteTreeSettings);
+					// DiscreteTreeParserOld parser = new DiscreteTreeParserOld(
+					// settings.discreteTreeSettings);
 
 					DiscreteSpreadDataParser parser = new DiscreteSpreadDataParser(settings.discreteTreeSettings);
-					
+
 					SpreadData data = parser.parse();
 
 					// ---EXPORT TO JSON---//
@@ -632,7 +594,7 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), args1, e);
 
-				}// END: try-catch
+				} // END: try-catch
 
 			} else if (settings.bayesFactors) {
 
@@ -645,24 +607,19 @@ public class Spread2ConsoleApp {
 					args2.parseArguments(otherArgs);
 
 					if (args2.hasOption(LOCATIONS)) {
-						settings.bayesFactorsSettings.locations = args2
-								.getStringOption(LOCATIONS);
+						settings.bayesFactorsSettings.locations = args2.getStringOption(LOCATIONS);
 					} else {
-						throw new ArgumentException("Required argument "
-								+ LOCATIONS + " is missing.");
-					}// END: option check
+						throw new ArgumentException("Required argument " + LOCATIONS + " is missing.");
+					} // END: option check
 
 					if (args2.hasOption(LOG)) {
-						settings.bayesFactorsSettings.log = args2
-								.getStringOption(LOG);
+						settings.bayesFactorsSettings.log = args2.getStringOption(LOG);
 					} else {
-						throw new ArgumentException("Required argument " + LOG
-								+ " is missing.");
-					}// END: option check
+						throw new ArgumentException("Required argument " + LOG + " is missing.");
+					} // END: option check
 
 					if (args2.hasOption(OUTPUT)) {
-						settings.bayesFactorsSettings.output = args2
-								.getStringOption(OUTPUT);
+						settings.bayesFactorsSettings.output = args2.getStringOption(OUTPUT);
 					} // END: option check
 
 					if (args2.hasOption(BURNIN)) {
@@ -671,8 +628,7 @@ public class Spread2ConsoleApp {
 
 						if (burnin < 0.0 || burnin > 100.0) {
 
-							throw new ArgumentException(
-									"Burnin outside of [0,100].");
+							throw new ArgumentException("Burnin outside of [0,100].");
 
 						} else {
 							settings.bayesFactorsSettings.burnin = burnin;
@@ -682,22 +638,22 @@ public class Spread2ConsoleApp {
 
 				} catch (ArgumentException e) {
 					gracefullyExit(e.getMessage(), args2, e);
-				}// END: try-catch
+				} // END: try-catch
 
 				// ---RUN---//
 
 				try {
 
-//					BayesFactorParser parser = new BayesFactorParser(
-//							settings.bayesFactorsSettings);
+					// BayesFactorParser parser = new BayesFactorParser(
+					// settings.bayesFactorsSettings);
 
 					System.out.println("Bayes factor not yet implemented!");
 					System.exit(0);
-					
-					SpreadData data = null;//parser.parse();
+
+					SpreadData data = null;// parser.parse();
 
 					// ---EXPORT TO JSON---//
-					
+
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
@@ -712,11 +668,11 @@ public class Spread2ConsoleApp {
 
 				} catch (IOException e) {
 					gracefullyExit(e.getMessage(), args2, e);
-//				} catch (IllegalCharacterException e) {
-//					gracefullyExit(e.getMessage(), args2, e);
-//				} catch (LocationNotFoundException e) {
-//					gracefullyExit(e.getMessage(), args2, e);
-				}// END: try-catch
+					// } catch (IllegalCharacterException e) {
+					// gracefullyExit(e.getMessage(), args2, e);
+					// } catch (LocationNotFoundException e) {
+					// gracefullyExit(e.getMessage(), args2, e);
+				} // END: try-catch
 
 			} else if (settings.continuousTree) {
 
@@ -729,39 +685,32 @@ public class Spread2ConsoleApp {
 					args3.parseArguments(otherArgs);
 
 					if (args3.hasOption(TREE)) {
-						settings.continuousTreeSettings.tree = args3
-								.getStringOption(TREE);
+						settings.continuousTreeSettings.tree = args3.getStringOption(TREE);
 					}
 
 					if (args3.hasOption(LOCATION_TRAIT)) {
-						settings.continuousTreeSettings.locationTrait = args3
-								.getStringOption(LOCATION_TRAIT);
+						settings.continuousTreeSettings.locationTrait = args3.getStringOption(LOCATION_TRAIT);
 					}
 
 					if (args3.hasOption(HPD)) {
-						settings.continuousTreeSettings.hpd = args3
-								.getStringOption(HPD);
+						settings.continuousTreeSettings.hpd = args3.getStringOption(HPD);
 					}
 
 					if (args3.hasOption(MRSD)) {
-						settings.continuousTreeSettings.mrsd = args3
-								.getStringOption(MRSD);
+						settings.continuousTreeSettings.mrsd = args3.getStringOption(MRSD);
 					}
-					
+
 					if (args3.hasOption(TIMESCALE_MULTIPLIER)) {
-						settings.continuousTreeSettings.timescaleMultiplier = args3
-								.getRealOption(TIMESCALE_MULTIPLIER);
+						settings.continuousTreeSettings.timescaleMultiplier = args3.getRealOption(TIMESCALE_MULTIPLIER);
 					}
-					
+
 					if (args3.hasOption(TRAITS)) {
-						settings.continuousTreeSettings.traits = args3
-								.getStringArrayOption(TRAITS);
+						settings.continuousTreeSettings.traits = args3.getStringArrayOption(TRAITS);
 					}
 
 					if (args3.hasOption(OUTPUT)) {
-						settings.continuousTreeSettings.output = args3
-								.getStringOption(OUTPUT);
-					}// END: option check
+						settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
+					} // END: option check
 
 				} catch (ArgumentException e) {
 
@@ -772,13 +721,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-//					ContinuousTreeParser parser = new ContinuousTreeParser(
-//							settings.continuousTreeSettings);
+					// ContinuousTreeParser parser = new ContinuousTreeParser(
+					// settings.continuousTreeSettings);
 
 					System.out.println("Continuous Tree Parser not yet implemented!");
 					System.exit(0);
-					
-					SpreadData data = null;//parser.parse();
+
+					SpreadData data = null;// parser.parse();
 
 					// ---EXPORT TO JSON---//
 
@@ -796,19 +745,19 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), args3, e);
 
-//				} catch (ImportException e) {
-//
-//					gracefullyExit(e.getMessage(), args3, e);
-//
-//				} catch (AnalysisException e) {
-//
-//					gracefullyExit(e.getMessage(), args3, e);
-//
-//				} catch (NumberFormatException e) {
-//					
-//					gracefullyExit(e.getMessage(), args3, e);
-					
-				}// END: try-catch block
+					// } catch (ImportException e) {
+					//
+					// gracefullyExit(e.getMessage(), args3, e);
+					//
+					// } catch (AnalysisException e) {
+					//
+					// gracefullyExit(e.getMessage(), args3, e);
+					//
+					// } catch (NumberFormatException e) {
+					//
+					// gracefullyExit(e.getMessage(), args3, e);
+
+				} // END: try-catch block
 
 				System.out.println("Created JSON file");
 
@@ -826,59 +775,48 @@ public class Spread2ConsoleApp {
 
 					if (args4.hasOption(TREE)) {
 
-						settings.timeSlicerSettings.tree = args4
-								.getStringOption(TREE);
+						settings.timeSlicerSettings.tree = args4.getStringOption(TREE);
 
 					} else if (args4.hasOption(SLICE_HEIGHTS)) {
 
-						settings.timeSlicerSettings.sliceHeights = args4
-								.getStringOption(SLICE_HEIGHTS);
+						settings.timeSlicerSettings.sliceHeights = args4.getStringOption(SLICE_HEIGHTS);
 
-					} else if (args4.hasOption(TREE)
-							&& args4.hasOption(SLICE_HEIGHTS)) {
+					} else if (args4.hasOption(TREE) && args4.hasOption(SLICE_HEIGHTS)) {
 
-						throw new ArgumentException("Can't use both a" + TREE
-								+ " and " + SLICE_HEIGHTS + " argument.");
+						throw new ArgumentException("Can't use both a" + TREE + " and " + SLICE_HEIGHTS + " argument.");
 
 					} else {
 
-						throw new ArgumentException("Must specify" + TREE
-								+ " or " + SLICE_HEIGHTS + " argument.");
+						throw new ArgumentException("Must specify" + TREE + " or " + SLICE_HEIGHTS + " argument.");
 
-					}// END: option check
+					} // END: option check
 
 					if (args4.hasOption(TREES)) {
 
-						settings.timeSlicerSettings.trees = args4
-								.getStringOption(TREES);
+						settings.timeSlicerSettings.trees = args4.getStringOption(TREES);
 
 					} else {
 
-						throw new ArgumentException("Required argument "
-								+ TREES + " is missing.");
+						throw new ArgumentException("Required argument " + TREES + " is missing.");
 
-					}// END: option check
+					} // END: option check
 
 					if (args4.hasOption(TRAITS)) {
 
-						settings.timeSlicerSettings.traits = args4
-								.getStringArrayOption(TRAITS);
+						settings.timeSlicerSettings.traits = args4.getStringArrayOption(TRAITS);
 
 					} else {
 
-						throw new ArgumentException("Required argument "
-								+ LOCATION_TRAIT + " is missing.");
+						throw new ArgumentException("Required argument " + LOCATION_TRAIT + " is missing.");
 
-					}// END: option check
+					} // END: option check
 
 					if (args4.hasOption(INTERVALS)) {
-						settings.timeSlicerSettings.intervals = args4
-								.getIntegerOption(INTERVALS);
+						settings.timeSlicerSettings.intervals = args4.getIntegerOption(INTERVALS);
 					}
 
 					if (args4.hasOption(BURNIN)) {
-						settings.timeSlicerSettings.burnIn = args4
-								.getIntegerOption(BURNIN);
+						settings.timeSlicerSettings.burnIn = args4.getIntegerOption(BURNIN);
 					}
 
 					if (args4.hasOption(HPD)) {
@@ -887,29 +825,25 @@ public class Spread2ConsoleApp {
 
 						if (hpdLevel < 0.0 || hpdLevel > 1.0) {
 
-							throw new ArgumentException(HPD
-									+ "argument outside of [0.0, 1.0].");
+							throw new ArgumentException(HPD + "argument outside of [0.0, 1.0].");
 
 						} else {
 							settings.timeSlicerSettings.hpdLevel = hpdLevel;
 						}
 
-					}// END: option check
+					} // END: option check
 
 					if (args4.hasOption(MRSD)) {
-						settings.timeSlicerSettings.mrsd = args4
-								.getStringOption(MRSD);
+						settings.timeSlicerSettings.mrsd = args4.getStringOption(MRSD);
 					}
-					
+
 					if (args4.hasOption(TIMESCALE_MULTIPLIER)) {
-						settings.timeSlicerSettings.timescaleMultiplier = args4
-								.getRealOption(TIMESCALE_MULTIPLIER);
+						settings.timeSlicerSettings.timescaleMultiplier = args4.getRealOption(TIMESCALE_MULTIPLIER);
 					}
-					
+
 					if (args4.hasOption(OUTPUT)) {
-						settings.timeSlicerSettings.output = args4
-								.getStringOption(OUTPUT);
-					}// END: option check
+						settings.timeSlicerSettings.output = args4.getStringOption(OUTPUT);
+					} // END: option check
 
 				} catch (ArgumentException e) {
 					gracefullyExit(e.getMessage(), args4, e);
@@ -919,12 +853,12 @@ public class Spread2ConsoleApp {
 
 				try {
 
-//					TimeSlicerParser parser = new TimeSlicerParser(
-//							settings.timeSlicerSettings);
+					// TimeSlicerParser parser = new TimeSlicerParser(
+					// settings.timeSlicerSettings);
 
 					System.out.println("Time Slicer Parser not yet implemented!");
 					System.exit(0);
-					
+
 					SpreadData data = null;// parser.parse();
 
 					// ---EXPORT TO JSON---//
@@ -941,12 +875,13 @@ public class Spread2ConsoleApp {
 
 				} catch (IOException e) {
 					gracefullyExit(e.getMessage(), args4, e);
-//				} catch (ImportException e) {
-//					gracefullyExit(e.getMessage(), args4, e);
-//				} catch (AnalysisException e) {
-//					gracefullyExit(e.getMessage(), args4, e);
-				} catch(UnsupportedClassVersionError e) {
-					String message = "Java version found " + System.getProperty("java.version") + " is too old. Please update";
+					// } catch (ImportException e) {
+					// gracefullyExit(e.getMessage(), args4, e);
+					// } catch (AnalysisException e) {
+					// gracefullyExit(e.getMessage(), args4, e);
+				} catch (UnsupportedClassVersionError e) {
+					String message = "Java version found " + System.getProperty("java.version")
+							+ " is too old. Please update";
 					gracefullyExit(message, args4, new AnalysisException(e.getMessage()));
 				}
 
@@ -954,7 +889,7 @@ public class Spread2ConsoleApp {
 
 			} else {
 				throw new RuntimeException("Should never get here!");
-			}// END: settings check
+			} // END: settings check
 
 		} else if (settings.read) {
 
@@ -967,37 +902,30 @@ public class Spread2ConsoleApp {
 				jsonReaderArguments.parseArguments(otherArgs);
 
 				if (jsonReaderArguments.hasOption(LOCATIONS)) {
-					settings.jsonReaderSettings.locations = jsonReaderArguments
-							.getStringArrayOption(LOCATIONS);
+					settings.jsonReaderSettings.locations = jsonReaderArguments.getStringArrayOption(LOCATIONS);
 				}
 
 				if (jsonReaderArguments.hasOption(LINES)) {
-					settings.jsonReaderSettings.lines = jsonReaderArguments
-							.getStringArrayOption(LINES);
+					settings.jsonReaderSettings.lines = jsonReaderArguments.getStringArrayOption(LINES);
 				}
 
 				if (jsonReaderArguments.hasOption(POLYGONS)) {
-					settings.jsonReaderSettings.polygons = jsonReaderArguments
-							.getStringArrayOption(POLYGONS);
+					settings.jsonReaderSettings.polygons = jsonReaderArguments.getStringArrayOption(POLYGONS);
 				}
 
-				if (settings.jsonReaderSettings.locations == null
-						&& settings.jsonReaderSettings.lines == null
+				if (settings.jsonReaderSettings.locations == null && settings.jsonReaderSettings.lines == null
 						&& settings.jsonReaderSettings.polygons == null) {
-					throw new ArgumentException("Must specify at least one of "
-							+ LOCATIONS + ", " + LINES + ", " + " or "
-							+ POLYGONS + " arguments.");
+					throw new ArgumentException("Must specify at least one of " + LOCATIONS + ", " + LINES + ", "
+							+ " or " + POLYGONS + " arguments.");
 				}
 
 				if (jsonReaderArguments.hasOption(OUTPUT)) {
 
-					settings.jsonReaderSettings.output = jsonReaderArguments
-							.getStringOption(OUTPUT);
+					settings.jsonReaderSettings.output = jsonReaderArguments.getStringOption(OUTPUT);
 
 				} else {
 
-					throw new ArgumentException("Required argument " + OUTPUT
-							+ " is missing.");
+					throw new ArgumentException("Required argument " + OUTPUT + " is missing.");
 				}
 
 			} catch (ArgumentException e) {
@@ -1008,8 +936,9 @@ public class Spread2ConsoleApp {
 
 			try {
 
-//				JsonReader reader = new JsonReader(settings.jsonReaderSettings);
-				SpreadData data = null;//reader.read();
+				// JsonReader reader = new
+				// JsonReader(settings.jsonReaderSettings);
+				SpreadData data = null;// reader.read();
 
 				// ---EXPORT TO JSON---//
 
@@ -1024,7 +953,7 @@ public class Spread2ConsoleApp {
 				fw.close();
 
 				System.out.println("Created JSON file");
-				
+
 			} catch (IOException e) {
 				gracefullyExit(e.getMessage(), jsonReaderArguments, e);
 			}
@@ -1044,20 +973,17 @@ public class Spread2ConsoleApp {
 					settings.kmlRendererSettings = new KmlRendererSettings();
 					if (kmlRenderArguments.hasOption(JSON)) {
 
-						settings.kmlRendererSettings.json = kmlRenderArguments
-								.getStringOption(JSON);
+						settings.kmlRendererSettings.json = kmlRenderArguments.getStringOption(JSON);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + JSON
-								+ " is missing.");
+						throw new ArgumentException("Required argument " + JSON + " is missing.");
 
-					}// END: option check
+					} // END: option check
 
 					if (kmlRenderArguments.hasOption(OUTPUT)) {
 
-						settings.kmlRendererSettings.output = kmlRenderArguments
-								.getStringOption(OUTPUT);
+						settings.kmlRendererSettings.output = kmlRenderArguments.getStringOption(OUTPUT);
 
 					}
 
@@ -1078,12 +1004,10 @@ public class Spread2ConsoleApp {
 						settings.kmlRendererSettings.polygonColor = kmlRenderArguments
 								.getRealArrayOption(POLYGON_COLOR);
 
-					} else if (kmlRenderArguments
-							.hasOption(POLYGON_COLOR_MAPPING)
+					} else if (kmlRenderArguments.hasOption(POLYGON_COLOR_MAPPING)
 							&& kmlRenderArguments.hasOption(POLYGON_COLOR)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined polygon color!");
+						throw new ArgumentException("Can't both map and have a defined polygon color!");
 
 					} else {
 
@@ -1100,16 +1024,13 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
 
-						settings.kmlRendererSettings.polygonAlpha = kmlRenderArguments
-								.getRealOption(POLYGON_ALPHA);
+						settings.kmlRendererSettings.polygonAlpha = kmlRenderArguments.getRealOption(POLYGON_ALPHA);
 						settings.kmlRendererSettings.polygonAlphaChanged = true;
 
-					} else if (kmlRenderArguments
-							.hasOption(POLYGON_ALPHA_MAPPING)
+					} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA_MAPPING)
 							&& kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined polygon alpha!");
+						throw new ArgumentException("Can't both map and have a defined polygon alpha!");
 
 					} else {
 
@@ -1126,15 +1047,12 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(POLYGON_AREA)) {
 
-						settings.kmlRendererSettings.polygonArea = kmlRenderArguments
-								.getRealOption(POLYGON_AREA);
+						settings.kmlRendererSettings.polygonArea = kmlRenderArguments.getRealOption(POLYGON_AREA);
 
-					} else if (kmlRenderArguments
-							.hasOption(POLYGON_AREA_MAPPING)
+					} else if (kmlRenderArguments.hasOption(POLYGON_AREA_MAPPING)
 							&& kmlRenderArguments.hasOption(POLYGON_AREA)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined polygon radius!");
+						throw new ArgumentException("Can't both map and have a defined polygon radius!");
 
 					} else {
 
@@ -1142,7 +1060,6 @@ public class Spread2ConsoleApp {
 
 					}
 
-					
 					// ---POLYGONS SUBSET---//
 
 					if (kmlRenderArguments.hasOption(POLYGONS_SUBSET)) {
@@ -1162,13 +1079,12 @@ public class Spread2ConsoleApp {
 
 						} else {
 
-							throw new ArgumentException(
-									"Can't create a subset from these options!");
+							throw new ArgumentException("Can't create a subset from these options!");
 
 						}
 
-					}// END: option check
-					
+					} // END: option check
+
 					// ---LINE COLOR---//
 
 					if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)) {
@@ -1177,20 +1093,17 @@ public class Spread2ConsoleApp {
 								.getStringOption(LINE_COLOR_MAPPING);
 
 						if (kmlRenderArguments.hasOption(LINE_COLORS)) {
-							settings.kmlRendererSettings.lineColors = kmlRenderArguments
-									.getStringOption(LINE_COLORS);
+							settings.kmlRendererSettings.lineColors = kmlRenderArguments.getStringOption(LINE_COLORS);
 						}
 
 					} else if (kmlRenderArguments.hasOption(LINE_COLOR)) {
 
-						settings.kmlRendererSettings.lineColor = kmlRenderArguments
-								.getRealArrayOption(LINE_COLOR);
+						settings.kmlRendererSettings.lineColor = kmlRenderArguments.getRealArrayOption(LINE_COLOR);
 
 					} else if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_COLOR)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined line color!");
+						throw new ArgumentException("Can't both map and have a defined line color!");
 
 					} else {
 
@@ -1207,15 +1120,13 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(LINE_ALPHA)) {
 
-						settings.kmlRendererSettings.lineAlpha = kmlRenderArguments
-								.getRealOption(LINE_ALPHA);
+						settings.kmlRendererSettings.lineAlpha = kmlRenderArguments.getRealOption(LINE_ALPHA);
 						settings.kmlRendererSettings.lineAlphaChanged = true;
 
 					} else if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_ALPHA)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined line alpha!");
+						throw new ArgumentException("Can't both map and have a defined line alpha!");
 
 					} else {
 
@@ -1232,14 +1143,12 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(LINE_WIDTH)) {
 
-						settings.kmlRendererSettings.lineWidth = kmlRenderArguments
-								.getRealOption(LINE_WIDTH);
+						settings.kmlRendererSettings.lineWidth = kmlRenderArguments.getRealOption(LINE_WIDTH);
 
 					} else if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_WIDTH)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined line altitude!");
+						throw new ArgumentException("Can't both map and have a defined line altitude!");
 
 					} else {
 
@@ -1256,15 +1165,12 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
 
-						settings.kmlRendererSettings.lineAltitude = kmlRenderArguments
-								.getRealOption(LINE_ALTITUDE);
+						settings.kmlRendererSettings.lineAltitude = kmlRenderArguments.getRealOption(LINE_ALTITUDE);
 
-					} else if (kmlRenderArguments
-							.hasOption(LINE_ALTITUDE_MAPPING)
+					} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
 
-						throw new ArgumentException(
-								"Can't both map and have a defined line altitude!");
+						throw new ArgumentException("Can't both map and have a defined line altitude!");
 
 					} else {
 
@@ -1276,64 +1182,59 @@ public class Spread2ConsoleApp {
 
 					if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
 
-						settings.kmlRendererSettings.linesSubset = kmlRenderArguments
-								.getStringOption(LINES_SUBSET);
+						settings.kmlRendererSettings.linesSubset = kmlRenderArguments.getStringOption(LINES_SUBSET);
 
 						if (kmlRenderArguments.hasOption(LINES_CUTOFF)) {
 
-							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments
-									.getRealOption(LINES_CUTOFF);
+							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments.getRealOption(LINES_CUTOFF);
 
 						} else if (kmlRenderArguments.hasOption(LINES_VALUE)) {
 
-							settings.kmlRendererSettings.linesValue = kmlRenderArguments
-									.getStringOption(LINES_VALUE);
+							settings.kmlRendererSettings.linesValue = kmlRenderArguments.getStringOption(LINES_VALUE);
 
 						} else {
 
-							throw new ArgumentException(
-									"Can't create a subset from these options!");
+							throw new ArgumentException("Can't create a subset from these options!");
 
 						}
 
-					}// END: option check
+					} // END: option check
 
 				} catch (ArgumentException e) {
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-				}// END: try-catch
+				} // END: try-catch
 
 				// ---RUN---//
 
 				try {
 
-					Reader reader = new FileReader(
-							settings.kmlRendererSettings.json);
+					Reader reader = new FileReader(settings.kmlRendererSettings.json);
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-//					KmlRenderer renderer = new KmlRenderer(input,
-//							settings.kmlRendererSettings);
-//					renderer.render();
+					// KmlRenderer renderer = new KmlRenderer(input,
+					// settings.kmlRendererSettings);
+					// renderer.render();
 
 					System.out.println("Rendered KML.");
 
-//				} catch (KmlException e) {
-//
-//					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					// } catch (KmlException e) {
+					//
+					// gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
 				} catch (IOException e) {
 
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
-//				} catch (MissingAttributeException e) {
-//
-//					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-//
-//				} catch (AnalysisException e) {
-//
-//					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					// } catch (MissingAttributeException e) {
+					//
+					// gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+					//
+					// } catch (AnalysisException e) {
+					//
+					// gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
-				}// END: Exception handling
+				} // END: Exception handling
 
 			} else if (settings.geojson) { // ---GEOJSON RENDERING---//
 
@@ -1349,23 +1250,22 @@ public class Spread2ConsoleApp {
 
 				} catch (ArgumentException e) {
 					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
-				}// END: Exception handling
+				} // END: Exception handling
 
 				// ---RUN---//
 
 				try {
 
-					Reader reader = new FileReader(
-							settings.geoJSONRendererSettings.json);
+					Reader reader = new FileReader(settings.geoJSONRendererSettings.json);
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
 					System.out.println("Geo JSON renderer not yet implemented!");
 					System.exit(0);
-					
-//					GeoJSONRenderer renderer = new GeoJSONRenderer(input,
-//							settings.geoJSONRendererSettings);
-//					renderer.render();
+
+					// GeoJSONRenderer renderer = new GeoJSONRenderer(input,
+					// settings.geoJSONRendererSettings);
+					// renderer.render();
 
 					System.out.println("Rendered GeoJSON.");
 
@@ -1373,30 +1273,32 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
 
-//				} catch (IOException e) {
-//
-//					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
-//
-//				} catch (MissingAttributeException e) {
-//
-//					gracefullyExit(e.getMessage(), geojsonRenderArguments, e);
+					// } catch (IOException e) {
+					//
+					// gracefullyExit(e.getMessage(), geojsonRenderArguments,
+					// e);
+					//
+					// } catch (MissingAttributeException e) {
+					//
+					// gracefullyExit(e.getMessage(), geojsonRenderArguments,
+					// e);
 
-				}// END: Exception handling
+				} // END: Exception handling
 
 			} else {
 
 				throw new RuntimeException("Should never get here!");
 
-			}// END: rendering type check
+			} // END: rendering type check
 
-		}// END: create / render / read check
+		} // END: create / render / read check
 
 	}// END: run
 
 	private void gracefullyExit(String message, Arguments arguments, Exception e) {
-    
+
 		// TODO: read / parse / render in help message
-		
+
 		if (Spread2App.DEBUG) {
 			if (e != null) {
 				e.printStackTrace();

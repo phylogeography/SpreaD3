@@ -31,14 +31,14 @@ var lines;
 // ---FUNCTIONS---//
 // /////////////////
 
-function draw() {
-
-	// project path data
-	g.selectAll('path.country').attr("class", "country").attr('d', path).style(
-			"stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
-			"stroke", "rgb(0, 0, 0)");
-
-}// END: draw
+//function draw() {
+//
+//	// project path data
+//	g.selectAll('path.country').attr("class", "country").attr('d', path).style(
+//			"stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
+//			"stroke", "rgb(0, 0, 0)");
+//
+//}// END: draw
 
 function move() {
 
@@ -55,9 +55,10 @@ function move() {
 	zoom.translate(t);
 	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
-	// fit the path to the zoom level
+	// fit the paths to the zoom level
 	d3.selectAll(".country").style("stroke-width", 1.0 / s);
-
+	d3.selectAll(".line").style("stroke-width", 1.0 / s);
+	
 }// END: move
 
 // /////////////////
@@ -66,7 +67,7 @@ function move() {
 
 // ---DRAW MAP BACKGROUND---//
 
-var zoom = d3.behavior.zoom().scaleExtent([ 1, 9 ]).on("zoom", move);
+var zoom = d3.behavior.zoom().scaleExtent([ 1, 20 ]).on("zoom", move);
 
 var path = d3.geo.path().projection(projection);
 
@@ -74,32 +75,36 @@ var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
 
 var g = svg.append("g");
+var equatorLayer = g.append("g");
+var topoLayer = g.append("g");
+var linesLayer = g.append("g");
 
-d3.json("data/world-topo-min.json", function ready(error, world) {
+d3.json("data/combined.topojson", function ready(error, map) {
 
 	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
 			path);
 
-	g.append("path").datum(
+	equatorLayer.append("path").datum(
 			{
 				type : "LineString",
 				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
 						[ 180, 0 ] ]
 			}).attr("class", "equator").attr("d", path);
 
-	g.selectAll('path').data(
-			topojson.feature(world, world.objects.countries).features).enter()
-			.append('path').attr("class", "country");
-
-	// draw path data
-	draw();
+	topoLayer.append("path")
+    .datum(topojson.feature(map, map.objects.collection))
+    .attr("class", "country").attr('d', path).style(
+			"stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
+			"stroke", "rgb(0, 0, 0)");
+	
+	
 });
 
 // //////////////////////////////////
 // --TODO: experiments with arcs---//
 // //////////////////////////////////
 
-d3.json("data/test_discrete.json", function(json) {
+d3.json("data/ebov_discrete.json", function(json) {
 
 	// -- DATA-- //
 
@@ -143,7 +148,6 @@ d3.json("data/test_discrete.json", function(json) {
 		points = layer.points;
 		lines = layer.lines;
 		
-//		populatePanels(lines);
 		generateLines(lines, points);
 		
 	});
@@ -195,33 +199,6 @@ d3.json("data/test_discrete.json", function(json) {
 	});// END: slide
 
 });
-
-
-
-//var first = document.getElementById("first");
-
-//$('#first').collapsible('accordion');
-
-
-
-
-
-
-
-// TODO
-// gradients
-// https://gist.github.com/mbostock/4163057
-// http://www.d3noob.org/2013/01/applying-colour-gradient-to-graph-line.html
-
-
-
-
-
-
-
-
-
-
 
 
 

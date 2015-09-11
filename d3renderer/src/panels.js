@@ -66,7 +66,7 @@ function populatePanels(attributes) {
                             var attributeValue = line.attr(colorAttribute);
                             var color = scale(attributeValue) ;
 
-							line.transition().style("stroke", color);
+							line.transition().delay(100).ease("linear").style("stroke", color);
 
 						});
 

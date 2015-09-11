@@ -5,11 +5,17 @@ import data.structure.Location;
 @SuppressWarnings("serial")
 public class LocationNotFoundException extends Exception {
 
-	private final Location location;
+	public enum Type {
+		NODE, PARENT
+	}
 	
-	public LocationNotFoundException(Location location) {
+	private final Location location;
+	private final Type type;
+	
+	public LocationNotFoundException(Location location, Type type) {
 		
 		this.location = location;
+		this.type = type;
 		
 	}//END: Constructor
 	
@@ -19,7 +25,9 @@ public class LocationNotFoundException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		String message = "Location " + location.getId() + " not found";
+		
+		String locationType = (type == Type.PARENT ? "Parent" : " Child");
+		String message =  locationType + " location " + location.getId() + " could not be found in the locations file.";
 		return message;
 	}
 	

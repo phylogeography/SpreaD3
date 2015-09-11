@@ -58,11 +58,12 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	var startTime = line.startTime;
 	var endTime = line.endTime;
 
-	g.append("path") //
+	linesLayer.append("path") //
 	.attr("class", "line") //
 	.attr("d", bearing) //
 	.attr("fill", "none") //
 	.attr("stroke-width", 1 + "px") //
+	.attr("stroke-linejoin", "round") //
 	.attr("stroke", "rgb(" + 0 + "," + 0 + "," + 0 + ")") //
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
