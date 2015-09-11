@@ -12,10 +12,6 @@
 //
 var width = document.getElementById('container').offsetWidth; // 600;
 var height = width / 2; // 400;
-
-var projection = d3.geo.mercator().translate([ (width / 2), (height / 2) ])
-		.scale(width / 2 / Math.PI);
-
 var graticule = d3.geo.graticule();
 
 //
@@ -69,7 +65,10 @@ function move() {
 
 var zoom = d3.behavior.zoom().scaleExtent([ 1, 20 ]).on("zoom", move);
 
-var path = d3.geo.path().projection(projection);
+//var path = d3.geo.path().projection(projection);
+
+var path;
+var projection;
 
 var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
@@ -81,9 +80,26 @@ var linesLayer = g.append("g");
 
 d3.json("data/combined.topojson", function ready(error, map) {
 
-	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
-			path);
+	var topo = topojson.feature(map, map.objects.collection);
 
+	// first guess for the projection
+	  var center = d3.geo.centroid(topo);
+	  var scale  = 150;
+      var offset = [width/2, height/2];
+       projection = d3.geo.mercator().scale(scale).center(center)
+          .translate(offset);
+       path = d3.geo.path().projection(projection);
+      
+       
+       
+       
+   	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
+			path);
+       
+//	  console.log(center);
+	  
+	  
+	  
 	equatorLayer.append("path").datum(
 			{
 				type : "LineString",
@@ -91,11 +107,12 @@ d3.json("data/combined.topojson", function ready(error, map) {
 						[ 180, 0 ] ]
 			}).attr("class", "equator").attr("d", path);
 
+	
 	topoLayer.append("path")
-    .datum(topojson.feature(map, map.objects.collection))
+    .datum(topo)
     .attr("class", "country").attr('d', path).style(
-			"stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
-			"stroke", "rgb(0, 0, 0)");
+			"stroke-width", .5).style("fill", "#282828").style(
+			"stroke", "#C0C0C0");
 	
 	
 });
@@ -148,7 +165,7 @@ d3.json("data/ebov_discrete.json", function(json) {
 		points = layer.points;
 		lines = layer.lines;
 		
-		generateLines(lines, points);
+//		generateLines(lines, points);
 		
 	});
 	
