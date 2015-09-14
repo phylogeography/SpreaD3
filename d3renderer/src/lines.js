@@ -58,6 +58,7 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	var startTime = line.startTime;
 	var endTime = line.endTime;
 
+	
 	linesLayer.append("path") //
 	.attr("class", "line") //
 	.attr("d", bearing) //
@@ -68,6 +69,7 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
 	.attr("opacity", 1);
+
 
 	var l = g.selectAll("path.line").last();
 	var attributes = line.attributes;

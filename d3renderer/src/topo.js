@@ -1,9 +1,12 @@
-// ---POPULATE PANELS---//
+// ---GENERATE TOPO LAYER---//
 
 function generateTopoLayer(topo) {
 
 	// first guess for the projection
 	var center = d3.geo.centroid(topo);
+	
+//	console.log(center);
+	
 	var scale = 150;
 	var offset = [ width / 2, height / 2 ];
 	projection = d3.geo.mercator().scale(scale).center(center)
@@ -48,3 +51,41 @@ function generateTopoLayer(topo) {
 	;
 
 }// END: generateTopoLayer
+
+
+
+
+
+//function generateWorldLayer(topo) {
+//
+//	projection = d3.geo.mercator() //
+//	.translate([ (width / 2), (height / 2) ]) //
+//	.scale(width / 2 / Math.PI);
+//
+//	path = d3.geo.path().projection(projection);
+//	
+//	svg.append("path") //
+//	.datum(graticule) //
+//	.attr("class", "graticule") //
+//	.attr("d", path);
+//
+//	equatorLayer.append("path") //
+//	.datum(
+//			{
+//				type : "LineString",
+//				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
+//						[ 180, 0 ] ]
+//			}) //
+//	.attr("class", "equator") //
+//	.attr("d", path);
+//
+//	var country = topoLayer.selectAll(".topo").data(topo);
+//
+//	country.enter().insert("path") //
+//	.attr("class", "topo") //
+//	.attr("d", path) //
+//	;
+//
+//}// END: draw
+
+

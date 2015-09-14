@@ -67,7 +67,9 @@ var pointsLayer = g.append("g");
 var areasLayer = g.append("g");
 var linesLayer = g.append("g");
 
-var projection = d3.geo.mercator();
+var projection;// = d3.geo.mercator();
+
+var doneOnce = false;
 
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 
@@ -103,16 +105,21 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 		var type = layer.type
 		if (type == MAP) {
-			var topo = layer.geojson;
-			generateTopoLayer(topo);
-			mapRendered = true;
+
+//			var topo = layer.geojson;
+//			generateTopoLayer(topo);
+//			mapRendered = true;
+
 		}
 
 	});
 
 	if (!mapRendered) {
-		d3.json("data/world.geojson", function ready(error, world) {
-			generateTopoLayer(world);
+		d3.json("data/world.geojson", function ready(error, topo) {
+			
+			generateTopoLayer(topo);
+//			mapRendered = true;
+			
 		});
 	}// END: mapRendered check
 
