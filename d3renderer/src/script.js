@@ -67,7 +67,8 @@ var pointsLayer = g.append("g");
 var areasLayer = g.append("g");
 var linesLayer = g.append("g");
 
-var projection;// = d3.geo.mercator();
+//var projection;
+var projection = d3.geo.mercator();
 
 var doneOnce = false;
 

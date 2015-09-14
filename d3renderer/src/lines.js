@@ -65,7 +65,7 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("fill", "none") //
 	.attr("stroke-width", 1 + "px") //
 	.attr("stroke-linejoin", "round") //
-	.attr("stroke", "rgb(" + 0 + "," + 0 + "," + 0 + ")") //
+	.attr("stroke", "rgb(" + 250 + "," + 0 + "," + 0 + ")") //
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
 	.attr("opacity", 1);
