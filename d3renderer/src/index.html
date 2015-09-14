@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../lib/collabsible/collabsible.js"></script>
 <script type="text/javascript" src="../lib/colorlegend/colorlegend.js"></script>
 
-	<script type="text/javascript" src="../lib/jscolor/jscolor.js"></script>
+<script type="text/javascript" src="../lib/jscolor/jscolor.js"></script>
 
 <!-- sources -->
 <script type="text/javascript" src=utils.js></script>
@@ -23,7 +23,6 @@
 <script type="text/javascript" src="lines.js"></script>
 
 <style type="text/css">
-
 #container {
 	margin-top: 1.5cm;
 	border: 2px solid #000;
@@ -45,19 +44,24 @@
 	stroke-width: 1px;
 }
 
+.topo {
+	fill: #282828;
+	stroke: #C0C0C0;
+}
+
 .selectors {
 	margin-top: 1.5cm;
 	float: left;
 }
 
 /* styling for collapsible panels */
-.panel, .panelcollapsed {
+.panel,.panelcollapsed {
 	margin-top: 5px;
 	margin-right: 5px;
 }
 
 /* panel heading */
-.panel h2, .panelcollapsed h2 {
+.panel h2,.panelcollapsed h2 {
 	font-size: 14px;
 	font-weight: 300;
 	margin: 0px;
@@ -77,7 +81,7 @@
 }
 
 /* panel heading on rollover */
-.panel h2:hover, .panelcollapsed h2:hover {
+.panel h2:hover,.panelcollapsed h2:hover {
 	background-color: #F5F7F9;
 }
 
@@ -107,55 +111,55 @@
 	width: 100px;
 	height: 300px;
 	font-size: 20px;
-/*  	border: 1px solid #bbb; */
-/* 	margin: 10px; */
-/* 	float: left; */
+	/*  	border: 1px solid #bbb; */
+	/* 	margin: 10px; */
+	/* 	float: left; */
 }
 </style>
 </head>
 
 <body>
 
-	<div class="all" style="display: block;">
+    <div class="all" style="display: block;">
 
-		<div id="controls">
-			<h2>
-				Current date: <span id="currentDate"> 0 </span>
-			</h2>
-			<div id="timeSlider"></div>
-		</div>
+        <div id="controls">
+            <h2>
+                Current date: <span id="currentDate"> 0 </span>
+            </h2>
+            <div id="timeSlider"></div>
+        </div>
 
-		<div class="selectorsANDcontainer" style="display: inline;">
+        <div class="selectorsANDcontainer" style="display: inline;">
 
-			<div class="selectors" style="display: inline;">
+            <div class="selectors" style="display: inline;">
 
-				<!-- SELECTORS -->
+                <!-- SELECTORS -->
 
-				<div class="panel">
-					<h2>Line color attribute</h2>
-					<div class="panelcontent">
-						<select id="linecolor">
-							<!-- 						<option >host1</option> -->
-							<!-- 						<option >host2</option> -->
-						</select>
-						<div id="linesColorLegend" class="legend"></div>
-						
-						
-					</div>
-				</div>
+                <div class="panel">
+                    <h2>Line color attribute</h2>
+                    <div class="panelcontent">
+                        <select id="linecolor">
+                            <!-- 						<option >host1</option> -->
+                            <!-- 						<option >host2</option> -->
+                        </select>
+                        <div id="linesColorLegend" class="legend"></div>
 
-			</div>
-			<!-- END: selectors-->
 
-			<div id="container"></div>
+                    </div>
+                </div>
 
-		</div>
-		<!-- END: selectorsANDcontainer-->
+            </div>
+            <!-- END: selectors-->
 
-	</div>
-	<!-- END: all-->
+            <div id="container"></div>
 
-	<script type="text/javascript" src="script.js"></script>
+        </div>
+        <!-- END: selectorsANDcontainer-->
+
+    </div>
+    <!-- END: all-->
+
+    <script type="text/javascript" src="script.js"></script>
 
 </body>
 </html>

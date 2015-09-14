@@ -72,7 +72,7 @@ var projection = d3.geo.mercator();
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// -- TIME-- //
-	
+
 	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
 	var startDate = new Date(timeLine.startTime);
@@ -86,195 +86,95 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 			[ 0, 1 ]);
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
-	
+
 	// ---ATTRIBUTES---//
 
 	attributes = json.uniqueAttributes;
 	populatePanels(attributes);
-	
+
 	// ---LAYERS---//
 
 	var layers = json.layers;
 	var mapRendered = false;
-	
-	// First render a map layer
+
+	// ---MAP LAYER---//
+
 	layers.forEach(function(layer) {
-		
+
 		var type = layer.type
 		if (type == MAP) {
-
 			var topo = layer.geojson;
-			generateTopoLayer(topo );
+			generateTopoLayer(topo);
 			mapRendered = true;
-		} 	
+		}
 
 	});
-	
-	if(!mapRendered) {
-		//TODO: generate world map
-	}
-	
-	// Then render data layers
+
+	if (!mapRendered) {
+		d3.json("data/world.geojson", function ready(error, world) {
+			generateTopoLayer(world);
+		});
+	}// END: mapRendered check
+
+	// ---DATA LAYER---//
+
 	layers.forEach(function(layer) {
-		
+
 		var type = layer.type
 		if (type == DATA) {
 
 			points = layer.points;
 			lines = layer.lines;
-			 generateLines(lines, points );
-			
-		} 	
+			generateLines(lines, points);
+
+		}
 
 	});
-	
-	
+
+	// ---LISTENERS---//
+
+	// time slider listener
+	timeSlider.on('slide', function(evt, value) {
+
+		var currentDate = timeScale.invert(timeScale(value));
+		currentDateDisplay.text(dateFormat(currentDate));
+
+		// TODO: hook up slider and offsets for travelling paths animation
+		d3.selectAll(".line")[0]
+				.forEach(function(line) {
+
+					var linePath = d3.select(line)
+					var totalLength = linePath.node().getTotalLength();
+
+					var lineStartDate = new Date(
+							linePath.node().attributes.startTime.value);
+					var lineEndDate = new Date(
+							linePath.node().attributes.endTime.value);
+
+					if (lineEndDate <= value) {
+
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", totalLength) //
+						.attr("opacity", 0)//
+						.transition() //
+						.duration(750) //
+						.ease("linear") //
+						.attr("stroke-dashoffset", 0) //
+						.attr("opacity", 1);
+
+					} else {
+
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", totalLength) //
+						.attr("opacity", 0);
+
+					}// END: date check
+
+				});// END: filter
+
+	});// END: slide
 
 } // END: function
 );
-
-
-
-//d3.json("data/combined.topojson", function ready(error, map) {
-//
-//	var topo = topojson.feature(map, map.objects.collection);
-//
-//	// first guess for the projection
-//	var center = d3.geo.centroid(topo);
-//	var scale = 150;
-//	var offset = [ width / 2, height / 2 ];
-//	projection = d3.geo.mercator().scale(scale).center(center)
-//			.translate(offset);
-//	path = d3.geo.path().projection(projection);
-//
-//	// determine the bounds
-//	var bounds = path.bounds(topo);
-//	var hscale = scale * width / (bounds[1][0] - bounds[0][0]);
-//	var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
-//	var scale = (hscale < vscale) ? hscale : vscale;
-//	var offset = [ width - (bounds[0][0] + bounds[1][0]) / 2,
-//			height - (bounds[0][1] + bounds[1][1]) / 2 ];
-//
-//	// new projection
-//	projection = d3.geo.mercator().center(center).scale(scale)
-//			.translate(offset);
-//	// new path
-//	path = path.projection(projection);
-//
-//	// add a rectangle to see the bound of the svg
-////	svg.append("rect").attr('width', width).attr('height', height).style(
-////			'stroke', 'white').style('fill', 'none');
-//
-//	// add graticule
-//	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
-//			path);
-//
-//	// add equator
-//	equatorLayer.append("path").datum(
-//			{
-//				type : "LineString",
-//				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
-//						[ 180, 0 ] ]
-//			}).attr("class", "equator").attr("d", path);
-//
-//	// add map data
-//	topoLayer.append("path").datum(topo).attr("class", "country").attr('d',
-//			path).style("stroke-width", .5).style("fill", "#282828").style(
-//			"stroke", "#C0C0C0");
-//
-//});
-
-
-//d3.json("data/ebov_discrete.json", function(json) {
-//
-//	// -- DATA-- //
-//
-//	// locations = json.locations;
-//	// var locationIds = [];
-//	// locations.forEach(function(location) {
-//	//
-//	// locationIds.push(location.id);
-//	//
-//	// });
-//
-//	// -- TIME-- //
-//	var dateFormat = d3.time.format("%Y-%m-%d");
-//	var timeLine = json.timeLine;
-//	var startDate = new Date(timeLine.startTime);
-//	var endDate = new Date(timeLine.endTime);
-//
-//	// initial value
-//	var currentDateDisplay = d3.select('#currentDate').text(
-//			dateFormat(startDate));
-//
-//	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-//			[ 0, 1 ]);
-//	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-//	d3.select('#timeSlider').call(timeSlider);
-//
-//	// ---ATTRIBUTES---//
-//
-//	attributes = json.uniqueAttributes;
-//	populatePanels(attributes);
-//
-//	// console.log(attributes);
-//
-//	// ---LAYERS---//
-//
-//	var layers = json.layers;
-//	layers.forEach(function(layer) {
-//
-//		points = layer.points;
-//		lines = layer.lines;
-//
-//		 generateLines(lines, points);
-//
-//	});
-//
-//	// ---LISTENERS---//
-//
-//	// time slider listener
-//	timeSlider.on('slide', function(evt, value) {
-//
-//		var currentDate = timeScale.invert(timeScale(value));
-//		currentDateDisplay.text(dateFormat(currentDate));
-//
-//		// TODO:
-//		// animation begins at the startTime, ends at the endTime
-//		d3.selectAll(".line")[0]
-//				.filter(function(line) {
-//
-//					var linePath = d3.select(line)
-//					var totalLength = linePath.node().getTotalLength();
-//
-//					var lineStartDate = new Date(
-//							linePath.node().attributes.startTime.value);
-//					var lineEndDate = new Date(
-//							linePath.node().attributes.endTime.value);
-//
-//					if (lineEndDate <= value) {
-//
-//						linePath.attr("stroke-dasharray",
-//								totalLength + " " + totalLength) //
-//						.attr("stroke-dashoffset", totalLength) //
-//						.attr("opacity", 0)//
-//						.transition() //
-//						.duration(750) //
-//						.ease("linear") //
-//						.attr("stroke-dashoffset", 0) //
-//						.attr("opacity", 1);
-//
-//					} else {
-//
-//						linePath.attr("stroke-dasharray",
-//								totalLength + " " + totalLength) //
-//						.attr("stroke-dashoffset", totalLength) //
-//						.attr("opacity", 0);
-//
-//					}// END: date check
-//
-//				});// END: filter
-//
-//	});// END: slide
-//
-//});

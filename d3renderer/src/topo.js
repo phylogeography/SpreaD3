@@ -1,8 +1,7 @@
-
 // ---POPULATE PANELS---//
 
 function generateTopoLayer(topo) {
-	
+
 	// first guess for the projection
 	var center = d3.geo.centroid(topo);
 	var scale = 150;
@@ -11,10 +10,9 @@ function generateTopoLayer(topo) {
 			.translate(offset);
 	path = d3.geo.path().projection(projection);
 
-//	projection = projection.center(center);
-//	path = path.projection(projection);
-	
-	
+	// projection = projection.center(center);
+	// path = path.projection(projection);
+
 	// determine the bounds
 	var bounds = path.bounds(topo);
 	var hscale = scale * width / (bounds[1][0] - bounds[0][0]);
@@ -42,8 +40,11 @@ function generateTopoLayer(topo) {
 			}).attr("class", "equator").attr("d", path);
 
 	// add map data
-	topoLayer.append("path").datum(topo).attr("class", "country").attr('d',
-			path).style("stroke-width", .5).style("fill", "#282828").style(
-			"stroke", "#C0C0C0");
+	topoLayer.append("path") //
+	.datum(topo) //
+	.attr("class", "topo") //
+	.attr('d', path) //
+	.style("stroke-width", .5) //
+	;
 
-}//END: generateTopoLayer
+}// END: generateTopoLayer
