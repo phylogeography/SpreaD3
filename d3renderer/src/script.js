@@ -68,7 +68,7 @@ var areasLayer = g.append("g");
 var linesLayer = g.append("g");
 
 //var projection;
-var projection = d3.geo.mercator();
+var projection;// = d3.geo.mercator();
 
 var doneOnce = false;
 
@@ -116,28 +116,51 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	});
 
 	if (!mapRendered) {
-		d3.json("data/world.geojson", function ready(error, topo) {
-			
+
+        queue()
+            .defer(d3.json, "data/world.geojson")
+            .await(ready);
+
+		function ready(error, topo) {
+
 			generateTopoLayer(topo);
 //			mapRendered = true;
-			
-		});
-	}// END: mapRendered check
 
-	// ---DATA LAYER---//
+            // ---DATA LAYER---//
 
-	layers.forEach(function(layer) {
+            layers.forEach(function(layer) {
 
-		var type = layer.type
-		if (type == DATA) {
+                var type = layer.type
+                if (type == DATA) {
 
-			points = layer.points;
-			lines = layer.lines;
-			generateLines(lines, points);
+                    points = layer.points;
+                    lines = layer.lines;
+                    generateLines(lines, points);
 
-		}
+                }
 
-	});
+            });
+
+		};
+
+	} else {
+
+        // ---DATA LAYER---//
+
+        layers.forEach(function(layer) {
+
+            var type = layer.type
+            if (type == DATA) {
+
+                points = layer.points;
+                lines = layer.lines;
+                generateLines(lines, points);
+
+            }
+
+        });
+
+    }// END: mapRendered check
 
 	// ---LISTENERS---//
 
