@@ -14,6 +14,7 @@ import structure.data.TimeLine;
 import structure.data.attributable.Area;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
+import structure.geojson.GeoJsonData;
 import utils.Utils;
 import exceptions.AnalysisException;
 import exceptions.IllegalCharacterException;
@@ -27,7 +28,8 @@ public class DiscreteSpreadDataParser {
 		this.settings = settings;
 	}// END: Constructor
 
-	public SpreadData parse() throws IOException, ImportException, AnalysisException, IllegalCharacterException,
+	public SpreadData parse() throws IOException, ImportException,
+			AnalysisException, IllegalCharacterException,
 			LocationNotFoundException {
 
 		TimeLine timeLine = null;
@@ -47,11 +49,13 @@ public class DiscreteSpreadDataParser {
 
 		TimeParser timeParser = new TimeParser(settings.mrsd);
 		timeParser.parseTime();
-		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree.getRootNode()));
+		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree
+				.getRootNode()));
 
 		System.out.println("Parsed time line");
 
-		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(settings.locations, settings.header);
+		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
+				settings.locations, settings.header);
 		locationsList = locationsParser.parseLocations();
 
 		System.out.println("Parsed locations");
@@ -69,10 +73,12 @@ public class DiscreteSpreadDataParser {
 		areasList = null;
 
 		uniqueAttributes = treeParser.getUniqueAttributes();
-		
+
 		System.out.println("Parsed the tree");
 
 		layersList = new LinkedList<Layer>();
+
+		// TODO: filename only as id
 		Layer discreteLayer = new Layer(settings.tree, //
 				"Discrete tree visualisation", //
 				pointsList, //
@@ -82,7 +88,24 @@ public class DiscreteSpreadDataParser {
 
 		layersList.add(discreteLayer);
 
-		SpreadData data = new SpreadData(timeLine, uniqueAttributes, locationsList, layersList);
+		if (settings.geojson != null) {
+
+			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
+			GeoJsonData geojson = geojsonParser.parseGeoJSON();
+
+			// TODO: filename only as id
+			Layer geojsonLayer = new Layer(settings.geojson, //
+					"GeoJson layer", //
+					geojson);
+
+			layersList.add(geojsonLayer);
+
+			System.out.println("Parsed the GeoJSON");
+
+		}//END: null check
+
+		SpreadData data = new SpreadData(timeLine, uniqueAttributes,
+				locationsList, layersList);
 
 		return data;
 	}// END: parse

@@ -6,19 +6,22 @@ import java.util.List;
 import structure.data.attributable.Area;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
+import structure.geojson.GeoJsonData;
 
 public class Layer {
 
 	public enum Type {
-		MAP, DATA
+		Map, Data
 	}
-	
+
+	private final Type type;
 	private final String id;
 	private final String description;
-	private final Type type;
+	
 	private final List<Point> points;
 	private final List<Area> areas;
 	private final List<Line> lines;
+	private final GeoJsonData geojson;
 
 	private boolean hasAreas;
 
@@ -29,12 +32,14 @@ public class Layer {
 			List<Line> lines //
 	) {
 
+		this.type = Type.Data;
 		this.id = id;
 		this.description = description;
-		this.type = Type.DATA;
 		
+		this.geojson = null;
+
 		this.points = points;
-		
+
 		this.lines = new ArrayList<Line>();
 		if (lines != null) {
 			this.lines.addAll(lines);
@@ -48,26 +53,25 @@ public class Layer {
 			this.hasAreas = false;
 		}
 
-
 	}// END: Constructor
 
-	
 	public Layer(String id, //
-			String description //
-			
+			String description, //
+			GeoJsonData map //
 	) {
 
+		this.type = Type.Map;
 		this.id = id;
 		this.description = description;
-		this.type = Type.MAP;
-		
+		this.geojson = map;
+
 		this.points = null;
 		this.lines = null;
-        this.areas = null;
-        this.hasAreas = false;
+		this.areas = null;
+		this.hasAreas = false;
 
 	}// END: Constructor
-	
+
 	public List<Line> getLines() {
 		return lines;
 	}
@@ -94,6 +98,10 @@ public class Layer {
 
 	public String getType() {
 		return type.toString();
+	}
+
+	public GeoJsonData getGeojson() {
+		return geojson;
 	}
 
 }// END: class

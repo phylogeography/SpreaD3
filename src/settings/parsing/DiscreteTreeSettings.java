@@ -32,6 +32,6 @@ public class DiscreteTreeSettings {
 
 	public boolean header = false;
 
-	public String map = null;
+	public String geojson = null;
 	
 }//END: class

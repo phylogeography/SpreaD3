@@ -32,8 +32,6 @@ public class DiscreteLocationsParser {
 		// create list from the coordinates file
 		String[] lines = Utils.readLines(locations, Utils.HASH_COMMENT);
 
-		System.out.println(header);
-		
 		if(header) {
 			lines = Arrays.copyOfRange(lines, 1, lines.length);
 		}

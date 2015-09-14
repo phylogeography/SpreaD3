@@ -541,7 +541,7 @@ public class Spread2ConsoleApp {
 					
 					if (args1.hasOption(MAP)) {
 						
-						settings.discreteTreeSettings.map = args1.getStringOption(MAP);
+						settings.discreteTreeSettings.geojson = args1.getStringOption(MAP);
 					}
 					
 //					if (args1.hasOption(TRAITS)) {
