@@ -11,7 +11,7 @@ import structure.geojson.GeoJsonData;
 public class Layer {
 
 	public enum Type {
-		Map, Data
+		map, data
 	}
 
 	private final Type type;
@@ -32,7 +32,7 @@ public class Layer {
 			List<Line> lines //
 	) {
 
-		this.type = Type.Data;
+		this.type = Type.data;
 		this.id = id;
 		this.description = description;
 		
@@ -60,7 +60,7 @@ public class Layer {
 			GeoJsonData map //
 	) {
 
-		this.type = Type.Map;
+		this.type = Type.map;
 		this.id = id;
 		this.description = description;
 		this.geojson = map;

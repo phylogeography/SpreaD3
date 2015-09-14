@@ -4,7 +4,7 @@ function populatePanels(attributes) {
 
 	lineColorSelect = document.getElementById("linecolor");
 
-	for (i = 0; i < attributes.length; i++) {
+	for (var i = 0; i < attributes.length; i++) {
 
 		option = attributes[i].id;
 		element = document.createElement("option");
