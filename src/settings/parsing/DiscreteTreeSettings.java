@@ -31,5 +31,7 @@ public class DiscreteTreeSettings {
 	public double timescaleMultiplier = 1;
 
 	public boolean header = false;
+
+	public String map = null;
 	
 }//END: class

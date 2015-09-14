@@ -1,6 +1,6 @@
 package exceptions;
 
-import data.structure.Location;
+import structure.data.Location;
 
 @SuppressWarnings("serial")
 public class LocationNotFoundException extends Exception {

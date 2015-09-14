@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import structure.data.Location;
+import structure.data.primitive.Coordinate;
 import utils.Utils;
-import data.structure.Location;
-import data.structure.primitive.Coordinate;
 import exceptions.IllegalCharacterException;
 
 public class DiscreteLocationsParser {

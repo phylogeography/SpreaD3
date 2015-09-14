@@ -15,26 +15,26 @@ var height = width / 2; // 400;
 var graticule = d3.geo.graticule();
 
 //
-//---DATA---//
+// ---DATA---//
 //
 
 var attributes;
 var lines;
-//var lineValueMap = [];
-//var lineMinMaxMap = [];
+// var lineValueMap = [];
+// var lineMinMaxMap = [];
 
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////
 
-//function draw() {
+// function draw() {
 //
-//	// project path data
-//	g.selectAll('path.country').attr("class", "country").attr('d', path).style(
-//			"stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
-//			"stroke", "rgb(0, 0, 0)");
+// // project path data
+// g.selectAll('path.country').attr("class", "country").attr('d', path).style(
+// "stroke-width", .5).style("fill", "rgb(194, 178, 128)").style(
+// "stroke", "rgb(0, 0, 0)");
 //
-//}// END: draw
+// }// END: draw
 
 function move() {
 
@@ -54,7 +54,7 @@ function move() {
 	// fit the paths to the zoom level
 	d3.selectAll(".country").style("stroke-width", 1.0 / s);
 	d3.selectAll(".line").style("stroke-width", 1.0 / s);
-	
+
 }// END: move
 
 // /////////////////
@@ -63,12 +63,10 @@ function move() {
 
 // ---DRAW MAP BACKGROUND---//
 
-var zoom = d3.behavior.zoom().scaleExtent([ 1, 20 ]).on("zoom", move);
+var zoom = d3.behavior.zoom().scaleExtent([ 1, 9 ]).on("zoom", move);
 
-//var path = d3.geo.path().projection(projection);
-
-var path;
-var projection;
+//var path;
+//var projection = d3.geo.mercator();
 
 var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
@@ -82,24 +80,56 @@ d3.json("data/combined.topojson", function ready(error, map) {
 
 	var topo = topojson.feature(map, map.objects.collection);
 
+//	var projection = d3.geo.mercator()
+//    .scale(1)
+//    .translate([0, 0]);
+//
+//// Create a path generator.
+//var path = d3.geo.path()
+//    .projection(projection);
+//	
+//var b = path.bounds(map);
+//s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+//t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+//
+////Update the projection to use computed scale & translate.
+//projection
+//    .scale(s)
+//    .translate(t);
+//
+//path = path.projection(projection);
+
 	// first guess for the projection
-	  var center = d3.geo.centroid(topo);
-	  var scale  = 150;
-      var offset = [width/2, height/2];
-       projection = d3.geo.mercator().scale(scale).center(center)
-          .translate(offset);
-       path = d3.geo.path().projection(projection);
-      
-       
-       
-       
-   	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
+	var center = d3.geo.centroid(topo);
+	var scale = 150;
+	var offset = [ width / 2, height / 2 ];
+	projection = d3.geo.mercator().scale(scale).center(center)
+			.translate(offset);
+	path = d3.geo.path().projection(projection);
+
+	// determine the bounds
+	var bounds = path.bounds(topo);
+	var hscale = scale * width / (bounds[1][0] - bounds[0][0]);
+	var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
+	var scale = (hscale < vscale) ? hscale : vscale;
+	var offset = [ width - (bounds[0][0] + bounds[1][0]) / 2,
+			height - (bounds[0][1] + bounds[1][1]) / 2 ];
+
+	// new projection
+	projection = d3.geo.mercator().center(center).scale(scale)
+			.translate(offset);
+	// new path
+	path = path.projection(projection);
+
+	// add a rectangle to see the bound of the svg
+//	svg.append("rect").attr('width', width).attr('height', height).style(
+//			'stroke', 'white').style('fill', 'none');
+
+	// add graticule
+	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
 			path);
-       
-//	  console.log(center);
-	  
-	  
-	  
+
+	// add equator
 	equatorLayer.append("path").datum(
 			{
 				type : "LineString",
@@ -107,14 +137,11 @@ d3.json("data/combined.topojson", function ready(error, map) {
 						[ 180, 0 ] ]
 			}).attr("class", "equator").attr("d", path);
 
-	
-	topoLayer.append("path")
-    .datum(topo)
-    .attr("class", "country").attr('d', path).style(
-			"stroke-width", .5).style("fill", "#282828").style(
+	// add map data
+	topoLayer.append("path").datum(topo).attr("class", "country").attr('d',
+			path).style("stroke-width", .5).style("fill", "#282828").style(
 			"stroke", "#C0C0C0");
-	
-	
+
 });
 
 // //////////////////////////////////
@@ -125,15 +152,14 @@ d3.json("data/ebov_discrete.json", function(json) {
 
 	// -- DATA-- //
 
-//	locations = json.locations;
-//	var locationIds = [];
-//	locations.forEach(function(location) {
-//
-//		locationIds.push(location.id);
-//
-//	});
+	// locations = json.locations;
+	// var locationIds = [];
+	// locations.forEach(function(location) {
+	//
+	// locationIds.push(location.id);
+	//
+	// });
 
-	
 	// -- TIME-- //
 	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
@@ -149,28 +175,27 @@ d3.json("data/ebov_discrete.json", function(json) {
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
-	
-	//---ATTRIBUTES---//
-	
-	 attributes = json.uniqueAttributes;
+	// ---ATTRIBUTES---//
+
+	attributes = json.uniqueAttributes;
 	populatePanels(attributes);
-	
-//	console.log(attributes);
-	
-	//---LAYERS---//
-	
+
+	// console.log(attributes);
+
+	// ---LAYERS---//
+
 	var layers = json.layers;
 	layers.forEach(function(layer) {
 
 		points = layer.points;
 		lines = layer.lines;
-		
-//		generateLines(lines, points);
-		
+
+		 generateLines(lines, points);
+
 	});
-	
-	//---LISTENERS---//
-	
+
+	// ---LISTENERS---//
+
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
@@ -216,7 +241,3 @@ d3.json("data/ebov_discrete.json", function(json) {
 	});// END: slide
 
 });
-
-
-
-

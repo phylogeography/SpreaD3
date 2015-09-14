@@ -2,9 +2,9 @@ package parsers;
 
 import org.joda.time.LocalDate;
 
-import data.structure.TimeLine;
-import exceptions.AnalysisException;
+import structure.data.TimeLine;
 import utils.Utils;
+import exceptions.AnalysisException;
 
 public class TimeParser {
 

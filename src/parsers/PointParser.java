@@ -3,12 +3,12 @@ package parsers;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import data.structure.Location;
-import data.structure.attributable.Point;
-import exceptions.LocationNotFoundException;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
+import structure.data.Location;
+import structure.data.attributable.Point;
 import utils.Utils;
+import exceptions.LocationNotFoundException;
 
 public class PointParser {
 

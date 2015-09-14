@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import data.structure.Attribute;
-import data.structure.Location;
-import data.structure.attributable.Line;
-import data.structure.attributable.Point;
-import exceptions.AnalysisException;
-import exceptions.LocationNotFoundException;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
+import structure.data.Attribute;
+import structure.data.Location;
+import structure.data.attributable.Line;
+import structure.data.attributable.Point;
 import utils.Utils;
+import exceptions.AnalysisException;
+import exceptions.LocationNotFoundException;
 
 public class DiscreteTreeParser {
 

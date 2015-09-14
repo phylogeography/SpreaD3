@@ -9,17 +9,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import data.SpreadData;
-import exceptions.AnalysisException;
-import exceptions.ArgumentException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
-import exceptions.MissingAttributeException;
 import jebl.evolution.io.ImportException;
-import kmlframework.kml.KmlException;
 import parsers.DiscreteSpreadDataParser;
 import settings.Settings;
 import settings.parsing.BayesFactorsSettings;
@@ -29,8 +19,17 @@ import settings.parsing.TimeSlicerSettings;
 import settings.reading.JsonReaderSettings;
 import settings.rendering.GeoJSONRendererSettings;
 import settings.rendering.KmlRendererSettings;
+import structure.data.SpreadData;
 import utils.Arguments;
 import utils.Utils;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import exceptions.AnalysisException;
+import exceptions.ArgumentException;
+import exceptions.IllegalCharacterException;
+import exceptions.LocationNotFoundException;
 
 public class Spread2ConsoleApp {
 
@@ -66,9 +65,10 @@ public class Spread2ConsoleApp {
 	private static final String LOG = "log";
 	private static final String BURNIN = "burnin";
 	private static final String LOCATION_TRAIT = "locationTrait";
-	private static final String TRAITS = "traits";
+//	private static final String TRAITS = "traits";
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
+	private static final String MAP = "map";
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
 	private static final String MRSD = "mrsd";
@@ -166,7 +166,10 @@ public class Spread2ConsoleApp {
 				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
+				new Arguments.StringOption(MAP, "", "geojson file name"),		
+						
+						
+//				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 
 				new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
@@ -201,7 +204,7 @@ public class Spread2ConsoleApp {
 				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
+//				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 
 				new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
@@ -217,7 +220,7 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(SLICE_HEIGHTS, "", "slice heights file name"),
 
-				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
+//				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
 
 				// new Arguments.StringOption(LOCATION_TRAIT, "",
 				// "location trait name"),
@@ -535,11 +538,17 @@ public class Spread2ConsoleApp {
 						settings.discreteTreeSettings.timescaleMultiplier = args1.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
-					if (args1.hasOption(TRAITS)) {
-
-						settings.discreteTreeSettings.traits = args1.getStringArrayOption(TRAITS);
-
-					} // END: option check
+					
+					if (args1.hasOption(MAP)) {
+						
+						settings.discreteTreeSettings.map = args1.getStringOption(MAP);
+					}
+					
+//					if (args1.hasOption(TRAITS)) {
+//
+//						settings.discreteTreeSettings.traits = args1.getStringArrayOption(TRAITS);
+//
+//					} // END: option check
 
 					if (args1.hasOption(OUTPUT)) {
 
@@ -704,9 +713,9 @@ public class Spread2ConsoleApp {
 						settings.continuousTreeSettings.timescaleMultiplier = args3.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
-					if (args3.hasOption(TRAITS)) {
-						settings.continuousTreeSettings.traits = args3.getStringArrayOption(TRAITS);
-					}
+//					if (args3.hasOption(TRAITS)) {
+//						settings.continuousTreeSettings.traits = args3.getStringArrayOption(TRAITS);
+//					}
 
 					if (args3.hasOption(OUTPUT)) {
 						settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
@@ -801,15 +810,15 @@ public class Spread2ConsoleApp {
 
 					} // END: option check
 
-					if (args4.hasOption(TRAITS)) {
-
-						settings.timeSlicerSettings.traits = args4.getStringArrayOption(TRAITS);
-
-					} else {
-
-						throw new ArgumentException("Required argument " + LOCATION_TRAIT + " is missing.");
-
-					} // END: option check
+//					if (args4.hasOption(TRAITS)) {
+//
+//						settings.timeSlicerSettings.traits = args4.getStringArrayOption(TRAITS);
+//
+//					} else {
+//
+//						throw new ArgumentException("Required argument " + LOCATION_TRAIT + " is missing.");
+//
+//					} // END: option check
 
 					if (args4.hasOption(INTERVALS)) {
 						settings.timeSlicerSettings.intervals = args4.getIntegerOption(INTERVALS);

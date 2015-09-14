@@ -2,23 +2,22 @@ package parsers;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Set;
 
-import data.SpreadData;
-import data.structure.Attribute;
-import data.structure.Layer;
-import data.structure.Location;
-import data.structure.TimeLine;
-import data.structure.attributable.Area;
-import data.structure.attributable.Line;
-import data.structure.attributable.Point;
-import exceptions.AnalysisException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
 import settings.parsing.DiscreteTreeSettings;
+import structure.data.Attribute;
+import structure.data.Layer;
+import structure.data.Location;
+import structure.data.SpreadData;
+import structure.data.TimeLine;
+import structure.data.attributable.Area;
+import structure.data.attributable.Line;
+import structure.data.attributable.Point;
 import utils.Utils;
+import exceptions.AnalysisException;
+import exceptions.IllegalCharacterException;
+import exceptions.LocationNotFoundException;
 
 public class DiscreteSpreadDataParser {
 

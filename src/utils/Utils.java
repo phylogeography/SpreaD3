@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import data.structure.primitive.Coordinate;
-
 import java.util.Random;
 
 import jebl.evolution.graphs.Node;
@@ -18,6 +15,7 @@ import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NexusImporter;
 import jebl.evolution.io.TreeImporter;
 import jebl.evolution.trees.RootedTree;
+import structure.data.primitive.Coordinate;
 import exceptions.AnalysisException;
 
 public class Utils {
