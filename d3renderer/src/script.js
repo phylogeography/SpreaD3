@@ -48,6 +48,72 @@ function move() {
 
 }// END: move
 
+function initializeLines(layers) {
+
+    // ---DATA LAYER---//
+
+    layers.forEach(function(layer) {
+
+        var type = layer.type
+        if (type == DATA) {
+
+            points = layer.points;
+            lines = layer.lines;
+            generateLines(lines, points);
+
+        }
+
+    });
+
+}
+
+function initializeTimeSlider(timeSlider) {
+
+    // time slider listener
+    timeSlider.on('slide', function(evt, value) {
+
+        var currentDate = timeScale.invert(timeScale(value));
+        currentDateDisplay.text(dateFormat(currentDate));
+
+        // TODO: hook up slider and offsets for travelling paths animation
+        d3.selectAll(".line")[0]
+            .forEach(function(line) {
+
+                var linePath = d3.select(line)
+                var totalLength = linePath.node().getTotalLength();
+
+                var lineStartDate = new Date(
+                    linePath.node().attributes.startTime.value);
+                var lineEndDate = new Date(
+                    linePath.node().attributes.endTime.value);
+
+                if (lineEndDate <= value) {
+
+                    linePath.attr("stroke-dasharray",
+                        totalLength + " " + totalLength) //
+                        .attr("stroke-dashoffset", totalLength) //
+                        .attr("opacity", 0)//
+                        .transition() //
+                        .duration(750) //
+                        .ease("linear") //
+                        .attr("stroke-dashoffset", 0) //
+                        .attr("opacity", 1);
+
+                } else {
+
+                    linePath.attr("stroke-dasharray",
+                        totalLength + " " + totalLength) //
+                        .attr("stroke-dashoffset", totalLength) //
+                        .attr("opacity", 0);
+
+                }// END: date check
+
+            });// END: filter
+
+    });// END: slide
+
+}
+
 // /////////////////
 // ---RENDERING---//
 // /////////////////
@@ -126,86 +192,19 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 			generateTopoLayer(topo);
 //			mapRendered = true;
 
-            // ---DATA LAYER---//
-
-            layers.forEach(function(layer) {
-
-                var type = layer.type
-                if (type == DATA) {
-
-                    points = layer.points;
-                    lines = layer.lines;
-                    generateLines(lines, points);
-
-                }
-
-            });
+            initializeLines(layers);
+            initializeTimeSlider(timeSlider);
 
 		};
 
 	} else {
 
-        // ---DATA LAYER---//
-
-        layers.forEach(function(layer) {
-
-            var type = layer.type
-            if (type == DATA) {
-
-                points = layer.points;
-                lines = layer.lines;
-                generateLines(lines, points);
-
-            }
-
-        });
+        initializeLines(layers);
+        initializeTimeSlider(timeSlider);
 
     }// END: mapRendered check
 
 	// ---LISTENERS---//
-
-	// time slider listener
-	timeSlider.on('slide', function(evt, value) {
-
-		var currentDate = timeScale.invert(timeScale(value));
-		currentDateDisplay.text(dateFormat(currentDate));
-
-		// TODO: hook up slider and offsets for travelling paths animation
-		d3.selectAll(".line")[0]
-				.forEach(function(line) {
-
-					var linePath = d3.select(line)
-					var totalLength = linePath.node().getTotalLength();
-
-					var lineStartDate = new Date(
-							linePath.node().attributes.startTime.value);
-					var lineEndDate = new Date(
-							linePath.node().attributes.endTime.value);
-
-					if (lineEndDate <= value) {
-
-						linePath.attr("stroke-dasharray",
-								totalLength + " " + totalLength) //
-						.attr("stroke-dashoffset", totalLength) //
-						.attr("opacity", 0)//
-						.transition() //
-						.duration(750) //
-						.ease("linear") //
-						.attr("stroke-dashoffset", 0) //
-						.attr("opacity", 1);
-
-					} else {
-
-						linePath.attr("stroke-dasharray",
-								totalLength + " " + totalLength) //
-						.attr("stroke-dashoffset", totalLength) //
-						.attr("opacity", 0);
-
-					}// END: date check
-
-				});// END: filter
-
-	});// END: slide
-
+        
 } // END: function
 );
