@@ -48,7 +48,7 @@ function move() {
 
 }// END: move
 
-function initializeLines(layers) {
+function initializeLayers(layers) {
 
     // ---DATA LAYER---//
 
@@ -65,7 +65,7 @@ function initializeLines(layers) {
 
     });
 
-}
+}//END: initializeLayers
 
 function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat) {
 
@@ -197,15 +197,18 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	});
 
+	// if no geojson layer render world map
 	if (!mapRendered) {
 
-        function readynow(error, topo) {
+        function readynow(error, world) {
 
-            generateTopoLayer(topo);
+        	generateWorldLayer(world)
 //			mapRendered = true;
 
-            initializeLines(layers);
+    		// ---DATA LAYERS---//
+            
             initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat);
+            initializeLayers(layers);
 
         };
 
@@ -215,12 +218,13 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	} else {
 
-        initializeLines(layers);
+		// ---DATA LAYERS---//
+		
         initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat);
+    	initializeLayers(layers);
 
     }// END: mapRendered check
 
-	// ---LISTENERS---//
 
 } // END: function
 );
