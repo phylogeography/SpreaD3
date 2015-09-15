@@ -67,7 +67,7 @@ var pointsLayer = g.append("g");
 var areasLayer = g.append("g");
 var linesLayer = g.append("g");
 
-//var projection;
+// var projection;
 var projection;// = d3.geo.mercator();
 
 var doneOnce = false;
@@ -107,9 +107,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 		var type = layer.type
 		if (type == MAP) {
 
-//			var topo = layer.geojson;
-//			generateTopoLayer(topo);
-//			mapRendered = true;
+			var topo = layer.geojson;
+			generateTopoLayer(topo);
+			mapRendered = true;
 
 		}
 
@@ -117,50 +117,49 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	if (!mapRendered) {
 
-        queue()
-            .defer(d3.json, "data/world.geojson")
-            .await(ready);
+		queue().defer(d3.json, "data/world.geojson").await(ready);
 
 		function ready(error, topo) {
 
 			generateTopoLayer(topo);
-//			mapRendered = true;
+			// mapRendered = true;
 
-            // ---DATA LAYER---//
+			// ---DATA LAYER---//
 
-            layers.forEach(function(layer) {
+			layers.forEach(function(layer) {
 
-                var type = layer.type
-                if (type == DATA) {
+				var type = layer.type
+				if (type == DATA) {
 
-                    points = layer.points;
-                    lines = layer.lines;
-                    generateLines(lines, points);
+					points = layer.points;
+					lines = layer.lines;
+					generateLines(lines, points);
 
-                }
+				}
 
-            });
+			});
 
-		};
+		}
+		;
 
 	} else {
 
-        // ---DATA LAYER---//
+		// ---DATA LAYER---//
 
-        layers.forEach(function(layer) {
+		layers.forEach(function(layer) {
 
-            var type = layer.type
-            if (type == DATA) {
+			var type = layer.type
+			if (type == DATA) {
 
-                points = layer.points;
-                lines = layer.lines;
-                generateLines(lines, points);
+				points = layer.points;
+				lines = layer.lines;
+				generateLines(lines, points);
 
-            }
+			}
 
-        });
+		});
 
-    }// END: mapRendered check
+	}// END: mapRendered check
 
 	// ---LISTENERS---//
 
@@ -182,26 +181,41 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 					var lineEndDate = new Date(
 							linePath.node().attributes.endTime.value);
 
-					if (lineEndDate <= value) {
+					if (lineStartDate <= value && value <= lineEndDate) {// painting
 
-						linePath.attr("stroke-dasharray",
-								totalLength + " " + totalLength) //
-						.attr("stroke-dashoffset", totalLength) //
-						.attr("opacity", 0)//
+						var duration = lineEndDate - lineStartDate;
+						var timePassed = value - lineStartDate;
+
+						var offset = map(timePassed, 0, duration, 0,
+								totalLength);
+						offset = totalLength - offset;
+
+						linePath //
 						.transition() //
 						.duration(750) //
 						.ease("linear") //
-						.attr("stroke-dashoffset", 0) //
+						.attr("stroke-dashoffset", offset) //
 						.attr("opacity", 1);
 
-					} else {
+					} else if (lineStartDate > value) { // not yet
 
 						linePath.attr("stroke-dasharray",
 								totalLength + " " + totalLength) //
 						.attr("stroke-dashoffset", totalLength) //
 						.attr("opacity", 0);
 
-					}// END: date check
+					} else if (lineEndDate < value) { // already painted
+
+						linePath.attr("stroke-dasharray",
+								totalLength + " " + totalLength) //
+						.attr("stroke-dashoffset", 0) //
+						.attr("opacity", 1);
+
+					} else { // sth went wrong
+
+						console.log("FUBAR");
+
+					}// END: time check
 
 				});// END: filter
 

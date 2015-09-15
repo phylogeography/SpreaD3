@@ -17,6 +17,27 @@ var DATA = "data";
 // ---FUNCTIONS---//
 // /////////////////
 
+function map(value, fromLow, fromHigh, toLow, toHigh) {
+	/**
+	 * maps a single value from its range into another interval
+	 * 
+	 * @param value -
+	 *            value to be mapped
+	 * @param fromLow -
+	 *            range of value
+	 * @param fromHigh -
+	 *            range of value
+	 * @param toLow -
+	 *            interval
+	 * @param toHigh -
+	 *            interval
+	 * @return the mapped value
+	 */
+
+	return (toLow + (toHigh - toLow)
+			* ((value - fromLow) / (fromHigh - fromLow)));
+}// END: map
+
 function isNumeric(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }// END: isNumeric
