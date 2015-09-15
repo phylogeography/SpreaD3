@@ -2,6 +2,7 @@ EBOV/
 bin/
 classes/
 dist/
+other/
 test.json
 test.kml
 data/annotatedTreeReader.R

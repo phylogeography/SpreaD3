@@ -151,7 +151,7 @@ var linesLayer = g.append("g");
 //var projection;
 var projection;// = d3.geo.mercator();
 
-var doneOnce = false;
+var playing = false;
 
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 
@@ -172,6 +172,26 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
+	
+	// TODO: play/pause button
+	var playPauseButton = d3.select('#playPause').attr("class", "playPause") .on("click", function() {
+		
+		console.log("click!");
+		
+		 if (playing) {
+			 
+			 playing = false;
+			 playPauseButton.classed("playing", playing);
+		 } else {
+			 
+			 
+			 playing = true;
+			 playPauseButton.classed("playing", playing);
+		 }//END: playing check
+		
+	});
+	
+	
 	// ---ATTRIBUTES---//
 
 	attributes = json.uniqueAttributes;
@@ -189,9 +209,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 		var type = layer.type
 		if (type == MAP) {
 
-//			var topo = layer.geojson;
-//			generateTopoLayer(topo);
-//			mapRendered = true;
+			var topo = layer.geojson;
+			generateTopoLayer(topo);
+			mapRendered = true;
 
 		}
 

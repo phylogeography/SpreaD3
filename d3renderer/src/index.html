@@ -18,7 +18,7 @@
 <script src="http://d3js.org/queue.v1.min.js"></script>
 
 
-    <!-- sources -->
+<!-- sources -->
 <script type="text/javascript" src=utils.js></script>
 <script type="text/javascript" src="topo.js"></script>
 <script type="text/javascript" src="panels.js"></script>
@@ -56,14 +56,40 @@
 	float: left;
 }
 
+/* #wrapper { */
+/* 	width: 100%; */
+/* 	margin-left: auto; */
+/* 	margin-right: auto; */
+/* } */
+.playPause {
+	float: left;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #CCCCCC;
+	border-radius: 5px;
+	width: 40px;
+	height: 40px;
+	/* 	position: absolute; */
+	background: url('img/play.png');
+}
+
+#timeSlider {
+	margin-left: 60px;
+	margin-right: 5px;
+}
+
+.playPause.playing {
+	background: url('img/pause.png');
+}
+
 /* styling for collapsible panels */
-.panel,.panelcollapsed {
+.panel, .panelcollapsed {
 	margin-top: 5px;
 	margin-right: 5px;
 }
 
 /* panel heading */
-.panel h2,.panelcollapsed h2 {
+.panel h2, .panelcollapsed h2 {
 	font-size: 14px;
 	font-weight: 300;
 	margin: 0px;
@@ -83,7 +109,7 @@
 }
 
 /* panel heading on rollover */
-.panel h2:hover,.panelcollapsed h2:hover {
+.panel h2:hover, .panelcollapsed h2:hover {
 	background-color: #F5F7F9;
 }
 
@@ -122,46 +148,51 @@
 
 <body>
 
-    <div class="all" style="display: block;">
+	<div class="all" style="display: block;">
 
-        <div id="controls">
-            <h2>
-                Current date: <span id="currentDate"> 0 </span>
-            </h2>
-            <div id="timeSlider"></div>
-        </div>
-
-        <div class="selectorsANDcontainer" style="display: inline;">
-
-            <div class="selectors" style="display: inline;">
-
-                <!-- SELECTORS -->
-
-                <div class="panel">
-                    <h2>Line color attribute</h2>
-                    <div class="panelcontent">
-                        <select id="linecolor">
-                            <!-- 						<option >host1</option> -->
-                            <!-- 						<option >host2</option> -->
-                        </select>
-                        <div id="linesColorLegend" class="legend"></div>
+		<div id="controls">
+			<h2>
+				Current date: <span id="currentDate"> 0 </span>
+			</h2>
+			<!-- 			<div id="wrapper" style="display: block;"> -->
+			<div>
+				<div id="playPause"></div>
+				<div id="timeSlider"></div>
+			</div>
+		</div>
 
 
-                    </div>
-                </div>
+		<div class="selectorsANDcontainer" style="display: block;">
 
-            </div>
-            <!-- END: selectors-->
+			<div class="selectors" style="display: lock;">
 
-            <div id="container"></div>
+				<!-- SELECTORS -->
 
-        </div>
-        <!-- END: selectorsANDcontainer-->
+				<div class="panel">
+					<h2>Line color attribute</h2>
+					<div class="panelcontent">
+						<select id="linecolor">
+							<!-- 						<option >host1</option> -->
+							<!-- 						<option >host2</option> -->
+						</select>
+						<div id="linesColorLegend" class="legend"></div>
 
-    </div>
-    <!-- END: all-->
 
-    <script type="text/javascript" src="script.js"></script>
+					</div>
+				</div>
+
+			</div>
+			<!-- END: selectors-->
+
+			<div id="container"></div>
+
+		</div>
+		<!-- END: selectorsANDcontainer-->
+
+	</div>
+	<!-- END: all-->
+
+	<script type="text/javascript" src="script.js"></script>
 
 </body>
 </html>
