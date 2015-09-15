@@ -69,158 +69,6 @@ function initializeLines(layers) {
 
 function initializeTimeSlider(timeSlider) {
 
-    // time slider listener
-    timeSlider.on('slide', function(evt, value) {
-
-        var currentDate = timeScale.invert(timeScale(value));
-        currentDateDisplay.text(dateFormat(currentDate));
-
-        // TODO: hook up slider and offsets for travelling paths animation
-        d3.selectAll(".line")[0]
-            .forEach(function(line) {
-
-                var linePath = d3.select(line)
-                var totalLength = linePath.node().getTotalLength();
-
-                var lineStartDate = new Date(
-                    linePath.node().attributes.startTime.value);
-                var lineEndDate = new Date(
-                    linePath.node().attributes.endTime.value);
-
-                if (lineEndDate <= value) {
-
-                    linePath.attr("stroke-dasharray",
-                        totalLength + " " + totalLength) //
-                        .attr("stroke-dashoffset", totalLength) //
-                        .attr("opacity", 0)//
-                        .transition() //
-                        .duration(750) //
-                        .ease("linear") //
-                        .attr("stroke-dashoffset", 0) //
-                        .attr("opacity", 1);
-
-                } else {
-
-                    linePath.attr("stroke-dasharray",
-                        totalLength + " " + totalLength) //
-                        .attr("stroke-dashoffset", totalLength) //
-                        .attr("opacity", 0);
-
-                }// END: date check
-
-            });// END: filter
-
-    });// END: slide
-
-}
-
-// /////////////////
-// ---RENDERING---//
-// /////////////////
-
-// ---DRAW MAP BACKGROUND---//
-
-var zoom = d3.behavior.zoom().scaleExtent([ 1, 9 ]).on("zoom", move);
-
-var svg = d3.select("#container").append('svg').attr('width', width).attr(
-		'height', height).call(zoom);
-
-var g = svg.append("g");
-var equatorLayer = g.append("g");
-var topoLayer = g.append("g");
-
-var pointsLayer = g.append("g");
-var areasLayer = g.append("g");
-var linesLayer = g.append("g");
-
-//var projection;
-var projection;// = d3.geo.mercator();
-
-var doneOnce = false;
-
-d3.json("data/ebov_discrete.json", function ready(error, json) {
-
-	// -- TIME-- //
-
-	var dateFormat = d3.time.format("%Y-%m-%d");
-	var timeLine = json.timeLine;
-	var startDate = new Date(timeLine.startTime);
-	var endDate = new Date(timeLine.endTime);
-
-	// initial value
-	var currentDateDisplay = d3.select('#currentDate').text(
-			dateFormat(startDate));
-
-	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-			[ 0, 1 ]);
-	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-	d3.select('#timeSlider').call(timeSlider);
-
-	// ---ATTRIBUTES---//
-
-	attributes = json.uniqueAttributes;
-	populatePanels(attributes);
-
-	// ---LAYERS---//
-
-	var layers = json.layers;
-	var mapRendered = false;
-
-	// ---MAP LAYER---//
-
-	layers.forEach(function(layer) {
-
-		var type = layer.type
-		if (type == MAP) {
-
-			var topo = layer.geojson;
-			generateTopoLayer(topo);
-			mapRendered = true;
-
-		}
-
-	});
-
-	if (!mapRendered) {
-
-        queue()
-            .defer(d3.json, "data/world.geojson")
-            .await(ready);
-
-		function ready(error, topo) {
-
-			generateTopoLayer(topo);
-//			mapRendered = true;
-
-     
-            initializeTimeSlider(timeSlider);
-       initializeLines(layers);
-		};
-
-	} else {
-
-        initializeLines(layers);
-        initializeTimeSlider(timeSlider);
-
-    }// END: mapRendered check
-
-	// ---DATA LAYER---//
-
-	layers.forEach(function(layer) {
-
-		var type = layer.type
-		if (type == DATA) {
-
-			points = layer.points;
-			lines = layer.lines;
-			generateLines(lines, points);
-
-		}
-
-	});
-
-	// ---LISTENERS---//
-
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
@@ -278,5 +126,101 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 				});// END: filter
 
 	});// END: slide
+
+}
+
+// /////////////////
+// ---RENDERING---//
+// /////////////////
+
+// ---DRAW MAP BACKGROUND---//
+
+var zoom = d3.behavior.zoom().scaleExtent([ 1, 9 ]).on("zoom", move);
+
+var svg = d3.select("#container").append('svg').attr('width', width).attr(
+		'height', height).call(zoom);
+
+var g = svg.append("g");
+var equatorLayer = g.append("g");
+var topoLayer = g.append("g");
+
+var pointsLayer = g.append("g");
+var areasLayer = g.append("g");
+var linesLayer = g.append("g");
+
+//var projection;
+var projection;// = d3.geo.mercator();
+
+var doneOnce = false;
+
+d3.json("data/ebov_discrete.json", function ready(error, json) {
+
+	// -- TIME-- //
+
+	var dateFormat = d3.time.format("%Y-%m-%d");
+	var timeLine = json.timeLine;
+        
+	var startDate = new Date(timeLine.startTime);
+	var endDate = new Date(timeLine.endTime);
+
+	// initial value
+	var currentDateDisplay = d3.select('#currentDate').text(
+			dateFormat(startDate));
+
+	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
+			[ 0, 1 ]);
+	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+	d3.select('#timeSlider').call(timeSlider);
+
+	// ---ATTRIBUTES---//
+
+	attributes = json.uniqueAttributes;
+	populatePanels(attributes);
+
+	// ---LAYERS---//
+
+	var layers = json.layers;
+	var mapRendered = false;
+
+	// ---MAP LAYER---//
+
+	layers.forEach(function(layer) {
+
+		var type = layer.type
+		if (type == MAP) {
+
+//			var topo = layer.geojson;
+//			generateTopoLayer(topo);
+//			mapRendered = true;
+
+		}
+
+	});
+
+	if (!mapRendered) {
+
+        function readynow(error, topo) {
+
+            generateTopoLayer(topo);
+//			mapRendered = true;
+
+            initializeLines(layers);
+            initializeTimeSlider(timeSlider);
+
+        };
+
+        queue()
+            .defer(d3.json, "data/world.geojson")
+            .await(readynow);
+
+	} else {
+
+        initializeLines(layers);
+        initializeTimeSlider(timeSlider);
+
+    }// END: mapRendered check
+
+	// ---LISTENERS---//
+
 } // END: function
 );
