@@ -144,6 +144,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
+        
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
 
@@ -183,19 +184,19 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	if (!mapRendered) {
 
-        queue()
-            .defer(d3.json, "data/world.geojson")
-            .await(ready);
+        function readynow(error, topo) {
 
-		function ready(error, topo) {
-
-			generateTopoLayer(topo);
+            generateTopoLayer(topo);
 //			mapRendered = true;
 
             initializeLines(layers);
             initializeTimeSlider(timeSlider);
 
-		};
+        };
+
+        queue()
+            .defer(d3.json, "data/world.geojson")
+            .await(readynow);
 
 	} else {
 
@@ -205,6 +206,6 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
     }// END: mapRendered check
 
 	// ---LISTENERS---//
-        
+
 } // END: function
 );
