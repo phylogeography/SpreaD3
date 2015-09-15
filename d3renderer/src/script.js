@@ -67,7 +67,7 @@ function initializeLines(layers) {
 
 }
 
-function initializeTimeSlider(timeSlider) {
+function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat) {
 
     // time slider listener
     timeSlider.on('slide', function(evt, value) {
@@ -144,7 +144,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
-        
+
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
 
@@ -190,7 +190,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 //			mapRendered = true;
 
             initializeLines(layers);
-            initializeTimeSlider(timeSlider);
+            initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat);
 
         };
 
@@ -201,7 +201,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	} else {
 
         initializeLines(layers);
-        initializeTimeSlider(timeSlider);
+        initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat);
 
     }// END: mapRendered check
 
