@@ -50,32 +50,34 @@ function move() {
 
 function initializeLayers(layers) {
 
-    // ---DATA LAYER---//
+	// ---DATA LAYER---//
 
-    layers.forEach(function(layer) {
+	layers.forEach(function(layer) {
 
-        var type = layer.type
-        if (type == DATA) {
+		var type = layer.type
+		if (type == DATA) {
 
-            points = layer.points;
-            lines = layer.lines;
-            generateLines(lines, points);
+			points = layer.points;
+			lines = layer.lines;
+			generateLines(lines, points);
 
-        }
+		}
 
-    });
+	});
 
-}//END: initializeLayers
+}// END: initializeLayers
 
-function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat) {
+function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+		dateFormat) {
 
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
+		// console.log(value);
+
 		var currentDate = timeScale.invert(timeScale(value));
 		currentDateDisplay.text(dateFormat(currentDate));
 
-		// TODO: hook up slider and offsets for travelling paths animation
 		d3.selectAll(".line")[0]
 				.forEach(function(line) {
 
@@ -127,6 +129,20 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFor
 
 	});// END: slide
 
+}// END: initializeTimeSlider
+
+// TODO: not registered with listener
+var interval = 86400000;
+var tick = 1;
+function testTimer() {
+
+	var sliderValue = sliderStartValue + tick * interval;
+
+	timeSlider.value(sliderValue);
+	tick++;
+
+	// console.log(sliderValue);
+
 }
 
 // /////////////////
@@ -137,6 +153,7 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFor
 
 var zoom = d3.behavior.zoom().scaleExtent([ 1, 9 ]).on("zoom", move);
 
+// layers
 var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
 
@@ -148,10 +165,15 @@ var pointsLayer = g.append("g");
 var areasLayer = g.append("g");
 var linesLayer = g.append("g");
 
-//var projection;
-var projection;// = d3.geo.mercator();
+var projection;
 
+// time slider
 var playing = false;
+var processID;
+var timeSlider;
+var sliderStartValue;
+// var interval;
+// var startDate;
 
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 
@@ -163,35 +185,43 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
 
+	sliderStartValue = Date.parse(timeLine.startTime);
+
 	// initial value
 	var currentDateDisplay = d3.select('#currentDate').text(
 			dateFormat(startDate));
 
 	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
 			[ 0, 1 ]);
-	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+	timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
-	
-	// TODO: play/pause button
-	var playPauseButton = d3.select('#playPause').attr("class", "playPause") .on("click", function() {
-		
-		console.log("click!");
-		
-		 if (playing) {
-			 
-			 playing = false;
-			 playPauseButton.classed("playing", playing);
-		 } else {
-			 
-			 
-			 playing = true;
-			 playPauseButton.classed("playing", playing);
-		 }//END: playing check
-		
-	});
-	
-	
+	// TODO: play/pause button for timeSlider
+	var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+			.on("click", function() {
+
+				// sliderValue = sliderValue + 1;// interval;
+				// timeSlider.value(sliderValue);
+				// timeSlider.value(1386612676112);
+
+				if (playing) {
+					playing = false;
+					playPauseButton.classed("playing", playing);
+
+					clearInterval(processID);
+
+				} else {
+					playing = true;
+					playPauseButton.classed("playing", playing);
+
+					processID = setInterval(function() {
+						testTimer();
+					}, 100);
+
+				}// END: playing check
+
+			});
+
 	// ---ATTRIBUTES---//
 
 	attributes = json.uniqueAttributes;
@@ -220,31 +250,31 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	// if no geojson layer render world map
 	if (!mapRendered) {
 
-        function readynow(error, world) {
+		function readynow(error, world) {
 
-        	generateWorldLayer(world)
-//			mapRendered = true;
+			generateWorldLayer(world)
+			// mapRendered = true;
 
-    		// ---DATA LAYERS---//
-            
-            initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat);
-            initializeLayers(layers);
+			// ---DATA LAYERS---//
 
-        };
+			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+					dateFormat);
+			initializeLayers(layers);
 
-        queue()
-            .defer(d3.json, "data/world.geojson")
-            .await(readynow);
+		}
+		;
+
+		queue().defer(d3.json, "data/world.geojson").await(readynow);
 
 	} else {
 
 		// ---DATA LAYERS---//
-		
-        initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat);
-    	initializeLayers(layers);
 
-    }// END: mapRendered check
+		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+				dateFormat);
+		initializeLayers(layers);
 
+	}// END: mapRendered check
 
 } // END: function
 );
