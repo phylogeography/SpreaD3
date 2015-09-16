@@ -75,7 +75,8 @@ function paintFrame(value, timeScale, currentDateDisplay, dateFormat) {
 	d3.selectAll(".line")[0]
 			.forEach(function(line) {
 
-				var linePath = d3.select(line)
+				var linePath = d3.select(line);
+
 				var totalLength = linePath.node().getTotalLength();
 
 				var lineStartDate = new Date(
@@ -252,10 +253,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 								playing = true;
 								playPauseButton.classed("playing", playing);
 
-//								processID = setInterval(function() {
-								processID = d3.timer(function() {
+								processID = setInterval(function() {
 								
-									var sliderValue = currentSliderValue + sliderInterval;
+									var sliderValue = currentSliderValue + 2.0*sliderInterval;
 									if (sliderValue > sliderEndValue) {
 										sliderValue = sliderStartValue;
 									}
@@ -266,7 +266,11 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 									currentSliderValue = sliderValue;
 
-								}, 100);
+                                    //GB: I've doubled the number below to give the loop more time to draw everything
+                                    //this avoids the flickering of some lines, which I think happens because they
+                                    //have to be drawn almost simultaneously for 2 different values of the slider
+                                    //I've double sliderInterval accordingly to keep the impression of speed
+								}, 2.0*100);
 
 							}// END: playing check
 

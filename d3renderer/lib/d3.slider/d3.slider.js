@@ -174,7 +174,7 @@ return function module() {
         if (orientation === "horizontal") {
 
         	var marginHack = 10;
-          svg.style("margin-left", -marginHack + "px");
+          svg.style("margin-left", -margin + "px");
 
           svg.attr({
             width: sliderLength + margin * 2,
