@@ -67,10 +67,8 @@ function initializeLayers(layers) {
 
 }// END: initializeLayers
 
+function paintFrame(value, timeScale, currentDateDisplay, dateFormat) {
 
-function paintFrame(value, timeScale, currentDateDisplay,
-		dateFormat) {
-	
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
 
@@ -90,8 +88,7 @@ function paintFrame(value, timeScale, currentDateDisplay,
 					var duration = lineEndDate - lineStartDate;
 					var timePassed = value - lineStartDate;
 
-					var offset = map(timePassed, 0, duration, 0,
-							totalLength);
+					var offset = map(timePassed, 0, duration, 0, totalLength);
 					offset = totalLength - offset;
 
 					linePath //
@@ -122,10 +119,8 @@ function paintFrame(value, timeScale, currentDateDisplay,
 				}// END: time check
 
 			});// END: filter
-	
-}//END: paintFrame
 
-
+}// END: paintFrame
 
 function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 		dateFormat) {
@@ -133,17 +128,12 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
-		paintFrame(value, timeScale, currentDateDisplay,
-				dateFormat);
-
+		paintFrame(value, timeScale, currentDateDisplay, dateFormat);
 		currentSliderValue = value;
-	
 
 	});// END: slide
 
 }// END: initializeTimeSlider
-
-
 
 // /////////////////
 // ---RENDERING---//
@@ -170,18 +160,9 @@ var projection;
 // time slider
 var playing = false;
 var processID;
-
-
 var currentSliderValue;
-
-
-//var timeSlider;
-//var sliderStartValue;
-//var sliderEndValue;
-
-var interval = 86400000;
-var tick = 1;
-
+var sliderInterval = 86400000;
+//var tick = 1;
 
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 
@@ -196,8 +177,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	var sliderStartValue = Date.parse(timeLine.startTime);
 	var sliderEndValue = Date.parse(timeLine.endTime);
 	currentSliderValue = sliderStartValue;
-	
-	
+
 	// initial value
 	var currentDateDisplay = d3.select('#currentDate').text(
 			dateFormat(startDate));
@@ -206,7 +186,6 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 			[ 0, 1 ]);
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
-
 
 	// ---ATTRIBUTES---//
 
@@ -254,57 +233,50 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	} else {
 
 		// ---TIME SLIDER---//
-		
+
 		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 				dateFormat);
-		
-		var playPauseButton = d3.select('#playPause').attr("class", "playPause")
-		.on("click", function() {
 
-//			timeSlider.value(1386612676112);
-			
-			if (playing) {
-				playing = false;
-				playPauseButton.classed("playing", playing);
+		var playPauseButton = d3.select('#playPause')
+				.attr("class", "playPause").on(
+						"click",
+						function() {
 
-				clearInterval(processID);
+							if (playing) {
+								playing = false;
+								playPauseButton.classed("playing", playing);
 
-			} else {
-				playing = true;
-				playPauseButton.classed("playing", playing);
+								clearInterval(processID);
 
-				processID = setInterval(function() {
+							} else {
+								playing = true;
+								playPauseButton.classed("playing", playing);
 
-					var sliderValue = currentSliderValue + tick * interval;
-					if (sliderValue > sliderEndValue) {
-						tick = 1;
-					}
+								processID = setInterval(function() {
 
-					timeSlider.value(sliderValue);
-					paintFrame(sliderValue, timeScale, currentDateDisplay,
-							dateFormat);
-					
-					currentSliderValue = sliderValue;
-					tick++;
-					
-				}, 100);
+									var sliderValue = currentSliderValue + sliderInterval;//tick * interval;
+									if (sliderValue > sliderEndValue) {
+//										tick = 1;
+										sliderValue = sliderStartValue;
+									}
 
-			}// END: playing check
+									timeSlider.value(sliderValue);
+									paintFrame(sliderValue, timeScale,
+											currentDateDisplay, dateFormat);
 
-		});		
-		
-		
+									currentSliderValue = sliderValue;
+//									tick++;
+
+								}, 100);
+
+							}// END: playing check
+
+						});
+
 		// ---DATA LAYERS---//
 
 		initializeLayers(layers);
 
-		
-		///---EXPERIMENTAL---//
-		
-		///---END: EXPERIMENTAL---//	
-		
-		
-		
 	}// END: mapRendered check
 
 } // END: function
