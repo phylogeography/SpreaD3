@@ -252,8 +252,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 								playing = true;
 								playPauseButton.classed("playing", playing);
 
-								processID = setInterval(function() {
-
+//								processID = setInterval(function() {
+								processID = d3.timer(function() {
+								
 									var sliderValue = currentSliderValue + sliderInterval;
 									if (sliderValue > sliderEndValue) {
 										sliderValue = sliderStartValue;
