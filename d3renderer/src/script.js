@@ -93,7 +93,7 @@ function paintFrame(value, timeScale, currentDateDisplay, dateFormat) {
 
 					linePath //
 					.transition() //
-					.duration(750) //
+					.duration(500) //
 					.ease("linear") //
 					.attr("stroke-dashoffset", offset) //
 					.attr("opacity", 1);
@@ -254,9 +254,8 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 								processID = setInterval(function() {
 
-									var sliderValue = currentSliderValue + sliderInterval;//tick * interval;
+									var sliderValue = currentSliderValue + sliderInterval;
 									if (sliderValue > sliderEndValue) {
-//										tick = 1;
 										sliderValue = sliderStartValue;
 									}
 
@@ -265,7 +264,6 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 											currentDateDisplay, dateFormat);
 
 									currentSliderValue = sliderValue;
-//									tick++;
 
 								}, 100);
 

@@ -173,7 +173,8 @@ return function module() {
         // Horizontal axis
         if (orientation === "horizontal") {
 
-          svg.style("margin-left", -margin + "px");
+        	var marginHack = 10;
+          svg.style("margin-left", -marginHack + "px");
 
           svg.attr({
             width: sliderLength + margin * 2,
