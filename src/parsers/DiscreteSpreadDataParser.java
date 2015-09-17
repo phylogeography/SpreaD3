@@ -54,6 +54,9 @@ public class DiscreteSpreadDataParser {
 
 		System.out.println("Parsed time line");
 
+//		TODO
+//		System.exit(-1);
+		
 		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
 				settings.locations, settings.header);
 		locationsList = locationsParser.parseLocations();

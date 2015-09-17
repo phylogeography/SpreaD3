@@ -173,7 +173,7 @@ return function module() {
         // Horizontal axis
         if (orientation === "horizontal") {
 
-        	var marginHack = 10;
+//        	var marginHack = 10;
           svg.style("margin-left", -margin + "px");
 
           svg.attr({
