@@ -72,10 +72,10 @@ public class DiscreteTreeParser {
 			if (!rootedTree.isRoot(node)) {
 
 				// node parsed first
-				
+
 				String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
 				if (nodeState.contains("+")) {
-					String message = "Found tied state " + nodeState ;
+					String message = "Found tied state " + nodeState;
 					nodeState = Utils.breakTiesRandomly(nodeState);
 					message += (" randomly choosing " + nodeState);
 					System.out.println(message);
@@ -86,49 +86,48 @@ public class DiscreteTreeParser {
 				if (locationsList.contains(dummy)) {
 					locationIndex = locationsList.indexOf(dummy);
 				} else {
-					
+
 					String message1 = "Location " + dummy.getId() + " could not be found in the locations file.";
 					String message2 = "Resulting file may be incomplete!";
-					System.out.println(message1 + " " +message2);
+					System.out.println(message1 + " " + message2);
 					continue;
-					
+
 				}
 
 				Location nodeLocation = locationsList.get(locationIndex);
-				
+
 				// parent node parsed second
-				
+
 				Node parentNode = rootedTree.getParent(node);
 
 				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
 				if (parentState.contains("+")) {
-					String message = "Found tied state " + parentState ;
+					String message = "Found tied state " + parentState;
 					parentState = Utils.breakTiesRandomly(parentState);
-					message += (" randomly choosing " + parentState );
+					message += (" randomly choosing " + parentState);
 					System.out.println(message);
 				} // END: tie check
-				
-				
+
 				dummy = new Location(parentState);
-				 locationIndex = Integer.MAX_VALUE;
+				locationIndex = Integer.MAX_VALUE;
 				if (locationsList.contains(dummy)) {
 					locationIndex = locationsList.indexOf(dummy);
 				} else {
 					throw new LocationNotFoundException(dummy, LocationNotFoundException.Type.PARENT);
-//					System.out.println();
-//					continue;
+					// System.out.println();
+					// continue;
 				}
 
 				Location parentLocation = locationsList.get(locationIndex);
-
 
 				if (!parentLocation.equals(nodeLocation)) {
 
 					Point parentPoint = pointsMap.get(parentNode);
 					if (parentPoint == null) {
-						PointParser parentPointParser = new PointParser(index, //
-								// parentState, //
-								parentLocation, parentNode, //
+						PointParser parentPointParser = new PointParser( //
+								index, //
+								parentLocation, //
+								parentNode, //
 								rootedTree, //
 								timescaleMultiplier, //
 								timeParser //
@@ -142,9 +141,10 @@ public class DiscreteTreeParser {
 
 					Point nodePoint = pointsMap.get(node);
 					if (nodePoint == null) {
-						PointParser nodePointParser = new PointParser(index, //
-								// parentState, //
-								nodeLocation, parentNode, //
+						PointParser nodePointParser = new PointParser( //
+								index, //
+								nodeLocation, //
+								parentNode, //
 								rootedTree, //
 								timescaleMultiplier, //
 								timeParser //

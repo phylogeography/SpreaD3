@@ -67,7 +67,32 @@ function initializeLayers(layers) {
 
 }// END: initializeLayers
 
-function paintFrame(value, timeScale, currentDateDisplay, dateFormat) {
+//http://bl.ocks.org/mbostock/3808218
+
+//function update(value, timeScale, currentDateDisplay, dateFormat) {
+//
+//	var currentDate = timeScale.invert(timeScale(value));
+//	currentDateDisplay.text(dateFormat(currentDate));
+//
+//	// data join
+//	var lines = d3.selectAll(".line")[0]
+//			.filter(function(line) {
+//
+//				var linePath = d3.select(line);
+//				var lineStartDate = new Date( linePath.node().attributes.startTime.value);
+//				var lineEndDate = new Date( linePath.node().attributes.endTime.value);
+//
+//				return (lineStartDate <= value && value <= lineEndDate);
+//			});
+//	
+//	
+//	
+//	
+//	console.log(lines);
+//
+//}// END: update
+
+ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
@@ -121,7 +146,7 @@ function paintFrame(value, timeScale, currentDateDisplay, dateFormat) {
 
 			});// END: filter
 
-}// END: paintFrame
+}// END: update
 
 function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 		dateFormat) {
@@ -129,7 +154,7 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
-		paintFrame(value, timeScale, currentDateDisplay, dateFormat);
+		update(value, timeScale, currentDateDisplay, dateFormat);
 		currentSliderValue = value;
 
 	});// END: slide
@@ -237,7 +262,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 				dateFormat);
-
+		// put slider at the end of timeLine, everything painted
+        timeSlider.value(sliderEndValue);
+		
 		var playPauseButton = d3.select('#playPause')
 				.attr("class", "playPause").on(
 						"click",
@@ -261,8 +288,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 									}
 
 									timeSlider.value(sliderValue);
-									paintFrame(sliderValue, timeScale,
-											currentDateDisplay, dateFormat);
+									update(sliderValue, timeScale, currentDateDisplay, dateFormat);
 
 									currentSliderValue = sliderValue;
 
