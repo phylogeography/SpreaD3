@@ -43,13 +43,56 @@ function generateTopoLayer(topo) {
 			}).attr("class", "equator").attr("d", path);
 
 	// add map data
-	topoLayer.append("path") //
-	.datum(topo) //
+//	topoLayer.append("path") //
+//	.datum(topo) //
+//	.attr("class", "topo") //
+//		.attr("fill", function(d,i) {
+//		
+//		console.log("FUBAR");//  .properties.ISO);
+//		
+//		
+//	})
+//	.attr('d', path) //
+//	.style("stroke-width", .5) //
+//
+//	;
+
+//	console.log(topo);
+	
+	var scale = d3.scale.category20().domain(["GIN","SLE","LBR"]);
+	
+	
+	topoLayer. selectAll("path").data(topo.features).enter().append("path")
 	.attr("class", "topo") //
 	.attr('d', path) //
-	.style("stroke-width", .5) //
-	;
+//	.attr("fill", "blue")
+	.attr("fill", function(d,i) {
+		
+var value=d.properties.ISO;
+	
+var color = scale(value) ;
 
+return(color);
+		
+	})
+	.attr("opacity", 0.55)
+	.style("stroke-width", .5) //
+
+	
+	;
+	
+	
+	
+//	topoLayer.append("path") //
+//	.datum(topo) //
+//	.attr("class", "topo") //
+//	.attr('d', path) //
+//	.style("stroke-width", .5) //
+//	;
+
+	
+//	topoLayer.selectAll(path)
+	
 }// END: generateTopoLayer
 
 
@@ -98,7 +141,8 @@ function generateWorldLayer(world) {
 						[ 180, 0 ] ]
 			}).attr("class", "equator").attr("d", path);
 
-	// add map data
+	
+	
 	topoLayer.append("path") //
 	.datum(world) //
 	.attr("class", "topo") //

@@ -173,9 +173,11 @@ var g = svg.append("g");
 var equatorLayer = g.append("g");
 var topoLayer = g.append("g");
 
-var pointsLayer = g.append("g");
-var areasLayer = g.append("g");
+//var pointsLayer = g.append("g");
+//var areasLayer = g.append("g");
 var linesLayer = g.append("g");
+var locationsLayer = g.append("g");
+var labelsLayer = g.append("g");
 
 var projection;
 
@@ -183,12 +185,13 @@ var projection;
 var playing = false;
 var processID;
 var currentSliderValue;
-var sliderInterval = 86400000;
-//var tick = 1;
+var sliderInterval = 86400000 * 2;
+var sliderStartValue;
+var sliderEndValue;
 
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 
-	// -- TIME-- //
+	// -- TIME LINE-- //
 
 	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
@@ -196,9 +199,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
 
-	var sliderStartValue = Date.parse(timeLine.startTime);
-	var sliderEndValue = Date.parse(timeLine.endTime);
-	currentSliderValue = sliderStartValue;
+	 sliderStartValue = Date.parse(timeLine.startTime);
+	 sliderEndValue = Date.parse(timeLine.endTime);
+	 currentSliderValue = sliderStartValue;
 
 	// initial value
 	var currentDateDisplay = d3.select('#currentDate').text(
@@ -214,6 +217,8 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	attributes = json.uniqueAttributes;
 	populatePanels(attributes);
 
+	
+	
 	// ---LAYERS---//
 
 	var layers = json.layers;
@@ -278,7 +283,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 								processID = setInterval(function() {
 								
-									var sliderValue = currentSliderValue + 2.0*sliderInterval;
+									var sliderValue = currentSliderValue + sliderInterval;
 									if (sliderValue > sliderEndValue) {
 										sliderValue = sliderStartValue;
 									}
@@ -292,7 +297,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
                                     //this avoids the flickering of some lines, which I think happens because they
                                     //have to be drawn almost simultaneously for 2 different values of the slider
                                     //I've double sliderInterval accordingly to keep the impression of speed
-								}, 2.0*100);
+								}, 2 * 100);
 
 							}// END: playing check
 
@@ -302,6 +307,19 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 		initializeLayers(layers);
 
+		// ---LOCATIONS---//
+		// TODO
+		var locations = json.locations;
+		generateLocations(locations);
+		generateLabels(locations);
+		
+		
+//		console.log(locations);
+		
+		
+		
+		
+		
 	}// END: mapRendered check
 
 } // END: function
