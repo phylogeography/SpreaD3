@@ -20,8 +20,6 @@ var graticule = d3.geo.graticule();
 
 var attributes;
 var lines;
-// var lineValueMap = [];
-// var lineMinMaxMap = [];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -67,84 +65,82 @@ function initializeLayers(layers) {
 
 }// END: initializeLayers
 
-//http://bl.ocks.org/mbostock/3808218
-
-//function update(value, timeScale, currentDateDisplay, dateFormat) {
-//
-//	var currentDate = timeScale.invert(timeScale(value));
-//	currentDateDisplay.text(dateFormat(currentDate));
-//
-//	// data join
-//	var lines = d3.selectAll(".line")[0]
-//			.filter(function(line) {
-//
-//				var linePath = d3.select(line);
-//				var lineStartDate = new Date( linePath.node().attributes.startTime.value);
-//				var lineEndDate = new Date( linePath.node().attributes.endTime.value);
-//
-//				return (lineStartDate <= value && value <= lineEndDate);
-//			});
-//	
-//	
-//	
-//	
-//	console.log(lines);
-//
-//}// END: update
-
- function update(value, timeScale, currentDateDisplay, dateFormat) {
+function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
 
-	d3.selectAll(".line")[0]
-			.forEach(function(line) {
+	//---select travelling lines---//
+	linesLayer.selectAll("path.line") //
+	.filter(function(d) {
 
-				var linePath = d3.select(line);
+		var linePath = this;
+		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
+		var lineEndDate = Date.parse(linePath.attributes.endTime.value)
 
-				var totalLength = linePath.node().getTotalLength();
+		return (lineStartDate <= value && value <= lineEndDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.attr("stroke-dashoffset", function(d, i) {
+		
+		var linePath = this;
+		var totalLength = linePath.getTotalLength();
+		
+		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
+		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
+		var duration = lineEndDate - lineStartDate;
+		var timePassed = value - lineStartDate;
 
-				var lineStartDate = new Date(
-						linePath.node().attributes.startTime.value);
-				var lineEndDate = new Date(
-						linePath.node().attributes.endTime.value);
+		var offset = totalLength;
+		if(duration == 0) {
+			
+			offset = 0;
+			
+		} else {
+			
+		offset = map(timePassed, 0, duration, 0, totalLength);
+		offset = totalLength - offset;
+		
+		}// END: instantaneous line check
+		
+		return (offset);
+	}) //
+	.attr("opacity", 1)
+	;
+	
+	
+	//---select lines yet to be painted---//
+	linesLayer.selectAll("path.line") //
+	.filter(function(d) {
+		var linePath = this;
+		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
 
-				if (lineStartDate <= value && value <= lineEndDate) {// painting
+		return (lineStartDate > value);
+	}) //
+	.attr("stroke-dashoffset", function(d, i) {
+		var linePath = this;
+		var totalLength = linePath.getTotalLength();
+		
+		return (totalLength);
+	}) //
+	.attr("opacity", 0)
+	;
 
-					var duration = lineEndDate - lineStartDate;
-					var timePassed = value - lineStartDate;
+	
+	//---select lines already painted---//
+	linesLayer.selectAll("path.line") //
+	.filter(function(d) {
+		var linePath = this;
+		var lineEndDate = Date.parse(linePath.attributes.endTime.value)
 
-					var offset = map(timePassed, 0, duration, 0, totalLength);
-					offset = totalLength - offset;
-
-					linePath //
-					.transition() //
-					.duration(500) //
-					.ease("linear") //
-					.attr("stroke-dashoffset", offset) //
-					.attr("opacity", 1);
-
-				} else if (lineStartDate > value) { // not yet
-
-					linePath.attr("stroke-dasharray",
-							totalLength + " " + totalLength) //
-					.attr("stroke-dashoffset", totalLength) //
-					.attr("opacity", 0);
-
-				} else if (lineEndDate < value) { // already painted
-
-					linePath.attr("stroke-dasharray",
-							totalLength + " " + totalLength) //
-					.attr("stroke-dashoffset", 0) //
-					.attr("opacity", 1);
-
-				} else { // sth went wrong
-
-					console.log("FUBAR");
-
-				}// END: time check
-
-			});// END: filter
+		return (lineEndDate < value);
+	}) //
+	.attr("stroke-dashoffset", 0) //
+	.attr("opacity", 1)
+	;
+	
+	
 
 }// END: update
 

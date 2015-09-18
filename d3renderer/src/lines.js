@@ -68,15 +68,31 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("stroke", "rgb(" + 250 + "," + 0 + "," + 0 + ")") //
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
+	.attr("opacity", 1) //
+;
+
+   // select this line path
+	var thisLine = linesLayer.selectAll("path.line").last();
+
+	//---EXPERIMENTAl---//
+	
+		var totalLength = thisLine.node().getTotalLength();
+	
+	// add total length attribute;
+//	thisLine.attr("totalLength", totalLength);
+	
+	thisLine.attr("stroke-dasharray", totalLength + " " + totalLength) // 
+	.attr("stroke-dashoffset", 0) //
 	.attr("opacity", 1);
 
+	//---END: EXPERIMENTAl---//
 
-	var l = g.selectAll("path.line").last();
+	
 	var attributes = line.attributes;
 	for ( var property in attributes) {
 		if (attributes.hasOwnProperty(property)) {
 
-			l.attr(property, attributes[property]);
+			thisLine.attr(property, attributes[property]);
 
 		}
 	}
