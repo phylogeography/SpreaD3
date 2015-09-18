@@ -185,7 +185,7 @@ var projection;
 var playing = false;
 var processID;
 var currentSliderValue;
-var sliderInterval = 86400000 * 2;
+var sliderInterval = 86400000;
 var sliderStartValue;
 var sliderEndValue;
 
@@ -293,11 +293,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 									currentSliderValue = sliderValue;
 
-                                    //GB: I've doubled the number below to give the loop more time to draw everything
-                                    //this avoids the flickering of some lines, which I think happens because they
-                                    //have to be drawn almost simultaneously for 2 different values of the slider
-                                    //I've double sliderInterval accordingly to keep the impression of speed
-								}, 2 * 100);
+								}, 100);
 
 							}// END: playing check
 
