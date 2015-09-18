@@ -52,13 +52,13 @@ function generateLabels(locations) {
 
 				return (y);
 			}) //
-	.attr("text", function(d) {
+	.text( function(d) {
 		return (d.id);
 	}) //
 	.attr("font-family", "sans-serif")//
-	.attr("font-size", "11px")//
-	.attr("fill", "white") //
-	.attr("stroke", "black") //
+	.attr("font-size", "10px")//
+	.style("fill", "white") //
+//	.attr("stroke", "black") //
 	;
 
 	// .attr("r", "3px") //
