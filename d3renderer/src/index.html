@@ -32,7 +32,7 @@
 	border-radius: 5px;
 	height: 100%;
 	overflow: hidden;
-		background: #000000;
+	background: #000000;
 /* 	background: #ffffff; */
 }
 
@@ -60,6 +60,12 @@
 	float: left;
 }
 
+.buttons {
+    position: absolute;
+    left: 10px;
+    top: 150px;
+}
+
 .playPause {
 	float: left;
 	border-style: solid;
@@ -68,7 +74,7 @@
 	border-radius: 5px;
 	width: 40px;
 	height: 40px;
-	/* 	position: absolute; */
+	/*  position: absolute; */
 	background: url('img/play.png');
 }
 
@@ -157,13 +163,17 @@
             <div>
                 <div id="playPause"></div>
                 <div id="timeSlider"></div>
+                <div class="buttons">
+                    <button data-zoom="+1">Zoom In</button>
+                    <button data-zoom="-1">Zoom Out</button>
+                </div>
             </div>
         </div>
 
 
         <div class="selectorsANDcontainer" style="display: block;">
 
-            <div class="selectors" style="display: lock;">
+            <div class="selectors" style="display: block;">
 
                 <!-- SELECTORS -->
 
