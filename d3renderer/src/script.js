@@ -10,16 +10,13 @@
 //
 // ---MAP---//
 //
-var width = document.getElementById('container').offsetWidth; // 600;
-var height = width / 2; // 400;
+var width = document.getElementById('container').offsetWidth; 
+var height = width / 2; 
 var graticule = d3.geo.graticule();
 
 //
 // ---DATA---//
 //
-
-var attributes;
-var lines;
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -56,7 +53,7 @@ function initializeLayers(layers) {
 		if (type == DATA) {
 
 			points = layer.points;
-			lines = layer.lines;
+			var lines = layer.lines;
 			generateLines(lines, points);
 
 		}
@@ -214,7 +211,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// ---ATTRIBUTES---//
 
-	attributes = json.uniqueAttributes;
+	var attributes = json.uniqueAttributes;
 	populatePanels(attributes);
 
 	

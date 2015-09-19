@@ -23,8 +23,7 @@ function generateLines(lines, points) {
 
 function generateLine(line, startCoordinate, endCoordinate) {
 
-	// TODO: jitter this
-//	bend = 1;
+	//  jitter
 	var bend =  map(Date.parse(line.startTime), sliderStartValue, sliderEndValue, 1, 0);
 	
 //	console.log(Date.parse(line.startTime));

@@ -169,6 +169,7 @@ public class DiscreteTreeParser {
 				} else {
 
 					// TODO: count lineages holding state
+					// they go in as Points into a separate Layer
 					for (int i = 0; i < sliceHeights.length; i++) {
 
 						double sliceHeight = sliceHeights[i];
