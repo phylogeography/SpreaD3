@@ -6,9 +6,9 @@ function populateMapPanels(attributes) {
 
 	mapBackgroundSelect = document.getElementById("mapbackground");
 
-	var domain = [ "white", "black" ];
+	var domain = [ "white", "black", "grey", "light blue" ];
 	var scale = alternatingColorScale().domain(domain).range(
-			[ "#ffffff", "#000000" ]);
+			[ "#ffffff", "#000000", "#ddd", "#8cc5ff" ]);
 
 	for (var i = 0; i < domain.length; i++) {
 
