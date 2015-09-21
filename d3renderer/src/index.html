@@ -33,7 +33,7 @@
 	height: 100%;
 	overflow: hidden;
 	background: #000000;
-/* 	background: #ffffff; */
+	/* 	background: #ffffff; */
 }
 
 .graticule {
@@ -51,7 +51,7 @@
 .topo {
 	/* 	fill: #282828; */
 	/* 	stroke: #C0C0C0; */
-/* 	fill: #ffffff; */
+	/* 	fill: #ffffff; */
 	stroke: #000000;
 }
 
@@ -61,9 +61,9 @@
 }
 
 .buttons {
-    position: absolute;
-    left: 10px;
-    top: 150px;
+	position: absolute;
+	left: 10px;
+	top: 150px;
 }
 
 .playPause {
@@ -173,11 +173,14 @@
 
                 <!-- SELECTORS -->
 
+
+                <div class="buttons">
+                    <button data-zoom="+1">Zoom In</button>
+                    <button data-zoom="-1">Zoom Out</button>
+                </div>
+
+
                 <div class="panel">
-                    <div class="buttons">
-                        <button data-zoom="+1">Zoom In</button>
-                        <button data-zoom="-1">Zoom Out</button>
-                    </div>
                     <h2>Line color attribute</h2>
                     <div class="panelcontent">
                         <select id="linecolor">
@@ -185,14 +188,13 @@
                             <!-- 						<option >host2</option> -->
                         </select>
                         <div id="linesColorLegend" class="legend"></div>
-
-
                     </div>
-                </div>  <!-- END: panel-->
+                </div>
+                <!-- END: panel-->
 
 
                 <div class="panel">
-                    <h2>Map color attribute</h2>
+                    <h2>Map fill attribute</h2>
                     <div class="panelcontent">
                         <select id="mapcolor">
                         </select>
@@ -200,8 +202,21 @@
 
 
                     </div>
-                </div>  <!-- END: panel-->
+                </div>
+                <!-- END: panel-->
 
+
+                <div class="panel">
+                    <h2>Map background color</h2>
+                    <div class="panelcontent">
+                        <select id="mapbackground">
+                        </select>
+                        <div id="mapBackgroundLegend" class="legend"></div>
+
+
+                    </div>
+                </div>
+                <!-- END: panel-->
 
 
 
