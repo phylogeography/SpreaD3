@@ -1,5 +1,7 @@
 package structure.geojson;
 
+import com.google.gson.JsonObject;
+
 public class Feature {
 
 	private final String type;
@@ -7,13 +9,13 @@ public class Feature {
 
 	// TODO: specific classes for these Objects, for spec sheet see:
 	// http://geojson.org/geojson-spec.html#feature-collection-objects
-	private final Object properties;
+	private final JsonObject properties;
 	private final Object geometry;
 
 	public Feature(String type, //
 			String id, //
 			Object geometry, //
-			Object properties) {
+			JsonObject properties) {
 
 		this.type = type;
 		this.id = id;
@@ -34,7 +36,7 @@ public class Feature {
 		return geometry;
 	}
 
-	public Object getProperties() {
+	public JsonObject getProperties() {
 		return properties;
 	}
 

@@ -23,11 +23,12 @@ function generateLines(lines, points) {
 
 function generateLine(line, startCoordinate, endCoordinate) {
 
-	//  jitter
-	var bend =  map(Date.parse(line.startTime), sliderStartValue, sliderEndValue, 1, 0);
-	
-//	console.log(Date.parse(line.startTime));
-	
+	// jitter
+	var bend = map(Date.parse(line.startTime), sliderStartValue,
+			sliderEndValue, 1, 0);
+
+	// console.log(Date.parse(line.startTime));
+
 	var startLatitude = startCoordinate.xCoordinate;
 	var startLongitude = startCoordinate.yCoordinate;
 
@@ -61,7 +62,6 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	var startTime = line.startTime;
 	var endTime = line.endTime;
 
-	
 	linesLayer.append("path") //
 	.attr("class", "line") //
 	.attr("d", bearing) //
@@ -71,26 +71,18 @@ function generateLine(line, startCoordinate, endCoordinate) {
 	.attr("stroke", "rgb(" + 250 + "," + 0 + "," + 0 + ")") //
 	.attr("startTime", startTime) //
 	.attr("endTime", endTime) //
-	.attr("opacity", 1) //
-;
+	.attr("opacity", 1);
 
-   // select this line path
+	// select this line path
 	var thisLine = linesLayer.selectAll("path.line").last();
 
-	//---EXPERIMENTAl---//
-	
-		var totalLength = thisLine.node().getTotalLength();
-	
-	// add total length attribute;
-//	thisLine.attr("totalLength", totalLength);
-	
+	var totalLength = thisLine.node().getTotalLength();
+
 	thisLine.attr("stroke-dasharray", totalLength + " " + totalLength) // 
 	.attr("stroke-dashoffset", 0) //
 	.attr("opacity", 1);
 
-	//---END: EXPERIMENTAl---//
-
-	
+	// dump attribute values into DOM
 	var attributes = line.attributes;
 	for ( var property in attributes) {
 		if (attributes.hasOwnProperty(property)) {

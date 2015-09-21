@@ -33,7 +33,8 @@ public class DiscreteSpreadDataParser {
 			LocationNotFoundException {
 
 		TimeLine timeLine = null;
-		LinkedList<Attribute> uniqueAttributes = null;
+		LinkedList<Attribute> uniqueDataAttributes = null;
+		LinkedList<Attribute> uniqueMapAttributes = null;
 		LinkedList<Location> locationsList = null;
 
 		LinkedList<Layer> layersList = null;
@@ -54,9 +55,9 @@ public class DiscreteSpreadDataParser {
 
 		System.out.println("Parsed time line");
 
-//		TODO
-//		System.exit(-1);
-		
+		// TODO
+		// System.exit(-1);
+
 		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
 				settings.locations, settings.header);
 		locationsList = locationsParser.parseLocations();
@@ -75,7 +76,7 @@ public class DiscreteSpreadDataParser {
 		linesList = treeParser.getLinesList();
 		areasList = null;
 
-		uniqueAttributes = treeParser.getUniqueAttributes();
+		uniqueDataAttributes = treeParser.getUniqueAttributes();
 
 		System.out.println("Parsed the tree");
 
@@ -95,7 +96,9 @@ public class DiscreteSpreadDataParser {
 
 			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
-
+			uniqueMapAttributes = geojsonParser.getUniqueAttributes();
+			
+			
 			// TODO: filename only as id
 			Layer geojsonLayer = new Layer(settings.geojson, //
 					"GeoJson layer", //
@@ -105,10 +108,14 @@ public class DiscreteSpreadDataParser {
 
 			System.out.println("Parsed the GeoJSON");
 
-		}//END: null check
+		}// END: null check
 
-		SpreadData data = new SpreadData(timeLine, uniqueAttributes,
-				locationsList, layersList);
+		SpreadData data = new SpreadData(timeLine, //
+				uniqueDataAttributes, //
+				uniqueMapAttributes, //
+				locationsList, //
+				layersList//
+		);
 
 		return data;
 	}// END: parse

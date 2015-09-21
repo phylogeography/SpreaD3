@@ -257,9 +257,13 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
         // ---ATTRIBUTES---//
 
-	var attributes = json.uniqueAttributes;
-	populatePanels(attributes);
+	var dataAttributes = json.uniqueDataAttributes;
+	populateDataPanels(dataAttributes);
 
+	
+	var mapAttributes = json.uniqueMapAttributes;
+	populateMapPanels(mapAttributes);
+	
         // ---LAYERS---//
 
         var layers = json.layers;
@@ -269,11 +273,11 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
         layers.forEach(function(layer) {
 
-            var type = layer.type
+            var type = layer.type;
             if (type == MAP) {
 
-                var topo = layer.geojson;
-                generateTopoLayer(topo);
+                var geojson = layer.geojson;
+                generateTopoLayer(geojson);
                 mapRendered = true;
 
             }
@@ -345,7 +349,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
             initializeLayers(layers);
 
             // ---LOCATIONS---//
-            // TODO
+
             var locations = json.locations;
             generateLocations(locations);
             generateLabels(locations);
