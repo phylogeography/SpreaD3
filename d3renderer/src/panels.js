@@ -2,8 +2,48 @@
 
 function populateMapPanels(attributes) {
 
-	mapColorSelect = document.getElementById("mapcolor");
+	// --- MAP BACKGROUND---//
 
+	mapBackgroundSelect = document.getElementById("mapbackground");
+
+	var domain = [ "white", "black" ];
+	var scale = alternatingColorScale().domain(domain).range(
+			[ "#ffffff", "#000000" ]);
+
+	for (var i = 0; i < domain.length; i++) {
+
+		option = domain[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		mapBackgroundSelect.appendChild(element);
+
+	}// END: i loop
+
+	colorlegend("#mapBackgroundLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// map background listener
+	d3
+			.select(mapBackgroundSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = mapBackgroundSelect.options[mapBackgroundSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+						d3.select('#container').style("background", color);
+
+					});
+
+	// --- MAP FILL---//
+
+	mapColorSelect = document.getElementById("mapcolor");
 	for (var i = 0; i < attributes.length; i++) {
 
 		option = attributes[i].id;

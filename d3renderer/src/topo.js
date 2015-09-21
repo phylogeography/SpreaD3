@@ -43,7 +43,7 @@ function generateTopoLayer(geojson) {
 			.attr("class", "topo") //
 			.attr('d', path) //
 			.attr("fill", "white") //
-			.attr("opacity", 0.55)//
+			.attr("opacity", 0.55) //
 			.style("stroke-width", .5);
 
 	// dump attribute values into DOM
