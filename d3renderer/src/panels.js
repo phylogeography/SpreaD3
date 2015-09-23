@@ -115,11 +115,63 @@ function populateMapPanels(attributes) {
 
 }// END: populateMapPanels
 
+
+function populateLocationPanels() {
+
+	// --- LABEL COLOR---//
+
+	labelColorSelect = document.getElementById("labelcolor");
+
+	var domain = [ "black", "white" ];
+	var scale = alternatingColorScale().domain(domain).range(
+			[ "#000000", "#ffffff"  ]);
+
+	for (var i = 0; i < domain.length; i++) {
+
+		option = domain[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		labelColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	colorlegend("#labelColorLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// label color listener
+	d3
+			.select(labelColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = labelColorSelect.options[labelColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						d3.selectAll(".label").each(
+								function(d, i) {
+
+									var label = d3.select(this);
+
+									label.transition().delay(100).ease("linear")
+											.style("fill", color);
+
+								});
+						
+					});
+	
+	
+}// END: populateLabelPanels
+
+
 function populatePointPanels(attributes) {
 	
-//	console.log("TODO: populateNodePanels");
-	
-	//TODO
 	pointColorSelect = document.getElementById("pointcolor");
 
 	for (var i = 0; i < attributes.length; i++) {

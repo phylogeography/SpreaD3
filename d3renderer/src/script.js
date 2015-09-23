@@ -264,7 +264,8 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// ---ATTRIBUTES---//
 
-	// TODO: split into lineAttributes and nodeAttributes
+	populateLocationPanels(); 
+	
 	var lineAttributes = json.lineAttributes;
 	populateLinePanels(lineAttributes);
 

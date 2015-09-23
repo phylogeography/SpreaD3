@@ -1,7 +1,13 @@
 function generatePoints(data) {
 
-	var points = pointsLayer.selectAll("circle").data(data).enter().append("circle") //
+	var points = pointsLayer.selectAll("circle").data(data).enter().append(
+			"circle") //
 	.attr("class", "point") //
+	.attr("startTime", function(d) {
+
+		return (d.startTime);
+
+	}) //
 	.attr(
 			"cx",
 			function(d) {
@@ -26,7 +32,6 @@ function generatePoints(data) {
 	.attr("fill", "white") //
 	.attr("stroke", "black");
 
-	
 	// dump attribute values into DOM
 	points[0].forEach(function(d, i) {
 
@@ -41,5 +46,5 @@ function generatePoints(data) {
 			}
 		}// END: properties loop
 	});
-	
+
 }// END: generatePoints

@@ -152,8 +152,7 @@ public class DiscreteTreeParser {
 						// timeParser //
 						// );
 
-						parentPoint = createPoint(index, parentNode,
-								parentLocation);
+						parentPoint = createPoint(index, parentNode, parentLocation);
 						pointsMap.put(parentNode, parentPoint);
 						index++;
 
@@ -172,7 +171,6 @@ public class DiscreteTreeParser {
 						// );
 
 						nodePoint = createPoint(index, node, nodeLocation);
-
 						pointsMap.put(node, nodePoint);
 						index++;
 
@@ -404,7 +402,7 @@ public class DiscreteTreeParser {
 		}
 
 		return sliceHeights;
-	}
+	}//END: createSliceHeights
 
 	private Point createPoint(int index, Node node, Location location)
 			throws LocationNotFoundException {

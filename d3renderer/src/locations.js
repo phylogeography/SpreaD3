@@ -31,6 +31,7 @@ function generateLocations(locations) {
 function generateLabels(locations) {
 
 	labelsLayer.selectAll("text").data(locations).enter().append("text") //
+		.attr("class", "label") //
 	.attr(
 			"x",
 			function(d) {
@@ -56,7 +57,7 @@ function generateLabels(locations) {
 	}) //
 	.attr("font-family", "sans-serif")//
 	.attr("font-size", "10px")//
-	.style("fill", "white") //
+	.style("fill", "black") //
 	;
 
 }// END: generateLocations
