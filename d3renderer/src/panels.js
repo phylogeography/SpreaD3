@@ -115,7 +115,91 @@ function populateMapPanels(attributes) {
 
 }// END: populateMapPanels
 
-function populateDataPanels(attributes) {
+function populatePointPanels(attributes) {
+	
+//	console.log("TODO: populateNodePanels");
+	
+	//TODO
+	pointColorSelect = document.getElementById("pointcolor");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointColorSelect.appendChild(element);
+
+	}// END: i loop
+	
+	// point color listener
+	d3
+	.select(pointColorSelect)
+	.on(
+			'change',
+			function() {
+
+				var colorAttribute = pointColorSelect.options[pointColorSelect.selectedIndex].text;
+
+				var attribute = getObject(attributes, "id",
+						colorAttribute);
+
+				var data;
+				var scale;
+
+				$('#pointsColorLegend').html('');
+
+				if (attribute.scale == ORDINAL) {
+
+					data = attribute.domain;
+					scale = d3.scale.category20().domain(data);
+
+					colorlegend("#linesColorLegend", scale, "ordinal",
+							{
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+				} else {
+
+					data = attribute.range;
+					scale = d3.scale.linear().domain(data).range(
+							[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
+
+					colorlegend("#pointsColorLegend", scale, "linear", {
+						title : "",
+						boxHeight : 20,
+						boxWidth : 6,
+						vertical : true
+					});
+
+				}
+
+				d3.selectAll(".point").each(
+						function(d, i) {
+
+							var point = d3.select(this);
+							var attributeValue = point
+									.attr(colorAttribute);
+							var color = scale(attributeValue);
+
+							// console.log(color);
+
+							point.transition().delay(100).ease("linear")
+									.style("fill", color);
+
+						});
+
+			});
+	
+	
+	
+}//END: populateNodePanels
+
+function populateLinePanels(attributes) {
 
 	lineColorSelect = document.getElementById("linecolor");
 
@@ -192,7 +276,6 @@ function populateDataPanels(attributes) {
 
 					});
 
-	// d3.select(lineColorSelect).call('change');
 
 }// END: populateDataPanels
 

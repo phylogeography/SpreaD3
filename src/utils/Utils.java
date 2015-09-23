@@ -207,15 +207,28 @@ public class Utils {
 		System.out.println();
 	}// END: printArray
 
-	public static void print2DArray(Object[][] array, int nrow) {
-		for (int row = 0; row < nrow; row++) {
-			for (int col = 0; col < array[row].length; col++) {
+	public static void print2DArray(Object[][] array) {
+		int nRow = array[0].length;  
+		int nCol = array.length;  
+		for (int row = 0; row < nRow; row++) {
+			for (int col = 0; col < nCol; col++) {
 				System.out.print(array[row][col] + " ");
 			}
 			System.out.print("\n");
 		}
 	}// END: print2DArray
-
+	
+	public static void print2DArray(int[][] array) {
+		int nRow = array.length;  
+		int nCol = array[0].length;  
+		for (int row = 0; row < nRow; row++) {
+			for (int col = 0; col < nCol; col++) {
+				System.out.print(array[row][col] + " ");
+			}
+			System.out.print("\n");
+		}
+	}// END: print2DArray
+	
 	public static void printProgressBar(double progressPercentage, int barLength) {
 
 		System.out.print("\r[");

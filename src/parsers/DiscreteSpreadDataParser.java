@@ -33,14 +33,12 @@ public class DiscreteSpreadDataParser {
 			LocationNotFoundException {
 
 		TimeLine timeLine = null;
-		LinkedList<Attribute> uniqueDataAttributes = null;
-		LinkedList<Attribute> uniqueMapAttributes = null;
+		LinkedList<Attribute> mapAttributes = null;
+		LinkedList<Attribute> lineAttributes = null;
+		LinkedList<Attribute> pointAttributes = null;
 		LinkedList<Location> locationsList = null;
 
 		LinkedList<Layer> layersList = null;
-		LinkedList<Point> pointsList = null;
-		LinkedList<Line> linesList = null;
-		LinkedList<Area> areasList = null;
 
 		// ---IMPORT---//
 
@@ -54,9 +52,6 @@ public class DiscreteSpreadDataParser {
 				.getRootNode()));
 
 		System.out.println("Parsed time line");
-
-		// TODO
-		// System.exit(-1);
 
 		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
 				settings.locations, settings.header);
@@ -72,33 +67,22 @@ public class DiscreteSpreadDataParser {
 		);
 		treeParser.parseTree();
 
-		pointsList = treeParser.getPointsList();
-		linesList = treeParser.getLinesList();
-		areasList = null;
-
-		uniqueDataAttributes = treeParser.getUniqueAttributes();
-
-		System.out.println("Parsed the tree");
+		lineAttributes = treeParser.getLineAttributes();
+        pointAttributes = treeParser.getPointAttributes();
+		
+		System.out.println("Parsed tree attributes");
 
 		layersList = new LinkedList<Layer>();
 
-		// TODO: filename only as id
-		Layer discreteLayer = new Layer(settings.tree, //
-				"Discrete tree visualisation", //
-				pointsList, //
-				areasList, //
-				linesList //
-		);
-
-		layersList.add(discreteLayer);
+		// ---GEOJSON LAYER---//
 
 		if (settings.geojson != null) {
 
 			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
-			uniqueMapAttributes = geojsonParser.getUniqueAttributes();
-			
-			
+
+			mapAttributes = geojsonParser.getUniqueMapAttributes();
+
 			// TODO: filename only as id
 			Layer geojsonLayer = new Layer(settings.geojson, //
 					"GeoJson layer", //
@@ -106,15 +90,41 @@ public class DiscreteSpreadDataParser {
 
 			layersList.add(geojsonLayer);
 
-			System.out.println("Parsed the GeoJSON");
+			System.out.println("Parsed map attributes");
 
 		}// END: null check
 
+		// ---DATA LAYER (POINTS WITH COUNTS)---//
+
+		LinkedList<Point> countsList = treeParser.getCountsList();
+		Layer countsLayer = new Layer(settings.tree, //
+				"Lineages holding the state", //
+				countsList //
+		);
+
+		layersList.add(countsLayer);
+
+		// ---DATA LAYER (TREE LINES & POINTS WITH LOCATIONS)---//
+
+		LinkedList<Line> linesList = treeParser.getLinesList();
+		LinkedList<Point> pointsList = treeParser.getPointsList();
+
+		Layer treeLayer = new Layer(settings.tree, //
+				"Discrete tree visualisation", //
+				pointsList, //
+				linesList //
+		);
+
+		layersList.add(treeLayer);
+
+		System.out.println("Parsed the tree");
+
 		SpreadData data = new SpreadData(timeLine, //
-				uniqueDataAttributes, //
-				uniqueMapAttributes, //
+				mapAttributes, //
+				lineAttributes, //
+				pointAttributes,
 				locationsList, //
-				layersList//
+				layersList //
 		);
 
 		return data;

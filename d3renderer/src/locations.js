@@ -1,31 +1,30 @@
 function generateLocations(locations) {
 
-	// TODO: color choosers for stroke and fill, solid colors from a palette
+	locationsLayer.selectAll("circle").data(locations).enter().append("circle") //
+	.attr("class", "location") //
+	.attr(
+			"cx",
+			function(d) {
 
-	locationsLayer.selectAll("circle").data(locations).enter().append("circle")
-			.attr(
-					"cx",
-					function(d) {
+				var xy = projection([ d.coordinate.yCoordinate,
+						d.coordinate.xCoordinate ]);
+				var cx = xy[0]; // lat
 
-						var xy = projection([ d.coordinate.yCoordinate,
-								d.coordinate.xCoordinate ]);
-						var cx = xy[0]; // lat
+				return (cx);
+			}) //
+	.attr(
+			"cy",
+			function(d) {
 
-						return (cx);
-					}) //
-			.attr(
-					"cy",
-					function(d) {
+				var xy = projection([ d.coordinate.yCoordinate,
+						d.coordinate.xCoordinate ]);
+				var cy = xy[1]; // long
 
-						var xy = projection([ d.coordinate.yCoordinate,
-								d.coordinate.xCoordinate ]);
-						var cy = xy[1]; // long
-
-						return (cy);
-					}) //
-			.attr("r", "3px") //
-			.attr("fill", "red") //
-			.attr("stroke", "black");
+				return (cy);
+			}) //
+	.attr("r", "1px") //
+	.attr("fill", "black") //
+	.attr("stroke", "black");
 
 }// END: generateLocations
 
@@ -52,17 +51,12 @@ function generateLabels(locations) {
 
 				return (y);
 			}) //
-	.text( function(d) {
+	.text(function(d) {
 		return (d.id);
 	}) //
 	.attr("font-family", "sans-serif")//
 	.attr("font-size", "10px")//
 	.style("fill", "white") //
-//	.attr("stroke", "black") //
 	;
-
-	// .attr("r", "3px") //
-	// .attr("fill", "red") //
-	// .attr("stroke", "black")
 
 }// END: generateLocations

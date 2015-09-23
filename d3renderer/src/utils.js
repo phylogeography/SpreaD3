@@ -11,7 +11,8 @@ var ORDINAL = "ordinal";
 var LINEAR = "linear";
 
 var MAP = "map";
-var DATA = "data";
+var TREE = "tree";
+var COUNTS = "counts";
 
 // /////////////////
 // ---FUNCTIONS---//

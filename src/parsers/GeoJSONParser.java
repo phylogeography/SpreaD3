@@ -108,38 +108,8 @@ public class GeoJSONParser {
 		return data;
 	}// END: parseGeoJSON
 
-	public LinkedList<Attribute> getUniqueAttributes() {
+	public LinkedList<Attribute> getUniqueMapAttributes() {
 		return uniqueAttributes;
 	}// END: getUniqueAttributes
-
-	public static void main(String[] args) {
-
-		try {
-
-			String path = "/home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/combined.geojson";
-			String output = "/home/filip/Dropbox/JavaProjects/Spread2/test.geojson";
-
-			Reader reader = new FileReader(path);
-
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			GeoJsonData input = gson.fromJson(reader, GeoJsonData.class);
-
-			String s = gson.toJson(input);
-
-			File file = new File(output);
-			FileWriter fw;
-			fw = new FileWriter(file);
-			fw.write(s);
-			fw.close();
-
-			System.out.println("Done");
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}// END: main
 
 }// END: class

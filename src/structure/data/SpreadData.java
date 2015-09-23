@@ -11,22 +11,24 @@ import java.util.List;
 public class SpreadData {
 
 	private final TimeLine timeLine;
-	private final LinkedList<Attribute> uniqueDataAttributes;
-	private final LinkedList<Attribute> uniqueMapAttributes;
+	private final LinkedList<Attribute> mapAttributes;
+	private final LinkedList<Attribute> lineAttributes;
+	private final LinkedList<Attribute> pointAttributes;
 	private final LinkedList<Location> locations;
-	
 	private final LinkedList<Layer> layers;
 
 	public SpreadData(TimeLine timeLine, //
-			LinkedList<Attribute> uniqueDataAttributes, //
-			LinkedList<Attribute> uniqueMapAttributes, //
+			LinkedList<Attribute> mapAttributes, //
+			LinkedList<Attribute> lineAttributes, //
+			LinkedList<Attribute> pointAttributes, //
 			LinkedList<Location> locations, //
-			LinkedList<Layer> layers//
-			) {
+			LinkedList<Layer> layers //
+	) {
 
-		this.timeLine = timeLine; 
-		this.uniqueDataAttributes = uniqueDataAttributes;
-		this.uniqueMapAttributes = uniqueMapAttributes;
+		this.timeLine = timeLine;
+		this.mapAttributes = mapAttributes;
+		this.lineAttributes = lineAttributes;
+		this.pointAttributes = pointAttributes;
 		this.locations = locations;
 		this.layers = layers;
 
@@ -44,12 +46,16 @@ public class SpreadData {
 		return locations;
 	}
 
-	public LinkedList<Attribute> getDataAttributes() {
-		return uniqueDataAttributes;
+	public LinkedList<Attribute> getMapAttributes() {
+		return mapAttributes;
 	}
 
-	public LinkedList<Attribute> getMapAttributes() {
-		return uniqueMapAttributes;
+	public LinkedList<Attribute> getLineAttributes() {
+		return lineAttributes;
+	}
+
+	public LinkedList<Attribute> getPointAttributes() {
+		return pointAttributes;
 	}
 
 }// END: class

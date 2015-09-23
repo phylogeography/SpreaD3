@@ -11,16 +11,17 @@ import structure.geojson.GeoJsonData;
 public class Layer {
 
 	public enum Type {
-		map, data
+		map, tree, counts
 	}
 
 	private final Type type;
 	private final String id;
 	private final String description;
-	
+
 	private final List<Point> points;
-	private final List<Area> areas;
 	private final List<Line> lines;
+	private final List<Area> areas;
+
 	private final GeoJsonData geojson;
 
 	private boolean hasAreas;
@@ -28,32 +29,81 @@ public class Layer {
 	public Layer(String id, //
 			String description, //
 			List<Point> points, //
-			List<Area> areas, //
+			List<Line> lines, //
+			List<Area> areas //
+	) {
+
+		this.type = Type.tree;
+		
+		this.id = id;
+		this.description = description;
+
+		this.points = points;
+		this.lines = lines;
+		this.areas = areas;
+
+		this.geojson = null;
+
+	}// END: Constructor
+
+	public Layer(String id, //
+			String description, //
+			List<Point> points, //
 			List<Line> lines //
 	) {
 
-		this.type = Type.data;
+		this.type = Type.tree;
+		
 		this.id = id;
 		this.description = description;
-		
-		this.geojson = null;
 
 		this.points = points;
+		this.lines = lines;
+		this.areas = null;
+		this.hasAreas = false;
 
-		this.lines = new ArrayList<Line>();
-		if (lines != null) {
-			this.lines.addAll(lines);
-		}
-
-		this.hasAreas = true;
-		this.areas = new ArrayList<Area>();
-		if (areas != null) {
-			this.areas.addAll(areas);
-		} else {
-			this.hasAreas = false;
-		}
+		this.geojson = null;
 
 	}// END: Constructor
+
+	public Layer(String id, //
+			String description, //
+			List<Point> points //
+	) {
+
+		this.type = Type.counts;
+		
+		this.id = id;
+		this.description = description;
+
+		this.points = points;
+		this.lines = null;
+		this.areas = null;
+		this.hasAreas = false;
+
+		this.geojson = null;
+
+	}// END: Constructor
+
+//	 public Layer(
+//	 String id, //
+//	 String description, //
+//	 List<Area> areas //
+//	 ) {
+//	
+//	 this.type = Type.data;
+//	 this.id = id;
+//	 this.description = description;
+//	
+//	
+//	 this.points = null;
+//	 this.lines = null;
+//	 this.areas = areas;
+//	 this.hasAreas = true;
+//	
+//	 this.geojson = null;
+//	
+//	 }//END: Constructor
 
 	public Layer(String id, //
 			String description, //
