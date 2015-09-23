@@ -155,7 +155,7 @@ function populatePointPanels(attributes) {
 					data = attribute.domain;
 					scale = d3.scale.category20().domain(data);
 
-					colorlegend("#linesColorLegend", scale, "ordinal",
+					colorlegend("#pointsColorLegend", scale, "ordinal",
 							{
 								title : "",
 								boxHeight : 20,
