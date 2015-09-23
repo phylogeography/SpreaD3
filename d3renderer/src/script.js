@@ -62,6 +62,9 @@ function initializeLayers(layers) {
 
 			console.log("TODO: generate Points with counts");
 
+			var counts = layer.points;
+			generateCounts(counts);
+
 		} else {
 
 			// do nothing
@@ -142,6 +145,17 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("stroke-dashoffset", 0) //
 	.attr("opacity", 1);
 
+	
+	// ---select points  yet to be painted---//
+	//TODO
+	
+	
+	// ---select points already painted---//
+	//TODO
+	
+	
+	
+	
 }// END: update
 
 function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
@@ -223,8 +237,8 @@ var g = svg.append("g");
 var equatorLayer = g.append("g");
 var topoLayer = g.append("g");
 
+var areasLayer = g.append("g");
 var pointsLayer = g.append("g");
-// var areasLayer = g.append("g");
 var linesLayer = g.append("g");
 var locationsLayer = g.append("g");
 var labelsLayer = g.append("g");
@@ -264,8 +278,8 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// ---ATTRIBUTES---//
 
-	populateLocationPanels(); 
-	
+	populateLocationPanels();
+
 	var lineAttributes = json.lineAttributes;
 	populateLinePanels(lineAttributes);
 

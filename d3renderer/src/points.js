@@ -1,3 +1,50 @@
+function generateCounts(data) {
+
+	areasLayer.selectAll("circle").data(data).enter().append("circle") //
+	.attr("class", "point") //
+	.attr("startTime", function(d) {
+
+		return (d.startTime);
+
+	}) //
+	.attr(
+			"cx",
+			function(d) {
+
+				var xy = projection([ d.location.coordinate.yCoordinate,
+						d.location.coordinate.xCoordinate ]);
+				var cx = xy[0]; // lat
+
+				return (cx);
+			}) //
+	.attr(
+			"cy",
+			function(d) {
+
+				var xy = projection([ d.location.coordinate.yCoordinate,
+						d.location.coordinate.xCoordinate ]);
+				var cy = xy[1]; // long
+
+				return (cy);
+			}) //
+	.attr("r", function(d) {
+
+		var count = d.attributes.count;
+
+		// TODO: map them
+		var radius = 10 * Math.sqrt(count / Math.PI);
+
+		return (radius);
+
+	}) //
+	.attr("fill", "brown") //
+	.attr("fill-opacity", "0.5") //
+	.attr("stroke", "#fff") //
+	.attr("stroke-width", "0.5px");
+
+
+}// END: generateCounts
+
 function generatePoints(data) {
 
 	var points = pointsLayer.selectAll("circle").data(data).enter().append(
