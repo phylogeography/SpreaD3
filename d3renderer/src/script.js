@@ -73,10 +73,19 @@ function initializeLayers(layers) {
 
 }// END: initializeLayers
 
-function update(value, timeScale, currentDateDisplay, dateFormat) {
+function updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat) {
 
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
+
+}
+
+function update(value, timeScale, currentDateDisplay, dateFormat) {
+
+	// var currentDate = timeScale.invert(timeScale(value));
+	// currentDateDisplay.text(dateFormat(currentDate));
+
+	updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat);
 
 	// ---select lines painting now---//
 
@@ -156,6 +165,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (value < startDate || value > endDate);
 	}) //
+	.transition() //
+	.ease("linear") //
 	.attr("opacity", 0);
 
 	// ---select counts displayed now---//
@@ -349,8 +360,11 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 				dateFormat);
+		
 		// put slider at the end of timeLine, everything painted
 		timeSlider.value(sliderEndValue);
+		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+				dateFormat);
 
 		var playPauseButton = d3.select('#playPause')
 				.attr("class", "playPause").on(
