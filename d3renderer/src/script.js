@@ -43,7 +43,7 @@ function move() {
 
 }// END: move
 
-function initializeLayers(layers) {
+function initializeLayers(layers, pointAttributes, lineAttributes) {
 
 	// ---DATA LAYER---//
 
@@ -60,8 +60,11 @@ function initializeLayers(layers) {
 
 		} else if (type == COUNTS) { // TODO: needed?
 
+			var countAttribute = getObject(pointAttributes, "id",
+					COUNT);
+			
 			var counts = layer.points;
-			generateCounts(counts);
+			generateCounts(counts, countAttribute);
 
 		} else {
 
@@ -403,7 +406,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 		// ---DATA LAYERS---//
 
-		initializeLayers(layers);
+		initializeLayers(layers, pointAttributes, lineAttributes);
 
 		// ---LOCATIONS---//
 

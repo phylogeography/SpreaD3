@@ -14,6 +14,8 @@ var MAP = "map";
 var TREE = "tree";
 var COUNTS = "counts";
 
+var COUNT = "count";
+
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////

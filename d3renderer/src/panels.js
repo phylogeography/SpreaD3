@@ -115,7 +115,6 @@ function populateMapPanels(attributes) {
 
 }// END: populateMapPanels
 
-
 function populateLocationPanels() {
 
 	// --- LABEL COLOR---//
@@ -124,7 +123,7 @@ function populateLocationPanels() {
 
 	var domain = [ "black", "white" ];
 	var scale = alternatingColorScale().domain(domain).range(
-			[ "#000000", "#ffffff"  ]);
+			[ "#000000", "#ffffff" ]);
 
 	for (var i = 0; i < domain.length; i++) {
 
@@ -159,24 +158,28 @@ function populateLocationPanels() {
 
 									var label = d3.select(this);
 
-									label.transition().delay(100).ease("linear")
+									label.transition().delay(100)
+											.ease("linear")
 											.style("fill", color);
 
 								});
-						
+
 					});
-	
-	
+
 }// END: populateLabelPanels
 
-
 function populatePointPanels(attributes) {
-	
+
 	pointColorSelect = document.getElementById("pointcolor");
 
 	for (var i = 0; i < attributes.length; i++) {
 
 		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == COUNT) {
+			continue;
+		}
+
 		element = document.createElement("option");
 		element.textContent = option;
 		element.value = option;
@@ -184,74 +187,73 @@ function populatePointPanels(attributes) {
 		pointColorSelect.appendChild(element);
 
 	}// END: i loop
-	
+
 	// point color listener
 	d3
-	.select(pointColorSelect)
-	.on(
-			'change',
-			function() {
+			.select(pointColorSelect)
+			.on(
+					'change',
+					function() {
 
-				var colorAttribute = pointColorSelect.options[pointColorSelect.selectedIndex].text;
+						var colorAttribute = pointColorSelect.options[pointColorSelect.selectedIndex].text;
 
-				var attribute = getObject(attributes, "id",
-						colorAttribute);
+						var attribute = getObject(attributes, "id",
+								colorAttribute);
 
-				var data;
-				var scale;
+						var data;
+						var scale;
 
-				$('#pointsColorLegend').html('');
+						$('#pointsColorLegend').html('');
 
-				if (attribute.scale == ORDINAL) {
+						if (attribute.scale == ORDINAL) {
 
-					data = attribute.domain;
-					scale = d3.scale.category20().domain(data);
+							data = attribute.domain;
+							scale = d3.scale.category20().domain(data);
 
-					colorlegend("#pointsColorLegend", scale, "ordinal",
-							{
-								title : "",
-								boxHeight : 20,
-								boxWidth : 6,
-								vertical : true
-							});
+							colorlegend("#pointsColorLegend", scale, "ordinal",
+									{
+										title : "",
+										boxHeight : 20,
+										boxWidth : 6,
+										vertical : true
+									});
 
-				} else {
+						} else {
 
-					data = attribute.range;
-					scale = d3.scale.linear().domain(data).range(
-							[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
 
-					colorlegend("#pointsColorLegend", scale, "linear", {
-						title : "",
-						boxHeight : 20,
-						boxWidth : 6,
-						vertical : true
+							colorlegend("#pointsColorLegend", scale, "linear",
+									{
+										title : "",
+										boxHeight : 20,
+										boxWidth : 6,
+										vertical : true
+									});
+
+						}
+
+						// d3.selectAll(".point") //
+						pointsLayer.selectAll(".point").each(
+								function(d, i) {
+
+									var point = d3.select(this);
+									var attributeValue = point
+											.attr(colorAttribute);
+									var color = scale(attributeValue);
+
+									// console.log(color);
+
+									point.transition().delay(100)
+											.ease("linear")
+											.style("fill", color);
+
+								});
+
 					});
 
-				}
-
-//				d3.selectAll(".point") //
-				pointsLayer.selectAll(".point")
-				.each(
-						function(d, i) {
-
-							var point = d3.select(this);
-							var attributeValue = point
-									.attr(colorAttribute);
-							var color = scale(attributeValue);
-
-							// console.log(color);
-
-							point.transition().delay(100).ease("linear")
-									.style("fill", color);
-
-						});
-
-			});
-	
-	
-	
-}//END: populateNodePanels
+}// END: populateNodePanels
 
 function populateLinePanels(attributes) {
 
@@ -329,7 +331,6 @@ function populateLinePanels(attributes) {
 								});
 
 					});
-
 
 }// END: populateDataPanels
 

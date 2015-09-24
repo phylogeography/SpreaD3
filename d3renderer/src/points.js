@@ -1,6 +1,8 @@
 var COUNT_OPACITY = 0.5;
+var MIN_AREA = 1000;
+var MAX_AREA = 10000;
 
-function generateCounts(data) {
+function generateCounts(data, countAttribute) {
 
 	areasLayer.selectAll("circle").data(data).enter().append("circle") //
 	.attr("class", "point") //
@@ -38,8 +40,9 @@ function generateCounts(data) {
 
 		var count = d.attributes.count;
 
-		// TODO: map them
-		var radius = 10 * Math.sqrt(count / Math.PI);
+		// map them
+		var area = map(count, countAttribute.range[0], countAttribute.range[1], MIN_AREA, MAX_AREA);
+		var radius = Math.sqrt(area / Math.PI);
 
 		return (radius);
 
