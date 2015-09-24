@@ -81,9 +81,9 @@ public class FortuneCookies {
 //---DAVE JONES---//
 
 "What a bobby dazzler",
-"...And Bob's your uncle",
+"Bob's your uncle",
 "Good enough for Australia",
-
+"In like Flynn. Errol that is",
 
 // --- Bruce Campbell --- //
 

@@ -79,7 +79,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	currentDateDisplay.text(dateFormat(currentDate));
 
 	// ---select lines painting now---//
-	
+
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 
@@ -118,7 +118,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("opacity", 1);
 
 	// ---select lines yet to be painted---//
-	
+
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 		var linePath = this;
@@ -135,7 +135,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("opacity", 0);
 
 	// ---select lines already painted---//
-	
+
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 		var linePath = this;
@@ -146,36 +146,32 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("stroke-dashoffset", 0) //
 	.attr("opacity", 1);
 
-	//TODO: test
-	
-	// ---select points  yet to be displayed or already displayed---//
+	// ---select counts yet to be displayed or already displayed---//
+
 	areasLayer.selectAll(".point") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = Date.parse(point.attributes.startTime.value);
 		var endDate = Date.parse(point.attributes.endTime.value);
 
-		return ( value <startDate || value > endDate  );
+		return (value < startDate || value > endDate);
 	}) //
 	.attr("opacity", 0);
-	
-	
-	// ---select points displayed now---//
-	
+
+	// ---select counts displayed now---//
+
 	areasLayer.selectAll(".point") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = Date.parse(point.attributes.startTime.value);
 		var endDate = Date.parse(point.attributes.endTime.value);
 
-		return ( value > startDate && value < endDate  );
+		return (value > startDate && value < endDate);
 	}) //
-		.transition() //
+	.transition() //
 	.ease("linear") //
 	.attr("opacity", COUNT_OPACITY);
-	
-	
-	
+
 }// END: update
 
 function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
