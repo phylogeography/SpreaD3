@@ -60,8 +60,6 @@ function initializeLayers(layers) {
 
 		} else if (type == COUNTS) { // TODO: needed?
 
-			console.log("TODO: generate Points with counts");
-
 			var counts = layer.points;
 			generateCounts(counts);
 
@@ -80,7 +78,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
 
-	// ---select travelling lines---//
+	// ---select lines painting now---//
+	
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 
@@ -119,6 +118,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("opacity", 1);
 
 	// ---select lines yet to be painted---//
+	
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 		var linePath = this;
@@ -135,6 +135,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("opacity", 0);
 
 	// ---select lines already painted---//
+	
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 		var linePath = this;
@@ -145,14 +146,33 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.attr("stroke-dashoffset", 0) //
 	.attr("opacity", 1);
 
+	//TODO: test
 	
-	// ---select points  yet to be painted---//
-	//TODO
+	// ---select points  yet to be displayed or already displayed---//
+	areasLayer.selectAll(".point") //
+	.filter(function(d) {
+		var point = this;
+		var startDate = Date.parse(point.attributes.startTime.value);
+		var endDate = Date.parse(point.attributes.endTime.value);
+
+		return ( value <startDate || value > endDate  );
+	}) //
+	.attr("opacity", 0);
 	
 	
-	// ---select points already painted---//
-	//TODO
+	// ---select points displayed now---//
 	
+	areasLayer.selectAll(".point") //
+	.filter(function(d) {
+		var point = this;
+		var startDate = Date.parse(point.attributes.startTime.value);
+		var endDate = Date.parse(point.attributes.endTime.value);
+
+		return ( value > startDate && value < endDate  );
+	}) //
+		.transition() //
+	.ease("linear") //
+	.attr("opacity", COUNT_OPACITY);
 	
 	
 	

@@ -12,6 +12,7 @@ public class Point {
 	private final Location location;
 	private final Coordinate coordinate;
 	private final String startTime;
+	private final String endTime;
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 	
 	public String getId() {
@@ -23,6 +24,7 @@ public class Point {
 		this.location = null;
 		this.coordinate = null;
 		this.startTime = null;
+		this.endTime = null;
 	}
 	
 	public Point(String id, Location location, String startTime, Map<String, Object> attributes) {
@@ -31,6 +33,7 @@ public class Point {
 		this.location = location;
 		this.coordinate = null;
 		this.startTime = startTime;
+		this.endTime = null;
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
@@ -38,12 +41,27 @@ public class Point {
 
 	}// END: Constructor
 
+	public Point(String id, Location location, String startTime, String endTime, Map<String, Object> attributes) {
+
+		this.id = id;
+		this.location = location;
+		this.coordinate = null;
+		this.startTime = startTime;
+		this.endTime = endTime;
+
+		if (attributes != null) {
+			this.attributes.putAll(attributes);
+		}
+
+	}// END: Constructor
+	
 	public Point(String id, Coordinate coordinate, String startTime, Map<String, Object> attributes) {
 
 		this.id = id;
 		this.coordinate = coordinate;
 		this.location = null;
 		this.startTime = startTime;
+		this.endTime = null;
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
@@ -55,6 +73,10 @@ public class Point {
 		return startTime;
 	}
 
+	public String getEndTime() {
+		return endTime;
+	}
+	
 	public Location getLocation() {
 		return location;
 	}
@@ -94,5 +116,5 @@ public class Point {
 		}
 
 	}// END: equals
-	
+
 }// END: class

@@ -230,7 +230,9 @@ function populatePointPanels(attributes) {
 
 				}
 
-				d3.selectAll(".point").each(
+//				d3.selectAll(".point") //
+				pointsLayer.selectAll(".point")
+				.each(
 						function(d, i) {
 
 							var point = d3.select(this);

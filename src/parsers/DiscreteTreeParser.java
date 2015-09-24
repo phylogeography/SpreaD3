@@ -1,14 +1,16 @@
 package parsers;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import exceptions.AnalysisException;
+import exceptions.LocationNotFoundException;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -17,8 +19,6 @@ import structure.data.Location;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
 import utils.Utils;
-import exceptions.AnalysisException;
-import exceptions.LocationNotFoundException;
 
 public class DiscreteTreeParser {
 
@@ -225,6 +225,8 @@ public class DiscreteTreeParser {
 		for (int sliceIndex = 0; sliceIndex < locationCounts.length; sliceIndex++) {
 
 			double height = sliceHeights[sliceIndex];
+			double nextHeight = sliceIndex < locationCounts.length-1 ? sliceHeights[sliceIndex+1] : 0.0;
+			
 			for (int locationIndex = 0; locationIndex < locationCounts[0].length; locationIndex++) {
 
 				int count = locationCounts[sliceIndex][locationIndex];
@@ -233,12 +235,13 @@ public class DiscreteTreeParser {
 					String id = "point_" + index;
 					Location location = locationsList.get(locationIndex);
 					String startTime = timeParser.getNodeDate(height);
-
+					String endTime = timeParser.getNodeDate(nextHeight);
+					
 					Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 					attributes.put(COUNT,
 							locationCounts[sliceIndex][locationIndex]);
 
-					Point point = new Point(id, location, startTime, attributes);
+					Point point = new Point(id, location, startTime, endTime, attributes);
 					countsList.add(point);
 					index++;
 
@@ -256,9 +259,6 @@ public class DiscreteTreeParser {
 		}// END: slice loop
 
 		Attribute countAttribute = new Attribute(COUNT, countRange);
-
-		// System.out.println(countRange[Attribute.MIN_INDEX]);
-		// System.out.println(countRange[Attribute.MAX_INDEX]);
 
 		// collect attributes from lines
 		Map<String, Attribute> branchAttributesMap = new HashMap<String, Attribute>();
@@ -398,9 +398,13 @@ public class DiscreteTreeParser {
 
 		Double[] sliceHeights = new Double[intervals - 1];
 		for (int i = 0; i < (intervals - 1); i++) {
+//		for (int i = (intervals - 1); i < 0; i--) {
 			sliceHeights[i] = rootHeight - ((i + 1) * delta);
 		}
 
+//		Arrays.sort( sliceHeights );
+//		Utils.printArray(sliceHeights);
+		
 		return sliceHeights;
 	}//END: createSliceHeights
 

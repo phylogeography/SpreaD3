@@ -1,3 +1,5 @@
+var COUNT_OPACITY = 0.5;
+
 function generateCounts(data) {
 
 	areasLayer.selectAll("circle").data(data).enter().append("circle") //
@@ -5,6 +7,11 @@ function generateCounts(data) {
 	.attr("startTime", function(d) {
 
 		return (d.startTime);
+
+	}) //
+	.attr("endTime", function(d) {
+
+		return (d.endTime);
 
 	}) //
 	.attr(
@@ -38,10 +45,9 @@ function generateCounts(data) {
 
 	}) //
 	.attr("fill", "brown") //
-	.attr("fill-opacity", "0.5") //
+	.attr("fill-opacity", COUNT_OPACITY) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px");
-
 
 }// END: generateCounts
 
