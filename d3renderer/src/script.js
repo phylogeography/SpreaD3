@@ -41,10 +41,8 @@ function move() {
 	// fit the paths to the zoom level
 	d3.selectAll(".country").style("stroke-width", 1.0 / s);
 	d3.selectAll(".line").style("stroke-width", 1.0 / s);
-	
-	// TODO: r
-	d3.selectAll(".point").style("stroke-width", 1.0 / s);//.attr("r", "0.05px");
-	
+	d3.selectAll(".point").style("stroke-width", 1.0 / s);
+
 }// END: move
 
 function initializeLayers(layers, pointAttributes, lineAttributes) {
@@ -63,9 +61,8 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 			generateLines(lines, points);
 
 		} else if (type == COUNTS) {
-			// TODO: fix scaling for world map 
-			var countAttribute = getObject(pointAttributes, "id", COUNT);
 
+			var countAttribute = getObject(pointAttributes, "id", COUNT);
 			var counts = layer.points;
 			generateCounts(counts, countAttribute);
 
@@ -199,42 +196,41 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 
 	});// END: slide
 
-	var playPauseButton = d3.select('#playPause')
-	.attr("class", "playPause").on(
-			"click",
-			function() {
+	var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+			.on(
+					"click",
+					function() {
 
-				if (playing) {
-					playing = false;
-					playPauseButton.classed("playing", playing);
+						if (playing) {
+							playing = false;
+							playPauseButton.classed("playing", playing);
 
-					clearInterval(processID);
+							clearInterval(processID);
 
-				} else {
-					playing = true;
-					playPauseButton.classed("playing", playing);
+						} else {
+							playing = true;
+							playPauseButton.classed("playing", playing);
 
-					processID = setInterval(function() {
+							processID = setInterval(function() {
 
-						var sliderValue = currentSliderValue
-								+ sliderInterval;
-						if (sliderValue > sliderEndValue) {
-							sliderValue = sliderStartValue;
-						}
+								var sliderValue = currentSliderValue
+										+ sliderInterval;
+								if (sliderValue > sliderEndValue) {
+									sliderValue = sliderStartValue;
+								}
 
-						timeSlider.value(sliderValue);
-						update(sliderValue, timeScale,
-								currentDateDisplay, dateFormat);
+								timeSlider.value(sliderValue);
+								update(sliderValue, timeScale,
+										currentDateDisplay, dateFormat);
 
-						currentSliderValue = sliderValue;
+								currentSliderValue = sliderValue;
 
-					}, 100);
+							}, 100);
 
-				}// END: playing check
+						}// END: playing check
 
-			});
-	
-	
+					});
+
 }// END: initializeTimeSlider
 
 // ///////////////
@@ -315,11 +311,11 @@ var projection;
 var playing = false;
 var processID;
 var currentSliderValue;
-var sliderInterval = 86400000;
+var sliderInterval;// = 86400000;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/world_discrete.json", function ready(error, json) {
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
@@ -332,6 +328,10 @@ d3.json("data/world_discrete.json", function ready(error, json) {
 	sliderStartValue = Date.parse(timeLine.startTime);
 	sliderEndValue = Date.parse(timeLine.endTime);
 	currentSliderValue = sliderStartValue;
+
+	// TODO: slider for speed control
+	var speed = 100;
+	sliderInterval = (sliderEndValue - sliderStartValue) / speed;
 
 	// initial value
 	var currentDateDisplay = d3.select('#currentDate').text(
@@ -351,12 +351,12 @@ d3.json("data/world_discrete.json", function ready(error, json) {
 
 	var pointAttributes = json.pointAttributes;
 	populatePointPanels(pointAttributes);
-	
+
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {
 		populateMapPanels(mapAttributes);
-	} 
-	
+	}
+
 	// ---LAYERS---//
 
 	var layers = json.layers;
@@ -383,23 +383,23 @@ d3.json("data/world_discrete.json", function ready(error, json) {
 		function readynow(error, world) {
 
 			populateMapPanels(world.mapAttributes);
-			
+
 			generateWorldLayer(world);
 			// mapRendered = true;
 
 			// ---TIME SLIDER---//
-			
+
 			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 					dateFormat);
 
 			// put slider at the end of timeLine, everything painted
 			timeSlider.value(sliderEndValue);
-			
+
 			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
 					dateFormat);
-			
+
 			// ---DATA LAYERS---//
-			
+
 			initializeLayers(layers, pointAttributes, lineAttributes);
 
 			// ---LOCATIONS---//
@@ -407,7 +407,7 @@ d3.json("data/world_discrete.json", function ready(error, json) {
 			var locations = json.locations;
 			generateLocations(locations);
 			generateLabels(locations);
-			
+
 		}
 
 		queue().defer(d3.json, "data/world.geojson").await(readynow);
@@ -415,13 +415,13 @@ d3.json("data/world_discrete.json", function ready(error, json) {
 	} else {
 
 		// ---TIME SLIDER---//
-		
+
 		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 				dateFormat);
 
 		// put slider at the end of timeLine, everything painted
 		timeSlider.value(sliderEndValue);
-		
+
 		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
 				dateFormat);
 
