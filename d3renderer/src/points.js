@@ -4,7 +4,7 @@ var MAX_AREA = 10000;
 
 function generateCounts(data, countAttribute) {
 
-	areasLayer.selectAll("circle").data(data).enter().append("circle") //
+	var counts = areasLayer.selectAll("circle").data(data).enter().append("circle") //
 	.attr("class", "point") //
 	.attr("startTime", function(d) {
 
@@ -48,9 +48,52 @@ function generateCounts(data, countAttribute) {
 
 	}) //
 	.attr("fill", "brown") //
-	.attr("fill-opacity", COUNT_OPACITY) //
+	.attr("opacity", COUNT_OPACITY) //
 	.attr("stroke", "#fff") //
-	.attr("stroke-width", "0.5px");
+	.attr("stroke-width", "0.5px")
+	.on('mouseover', function(d) {
+		
+		var point = d3.select(this);
+		point.attr('stroke', '#000');
+		
+//		point.transition().duration(500)
+//		.attr("r", point.attr("r") * 2 );
+		
+		
+}).on('mouseout', function(d,i) {
+	
+	var point = d3.select(this);
+	point.attr('stroke', '#fff');
+	
+//	point.transition().duration(500)
+//	.attr("r", point.attr("r") / 2 );
+	
+})
+
+	.call(d3.kodama.tooltip().format(function(d,i) {
+		
+		// TODO: filter
+		
+//		console.log(d3.select(this));
+		
+		if(1==1) {
+	
+        return {
+            title: d.location.id,
+            items: [
+                { title: 'Date', value: d.startTime},
+                { title: 'Count', value: d.attributes.count}
+            ]
+        };
+        
+} else {
+        	
+        	return null;
+        	
+        }
+		
+	}))
+	;
 
 }// END: generateCounts
 

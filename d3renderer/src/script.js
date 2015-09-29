@@ -47,24 +47,24 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 
 	// ---DATA LAYER---//
 
+	// TODO: fix scaling for world map 
 	layers.forEach(function(layer) {
 
 		var type = layer.type;
 		if (type == TREE) {
 
 			var points = layer.points;
-			generatePoints(points);
+//			generatePoints(points);
 
 			var lines = layer.lines;
 			generateLines(lines, points);
 
-		} else if (type == COUNTS) { // TODO: needed?
+		} else if (type == COUNTS) {
 
-			var countAttribute = getObject(pointAttributes, "id",
-					COUNT);
-			
+			var countAttribute = getObject(pointAttributes, "id", COUNT);
+
 			var counts = layer.points;
-			generateCounts(counts, countAttribute);
+//			generateCounts(counts, countAttribute);
 
 		} else {
 
@@ -81,12 +81,9 @@ function updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat) {
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
 
-}
+}// END: updateDateDisplay
 
 function update(value, timeScale, currentDateDisplay, dateFormat) {
-
-	// var currentDate = timeScale.invert(timeScale(value));
-	// currentDateDisplay.text(dateFormat(currentDate));
 
 	updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat);
 
@@ -174,7 +171,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".point") //
+	var points = areasLayer.selectAll(".point") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = Date.parse(point.attributes.startTime.value);
@@ -199,6 +196,42 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 
 	});// END: slide
 
+	var playPauseButton = d3.select('#playPause')
+	.attr("class", "playPause").on(
+			"click",
+			function() {
+
+				if (playing) {
+					playing = false;
+					playPauseButton.classed("playing", playing);
+
+					clearInterval(processID);
+
+				} else {
+					playing = true;
+					playPauseButton.classed("playing", playing);
+
+					processID = setInterval(function() {
+
+						var sliderValue = currentSliderValue
+								+ sliderInterval;
+						if (sliderValue > sliderEndValue) {
+							sliderValue = sliderStartValue;
+						}
+
+						timeSlider.value(sliderValue);
+						update(sliderValue, timeScale,
+								currentDateDisplay, dateFormat);
+
+						currentSliderValue = sliderValue;
+
+					}, 100);
+
+				}// END: playing check
+
+			});
+	
+	
 }// END: initializeTimeSlider
 
 // ///////////////
@@ -317,7 +350,10 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	populatePointPanels(pointAttributes);
 
 	var mapAttributes = json.mapAttributes;
-	populateMapPanels(mapAttributes);
+	if (typeof mapAttributes != 'undefined') {
+		populateMapPanels(mapAttributes);
+	}
+	
 
 	// ---LAYERS---//
 
@@ -347,11 +383,20 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 			generateWorldLayer(world);
 			// mapRendered = true;
 
-			// ---DATA LAYERS---//
-
+			// ---TIME SLIDER---//
+			
 			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 					dateFormat);
-			initializeLayers(layers);
+
+			// put slider at the end of timeLine, everything painted
+			timeSlider.value(sliderEndValue);
+			
+			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+					dateFormat);
+			
+			// ---DATA LAYERS---//
+			
+			initializeLayers(layers, pointAttributes, lineAttributes);
 
 		}
 
@@ -360,49 +405,15 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	} else {
 
 		// ---TIME SLIDER---//
-
+		
 		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 				dateFormat);
-		
+
 		// put slider at the end of timeLine, everything painted
 		timeSlider.value(sliderEndValue);
+		
 		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
 				dateFormat);
-
-		var playPauseButton = d3.select('#playPause')
-				.attr("class", "playPause").on(
-						"click",
-						function() {
-
-							if (playing) {
-								playing = false;
-								playPauseButton.classed("playing", playing);
-
-								clearInterval(processID);
-
-							} else {
-								playing = true;
-								playPauseButton.classed("playing", playing);
-
-								processID = setInterval(function() {
-
-									var sliderValue = currentSliderValue
-											+ sliderInterval;
-									if (sliderValue > sliderEndValue) {
-										sliderValue = sliderStartValue;
-									}
-
-									timeSlider.value(sliderValue);
-									update(sliderValue, timeScale,
-											currentDateDisplay, dateFormat);
-
-									currentSliderValue = sliderValue;
-
-								}, 100);
-
-							}// END: playing check
-
-						});
 
 		// ---DATA LAYERS---//
 
