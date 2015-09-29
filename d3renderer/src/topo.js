@@ -5,7 +5,7 @@ function generateTopoLayer(geojson) {
 	// first guess for the projection
 	var center = d3.geo.centroid(geojson);
 
-	var scale = 150;
+	scale = 150;
 	var offset = [ width / 2, height / 2 ];
 	projection = d3.geo.mercator().scale(scale).center(center)
 			.translate(offset);
@@ -15,7 +15,7 @@ function generateTopoLayer(geojson) {
 	var bounds = path.bounds(geojson);
 	var hscale = scale * width / (bounds[1][0] - bounds[0][0]);
 	var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
-	var scale = (hscale < vscale) ? hscale : vscale;
+	scale = (hscale < vscale) ? hscale : vscale;
 	var offset = [ width - (bounds[0][0] + bounds[1][0]) / 2,
 			height - (bounds[0][1] + bounds[1][1]) / 2 ];
 
@@ -68,7 +68,7 @@ function generateTopoLayer(geojson) {
 
 function generateWorldLayer(world) {
 
-	var scale = (width / 2 / Math.PI);
+	scale = (width / 2 / Math.PI);
 	var offset = [ (width / 2), (height / 2) ];
 
 	// new projection
@@ -90,14 +90,30 @@ function generateWorldLayer(world) {
 						[ 180, 0 ] ]
 			}).attr("class", "equator").attr("d", path);
 
-	topoLayer.append("path") //
-	.datum(world) //
-	.attr("class", "topo") //
-	.attr('d', path) //
-	.attr("fill", "white") //
-	.attr("stroke", "black") //
-	.attr("opacity", 0.55) //
-	.style("stroke-width", .5);
+	var features = world.features;
+	var topo = topoLayer.selectAll("path").data(features).enter()
+			.append("path") //
+			.attr("class", "topo") //
+			.attr('d', path) //
+			.attr("fill", "white") //
+			.attr("stroke", "black") //
+			.attr("opacity", 0.55) //
+			.style("stroke-width", .5);
+	
+	// dump attribute values into DOM
+	topo[0].forEach(function(d, i) {
 
+		var thisTopo = d3.select(d);
+		var properties = world.features[i].properties;
+
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
+
+				thisTopo.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
+	});
+	
 }// END: generateWorldLayer
 

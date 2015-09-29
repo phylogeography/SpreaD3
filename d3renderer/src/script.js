@@ -13,6 +13,7 @@
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
 var graticule = d3.geo.graticule();
+var scale;
 
 //
 // ---DATA---//
@@ -40,31 +41,33 @@ function move() {
 	// fit the paths to the zoom level
 	d3.selectAll(".country").style("stroke-width", 1.0 / s);
 	d3.selectAll(".line").style("stroke-width", 1.0 / s);
-
+	
+	// TODO: r
+	d3.selectAll(".point").style("stroke-width", 1.0 / s);//.attr("r", "0.05px");
+	
 }// END: move
 
 function initializeLayers(layers, pointAttributes, lineAttributes) {
 
 	// ---DATA LAYER---//
 
-	// TODO: fix scaling for world map 
 	layers.forEach(function(layer) {
 
 		var type = layer.type;
 		if (type == TREE) {
 
 			var points = layer.points;
-//			generatePoints(points);
+			generatePoints(points);
 
 			var lines = layer.lines;
 			generateLines(lines, points);
 
 		} else if (type == COUNTS) {
-
+			// TODO: fix scaling for world map 
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
 
 			var counts = layer.points;
-//			generateCounts(counts, countAttribute);
+			generateCounts(counts, countAttribute);
 
 		} else {
 
@@ -316,7 +319,7 @@ var sliderInterval = 86400000;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/ebov_discrete.json", function ready(error, json) {
+d3.json("data/world_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
@@ -348,13 +351,12 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	var pointAttributes = json.pointAttributes;
 	populatePointPanels(pointAttributes);
-
+	
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {
 		populateMapPanels(mapAttributes);
-	}
+	} 
 	
-
 	// ---LAYERS---//
 
 	var layers = json.layers;
@@ -380,6 +382,8 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 		function readynow(error, world) {
 
+			populateMapPanels(world.mapAttributes);
+			
 			generateWorldLayer(world);
 			// mapRendered = true;
 
@@ -398,6 +402,12 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 			
 			initializeLayers(layers, pointAttributes, lineAttributes);
 
+			// ---LOCATIONS---//
+
+			var locations = json.locations;
+			generateLocations(locations);
+			generateLabels(locations);
+			
 		}
 
 		queue().defer(d3.json, "data/world.geojson").await(readynow);

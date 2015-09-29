@@ -22,7 +22,7 @@ function generateLocations(locations) {
 
 				return (cy);
 			}) //
-	.attr("r", "1px") //
+	.attr("r", ".1px") //
 	.attr("fill", "black") //
 	.attr("stroke", "black");
 

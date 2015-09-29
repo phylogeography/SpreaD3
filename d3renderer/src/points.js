@@ -1,10 +1,11 @@
 var COUNT_OPACITY = 0.5;
-var MIN_AREA = 1000;
-var MAX_AREA = 10000;
+//var MIN_AREA = 1000;
+//var MAX_AREA = 10000;
 
 function generateCounts(data, countAttribute) {
 
-	var counts = areasLayer.selectAll("circle").data(data).enter().append("circle") //
+	var counts = areasLayer.selectAll("circle").data(data).enter().append(
+			"circle") //
 	.attr("class", "point") //
 	.attr("startTime", function(d) {
 
@@ -36,64 +37,74 @@ function generateCounts(data, countAttribute) {
 
 				return (cy);
 			}) //
-	.attr("r", function(d) {
+	.attr(
+			"r",
+			function(d) {
 
-		var count = d.attributes.count;
+				var count = d.attributes.count;
 
-		// map them
-		var area = map(count, countAttribute.range[0], countAttribute.range[1], MIN_AREA, MAX_AREA);
-		var radius = Math.sqrt(area / Math.PI);
+				var min_area = 1000;//scale;
+				var max_area = 10000;//scale * 10;
+				
+				// map them
+				var area = map(count, // 
+						countAttribute.range[0], //
+						countAttribute.range[1], //
+						min_area, //
+						max_area //
+						);
+				var radius = Math.sqrt(area / Math.PI);
 
-		return (radius);
+				return (radius);
 
-	}) //
+			}) //
 	.attr("fill", "brown") //
 	.attr("opacity", COUNT_OPACITY) //
 	.attr("stroke", "#fff") //
-	.attr("stroke-width", "0.5px")
-	.on('mouseover', function(d) {
-		
+	.attr("stroke-width", "0.5px").on('mouseover', function(d) {
+
 		var point = d3.select(this);
 		point.attr('stroke', '#000');
-		
-//		point.transition().duration(500)
-//		.attr("r", point.attr("r") * 2 );
-		
-		
-}).on('mouseout', function(d,i) {
-	
-	var point = d3.select(this);
-	point.attr('stroke', '#fff');
-	
-//	point.transition().duration(500)
-//	.attr("r", point.attr("r") / 2 );
-	
-})
 
-	.call(d3.kodama.tooltip().format(function(d,i) {
-		
+		// point.transition().duration(500)
+		// .attr("r", point.attr("r") * 2 );
+
+	}).on('mouseout', function(d, i) {
+
+		var point = d3.select(this);
+		point.attr('stroke', '#fff');
+
+		// point.transition().duration(500)
+		// .attr("r", point.attr("r") / 2 );
+
+	})
+
+	.call(d3.kodama.tooltip().format(function(d, i) {
+
 		// TODO: filter
-		
-//		console.log(d3.select(this));
-		
-		if(1==1) {
-	
-        return {
-            title: d.location.id,
-            items: [
-                { title: 'Date', value: d.startTime},
-                { title: 'Count', value: d.attributes.count}
-            ]
-        };
-        
-} else {
-        	
-        	return null;
-        	
-        }
-		
-	}))
-	;
+
+		// console.log(d3.select(this));
+
+		if (1 == 1) {
+
+			return {
+				title : d.location.id,
+				items : [ {
+					title : 'Date',
+					value : d.startTime
+				}, {
+					title : 'Count',
+					value : d.attributes.count
+				} ]
+			};
+
+		} else {
+
+			return null;
+
+		}
+
+	}));
 
 }// END: generateCounts
 
