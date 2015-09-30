@@ -96,6 +96,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
 		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
 
+		
+		
 		return (lineStartDate <= value && value <= lineEndDate);
 	}) //
 	.transition() //
@@ -120,18 +122,38 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 		} else {
 
 			offset = map(timePassed, 0, duration, 0, totalLength);
-			offset = totalLength - offset;
 
+			if (d.westofsource) {
+				
+				offset = offset + totalLength;
+			
+			} else {
+
+				offset = totalLength - offset;
+			}
+			
 		}// END: instantaneous line check
 
 		
-		//TODO
-		console.log(d);
-		console.log("timePassed: " + timePassed);
-		console.log("duration: " + duration);
-		console.log("lineStartDate: " + lineStartDate);
-		console.log("totalLength: "+totalLength);
-		console.log("offset: "+offset);
+		if(d.startNodeId == "point_60" // Egypt
+			&& d.endNodeId == "point_61" // SouthAfrica
+				) {
+
+//			console.log("startLocation:" + d.startPoint.attributes.location);
+//			console.log("endLocation:" + d.endPoint.attributes.location);
+//			
+//			console.log("timePassed: " + timePassed);
+//			console.log("duration: " + duration);
+//			console.log("lineStartDate: " + lineStartDate);
+//			console.log("totalLength: "+totalLength);
+//			console.log("offset: "+offset);
+//			
+//			console.log("west of source: " + d.westofsource);
+			
+//			offset = offset +totalLength ;
+			
+		}
+		
 		
 		
 		return (offset);
@@ -327,7 +349,7 @@ var sliderInterval;// = 86400000;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/world_discrete.json", function ready(error, json) {
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 

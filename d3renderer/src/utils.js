@@ -81,20 +81,22 @@ function alternatingColorScale() {
 	var range;
 
 	function scale(x) {
-		return range[domain.indexOf(x) % range.length];
+		return (range[domain.indexOf(x) % range.length]);
 	}
 
 	scale.domain = function(x) {
 		if (!arguments.length) {
-			return domain;
+			return (domain);
 		}
 		domain = x;
-		return scale;
+		return (scale);
 	}
 
 	scale.range = function(x) {
-		if (!arguments.length)
-			return range;
+		if (!arguments.length) {
+			return (range);
+		}
+
 		range = x;
 		return scale;
 	}

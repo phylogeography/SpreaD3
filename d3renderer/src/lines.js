@@ -44,6 +44,8 @@ function generateLines(data, points) {
 				var dr = Math.sqrt(dx * dx + dy * dy) * bend;
 
 				var west_of_source = (targetX - sourceX) < 0;
+				line['westofsource'] = west_of_source;
+				
 				var bearing;
 				if (west_of_source) {
 					bearing = "M" + targetX + "," + targetY + "A" + dr + ","
