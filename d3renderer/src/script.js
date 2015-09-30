@@ -108,8 +108,10 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
 		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
 		var duration = lineEndDate - lineStartDate;
+		
 		var timePassed = value - lineStartDate;
 
+		
 		var offset = totalLength;
 		if (duration == 0) {
 
@@ -122,6 +124,16 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		}// END: instantaneous line check
 
+		
+		//TODO
+		console.log(d);
+		console.log("timePassed: " + timePassed);
+		console.log("duration: " + duration);
+		console.log("lineStartDate: " + lineStartDate);
+		console.log("totalLength: "+totalLength);
+		console.log("offset: "+offset);
+		
+		
 		return (offset);
 	}) //
 	.attr("opacity", 1);
@@ -171,7 +183,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---select counts displayed now---//
 
-	var points = areasLayer.selectAll(".point") //
+	areasLayer.selectAll(".point") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = Date.parse(point.attributes.startTime.value);
@@ -315,7 +327,7 @@ var sliderInterval;// = 86400000;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/ebov_discrete.json", function ready(error, json) {
+d3.json("data/world_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
@@ -330,8 +342,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	currentSliderValue = sliderStartValue;
 
 	// TODO: slider for speed control
-	var speed = 100;
-	sliderInterval = (sliderEndValue - sliderStartValue) / speed;
+	var sliderSpeed = 100;
+	var duration = sliderEndValue - sliderStartValue;
+	sliderInterval = duration / sliderSpeed;
 
 	// initial value
 	var currentDateDisplay = d3.select('#currentDate').text(

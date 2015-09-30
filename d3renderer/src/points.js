@@ -4,7 +4,7 @@ var COUNT_OPACITY = 0.5;
 
 function generateCounts(data, countAttribute) {
 
-	var counts = areasLayer.selectAll("circle").data(data).enter().append(
+areasLayer.selectAll("circle").data(data).enter().append(
 			"circle") //
 	.attr("class", "point") //
 	.attr("startTime", function(d) {
@@ -66,7 +66,8 @@ function generateCounts(data, countAttribute) {
 		var point = d3.select(this);
 		point.attr('stroke', '#000');
 
-		// point.transition().duration(500)
+//		var r = point.attr("r");
+//		 point.transition().duration(200).attr("r", r * 2 ).transition().duration(200).attr("r", r );
 		// .attr("r", point.attr("r") * 2 );
 
 	}).on('mouseout', function(d, i) {
