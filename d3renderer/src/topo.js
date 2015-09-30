@@ -44,7 +44,7 @@ function generateTopoLayer(geojson) {
 			.attr('d', path) //
 			.attr("fill", "white") //
 			.attr("stroke", "black") //
-			.attr("opacity", 0.55) //
+			.attr("fill-opacity", 0.5) //
 			.style("stroke-width", .5);
 
 	// dump attribute values into DOM
@@ -97,7 +97,7 @@ function generateWorldLayer(world) {
 			.attr('d', path) //
 			.attr("fill", "white") //
 			.attr("stroke", "black") //
-			.attr("opacity", 0.55) //
+			.attr("fill-opacity", 0.5) //
 			.style("stroke-width", .5);
 	
 	// dump attribute values into DOM

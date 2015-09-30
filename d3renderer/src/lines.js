@@ -75,7 +75,24 @@ function generateLines(data, points) {
 		return (totalLength + " " + totalLength);
 	}) //
 	.attr("stroke-dashoffset", 0) //
-	.attr("opacity", 1);
+	.attr("opacity", 1)
+    .on('mouseover', function(d) {
+
+    	// TODO: highlight
+//		var line = d3.select(this);
+//		line.attr('stroke-width', "2px");
+
+
+	})//
+	.on('mouseout', function(d, i) {
+
+    	// TODO: un-highlight
+
+//		var line = d3.select(this);
+//		line.attr('stroke-width', "1px");
+
+	})
+	;
 
 	// dump attribute values into DOM
 	lines[0].forEach(function(d, i) {
