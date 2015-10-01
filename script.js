@@ -2,224 +2,357 @@
  * @fbielejec
  */
 
-// ////////////////////////
-// ---GLOBAL VARIABLES---//
-// ////////////////////////
+// console.log("Slider:" + dateFormat(new Date(value)));
+// console.log(line.attributes.startTime.value);
+// ///////////////////
+// --- VARIABLES ---//
+// ///////////////////
+//
+// ---MAP---//
+//
 var width = document.getElementById('container').offsetWidth;
 var height = width / 2;
-
-var sliceCount = 5;
-
-var topo;
-var projection;
-var path;
-var svg;
-var g;
-
-var throttleTimer;
-
 var graticule = d3.geo.graticule();
+var scale;
 
-var tooltip = d3.select("#container").append("div").attr("class",
-		"tooltip hidden");
-
-var locations;
-
-var polygonsMap = [];
-var currentPolygons = null;
-// var polygonsMap = {};
-var polygonAttributeValues = [];
-var polygonAttributeMinMax = [];
-var polygonAreaSelect;
-var polygonColorSelect;
-
-var lines;
-// var lineSegmentsMap = {};
-var lineValueMap = [];
-var lineMinMaxMap = [];
-var lineWidthSelect;
-var lineColorSelect;
+//
+// ---DATA---//
+//
 
 // /////////////////
 // ---FUNCTIONS---//
 // /////////////////
 
-
-// ---SETUP---//
-function setup(width, height) {
-
-	projection = d3.geo.mercator() //
-	.translate([ (width / 2), (height / 2) ]) //
-	.scale(width / 2 / Math.PI);
-
-	path = d3.geo.path().projection(projection);
-
-	svg = d3.select("#container").append("svg") //
-	.attr("width", width) //
-	.attr("height", height) //
-	.call(zoom) //
-	.on("click", click);
-
-	g = svg.append("g");
-
-}// END: setup
-
-// ---DRAW---//
-
-function draw(topo) {
-
-	svg.append("path") //
-	.datum(graticule) //
-	.attr("class", "graticule") //
-	.attr("d", path);
-
-	g.append("path") //
-	.datum(
-			{
-				type : "LineString",
-				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
-						[ 180, 0 ] ]
-			}) //
-	.attr("class", "equator") //
-	.attr("d", path);
-
-	var country = g.selectAll(".country").data(topo);
-
-	country.enter().insert("path") //
-	.attr("class", "country") //
-	.attr("d", path) //
-	.attr("id", function(d, i) {
-		return d.id;
-	}) //
-	.attr("title", function(d, i) {
-		return d.properties.name;
-	}) //
-	.style("fill", "rgb(194, 178, 128)") //
-	.style("stroke", "rgb(0, 0, 0)") //
-	;
-
-	// offsets for tooltips
-	var offsetL = document.getElementById('container').offsetLeft + 20;
-	var offsetT = document.getElementById('container').offsetTop + 10;
-
-	// tooltips
-	country.on(
-			"mouseover",
-			function(d, i) {
-
-				var mouse = d3.mouse(svg.node()).map(function(d) {
-					return parseInt(d);
-				});
-
-				tooltip.classed("hidden", false) //
-				.attr(
-						"style",
-						"left:" + (mouse[0] + offsetL) + "px;top:"
-								+ (mouse[1] + offsetT) + "px") //
-				.html(d.properties.name);
-
-				d3.select(this).style("fill", "rgb(250, 250, 250)");
-
-			}) //
-	.on("mouseout", function(d, i) {
-
-		tooltip.classed("hidden", true);
-
-		d3.select(this).style("fill", "rgb(194, 178, 128)");
-
-	});
-
-}// END: draw
-
-// ---REDRAW---//
-
-function redraw() {
-	
-	width = document.getElementById('container').offsetWidth;
-	height = width / 2;
-	d3.select('svg').remove();
-	setup(width, height);
-	
-	draw(topo);
-	
-}// END: redraw
-
-// ---MOVE---//
-
 function move() {
 
 	var t = d3.event.translate;
 	var s = d3.event.scale;
-	// zscale = s;
 	var h = height / 4;
 
-	t[0] = Math.min((width / height) * (s - 1), //
-	Math.max(width * (1 - s), t[0]) //
-	);
+	t[0] = Math
+			.min((width / height) * (s - 1), Math.max(width * (1 - s), t[0]));
 
-	t[1] = Math.min(h * (s - 1) + h * s, //
-	Math.max(height * (1 - s) - h * s, t[1]) //
-	);
+	t[1] = Math.min(h * (s - 1) + h * s, Math.max(height * (1 - s) - h * s,
+			t[1]));
 
 	zoom.translate(t);
 	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
-	// adjust the country hover stroke width based on zoom level
-	d3.selectAll(".country") //
-	.style("stroke-width", 1.5 / s) //
-	;
+	// fit the paths to the zoom level
+	d3.selectAll(".country").style("stroke-width", 1.0 / s);
+	d3.selectAll(".line").style("stroke-width", 1.0 / s);
+	d3.selectAll(".point").style("stroke-width", 1.0 / s);
 
 }// END: move
 
-// ---THROTTLE---//
+function initializeLayers(layers, pointAttributes, lineAttributes) {
 
-function throttle() {
+	// ---DATA LAYER---//
 
-	window.clearTimeout(throttleTimer);
+	layers.forEach(function(layer) {
 
-	throttleTimer = window.setTimeout(function() {
-		redraw();
-	}, 200);
+		var type = layer.type;
+		if (type == TREE) {
 
-}// END: throttle
+			var points = layer.points;
+			generatePoints(points);
 
-// ---CLICK---//
+			var lines = layer.lines;
+			generateLines(lines, points);
 
-function click() {
-	/* Geo translation on mouse click on map */
-	projection.invert(d3.mouse(this));
-}// END: click
+		} else if (type == COUNTS) {
+
+			var countAttribute = getObject(pointAttributes, "id", COUNT);
+			var counts = layer.points;
+			generateCounts(counts, countAttribute);
+
+		} else {
+
+			// do nothing
+
+		}
+
+	});
+
+}// END: initializeLayers
+
+function updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat) {
+
+	var currentDate = timeScale.invert(timeScale(value));
+	currentDateDisplay.text(dateFormat(currentDate));
+
+}// END: updateDateDisplay
+
+function update(value, timeScale, currentDateDisplay, dateFormat) {
+
+	updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat);
+
+	// ---LINES---//
+
+	// ---select lines painting now---//
+
+	linesLayer.selectAll("path.line") //
+	.filter(function(d) {
+
+		var linePath = this;
+		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
+		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
+
+		return (lineStartDate <= value && value <= lineEndDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.attr("stroke-dashoffset", function(d, i) {
+
+		var linePath = this;
+		var totalLength = linePath.getTotalLength();
+
+		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
+		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
+		var duration = lineEndDate - lineStartDate;
+
+		var timePassed = value - lineStartDate;
+
+		var offset = totalLength;
+		if (duration == 0) {
+
+			offset = 0;
+
+		} else {
+
+			offset = map(timePassed, 0, duration, 0, totalLength);
+
+			if (d.westofsource) {
+
+				offset = offset + totalLength;
+
+			} else {
+
+				offset = totalLength - offset;
+			}
+
+		}// END: instantaneous line check
+
+		return (offset);
+	}) //
+	.style("visibility", "visible") //
+	.attr("opacity", 1);
+
+	// ---select lines yet to be painted---//
+
+	linesLayer.selectAll("path.line") //
+	.filter(function(d) {
+		var linePath = this;
+		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
+
+		return (lineStartDate > value);
+	}) //
+	.attr("stroke-dashoffset", function(d, i) {
+		var linePath = this;
+		var totalLength = linePath.getTotalLength();
+
+		return (totalLength);
+	}) //
+	.style("visibility", "hidden") //
+	.attr("opacity", 0);
+
+	// ---select lines already painted---//
+
+	linesLayer.selectAll("path.line") //
+	.filter(function(d) {
+		var linePath = this;
+		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
+
+		return (lineEndDate < value);
+	}) //
+	.attr("stroke-dashoffset", 0) //
+	.style("visibility", "visible") //
+	.attr("opacity", 1);
+
+	// ---COUNTS---//
+
+	// ---select counts yet to be displayed or already displayed---//
+
+	areasLayer.selectAll(".point") //
+	.filter(function(d) {
+		var point = this;
+		var startDate = Date.parse(point.attributes.startTime.value);
+		var endDate = Date.parse(point.attributes.endTime.value);
+
+		return (value < startDate || value > endDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.duration(1000) //
+	.style("visibility", "hidden") //
+	.attr("opacity", 0);
+
+	// ---select counts displayed now---//
+
+	areasLayer.selectAll(".point") //
+	.filter(function() {
+		var point = this;
+		var startDate = Date.parse(point.attributes.startTime.value);
+		var endDate = Date.parse(point.attributes.endTime.value);
+
+		return (value > startDate && value < endDate);
+	}) //
+	.transition() //
+	.duration(100) //
+	.ease("linear") //
+	.style("visibility", "visible") //
+	.attr("opacity", COUNT_OPACITY);
+
+}// END: update
+
+function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+		dateFormat) {
+
+	// time slider listener
+	timeSlider.on('slide', function(evt, value) {
+
+		update(value, timeScale, currentDateDisplay, dateFormat);
+		currentSliderValue = value;
+
+	});// END: slide
+
+	var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+			.on(
+					"click",
+					function() {
+
+						if (playing) {
+							playing = false;
+							playPauseButton.classed("playing", playing);
+
+							clearInterval(processID);
+
+						} else {
+							playing = true;
+							playPauseButton.classed("playing", playing);
+
+							processID = setInterval(function() {
+
+								var sliderValue = currentSliderValue
+										+ sliderInterval;
+								if (sliderValue > sliderEndValue) {
+									sliderValue = sliderStartValue;
+								}
+
+								timeSlider.value(sliderValue);
+								update(sliderValue, timeScale,
+										currentDateDisplay, dateFormat);
+
+								currentSliderValue = sliderValue;
+
+							}, 100);
+
+						}// END: playing check
+
+					});
+
+}// END: initializeTimeSlider
+
+// ///////////////
+// ---ZOOMING---//
+// ///////////////
+
+function clicked() {
+	svg.call(zoom.event);
+
+	var center0 = zoom.center();
+	var translate0 = zoom.translate();
+	var coordinates0 = coordinates(center0);
+
+	// console.log(zoom.scale());
+
+	zoom.scale(zoom.scale() * Math.pow(1.5, +this.getAttribute("data-zoom")));
+
+	if (zoom.scale() < minScaleExtent) {
+		zoom.scale(minScaleExtent);
+	}
+
+	if (zoom.scale() > maxScaleExtent) {
+		zoom.scale(maxScaleExtent);
+	}
+
+	// Translate back to the center.
+	var center1 = point(coordinates0);
+	zoom.translate([ translate0[0] + center0[0] - center1[0],
+			translate0[1] + center0[1] - center1[1] ]);
+
+	svg.transition().duration(750).call(zoom.event);
+}
+
+function coordinates(point) {
+	var scale = zoom.scale(), translate = zoom.translate();
+	return [ (point[0] - translate[0]) / scale,
+			(point[1] - translate[1]) / scale ];
+}
+
+function point(coordinates) {
+	var scale = zoom.scale(), translate = zoom.translate();
+	return [ coordinates[0] * scale + translate[0],
+			coordinates[1] * scale + translate[1] ];
+}
 
 // /////////////////
 // ---RENDERING---//
 // /////////////////
 
-// ---MAP BACKGROUND---//
+// ---DRAW MAP BACKGROUND---//
 
-d3.select(window).on("resize", throttle);
+var minScaleExtent = 1;
+var maxScaleExtent = 4;
 
-var zoom = d3.behavior.zoom() //
-.scaleExtent([ 1, 9 ]) //
-.on("zoom", move);
+var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
+		.center([ width / 2, height / 2 ]).size([ width, height ]).on("zoom",
+				move);
 
-setup(width, height);
+// layers
+var svg = d3.select("#container").append('svg').attr('width', width).attr(
+		'height', height).call(zoom);
 
-d3.json("data/world-topo-min.json", function(error, world) {
+d3.selectAll("button[data-zoom]").on("click", clicked);
 
-	topo = topojson.feature(world, world.objects.countries).features;
-	draw(topo);
+var g = svg.append("g");
+var equatorLayer = g.append("g");
+var topoLayer = g.append("g");
 
-});
+var areasLayer = g.append("g");
+var pointsLayer = g.append("g");
+var linesLayer = g.append("g");
+var locationsLayer = g.append("g");
+var labelsLayer = g.append("g");
 
-// ---DRAW DATA---//
+var projection;
 
-d3.json("data/test_discrete.json", function(json) {
+// time slider
+var playing = false;
+var processID;
+var currentSliderValue;
+var sliderInterval;
+var sliderStartValue;
+var sliderEndValue;
 
-	// paint all, then manipulate visibility according to dates
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 
+	// -- TIME LINE-- //
+
+	var dateFormat = d3.time.format("%Y-%m-%d");
 	var timeLine = json.timeLine;
+
 	var startDate = new Date(timeLine.startTime);
 	var endDate = new Date(timeLine.endTime);
+
+	sliderStartValue = Date.parse(timeLine.startTime);
+	sliderEndValue = Date.parse(timeLine.endTime);
+	currentSliderValue = sliderStartValue;
+
+	// TODO: slider for speed control
+	var sliderSpeed = 100;
+	var duration = sliderEndValue - sliderStartValue;
+	sliderInterval = duration / sliderSpeed;
 
 	// initial value
 	var currentDateDisplay = d3.select('#currentDate').text(
@@ -230,108 +363,102 @@ d3.json("data/test_discrete.json", function(json) {
 	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 	d3.select('#timeSlider').call(timeSlider);
 
-	locations = json.locations;
-	var locationIds = [];
-	locations.forEach(function(location) {
+	// ---ATTRIBUTES---//
 
-		locationIds.push(location.id);
+	populateLocationPanels();
 
-	});
+	var lineAttributes = json.lineAttributes;
+	populateLinePanels(lineAttributes);
+
+	var pointAttributes = json.pointAttributes;
+	populatePointPanels(pointAttributes);
+
+	var mapAttributes = json.mapAttributes;
+	if (typeof mapAttributes != 'undefined') {
+		populateMapPanels(mapAttributes);
+	}
+
+	// ---LAYERS---//
 
 	var layers = json.layers;
-	var polygons = null;
-	var lines = null;
+	var mapRendered = false;
+
+	// ---MAP LAYER---//
+
 	layers.forEach(function(layer) {
 
-		polygons = layer.polygons;
-		populatePolygonMaps(polygons);
-		generatePolygons(polygons, locations, locationIds);
+		var type = layer.type;
+		if (type == MAP) {
 
-		lines = layer.lines;
-		populateLineMaps(lines);
-		generateLines(lines, locations, locationIds);
+			var geojson = layer.geojson;
+			generateTopoLayer(geojson);
+			mapRendered = true;
 
-	});
-
-	// polygon area listener
-	d3.select(polygonAreaSelect).on('change', function() {
-		
-		// TODO: listeners should also 'rewind time', or set the visibility to
-		// current setting on the slider
-		
-		g.selectAll(".polygon").remove();
-		generatePolygons(polygons, locations, locationIds);
+		}
 
 	});
 
-	// polygon color listener
-	d3.select(polygonColorSelect).on('change', function() {
+	// if no geojson layer render world map
+	if (!mapRendered) {
 
-		g.selectAll(".polygon").remove();
-		generatePolygons(polygons, locations, locationIds);
+		function readynow(error, world) {
 
-	});
+			populateMapPanels(world.mapAttributes);
 
-	// line color listener
-	d3.select(lineColorSelect).on('change', function() {
+			generateWorldLayer(world);
+			// mapRendered = true;
 
-		g.selectAll(".line").remove();
-		generateLines(lines, locations, locationIds);
+			// ---TIME SLIDER---//
 
-	});
+			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+					dateFormat);
 
-	// time slider listener
-	timeSlider.on('slide', function(evt, value) {
+			// put slider at the end of timeLine, everything painted
+			timeSlider.value(sliderEndValue);
 
-		var currentDate = timeScale.invert(timeScale(value));
-		currentDateDisplay.text(dateFormat(currentDate));
+			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+					dateFormat);
 
-		// set transparency (opacity) on elements up to current date
+			// ---DATA LAYERS---//
 
-		// polygons
-		d3.selectAll(".polygon")[0]
-				.filter(function(polygon) {
+			initializeLayers(layers, pointAttributes, lineAttributes);
 
-					var polygonStartDate = new Date(
-							polygon.attributes.startTime.value);
-					if (polygonStartDate <= value) {
+			// ---LOCATIONS---//
 
-						d3.select(polygon) //
-						.transition() //
-						.duration(750) //
-						.attr("opacity", 1);
+			var locations = json.locations;
+			generateLocations(locations);
+			generateLabels(locations);
 
-					} else {
+		}
 
-						d3.select(polygon).attr("opacity", 0);
-						
-//						polygon.setAttribute('opacity', 0);
+		queue().defer(d3.json, "data/world.geojson").await(readynow);
 
-					}// END: date check
+	} else {
 
-				});// END: filter
+		// ---TIME SLIDER---//
 
-		// lines
-		d3.selectAll(".line")[0].filter(function(line) {
+		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+				dateFormat);
 
-			var lineStartDate = new Date(line.attributes.startTime.value);
-			if (lineStartDate <= value) {
+		// put slider at the end of timeLine, everything painted
+		timeSlider.value(sliderEndValue);
 
-				d3.select(line) //
-				.transition() //
-				.duration(750) //
-				.attr("opacity", 1);
+		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+				dateFormat);
 
-			} else {
+		// ---DATA LAYERS---//
 
-				d3.select(line).attr("opacity", 0);
-				
-//				line.setAttribute('opacity', 0);
+		initializeLayers(layers, pointAttributes, lineAttributes);
 
-			}// END: date check
+		// ---LOCATIONS---//
 
-		});// END: filter
+		var locations = json.locations;
+		generateLocations(locations);
+		generateLabels(locations);
 
-	});// END: slide
+		// console.log(locations);
 
-});
+	}// END: mapRendered check
+
+} // END: function
+);

@@ -1,303 +1,128 @@
-// ---POPULATE LINE MAPS---//
-
-function populateLineMaps(lines) {
-
-	var attributeInclude = [];
-	var factorValue = 1.0;
-
-	lines.forEach(function(line) {
-
-		var attributes = line.attributes;
-		for ( var property in attributes) {
-
-			// process values
-			var value = attributes[property].id;
-			if (!(value in lineValueMap)) {
-
-				if (isNumeric(value)) {
-
-					lineValueMap[value] = {
-						value : value
-					};
-
-				} else {
-
-					lineValueMap[value] = {
-						value : factorValue
-					};
-
-					factorValue++;
-
-				}// END: isNumeric check
-
-			} // END: contains check
-
-			// process includes and attribute names for choosers
-			var include = true;
-			if (property.startsWith(START_STRING)
-					|| property.startsWith(END_STRING)) {
-
-				// lines have start and end attributes, but we keep only the
-				// core name
-				property = property.replace(START_PREFIX, '').replace(
-						END_PREFIX, '');
-
-				// attributes with no start/end cannot be used with some
-				// aesthetics
-				include = false;
-
-			} else {
-
-				include = true;
-
-			}// END: prefix check
-
-			attributeInclude[property] = {
-				include : include
-			};
-
-			// get min max values
-			if (!(property in lineMinMaxMap)) {
-
-				lineMinMaxMap[property] = {
-					min : lineValueMap[value].value,
-					max : lineValueMap[value].value
-				};
-
-			} else {
-
-				var min = lineMinMaxMap[property].min;
-				var candidateMin = lineValueMap[value].value;
-
-				if (candidateMin < min) {
-					lineMinMaxMap[property].min = candidateMin;
-				}// END: min check
-
-				var max = lineMinMaxMap[property].max;
-				var candidateMax = lineValueMap[value].value;
-
-				if (candidateMax > max) {
-					lineMinMaxMap[property].max = candidateMax;
-				}// END: max check
-
-			}// END: key check
-
-		}// END: attributes loop
-
-	});// END: polygons loop
-
-	// printMap(lineValueMap);
-	// printMap(lineMinMaxMap);
-
-	var i;
-	var option;
-	var element;
-	var keys = Object.keys(lineMinMaxMap);
-
-	lineWidthSelect = document.getElementById("selectLineWidthAttribute");
-	for (i = 0; i < keys.length; i++) {
-
-		option = keys[i];
-		if (attributeInclude[option].include) {
-			element = document.createElement("option");
-			element.textContent = option;
-			element.value = option;
-
-			lineWidthSelect.appendChild(element);
-		}
-
-	}// END: i loop
-
-	lineColorSelect = document.getElementById("selectLineColorAttribute");
-	for (i = 0; i < keys.length; i++) {
-
-		option = keys[i];
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		lineColorSelect.appendChild(element);
-
-	}// END: i loop
-
-}// END: populateLineMaps
-
 // ---GENERATE LINES--//
 
-function generateLines(lines, locations, locationIds) {
+function generateLines(data, points) {
 
-	// width maping
-	var widthAttribute = lineWidthSelect.options[lineWidthSelect.selectedIndex].text;
+//	http://bl.ocks.org/mbostock/8033015
+	
+	var lines = linesLayer.selectAll("path").data(data).enter().append("path") //
+	.attr("class", "line") //
+	.attr(
+			"d",
+			function(d, i) {
 
-	var minWidth = 0.1;
-	var maxWidth = 0.5;
+				var line = d;
 
-	var widthScale = d3.scale.linear() //
-	.domain(
-			[ lineMinMaxMap[widthAttribute].min,
-					lineMinMaxMap[widthAttribute].max ]) //
-	.range([ minWidth, maxWidth ]);
+				var startNodeId = line.startNodeId;
+				var startPoint = getObject(points, "id", startNodeId);
+				line['startPoint'] = startPoint;
+				var startCoordinate = line.startPoint.location.coordinate;
 
-	// color maping
-	var colorAttribute = lineColorSelect.options[lineColorSelect.selectedIndex].text;
+				var endNodeId = line.endNodeId;
+				var endPoint = getObject(points, "id", endNodeId);
+				line['endPoint'] = endPoint;
+				var endCoordinate = line.endPoint.location.coordinate;
 
-	var numC = 9;
-	var cbMap;
+				// jitter
+				var bend = map(Date.parse(line.startTime), sliderStartValue,
+						sliderEndValue, 1, 0);
 
-	cbMap = colorbrewer["Reds"];
-	var minRed = cbMap[numC][0];
-	var maxRed = cbMap[numC][numC - 0];
-	var redScale = d3.scale.linear().domain(
-			[ lineMinMaxMap[colorAttribute].min,
-					lineMinMaxMap[colorAttribute].max ]) //
-	.range([ minRed, maxRed ]);
+				var startLatitude = startCoordinate.xCoordinate;
+				var startLongitude = startCoordinate.yCoordinate;
 
-	cbMap = colorbrewer["Greens"];
-	var minGreen = cbMap[numC][0];
-	var maxGreen = cbMap[numC][numC - 1];
-	var greenScale = d3.scale.linear().domain(
-			[ lineMinMaxMap[colorAttribute].min,
-					lineMinMaxMap[colorAttribute].max ]) //
-	.range([ minGreen, maxGreen ]);
+				var endLatitude = endCoordinate.xCoordinate;
+				var endLongitude = endCoordinate.yCoordinate;
 
-	cbMap = colorbrewer["Blues"];
-	var minBlue = cbMap[numC][0];
-	var maxBlue = cbMap[numC][numC - 0];
-	var blueScale = d3.scale.linear().domain(
-			[ lineMinMaxMap[colorAttribute].min,
-					lineMinMaxMap[colorAttribute].max ]) //
-	.range([ minBlue, maxBlue ]);
+				var sourceXY = projection([ startLongitude, startLatitude ]);
+				var targetXY = projection([ endLongitude, endLatitude ]);
 
-	var attribute;
-	var value;
-	lines.forEach(function(line) {
+				var sourceX = sourceXY[0]; // lat
+				var sourceY = sourceXY[1]; // long
 
-		var locationId = line.startLocation;
-		var index = locationIds.indexOf(locationId);
-		var location = locations[index];
-		var startCoordinate = location.coordinate;
+				var targetX = targetXY[0];
+				var targetY = targetXY[1];
 
-		locationId = line.endLocation;
-		index = locationIds.indexOf(locationId);
-		location = locations[index];
-		var endCoordinate = location.coordinate;
+				var dx = targetX - sourceX;
+				var dy = targetY - sourceY;
+				var dr = Math.sqrt(dx * dx + dy * dy) * bend;
 
-		// get width attribute value
-		attribute = line.attributes[widthAttribute].id;
-		value = lineValueMap[attribute].value;
-		var width = widthScale(value);
+				var west_of_source = (targetX - sourceX) < 0;
+				line['westofsource'] = west_of_source;
+				
+				var bearing;
+				if (west_of_source) {
+					bearing = "M" + targetX + "," + targetY + "A" + dr + ","
+							+ dr + " 0 0,1 " + sourceX + "," + sourceY;
+				} else {
 
-		// get start color attribute value
-		attribute = line.attributes[colorAttribute];
+					bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
+							+ dr + " 0 0,1 " + targetX + "," + targetY;
+				}
 
-		if (!attribute) {
+				return (bearing);
 
-			attribute = line.attributes[START_STRING + colorAttribute];
+			}) //
+	.attr("fill", "none") //
+	.attr("stroke-width", 1 + "px") //
+	.attr("stroke-linejoin", "round") //
+	.attr("stroke", "black") //
+	.attr("startTime", function(d) {
+		return (d.startTime);
+	}) //
+	.attr("endTime", function(d) {
+		return (d.endTime);
+	}) //
+	.attr("stroke-dasharray", function(d) {
 
-		}// END: null check
+		var totalLength = d3.select(this).node().getTotalLength();
+		return (totalLength + " " + totalLength);
+	}) //
+	.attr("stroke-dashoffset", 0) //
+	.attr("opacity", 1)
+    .on('mouseover', function(d) {
 
-		value = lineValueMap[attribute.id].value;
+    	// TODO: highlight
+		var line = d3.select(this);
+		line.attr('stroke-width', "4px");
+		
+		// bring line to the front
+        this.parentNode.parentNode.appendChild(this.parentNode);
 
-		// map start value to colors
-		var startRed = d3.rgb(redScale(value)).r;
-		var startGreen = d3.rgb(greenScale(value)).g;
-		var startBlue = d3.rgb(blueScale(value)).b;
+	})//
+	.on('mouseout', function(d, i) {
 
-		// get end color attribute value
-		attribute = line.attributes[colorAttribute];
-		if (!attribute) {
+    	// TODO: un-highlight
+		var line = d3.select(this);
+		line.attr('stroke-width', "1px");
 
-			attribute = line.attributes[END_STRING + colorAttribute];
+	})
+	.call(d3.kodama.tooltip().format(function(d, i) {
 
-		}// END: null check
+		return {
+//			title : "FOO",
+			items : [ {
+				title : 'Start point',
+				value : d.startPoint.location.id
+			}, {
+				title : 'End point',
+				value : d.endPoint.location.id
+			} ]
+		};
 
-		value = lineValueMap[attribute.id].value;
+	}));
 
-		// get colors from scale
-		var endRed = d3.rgb(redScale(value)).r;
-		var endGreen = d3.rgb(greenScale(value)).g;
-		var endBlue = d3.rgb(blueScale(value)).b;
+	// dump attribute values into DOM
+	lines[0].forEach(function(d, i) {
 
-		// console.log("start: " + startAttribute+ " " + startRed +","
-		// +startGreen +"," + startBlue + " end: " +endAttribute +" "
-		// +endRed
-		// +"," + endGreen +"," + endBlue );
+		var thisLine = d3.select(d);
+		var properties = data[i].attributes;
 
-		generateLine(line, startCoordinate, endCoordinate, startRed,
-				startGreen, startBlue, endRed, endGreen, endBlue, width);
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
 
+				thisLine.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
 	});
 
 }// END: generateLines
-
-// ---GENERATE LINE--//
-
-function generateLine(line, startCoordinate, endCoordinate, startRed,
-		startGreen, startBlue, endRed, endGreen, endBlue, width) {
-
-	var startLatitude = startCoordinate.xCoordinate;
-	var startLongitude = startCoordinate.yCoordinate;
-
-	var endLatitude = endCoordinate.xCoordinate;
-	var endLongitude = endCoordinate.yCoordinate;
-	var coords = getIntermediateCoords(startLongitude, startLatitude,
-			endLongitude, endLatitude, sliceCount);
-
-	var redStep = (endRed - startRed) / sliceCount;
-	var greenStep = (endGreen - startGreen) / sliceCount;
-	var blueStep = (endBlue - startBlue) / sliceCount;
-
-	// var startTime = Date.parse("1969-01-01");
-
-	var startTime = Date.parse(line.startTime);
-	var endTime = Date.parse(line.endTime);
-	var millis = endTime - startTime;
-	var segmentMillis = millis / (sliceCount - 1);
-
-	for (var i = 0; i < sliceCount; i++) {
-
-		var segmentStartLongitude = coords[i][LONGITUDE];
-		var segmentStartLatitude = coords[i][LATITUDE];
-
-		var segmentEndLongitude = coords[i + 1][LONGITUDE];
-		var segmentEndLatitude = coords[i + 1][LATITUDE];
-
-		var segmentRed = Math.round(startRed + redStep * i);
-		var segmentGreen = Math.round(startGreen + greenStep * i);
-		var segmentBlue = Math.round(startBlue + blueStep * i);
-
-		var segmentWidth = width;
-
-		var duration = segmentMillis * i;
-		var segmentStartTime = dateFormat(new Date(startTime + duration));
-
-		// console.log(segmentStartTime);
-
-		generateLineSegment(segmentStartLongitude, segmentStartLatitude,
-				segmentEndLongitude, segmentEndLatitude, segmentRed,
-				segmentGreen, segmentBlue, segmentWidth, segmentStartTime);
-
-	}// END: slices loop
-
-}// END: generateLine
-
-function generateLineSegment(startLongitude, startLatitude, endLongitude,
-		endLatitude, segmentRed, segmentGreen, segmentBlue, segmentWidth,
-		segmentStartTime) {
-
-	g.append("path").datum(
-			{
-				type : "LineString",
-				coordinates : [ [ startLongitude, startLatitude ],
-						[ endLongitude, endLatitude ] ]
-			}) //
-	.attr("class", "line") //
-	.attr("startTime", segmentStartTime) //
-	.attr("d", path).attr("fill", "none") //
-	.attr("stroke-width", segmentWidth + "px") //
-	.attr("stroke",
-			"rgb(" + segmentRed + "," + segmentGreen + "," + segmentBlue + ")") //
-	.attr("opacity", 1);
-
-}// END: generateLineSegment
-
