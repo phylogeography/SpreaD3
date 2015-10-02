@@ -2,6 +2,34 @@ var COUNT_OPACITY = 0.5;
 // var MIN_AREA = 1000;
 // var MAX_AREA = 10000;
 
+d3.kodama
+		.themeRegistry(
+				'countsTheme',
+				{
+					frame : {
+						padding : '4px',
+						background : 'linear-gradient(to top, rgb(188, 95, 95) 0%, rgb(177, 68, 68) 90%)',
+						'font-family' : '"Helvetica Neue", Helvetica, Arial, sans-serif',
+						'border' : '1px solid rgb(57, 208, 204)',
+						color : 'rgb(245,240,220)',
+						'border-radius' : '4px',
+						'font-size' : '12px',
+						'box-shadow' : '0px 1px 3px rgba(0,20,40,.5)'
+					},
+					title : {
+						'text-align' : 'center',
+						'padding' : '4px'
+					},
+					item_title : {
+						'text-align' : 'right',
+						'color' : 'rgb(220,200,120)'
+					},
+					item_value : {
+						'padding' : '1px 2px 1px 10px',
+						'color' : 'rgb(234, 224, 184)'
+					}
+				});
+
 function generateCounts(data, countAttribute) {
 
 	areasLayer.selectAll("circle").data(data).enter().append("circle") //
@@ -59,7 +87,7 @@ function generateCounts(data, countAttribute) {
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
 	.attr("opacity", COUNT_OPACITY) //
-	.style("visibility", "visible") //
+	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
 		var point = d3.select(this);
@@ -93,7 +121,8 @@ function generateCounts(data, countAttribute) {
 			} ]
 		};
 
-	}));
+	}) //
+	.theme('countsTheme'));
 
 }// END: generateCounts
 

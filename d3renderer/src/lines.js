@@ -1,7 +1,34 @@
 // ---GENERATE LINES--//
 
+    d3.kodama.themeRegistry('linesTheme', {
+    	   frame: {
+               padding: '4px',
+               background: 'linear-gradient(to top, rgb(16, 74, 105) 0%, rgb(14, 96, 125) 90%)',
+               'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
+               'border': '1px solid rgb(57, 208, 204)',
+               color: 'rgb(245,240,220)',
+               'border-radius': '4px',
+               'font-size': '12px',
+               'box-shadow': '0px 1px 3px rgba(0,20,40,.5)'
+           },
+           title: {'text-align': 'center', 'padding': '4px'},
+           item_title: {'text-align': 'right', 'color': 'rgb(220,200,120)'},
+           item_value: {'padding': '1px 2px 1px 10px', 'color': 'rgb(234, 224, 184)'}
+    });
+
 function generateLines(data, points) {
 
+//	http://bl.ocks.org/mbostock/8033015
+	var voronoi = d3.geom.voronoi() //
+	.x(function(d) {
+		return x(d.date);
+	}) //
+	.y(function(d) {
+		return y(d.value);
+	}) //
+	.clipExtent([ [ 0, 0 ], [ width, height ] ]);
+	
+	
 	var lines = linesLayer.selectAll("path").data(data).enter().append("path") //
 	.attr("class", "line") //
 	.attr(
@@ -79,20 +106,38 @@ function generateLines(data, points) {
     .on('mouseover', function(d) {
 
     	// TODO: highlight
-//		var line = d3.select(this);
-//		line.attr('stroke-width', "2px");
-
+		var line = d3.select(this);
+		line.classed("hover", true);
+//		line.attr('stroke-width', "4px");
+		
+		// bring line to the front
+        this.parentNode.parentNode.appendChild(this.parentNode);
 
 	})//
 	.on('mouseout', function(d, i) {
 
     	// TODO: un-highlight
-
-//		var line = d3.select(this);
+		var line = d3.select(this);
+		line.classed("hover", false);
 //		line.attr('stroke-width', "1px");
 
 	})
-	;
+	.call( d3.kodama.tooltip().format(function(d, i) {
+
+		return {
+//			title : "FOO",
+			items : [ {
+				title : 'Start point',
+				value : d.startPoint.location.id
+			}, {
+				title : 'End point',
+				value : d.endPoint.location.id
+			} ]
+		};
+
+	}).theme('linesTheme')
+	
+	);
 
 	// dump attribute values into DOM
 	lines[0].forEach(function(d, i) {

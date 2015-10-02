@@ -15,6 +15,7 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
+
 //
 // ---DATA---//
 //
@@ -39,9 +40,9 @@ function move() {
 	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
 	// fit the paths to the zoom level
-	d3.selectAll(".country").style("stroke-width", 1.0 / s);
-	d3.selectAll(".line").style("stroke-width", 1.0 / s);
-	d3.selectAll(".point").style("stroke-width", 1.0 / s);
+	d3.selectAll(".country").attr("stroke-width", 1.0 / s);
+	d3.selectAll(".line").attr("stroke-width", 1.0 / s);
+	d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 
 }// END: move
 
@@ -135,6 +136,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (offset);
 	}) //
+	.style("visibility", "visible") //
 	.attr("opacity", 1);
 
 	// ---select lines yet to be painted---//
@@ -152,6 +154,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (totalLength);
 	}) //
+	.style("visibility", "hidden") //
 	.attr("opacity", 0);
 
 	// ---select lines already painted---//
@@ -164,6 +167,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 		return (lineEndDate < value);
 	}) //
 	.attr("stroke-dashoffset", 0) //
+	.style("visibility", "visible") //
 	.attr("opacity", 1);
 
 	// ---COUNTS---//
@@ -178,9 +182,10 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (value < startDate || value > endDate);
 	}) //
-	.style("visibility", "hidden") //
 	.transition() //
 	.ease("linear") //
+	.duration(1000) //
+	.attr("visibility", "hidden") //
 	.attr("opacity", 0);
 
 	// ---select counts displayed now---//
@@ -193,9 +198,10 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (value > startDate && value < endDate);
 	}) //
-	.style("visibility", "visible") //
 	.transition() //
-	.duration(500).ease("linear") //
+	.duration(100) //
+	.ease("linear") //
+	.attr("visibility", "visible") //
 	.attr("opacity", COUNT_OPACITY);
 
 }// END: update
@@ -326,11 +332,11 @@ var projection;
 var playing = false;
 var processID;
 var currentSliderValue;
-var sliderInterval;// = 86400000;
+var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/world_discrete.json", function ready(error, json) {
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 

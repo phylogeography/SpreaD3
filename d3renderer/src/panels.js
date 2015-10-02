@@ -326,7 +326,7 @@ function populateLinePanels(attributes) {
 									// console.log(color);
 
 									line.transition().delay(100).ease("linear")
-											.style("stroke", color);
+											.attr("stroke", color);
 
 								});
 
