@@ -8,7 +8,7 @@ d3.kodama
 				{
 					frame : {
 						padding : '4px',
-						background : 'linear-gradient(to top, rgb(188, 95, 95) 0%, rgb(177, 68, 68) 90%)',
+						background : 'linear-gradient(to top, rgb(177, 68, 68) 0%, rgb(188, 95, 95) 90%)',
 						'font-family' : '"Helvetica Neue", Helvetica, Arial, sans-serif',
 						'border' : '1px solid rgb(57, 208, 204)',
 						color : 'rgb(245,240,220)',

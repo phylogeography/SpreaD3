@@ -461,5 +461,8 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	}// END: mapRendered check
 
+	
+	populateExportPanel();
+	
 } // END: function
 );

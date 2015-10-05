@@ -1,7 +1,6 @@
 package parsers;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -9,8 +8,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import exceptions.AnalysisException;
-import exceptions.LocationNotFoundException;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -19,6 +16,8 @@ import structure.data.Location;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
 import utils.Utils;
+import exceptions.AnalysisException;
+import exceptions.LocationNotFoundException;
 
 public class DiscreteTreeParser {
 
@@ -65,7 +64,6 @@ public class DiscreteTreeParser {
 	public void parseTree() throws IOException, ImportException,
 			LocationNotFoundException, AnalysisException {
 
-		// TODO: do I need that map? Maybe just use LinkedList from C'tor?
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 
 		Double[] sliceHeights = createSliceHeights(10);
@@ -107,7 +105,7 @@ public class DiscreteTreeParser {
 				Location nodeLocation = locationsList.get(locationIndex);
 
 				// parent node parsed second
-
+				
 				Node parentNode = rootedTree.getParent(node);
 
 				String parentState = (String) Utils.getObjectNodeAttribute(
@@ -143,15 +141,6 @@ public class DiscreteTreeParser {
 					Point parentPoint = pointsMap.get(parentNode);
 					if (parentPoint == null) {
 
-						// PointParser parentPointParser = new PointParser( //
-						// pointIndex, //
-						// parentLocation, //
-						// parentNode, //
-						// rootedTree, //
-						// timescaleMultiplier, //
-						// timeParser //
-						// );
-
 						parentPoint = createPoint(index, parentNode, parentLocation);
 						pointsMap.put(parentNode, parentPoint);
 						index++;
@@ -160,15 +149,6 @@ public class DiscreteTreeParser {
 
 					Point nodePoint = pointsMap.get(node);
 					if (nodePoint == null) {
-
-						// PointParser nodePointParser = new PointParser( //
-						// index, //
-						// nodeLocation, //
-						// parentNode, //
-						// rootedTree, //
-						// timescaleMultiplier, //
-						// timeParser //
-						// );
 
 						nodePoint = createPoint(index, node, nodeLocation);
 						pointsMap.put(node, nodePoint);
@@ -385,9 +365,7 @@ public class DiscreteTreeParser {
 		}// END: points loop
 
 		uniqueNodeAttributes.addAll(branchAttributesMap.values());
-
-		// TODO: experimental, we dump it here with node attributes
-		// perhaps a separate list?
+		// we dump it here with node attributes
 		uniqueNodeAttributes.add(countAttribute);
 
 	}// END: parseTree
@@ -398,13 +376,9 @@ public class DiscreteTreeParser {
 
 		Double[] sliceHeights = new Double[intervals - 1];
 		for (int i = 0; i < (intervals - 1); i++) {
-//		for (int i = (intervals - 1); i < 0; i--) {
 			sliceHeights[i] = rootHeight - ((i + 1) * delta);
 		}
 
-//		Arrays.sort( sliceHeights );
-//		Utils.printArray(sliceHeights);
-		
 		return sliceHeights;
 	}//END: createSliceHeights
 
@@ -430,7 +404,7 @@ public class DiscreteTreeParser {
 		Point point = new Point(id, location, startTime, attributes);
 
 		return point;
-	}// END: parseNodes
+	}// END: createPoint
 
 	public LinkedList<Line> getLinesList() {
 		return linesList;

@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import jebl.evolution.io.ImportException;
-import parsers.DiscreteSpreadDataParser;
+import parsers.ContinuousTreeSpreadDataParser;
+import parsers.DiscreteTreeSpreadDataParser;
 import settings.Settings;
 import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
@@ -65,7 +66,9 @@ public class Spread2ConsoleApp {
 	private static final String LOG = "log";
 	private static final String BURNIN = "burnin";
 	private static final String LOCATION_TRAIT = "locationTrait";
-//	private static final String TRAITS = "traits";
+	private static final String X_COORDINATE = "xCoordinate";
+	private static final String Y_COORDINATE = "yCoordinate";
+	
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
 	private static final String MAP = "map";
@@ -195,10 +198,12 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(TREE, "", "tree file name"),
 
-				new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
+				new Arguments.StringOption(X_COORDINATE, "", "x location trait name (latitude)"),
 
-				new Arguments.StringOption(HPD, "", "hpd interval attribute name"),
-
+				new Arguments.StringOption(Y_COORDINATE, "", "y location trait name (longitude)"),
+				
+				new Arguments.StringOption(HPD, "", "hpd level"),
+	
 				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
 				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
@@ -567,8 +572,7 @@ public class Spread2ConsoleApp {
 					// DiscreteTreeParserOld parser = new DiscreteTreeParserOld(
 					// settings.discreteTreeSettings);
 
-					DiscreteSpreadDataParser parser = new DiscreteSpreadDataParser(settings.discreteTreeSettings);
-
+					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(settings.discreteTreeSettings);
 					SpreadData data = parser.parse();
 
 					// ---EXPORT TO JSON---//
@@ -676,7 +680,9 @@ public class Spread2ConsoleApp {
 					System.out.println("Created JSON file");
 
 				} catch (IOException e) {
+					
 					gracefullyExit(e.getMessage(), args2, e);
+					
 					// } catch (IllegalCharacterException e) {
 					// gracefullyExit(e.getMessage(), args2, e);
 					// } catch (LocationNotFoundException e) {
@@ -697,14 +703,26 @@ public class Spread2ConsoleApp {
 						settings.continuousTreeSettings.tree = args3.getStringOption(TREE);
 					}
 
-					if (args3.hasOption(LOCATION_TRAIT)) {
-						settings.continuousTreeSettings.locationTrait = args3.getStringOption(LOCATION_TRAIT);
+					if (args3.hasOption(X_COORDINATE)) {
+						settings.continuousTreeSettings.xCoordinate = args3.getStringOption(X_COORDINATE);
 					}
-
+					
+					if (args3.hasOption(Y_COORDINATE)) {
+						settings.continuousTreeSettings.yCoordinate = args3.getStringOption(Y_COORDINATE);
+					}
+					
 					if (args3.hasOption(HPD)) {
 						settings.continuousTreeSettings.hpd = args3.getStringOption(HPD);
 					}
 
+//					if (args3.hasOption(X_COORDINATE_HPD)) {
+//						settings.continuousTreeSettings.xCoordinateHpd = args3.getStringOption(X_COORDINATE_HPD);
+//					}
+//					
+//					if (args3.hasOption(Y_COORDINATE_HPD)) {
+//						settings.continuousTreeSettings.yCoordinateHpd = args3.getStringOption(Y_COORDINATE_HPD);
+//					}
+					
 					if (args3.hasOption(MRSD)) {
 						settings.continuousTreeSettings.mrsd = args3.getStringOption(MRSD);
 					}
@@ -730,14 +748,9 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					// ContinuousTreeParser parser = new ContinuousTreeParser(
-					// settings.continuousTreeSettings);
-
-					System.out.println("Continuous Tree Parser not yet implemented!");
-					System.exit(0);
-
-					SpreadData data = null;// parser.parse();
-
+					ContinuousTreeSpreadDataParser parser = new ContinuousTreeSpreadDataParser(settings.continuousTreeSettings);
+					SpreadData data = parser.parse();
+					
 					// ---EXPORT TO JSON---//
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -754,17 +767,17 @@ public class Spread2ConsoleApp {
 
 					gracefullyExit(e.getMessage(), args3, e);
 
-					// } catch (ImportException e) {
-					//
-					// gracefullyExit(e.getMessage(), args3, e);
-					//
-					// } catch (AnalysisException e) {
-					//
-					// gracefullyExit(e.getMessage(), args3, e);
-					//
-					// } catch (NumberFormatException e) {
-					//
-					// gracefullyExit(e.getMessage(), args3, e);
+					 } catch (ImportException e) {
+					
+					 gracefullyExit(e.getMessage(), args3, e);
+					
+					 } catch (AnalysisException e) {
+					
+					 gracefullyExit(e.getMessage(), args3, e);
+					
+					 } catch (NumberFormatException e) {
+					
+					 gracefullyExit(e.getMessage(), args3, e);
 
 				} // END: try-catch block
 

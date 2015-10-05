@@ -181,6 +181,13 @@
                     <button data-zoom="-1">Zoom Out</button>
                 </div>
 
+                <div class="panel">
+                    <h2>Export</h2>
+                    <div class="panelcontent">
+                        <button id="saveSVG">Save SVG</button>
+                    </div>
+                </div>
+                <!-- END: panel-->
 
                 <div class="panel">
                     <h2>Line color attribute</h2>
@@ -243,6 +250,14 @@
 
     </div>
     <!-- END: all-->
+
+    <form id="svgform" method="post" action="download.pl">
+        <input type="hidden" id="output_format" name="output_format"
+            value=""> 
+            <input type="hidden" id="data" name="data"
+            value="">
+    </form>
+    <!-- END: form-->
 
     <script type="text/javascript" src="script.js"></script>
 

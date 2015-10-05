@@ -3,3 +3,22 @@
 * implemented custom slice heights
 * reinstated time scale multiplier option
 * Discrete and Continuous annotated tree parsers: by default all univariate traits found on branches are parsed
+
+
+h1. NEW PARSERS
+----------------
+
+h3. DISCRETE TREE PARSING
+
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -map /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/combined.geojson -output ebov_discrete.json
+
+
+
+h3. CONTINUOUS TREE PARSING
+
+* antigenic coordinates example
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic1 -yCoordinate antigenic2 -hpd 80 -mrsd 2011-01-01 -output antigenic_test.json
+
+* geographical coordinates example
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -output continuous_test.json
+

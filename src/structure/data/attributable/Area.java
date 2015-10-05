@@ -12,7 +12,7 @@ public class Area {
 	private final Polygon polygon;
 	private final String startTime;
 	
-	public Area( Polygon polygon, String startTime) {
+	public Area( Polygon polygon, String startTime, Map<String, Object> attributes) {
 		
 		this.polygon = polygon;
 		this.startTime = startTime;

@@ -16,6 +16,13 @@ public class Polygon {
 
 	}// END: Constructor
 
+	public Polygon(List<Coordinate> coordinates) {
+
+		this.coordinates = coordinates;
+		this.altitude = 0;
+
+	}// END: Constructor
+
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
