@@ -1,143 +1,225 @@
 // ---GENERATE LINES--//
 
-    d3.kodama.themeRegistry('linesTheme', {
-    	   frame: {
-               padding: '4px',
-               background: 'linear-gradient(to top, rgb(16, 74, 105) 0%, rgb(14, 96, 125) 90%)',
-               'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
-               'border': '1px solid rgb(57, 208, 204)',
-               color: 'rgb(245,240,220)',
-               'border-radius': '4px',
-               'font-size': '12px',
-               'box-shadow': '0px 1px 3px rgba(0,20,40,.5)'
-           },
-           title: {'text-align': 'center', 'padding': '4px'},
-           item_title: {'text-align': 'right', 'color': 'rgb(220,200,120)'},
-           item_value: {'padding': '1px 2px 1px 10px', 'color': 'rgb(234, 224, 184)'}
-    });
+d3.kodama
+		.themeRegistry(
+				'linesTheme',
+				{
+					frame : {
+						padding : '4px',
+						background : 'linear-gradient(to top, rgb(16, 74, 105) 0%, rgb(14, 96, 125) 90%)',
+						'font-family' : '"Helvetica Neue", Helvetica, Arial, sans-serif',
+						'border' : '1px solid rgb(57, 208, 204)',
+						color : 'rgb(245,240,220)',
+						'border-radius' : '4px',
+						'font-size' : '12px',
+						'box-shadow' : '0px 1px 3px rgba(0,20,40,.5)'
+					},
+					title : {
+						'text-align' : 'center',
+						'padding' : '4px'
+					},
+					item_title : {
+						'text-align' : 'right',
+						'color' : 'rgb(220,200,120)'
+					},
+					item_value : {
+						'padding' : '1px 2px 1px 10px',
+						'color' : 'rgb(234, 224, 184)'
+					}
+				});
 
 function generateLines(data, points) {
 
-//	http://bl.ocks.org/mbostock/8033015
-	var voronoi = d3.geom.voronoi() //
-	.x(function(d) {
-		return x(d.date);
-	}) //
-	.y(function(d) {
-		return y(d.value);
-	}) //
-	.clipExtent([ [ 0, 0 ], [ width, height ] ]);
-	
-	
-	var lines = linesLayer.selectAll("path").data(data).enter().append("path") //
-	.attr("class", "line") //
-	.attr(
-			"d",
-			function(d, i) {
+	// TODO
+	// http://bl.ocks.org/mbostock/8033015
+	// var voronoi = d3.geom.voronoi() //
+	// .x(function(d) {
+	// return x(d.date);
+	// }) //
+	// .y(function(d) {
+	// return y(d.value);
+	// }) //
+	// .clipExtent([ [ 0, 0 ], [ width, height ] ]);
 
-				var line = d;
+	var lines = linesLayer
+			.selectAll("path")
+			.data(data)
+			.enter()
+			.append("path")
+			//
+			.attr("class", "line")
+			//
+			.attr(
+					"d",
+					function(d, i) {
 
-				var startNodeId = line.startNodeId;
-				var startPoint = getObject(points, "id", startNodeId);
-				line['startPoint'] = startPoint;
-				var startCoordinate = line.startPoint.location.coordinate;
+						var line = d;
 
-				var endNodeId = line.endNodeId;
-				var endPoint = getObject(points, "id", endNodeId);
-				line['endPoint'] = endPoint;
-				var endCoordinate = line.endPoint.location.coordinate;
+						var startNodeId = line.startNodeId;
+						var startPoint = getObject(points, "id", startNodeId);
+						line['startPoint'] = startPoint;
 
-				// jitter
-				var bend = map(Date.parse(line.startTime), sliderStartValue,
-						sliderEndValue, 1, 0);
+						var startCoordinate;
+						var startLocation = line.startPoint.location;
+						if (typeof startLocation != 'undefined') {
 
-				var startLatitude = startCoordinate.xCoordinate;
-				var startLongitude = startCoordinate.yCoordinate;
+							startCoordinate = startLocation.coordinate;
 
-				var endLatitude = endCoordinate.xCoordinate;
-				var endLongitude = endCoordinate.yCoordinate;
+						} else {
 
-				var sourceXY = projection([ startLongitude, startLatitude ]);
-				var targetXY = projection([ endLongitude, endLatitude ]);
+							startCoordinate = line.startPoint.coordinate;
 
-				var sourceX = sourceXY[0]; // lat
-				var sourceY = sourceXY[1]; // long
+						}
 
-				var targetX = targetXY[0];
-				var targetY = targetXY[1];
+						var endNodeId = line.endNodeId;
+						var endPoint = getObject(points, "id", endNodeId);
+						line['endPoint'] = endPoint;
 
-				var dx = targetX - sourceX;
-				var dy = targetY - sourceY;
-				var dr = Math.sqrt(dx * dx + dy * dy) * bend;
+						var endCoordinate;
+						var endLocation = line.endPoint.location;
+						if (typeof startLocation != 'undefined') {
 
-				var west_of_source = (targetX - sourceX) < 0;
-				line['westofsource'] = west_of_source;
-				
-				var bearing;
-				if (west_of_source) {
-					bearing = "M" + targetX + "," + targetY + "A" + dr + ","
-							+ dr + " 0 0,1 " + sourceX + "," + sourceY;
-				} else {
+							endCoordinate = endLocation.coordinate;
 
-					bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
-							+ dr + " 0 0,1 " + targetX + "," + targetY;
-				}
+						} else {
 
-				return (bearing);
+							endCoordinate = line.endPoint.coordinate;
 
-			}) //
-	.attr("fill", "none") //
-	.attr("stroke-width", 1 + "px") //
-	.attr("stroke-linejoin", "round") //
-	.attr("stroke", "black") //
-	.attr("startTime", function(d) {
-		return (d.startTime);
-	}) //
-	.attr("endTime", function(d) {
-		return (d.endTime);
-	}) //
-	.attr("stroke-dasharray", function(d) {
+						}
 
-		var totalLength = d3.select(this).node().getTotalLength();
-		return (totalLength + " " + totalLength);
-	}) //
-	.attr("stroke-dashoffset", 0) //
-	.attr("opacity", 1)
-    .on('mouseover', function(d) {
+						// TODO: slider for bend, recomputes everything
+						var MAX_BEND = 0.5; // 0-1, values closer to 1 give more
+						// bent lines
 
-    	// TODO: highlight
-		var line = d3.select(this);
-		line.classed("hover", true);
-//		line.attr('stroke-width', "4px");
-		
-		// bring line to the front
-        this.parentNode.parentNode.appendChild(this.parentNode);
+						// bend, values closer to 1 result in more straight
+						// lines
+						var bend = map(Date.parse(line.startTime), //
+						sliderEndValue, //
+						sliderStartValue, //
+						MAX_BEND, //
+						1 //
+						);
 
-	})//
-	.on('mouseout', function(d, i) {
+						var startLatitude = startCoordinate.xCoordinate;
+						var startLongitude = startCoordinate.yCoordinate;
 
-    	// TODO: un-highlight
-		var line = d3.select(this);
-		line.classed("hover", false);
-//		line.attr('stroke-width', "1px");
+						var endLatitude = endCoordinate.xCoordinate;
+						var endLongitude = endCoordinate.yCoordinate;
 
-	})
-	.call( d3.kodama.tooltip().format(function(d, i) {
+						var sourceXY = projection([ startLongitude,
+								startLatitude ]);
+						var targetXY = projection([ endLongitude, endLatitude ]);
 
-		return {
-//			title : "FOO",
-			items : [ {
-				title : 'Start point',
-				value : d.startPoint.location.id
-			}, {
-				title : 'End point',
-				value : d.endPoint.location.id
-			} ]
-		};
+						var sourceX = sourceXY[0]; // lat
+						var sourceY = sourceXY[1]; // long
 
-	}).theme('linesTheme')
-	
-	);
+						var targetX = targetXY[0];
+						var targetY = targetXY[1];
+
+						var dx = targetX - sourceX;
+						var dy = targetY - sourceY;
+						var dr = Math.sqrt(dx * dx + dy * dy) * bend;
+
+						var west_of_source = (targetX - sourceX) < 0;
+						line['westofsource'] = west_of_source;
+
+						var bearing;
+						if (west_of_source) {
+							bearing = "M" + targetX + "," + targetY + "A" + dr
+									+ "," + dr + " 0 0,1 " + sourceX + ","
+									+ sourceY;
+						} else {
+
+							bearing = "M" + sourceX + "," + sourceY + "A" + dr
+									+ "," + dr + " 0 0,1 " + targetX + ","
+									+ targetY;
+						}
+
+						return (bearing);
+
+					})
+			//
+			.attr("fill", "none")
+			//
+			.attr("stroke-width", 1 + "px")
+			//
+			.attr("stroke-linejoin", "round")
+			//
+			.attr("stroke", "black")
+			//
+			.attr("startTime", function(d) {
+				return (d.startTime);
+			})
+			//
+			.attr("endTime", function(d) {
+				return (d.endTime);
+			})
+			//
+			.attr("stroke-dasharray", function(d) {
+
+				var totalLength = d3.select(this).node().getTotalLength();
+				return (totalLength + " " + totalLength);
+			})
+			//
+			.attr("stroke-dashoffset", 0)
+			//
+			.attr("opacity", 1)
+			.on('mouseover', function(d) {
+
+				var line = d3.select(this);
+				line.classed("hover", true);
+
+				// bring line to the front
+				this.parentNode.parentNode.appendChild(this.parentNode);
+
+			})
+			//
+			.on('mouseout', function(d, i) {
+
+				var line = d3.select(this);
+				line.classed("hover", false);
+
+			})
+			.call(
+					d3.kodama
+							.tooltip()
+							.format(
+									function(d, i) {
+
+										// TODO
+
+										return {
+											// title : "FOO",
+											items : [
+													{
+														title : 'From:',
+														value : typeof (d.startPoint.location) == 'undefined' ? (d3
+																.round(
+																		d.startPoint.coordinate.xCoordinate,
+																		2)
+																+ ', ' + d3
+																.round(
+																		d.startPoint.coordinate.yCoordinate,
+																		2))
+																: d.startPoint.location.id
+													},
+													{
+														title : 'To:',
+														value : typeof (d.endPoint.location) == 'undefined' ? (d3
+																.round(
+																		d.endPoint.coordinate.xCoordinate,
+																		2)
+																+ ', ' + d3
+																.round(
+																		d.endPoint.coordinate.yCoordinate,
+																		2))
+																: d.endPoint.location.id
+													} ]
+										};
+
+									}).theme('linesTheme')
+
+			);
 
 	// dump attribute values into DOM
 	lines[0].forEach(function(d, i) {

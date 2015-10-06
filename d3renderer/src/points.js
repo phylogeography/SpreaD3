@@ -140,27 +140,52 @@ function generatePoints(data) {
 			"cx",
 			function(d) {
 
-				var xy = projection([ d.location.coordinate.yCoordinate,
-						d.location.coordinate.xCoordinate ]);
+				//TODO: location or coordinates
+				var xy ;
+				var location = d.location;
+				if (typeof location != 'undefined') {
+				
+				 xy = projection([ location.coordinate.yCoordinate,
+						location.coordinate.xCoordinate ]);
+				
+				} else {
+					
+					 xy = projection([ d.coordinate.yCoordinate,
+											d.coordinate.xCoordinate ]);
+					
+				}
+				
 				var cx = xy[0]; // lat
-
 				return (cx);
 			}) //
 	.attr(
 			"cy",
 			function(d) {
 
-				var xy = projection([ d.location.coordinate.yCoordinate,
-						d.location.coordinate.xCoordinate ]);
+				//TODO: location or coordinates
+				var xy ;
+				var location = d.location;
+				if (typeof location != 'undefined') {
+				
+				 xy = projection([ location.coordinate.yCoordinate,
+						location.coordinate.xCoordinate ]);
+				
+				} else {
+					
+					 xy = projection([ d.coordinate.yCoordinate,
+											d.coordinate.xCoordinate ]);
+					
+				}
+				
 				var cy = xy[1]; // long
-
 				return (cy);
 			}) //
 	.attr("r", "5px") //
 	.attr("fill", "white") //
 	.attr("stroke", "black");
 
-	// dump attribute values into DOM
+	// TODO: throws exception
+	
 	points[0].forEach(function(d, i) {
 
 		var thisPoint = d3.select(d);

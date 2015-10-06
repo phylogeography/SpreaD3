@@ -15,7 +15,6 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
-
 //
 // ---DATA---//
 //
@@ -336,7 +335,7 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/ebov_discrete.json", function ready(error, json) {
+d3.json("data/continuous_test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
@@ -426,11 +425,16 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 			// ---LOCATIONS---//
 
+			// TODO: if not absent
 			var locations = json.locations;
-			generateLocations(locations);
-			generateLabels(locations);
+			if (typeof(locations) != 'undefined') {
 
-		}
+				generateLocations(locations);
+				generateLabels(locations);
+
+			}// END: null check
+
+		}// END: readynow
 
 		queue().defer(d3.json, "data/world.geojson").await(readynow);
 
@@ -461,8 +465,7 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	}// END: mapRendered check
 
-	
 	populateExportPanel();
-	
+
 } // END: function
 );

@@ -66,7 +66,7 @@ public class ContinuousTreeParser {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 		
-		//TODO
+		//TODO: hack
 		String prefix = xCoordinate.replaceAll("\\d*$", "");
 		String modalityAttributeName = prefix.concat("_").concat(hpd)
 				.concat("%").concat("HPD_modality");
@@ -332,6 +332,11 @@ public class ContinuousTreeParser {
 			Object nodeAttribute = node.getAttribute(attributeName);
 
 			if (!(nodeAttribute instanceof Object[])) {
+				
+				// TODO: remove invalid characters
+				
+				attributeName = attributeName.replaceAll("%", "");
+				
 				attributes.put(attributeName, nodeAttribute);
 			} // END: multivariate check
 

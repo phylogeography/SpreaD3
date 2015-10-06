@@ -1,6 +1,5 @@
 package structure.data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import structure.data.attributable.Area;
