@@ -17,8 +17,10 @@ h3. DISCRETE TREE PARSING
 h3. CONTINUOUS TREE PARSING
 
 * antigenic coordinates example
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic1 -yCoordinate antigenic2 -hpd 80 -mrsd 2011-01-01 -output antigenic_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -hpd 80 -mrsd 2011-01-01 -output antigenic_test.json
 
-* geographical coordinates example
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -output continuous_test.json
+* geographical coordinates example, world map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output continuous_test.json
 
+* geographical coordinates example, clipped map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json

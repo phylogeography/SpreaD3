@@ -186,13 +186,11 @@ function generateLines(data, points) {
 							.format(
 									function(d, i) {
 
-										// TODO
-
 										return {
 											// title : "FOO",
 											items : [
 													{
-														title : 'From:',
+														title : 'From',
 														value : typeof (d.startPoint.location) == 'undefined' ? (d3
 																.round(
 																		d.startPoint.coordinate.xCoordinate,
@@ -204,7 +202,7 @@ function generateLines(data, points) {
 																: d.startPoint.location.id
 													},
 													{
-														title : 'To:',
+														title : 'To',
 														value : typeof (d.endPoint.location) == 'undefined' ? (d3
 																.round(
 																		d.endPoint.coordinate.xCoordinate,

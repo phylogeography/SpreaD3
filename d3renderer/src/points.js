@@ -1,6 +1,4 @@
 var COUNT_OPACITY = 0.5;
-// var MIN_AREA = 1000;
-// var MAX_AREA = 10000;
 
 d3.kodama
 		.themeRegistry(
@@ -71,6 +69,8 @@ function generateCounts(data, countAttribute) {
 		var min_area = 1000;// scale;
 		var max_area = 10000;// scale * 10;
 
+		
+		// TODO: use  d3.scale.linear() 
 		// map them
 		var area = map(count, // 
 		countAttribute.range[0], //
@@ -140,21 +140,20 @@ function generatePoints(data) {
 			"cx",
 			function(d) {
 
-				//TODO: location or coordinates
-				var xy ;
+				var xy;
 				var location = d.location;
 				if (typeof location != 'undefined') {
-				
-				 xy = projection([ location.coordinate.yCoordinate,
-						location.coordinate.xCoordinate ]);
-				
+
+					xy = projection([ location.coordinate.yCoordinate,
+							location.coordinate.xCoordinate ]);
+
 				} else {
-					
-					 xy = projection([ d.coordinate.yCoordinate,
-											d.coordinate.xCoordinate ]);
-					
+
+					xy = projection([ d.coordinate.yCoordinate,
+							d.coordinate.xCoordinate ]);
+
 				}
-				
+
 				var cx = xy[0]; // lat
 				return (cx);
 			}) //
@@ -162,30 +161,27 @@ function generatePoints(data) {
 			"cy",
 			function(d) {
 
-				//TODO: location or coordinates
-				var xy ;
+				var xy;
 				var location = d.location;
 				if (typeof location != 'undefined') {
-				
-				 xy = projection([ location.coordinate.yCoordinate,
-						location.coordinate.xCoordinate ]);
-				
+
+					xy = projection([ location.coordinate.yCoordinate,
+							location.coordinate.xCoordinate ]);
+
 				} else {
-					
-					 xy = projection([ d.coordinate.yCoordinate,
-											d.coordinate.xCoordinate ]);
-					
+
+					xy = projection([ d.coordinate.yCoordinate,
+							d.coordinate.xCoordinate ]);
+
 				}
-				
+
 				var cy = xy[1]; // long
 				return (cy);
 			}) //
-	.attr("r", "5px") //
+	.attr("r", "2px") //
 	.attr("fill", "white") //
 	.attr("stroke", "black");
 
-	// TODO: throws exception
-	
 	points[0].forEach(function(d, i) {
 
 		var thisPoint = d3.select(d);

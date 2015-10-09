@@ -35,13 +35,14 @@ public class SpreadData {
 	}// END: Constructor
 
 	public SpreadData(TimeLine timeLine, //
+			LinkedList<Attribute> mapAttributes, //
 			LinkedList<Attribute> lineAttributes, //
 			LinkedList<Attribute> pointAttributes, //
 			LinkedList<Layer> layers //
 	) {
 
 		this.timeLine = timeLine;
-		this.mapAttributes = null;
+		this.mapAttributes = mapAttributes;
 		this.lineAttributes = lineAttributes;
 		this.pointAttributes = pointAttributes;
 		this.locations = null;

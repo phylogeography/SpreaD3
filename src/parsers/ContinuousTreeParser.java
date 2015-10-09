@@ -88,6 +88,8 @@ public class ContinuousTreeParser {
 					Double nodeCoordinateX = (Double) Utils
 							.getObjectNodeAttribute(node, xCoordinate);
 
+//					System.out.println("X: " + nodeCoordinateX + " Y: " + nodeCoordinateY);
+					
 					nodeCoordinate = new Coordinate(nodeCoordinateX,
 							nodeCoordinateY);
 
@@ -142,9 +144,24 @@ public class ContinuousTreeParser {
 
 				if (!rootedTree.isExternal(node)) {
 
-					Integer modality = (Integer) Utils.getObjectNodeAttribute(
+					Integer modality = 0;
+					
+					try {
+					
+						 modality = (Integer) Utils.getObjectNodeAttribute(
 							node, modalityAttributeName);
-
+					
+					} catch(AnalysisException e) {
+						
+						String message = modalityAttributeName
+								+ " attribute could not be found in the tree. Resulting visualisation may be incomplete!";
+						System.out.println(message);
+						continue;
+					}
+					
+					
+//					System.out.println(modality);
+					
 					for (int m = 1; m <= modality; m++) {
 
 						// trait1_80%HPD_1

@@ -119,7 +119,8 @@ public class DiscreteTreeSpreadDataParser {
 		SpreadData data = new SpreadData(timeLine, //
 				mapAttributes, //
 				lineAttributes, //
-				pointAttributes, locationsList, //
+				pointAttributes, //
+				locationsList, //
 				layersList //
 		);
 

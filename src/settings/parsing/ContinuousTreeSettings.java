@@ -31,4 +31,6 @@ public class ContinuousTreeSettings {
 	// path to json output file
 	public String output = "output.json";
 
+	public String geojson = null;
+
 }// END: class

@@ -335,6 +335,7 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
+//d3.json("data/ebov_discrete.json", function ready(error, json) {
 d3.json("data/continuous_test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
@@ -381,10 +382,10 @@ d3.json("data/continuous_test.json", function ready(error, json) {
 	// ---LAYERS---//
 
 	var layers = json.layers;
-	var mapRendered = false;
 
 	// ---MAP LAYER---//
 
+	var mapRendered = false;
 	layers.forEach(function(layer) {
 
 		var type = layer.type;
@@ -392,51 +393,81 @@ d3.json("data/continuous_test.json", function ready(error, json) {
 
 			var geojson = layer.geojson;
 			generateTopoLayer(geojson);
+			// TODO: make it look good with the world layer
+			// generateWorldLayer(geojson);
+
 			mapRendered = true;
 
 		}
 
 	});
 
-	// if no geojson layer render world map
+	// if no geojson layer found
 	if (!mapRendered) {
 
-		function readynow(error, world) {
+		populateMapBackground();
+		generateEmptyLayer(pointAttributes);
 
-			populateMapPanels(world.mapAttributes);
+		// ---TIME SLIDER---//
 
-			generateWorldLayer(world);
-			// mapRendered = true;
+		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+				dateFormat);
 
-			// ---TIME SLIDER---//
+		// put slider at the end of timeLine, everything painted
+		timeSlider.value(sliderEndValue);
 
-			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-					dateFormat);
+		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+				dateFormat);
 
-			// put slider at the end of timeLine, everything painted
-			timeSlider.value(sliderEndValue);
+		// ---DATA LAYERS---//
 
-			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
-					dateFormat);
+		initializeLayers(layers, pointAttributes, lineAttributes);
 
-			// ---DATA LAYERS---//
+		// ---LOCATIONS---//
 
-			initializeLayers(layers, pointAttributes, lineAttributes);
+		var locations = json.locations;
+		if (typeof (locations) != 'undefined') {
 
-			// ---LOCATIONS---//
+			generateLocations(locations);
+			generateLabels(locations);
 
-			// TODO: if not absent
-			var locations = json.locations;
-			if (typeof(locations) != 'undefined') {
+		}// END: null check
 
-				generateLocations(locations);
-				generateLabels(locations);
-
-			}// END: null check
-
-		}// END: readynow
-
-		queue().defer(d3.json, "data/world.geojson").await(readynow);
+		// function readynow(error, world) {
+		//
+		// populateMapPanels(world.mapAttributes);
+		//
+		// generateWorldLayer(world);
+		// // mapRendered = true;
+		//
+		// // ---TIME SLIDER---//
+		//
+		// initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+		// dateFormat);
+		//
+		// // put slider at the end of timeLine, everything painted
+		// timeSlider.value(sliderEndValue);
+		//
+		// updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+		// dateFormat);
+		//
+		// // ---DATA LAYERS---//
+		//
+		// initializeLayers(layers, pointAttributes, lineAttributes);
+		//
+		// // ---LOCATIONS---//
+		//
+		// var locations = json.locations;
+		// if (typeof(locations) != 'undefined') {
+		//
+		// generateLocations(locations);
+		// generateLabels(locations);
+		//
+		// }// END: null check
+		//
+		// }// END: readynow
+		//
+		// queue().defer(d3.json, "data/world.geojson").await(readynow);
 
 	} else {
 
@@ -458,8 +489,12 @@ d3.json("data/continuous_test.json", function ready(error, json) {
 		// ---LOCATIONS---//
 
 		var locations = json.locations;
-		generateLocations(locations);
-		generateLabels(locations);
+		if (typeof (locations) != 'undefined') {
+
+			generateLocations(locations);
+			generateLabels(locations);
+
+		}// END: null check
 
 		// console.log(locations);
 

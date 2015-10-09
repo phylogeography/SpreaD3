@@ -209,7 +209,7 @@ public class Spread2ConsoleApp {
 				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-//				new Arguments.StringArrayOption(TRAITS, -1, "", "traits to be parsed from nodes"),
+				new Arguments.StringOption(MAP, "", "geojson file name"),	
 
 				new Arguments.StringOption(OUTPUT, "", "json output file name"),
 
@@ -715,14 +715,6 @@ public class Spread2ConsoleApp {
 						settings.continuousTreeSettings.hpd = args3.getStringOption(HPD);
 					}
 
-//					if (args3.hasOption(X_COORDINATE_HPD)) {
-//						settings.continuousTreeSettings.xCoordinateHpd = args3.getStringOption(X_COORDINATE_HPD);
-//					}
-//					
-//					if (args3.hasOption(Y_COORDINATE_HPD)) {
-//						settings.continuousTreeSettings.yCoordinateHpd = args3.getStringOption(Y_COORDINATE_HPD);
-//					}
-					
 					if (args3.hasOption(MRSD)) {
 						settings.continuousTreeSettings.mrsd = args3.getStringOption(MRSD);
 					}
@@ -731,9 +723,10 @@ public class Spread2ConsoleApp {
 						settings.continuousTreeSettings.timescaleMultiplier = args3.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
-//					if (args3.hasOption(TRAITS)) {
-//						settings.continuousTreeSettings.traits = args3.getStringArrayOption(TRAITS);
-//					}
+					if (args3.hasOption(MAP)) {
+						
+						settings.continuousTreeSettings.geojson = args3.getStringOption(MAP);
+					}
 
 					if (args3.hasOption(OUTPUT)) {
 						settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
