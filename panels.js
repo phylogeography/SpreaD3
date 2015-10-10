@@ -1,6 +1,63 @@
 // ---POPULATE PANELS---//
 
-function populateMapPanels(attributes) {
+function populateExportPanel() {
+
+	// TODO: make it work
+
+	saveSVGButton = document.getElementById("saveSVG");
+	d3
+			.select(saveSVGButton)
+			.on(
+					'click',
+					function() {
+
+						var tmp = document.getElementById("container");
+						var svg = tmp.getElementsByTagName("svg")[0];
+
+						// Extract the data as SVG text string
+						var svg_xml = (new XMLSerializer)
+								.serializeToString(svg);
+
+						window.open().document.write(svg_xml);
+
+						var html = d3.select("svg").attr("title", "test2")
+								.attr("version", 1.1).attr("xmlns",
+										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+
+						d3
+								.select("body")
+								.append("div")
+								.attr("id", "download")
+								// .style("top", event.clientY+20+"px")
+								// .style("left", event.clientX+"px")
+								.html(
+										"Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
+								.append("img").attr(
+										"src",
+										"data:image/svg+xml;base64,"
+												+ btoa(html));
+
+						d3.select("#download").on(
+								"click",
+								function() {
+									if (event.button == 0) {
+										d3.select(this).transition().style(
+												"opacity", 0).remove();
+									}
+								}).transition().duration(500).style("opacity",
+								1);
+
+						// var form = document.getElementById("svgform");
+						//						
+						// form['output_format'].value = "svg";
+						// form['data'].value = svg_xml ;
+						// form.submit();
+
+					});
+
+}// END: populateExportPanel
+
+function populateMapBackground() {
 
 	// --- MAP BACKGROUND---//
 
@@ -40,6 +97,12 @@ function populateMapPanels(attributes) {
 						d3.select('#container').style("background", color);
 
 					});
+
+}// END: populateMapBackground
+
+function populateMapPanels(attributes) {
+
+	populateMapBackground();
 
 	// --- MAP FILL---//
 
@@ -99,17 +162,17 @@ function populateMapPanels(attributes) {
 
 						}
 
-						d3.selectAll(".topo").each(
-								function(d, i) {
+						d3.selectAll(".topo") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", function() {
 
-									var topo = d3.select(this);
-									var attributeValue = topo
-											.attr(colorAttribute);
-									var color = scale(attributeValue);
-									topo.transition().delay(100).ease("linear")
-											.style("fill", color);
+							var topo = d3.select(this);
+							var attributeValue = topo.attr(colorAttribute);
+							var color = scale(attributeValue);
 
-								});
+							return (color);
+						})
 
 					});
 
@@ -153,22 +216,18 @@ function populateLocationPanels() {
 						var colorSelect = labelColorSelect.options[labelColorSelect.selectedIndex].text;
 						var color = scale(colorSelect);
 
-						d3.selectAll(".label").each(
-								function(d, i) {
-
-									var label = d3.select(this);
-
-									label.transition().delay(100)
-											.ease("linear")
-											.style("fill", color);
-
-								});
+						d3.selectAll(".label") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
 
 					});
 
 }// END: populateLabelPanels
 
 function populatePointPanels(attributes) {
+
+	// ---COLOR---//
 
 	pointColorSelect = document.getElementById("pointcolor");
 
@@ -234,23 +293,82 @@ function populatePointPanels(attributes) {
 
 						}
 
-						// d3.selectAll(".point") //
-						pointsLayer.selectAll(".point").each(
-								function(d, i) {
+						// TODO
 
-									var point = d3.select(this);
-									var attributeValue = point
-											.attr(colorAttribute);
-									var color = scale(attributeValue);
+						pointsLayer.selectAll(".point").transition() //
+						.ease("linear") //
+						.attr("fill", function() {
 
-									// console.log(color);
+							var point = d3.select(this);
+							var attributeValue = point.attr(colorAttribute);
+							var color = scale(attributeValue);
 
-									point.transition().delay(100)
-											.ease("linear")
-											.style("fill", color);
+							return (color);
+						});
 
-								});
+					});
 
+	// ---AREA---//
+
+	pointAreaSelect = document.getElementById("pointarea");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointAreaSelect.appendChild(element);
+
+	}// END: i loop
+
+	// point area listener
+	d3
+			.select(pointAreaSelect)
+			.on(
+					'change',
+					function() {
+
+						var min_area = 10;
+						var max_area = 100;
+
+						var areaAttribute = pointAreaSelect.options[pointAreaSelect.selectedIndex].text;
+
+						var scale;
+						var attribute = getObject(attributes, "id",
+								areaAttribute);
+						if (attribute.scale == ORDINAL) {
+
+							scale = d3.scale.category20().domain(
+									attribute.domain);
+
+						} else {
+
+							scale = d3.scale.linear().domain(attribute.range)
+									.range([ min_area, max_area ]);
+
+						}
+
+						pointsLayer.selectAll(".point") //
+						.transition() //
+						.ease("linear") //
+						.attr("r", function(d) {
+
+							var attributeValue = d.attributes[areaAttribute];
+
+							// TODO: the null's (for the lulz :) )
+
+							var area = scale(attributeValue);
+							var radius = Math.sqrt(area / Math.PI);
+
+							return (radius);
+						})
 					});
 
 }// END: populateNodePanels
@@ -278,7 +396,6 @@ function populateLinePanels(attributes) {
 					function() {
 
 						var colorAttribute = lineColorSelect.options[lineColorSelect.selectedIndex].text;
-
 						var attribute = getObject(attributes, "id",
 								colorAttribute);
 
@@ -315,20 +432,17 @@ function populateLinePanels(attributes) {
 
 						}
 
-						d3.selectAll(".line").each(
-								function(d, i) {
+						d3.selectAll(".line") //
+						.transition() //
+						.ease("linear") //
+						.attr("stroke", function() {
 
-									var line = d3.select(this);
-									var attributeValue = line
-											.attr(colorAttribute);
-									var color = scale(attributeValue);
+							var line = d3.select(this);
+							var attributeValue = line.attr(colorAttribute);
+							var color = scale(attributeValue);
 
-									// console.log(color);
-
-									line.transition().delay(100).ease("linear")
-											.style("stroke", color);
-
-								});
+							return (color);
+						})
 
 					});
 

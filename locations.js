@@ -57,7 +57,7 @@ function generateLabels(locations) {
 	}) //
 	.attr("font-family", "sans-serif")//
 	.attr("font-size", "10px")//
-	.style("fill", "black") //
+	.attr("fill", "black") //
 	;
 
 }// END: generateLocations

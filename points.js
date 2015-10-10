@@ -1,6 +1,4 @@
 var COUNT_OPACITY = 0.5;
-// var MIN_AREA = 1000;
-// var MAX_AREA = 10000;
 
 d3.kodama
 		.themeRegistry(
@@ -31,6 +29,11 @@ d3.kodama
 				});
 
 function generateCounts(data, countAttribute) {
+
+	var min_area = 1000; // scale;
+	var max_area = 10000; // scale * 10;
+	var scale = d3.scale.linear().domain(countAttribute.range).range(
+			[ min_area, max_area ]);
 
 	areasLayer.selectAll("circle").data(data).enter().append("circle") //
 	.attr("class", "point") //
@@ -67,17 +70,7 @@ function generateCounts(data, countAttribute) {
 	.attr("r", function(d) {
 
 		var count = d.attributes.count;
-
-		var min_area = 1000;// scale;
-		var max_area = 10000;// scale * 10;
-
-		// map them
-		var area = map(count, // 
-		countAttribute.range[0], //
-		countAttribute.range[1], //
-		min_area, //
-		max_area //
-		);
+		var area = scale(count);
 		var radius = Math.sqrt(area / Math.PI);
 
 		return (radius);
@@ -140,27 +133,48 @@ function generatePoints(data) {
 			"cx",
 			function(d) {
 
-				var xy = projection([ d.location.coordinate.yCoordinate,
-						d.location.coordinate.xCoordinate ]);
-				var cx = xy[0]; // lat
+				var xy;
+				var location = d.location;
+				if (typeof location != 'undefined') {
 
+					xy = projection([ location.coordinate.yCoordinate,
+							location.coordinate.xCoordinate ]);
+
+				} else {
+
+					xy = projection([ d.coordinate.yCoordinate,
+							d.coordinate.xCoordinate ]);
+
+				}
+
+				var cx = xy[0]; // lat
 				return (cx);
 			}) //
 	.attr(
 			"cy",
 			function(d) {
 
-				var xy = projection([ d.location.coordinate.yCoordinate,
-						d.location.coordinate.xCoordinate ]);
-				var cy = xy[1]; // long
+				var xy;
+				var location = d.location;
+				if (typeof location != 'undefined') {
 
+					xy = projection([ location.coordinate.yCoordinate,
+							location.coordinate.xCoordinate ]);
+
+				} else {
+
+					xy = projection([ d.coordinate.yCoordinate,
+							d.coordinate.xCoordinate ]);
+
+				}
+
+				var cy = xy[1]; // long
 				return (cy);
 			}) //
-	.attr("r", "5px") //
+	.attr("r", "2px") //
 	.attr("fill", "white") //
 	.attr("stroke", "black");
 
-	// dump attribute values into DOM
 	points[0].forEach(function(d, i) {
 
 		var thisPoint = d3.select(d);

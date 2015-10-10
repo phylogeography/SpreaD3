@@ -39,9 +39,9 @@ function move() {
 	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
 	// fit the paths to the zoom level
-	d3.selectAll(".country").style("stroke-width", 1.0 / s);
-	d3.selectAll(".line").style("stroke-width", 1.0 / s);
-	d3.selectAll(".point").style("stroke-width", 1.0 / s);
+	d3.selectAll(".country").attr("stroke-width", 1.0 / s);
+	d3.selectAll(".line").attr("stroke-width", 1.0 / s);
+	d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 
 }// END: move
 
@@ -184,7 +184,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.style("visibility", "hidden") //
+	.attr("visibility", "hidden") //
 	.attr("opacity", 0);
 
 	// ---select counts displayed now---//
@@ -200,7 +200,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.duration(100) //
 	.ease("linear") //
-	.style("visibility", "visible") //
+	.attr("visibility", "visible") //
 	.attr("opacity", COUNT_OPACITY);
 
 }// END: update
@@ -336,6 +336,8 @@ var sliderStartValue;
 var sliderEndValue;
 
 d3.json("data/ebov_discrete.json", function ready(error, json) {
+//d3.json("data/continuous_test.json", function ready(error, json) {
+//d3.json("data/antigenic_test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
@@ -381,10 +383,10 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	// ---LAYERS---//
 
 	var layers = json.layers;
-	var mapRendered = false;
 
 	// ---MAP LAYER---//
 
+	var mapRendered = false;
 	layers.forEach(function(layer) {
 
 		var type = layer.type;
@@ -392,46 +394,81 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 			var geojson = layer.geojson;
 			generateTopoLayer(geojson);
+			// TODO: make it look good with the world layer
+			// generateWorldLayer(geojson);
+
 			mapRendered = true;
 
 		}
 
 	});
 
-	// if no geojson layer render world map
+	// if no geojson layer found
 	if (!mapRendered) {
 
-		function readynow(error, world) {
+		populateMapBackground();
+		generateEmptyLayer(pointAttributes);
 
-			populateMapPanels(world.mapAttributes);
+		// ---TIME SLIDER---//
 
-			generateWorldLayer(world);
-			// mapRendered = true;
+		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+				dateFormat);
 
-			// ---TIME SLIDER---//
+		// put slider at the end of timeLine, everything painted
+		timeSlider.value(sliderEndValue);
 
-			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-					dateFormat);
+		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+				dateFormat);
 
-			// put slider at the end of timeLine, everything painted
-			timeSlider.value(sliderEndValue);
+		// ---DATA LAYERS---//
 
-			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
-					dateFormat);
+		initializeLayers(layers, pointAttributes, lineAttributes);
 
-			// ---DATA LAYERS---//
+		// ---LOCATIONS---//
 
-			initializeLayers(layers, pointAttributes, lineAttributes);
+		var locations = json.locations;
+		if (typeof (locations) != 'undefined') {
 
-			// ---LOCATIONS---//
-
-			var locations = json.locations;
 			generateLocations(locations);
 			generateLabels(locations);
 
-		}
+		}// END: null check
 
-		queue().defer(d3.json, "data/world.geojson").await(readynow);
+		// function readynow(error, world) {
+		//
+		// populateMapPanels(world.mapAttributes);
+		//
+		// generateWorldLayer(world);
+		// // mapRendered = true;
+		//
+		// // ---TIME SLIDER---//
+		//
+		// initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+		// dateFormat);
+		//
+		// // put slider at the end of timeLine, everything painted
+		// timeSlider.value(sliderEndValue);
+		//
+		// updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+		// dateFormat);
+		//
+		// // ---DATA LAYERS---//
+		//
+		// initializeLayers(layers, pointAttributes, lineAttributes);
+		//
+		// // ---LOCATIONS---//
+		//
+		// var locations = json.locations;
+		// if (typeof(locations) != 'undefined') {
+		//
+		// generateLocations(locations);
+		// generateLabels(locations);
+		//
+		// }// END: null check
+		//
+		// }// END: readynow
+		//
+		// queue().defer(d3.json, "data/world.geojson").await(readynow);
 
 	} else {
 
@@ -453,12 +490,18 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 		// ---LOCATIONS---//
 
 		var locations = json.locations;
-		generateLocations(locations);
-		generateLabels(locations);
+		if (typeof (locations) != 'undefined') {
+
+			generateLocations(locations);
+			generateLabels(locations);
+
+		}// END: null check
 
 		// console.log(locations);
 
 	}// END: mapRendered check
+
+	populateExportPanel();
 
 } // END: function
 );
