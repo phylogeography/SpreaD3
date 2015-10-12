@@ -60,6 +60,9 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 			var lines = layer.lines;
 			generateLines(lines, points);
 
+			var areas = layer.areas;
+			generateAreas(areas);
+			
 		} else if (type == COUNTS) {
 
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
@@ -336,8 +339,8 @@ var sliderStartValue;
 var sliderEndValue;
 
 //d3.json("data/ebov_discrete.json", function ready(error, json) {
-//d3.json("data/continuous_test.json", function ready(error, json) {
-d3.json("data/antigenic_test.json", function ready(error, json) {
+d3.json("data/continuous_test.json", function ready(error, json) {
+//d3.json("data/antigenic_test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
