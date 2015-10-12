@@ -41,6 +41,12 @@ function generateLines(data, points) {
 	// }) //
 	// .clipExtent([ [ 0, 0 ], [ width, height ] ]);
 
+	// TODO: slider for bend, recomputes everything
+	// bend values [0,1] 0 gives straight lines, closer to 1 results in more bent lines
+	var MAX_BEND = 1.; 
+	var scale =  d3.scale.linear().domain([sliderStartValue, sliderEndValue]).range(
+			[ 0, MAX_BEND ]);
+	
 	var lines = linesLayer
 			.selectAll("path")
 			.data(data)
@@ -87,19 +93,9 @@ function generateLines(data, points) {
 
 						}
 
-						// TODO: slider for bend, recomputes everything
-						var MAX_BEND = 0.5; // 0-1, values closer to 1 give more
-						// bent lines
-
-						// bend, values closer to 1 result in more straight
-						// lines
-						var bend = map(Date.parse(line.startTime), //
-						sliderEndValue, //
-						sliderStartValue, //
-						MAX_BEND, //
-						1 //
-						);
-
+						// line bend
+						var bend = scale(Date.parse(line.startTime));
+							
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
 
