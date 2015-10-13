@@ -86,7 +86,7 @@ function generateEmptyLayer(pointAttributes) {
 
 	scale = (hscale < vscale) ? hscale : vscale;
     //still need to correct the scaling, not too happy about this ...
-    scale = 0.70 * scale;
+    scale = 0.75 * scale;
 
 	var offset = [ width / 2 / (bounds[0][1] - bounds[0][0]),
 	               (height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
