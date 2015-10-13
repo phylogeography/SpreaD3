@@ -172,7 +172,7 @@ function populateMapPanels(attributes) {
 							var color = scale(attributeValue);
 
 							return (color);
-						})
+						});
 
 					});
 
@@ -368,7 +368,7 @@ function populatePointPanels(attributes) {
 							var radius = Math.sqrt(area / Math.PI);
 
 							return (radius);
-						})
+						});
 					});
 
 }// END: populateNodePanels
@@ -442,9 +442,30 @@ function populateLinePanels(attributes) {
 							var color = scale(attributeValue);
 
 							return (color);
-						})
+						});
 
 					});
 
+	
+	
+	//TODO: line bend sliders
+//	var minBendScale = d3.scale.linear().domain([ startDate, endDate ]).range(
+//			[ 0, 1 ]);
+//	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+//	d3.select('#timeSlider').call(timeSlider);
+	
+	var minBendSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(0.0).max(1.0).step(0.1).value(1);
+	d3.select('#minBendSlider').call(minBendSlider);
+
+	minBendSlider.on("slide", function(evt, value) {
+	
+		console.log(value);
+		
+	});
+	
+	
+	var maxBendSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(0.0).max(1.0).step(0.1).value(1);
+	d3.select('#maxBendSlider').call(maxBendSlider);
+	
 }// END: populateDataPanels
 

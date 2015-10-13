@@ -61,8 +61,10 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 			generateLines(lines, points);
 
 			var areas = layer.areas;
-			generateAreas(areas);
-			
+			if (typeof areas != 'undefined') {
+				generateAreas(areas);
+			}
+
 		} else if (type == COUNTS) {
 
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
@@ -172,11 +174,43 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.style("visibility", "visible") //
 	.attr("opacity", 1);
 
+	// ---POLYGONS---//
+	
+	// ---select polygons yet to be displayed---//
+	
+	areasLayer.selectAll(".polygon") //
+	.filter(function(d) {
+		var polygon = this;
+		var startDate = Date.parse(polygon.attributes.startTime.value);
+
+		return (value < startDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.duration(1000) //
+	.attr("visibility", "hidden") //
+	.attr("opacity", 0);
+	
+	// ---select polygons displayed now---//
+	
+	areasLayer.selectAll(".polygon") //
+	.filter(function(d) {
+		var polygon = this;
+		var startDate = Date.parse(polygon.attributes.startTime.value);
+
+		return (value >= startDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.duration(1000) //
+	.attr("visibility", "visible") //
+	.attr("opacity", COUNT_OPACITY);
+	
 	// ---COUNTS---//
 
 	// ---select counts yet to be displayed or already displayed---//
 
-	areasLayer.selectAll(".point") //
+	areasLayer.selectAll(".circle") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = Date.parse(point.attributes.startTime.value);
@@ -192,7 +226,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".point") //
+	areasLayer.selectAll(".circle") //
 	.filter(function() {
 		var point = this;
 		var startDate = Date.parse(point.attributes.startTime.value);
@@ -338,8 +372,8 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-//d3.json("data/ebov_discrete.json", function ready(error, json) {
-d3.json("data/continuous_test.json", function ready(error, json) {
+// d3.json("data/ebov_discrete.json", function ready(error, json) {
+ d3.json("data/continuous_test.json", function ready(error, json) {
 //d3.json("data/antigenic_test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //

@@ -84,6 +84,9 @@ function generateAreas(data) {
 	}) //
 	.theme('countsTheme'));
 
+	
+	//TODO: dump attributes, color mapping
+	
 }// END: generateAreas
 
 function generateCounts(data, countAttribute) {
@@ -94,7 +97,7 @@ function generateCounts(data, countAttribute) {
 			[ min_area, max_area ]);
 
 	areasLayer.selectAll("circle").data(data).enter().append("circle") //
-	.attr("class", "point") //
+	.attr("class", "circle") //
 	.attr("startTime", function(d) {
 
 		return (d.startTime);

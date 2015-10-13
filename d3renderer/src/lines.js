@@ -43,9 +43,10 @@ function generateLines(data, points) {
 
 	// TODO: slider for bend, recomputes everything
 	// bend values [0,1] 0 gives straight lines, closer to 1 results in more bent lines
-	var MAX_BEND = 1.; 
+	var MIN_BEND = 1.0;
+	var MAX_BEND = 0.0;
 	var scale =  d3.scale.linear().domain([sliderStartValue, sliderEndValue]).range(
-			[ 0, MAX_BEND ]);
+			[ MIN_BEND, MAX_BEND ]);
 	
 	var lines = linesLayer
 			.selectAll("path")

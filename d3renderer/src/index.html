@@ -192,10 +192,24 @@
 
                 <div class="panel">
                     <h2>Line color attribute</h2>
-                    <div class="panelcontent" >
+                    <div class="panelcontent">
                         <select id="linecolor">
                         </select>
                         <div id="linesColorLegend" class="legend"></div>
+                    </div>
+                </div>
+                <!-- END: panel-->
+
+                <div class="panel">
+                    <h2>Line bend</h2>
+                    <div class="panelcontent">
+
+                        <h6>Min bend</h6>
+                        <div id="minBendSlider"></div>
+
+                        <h6>Max bend</h6>
+                        <div id="maxBendSlider"></div>
+                        
                     </div>
                 </div>
                 <!-- END: panel-->
@@ -215,7 +229,7 @@
                     <div class="panelcontent">
                         <select id="pointarea">
                         </select>
-<!--                         <div id="pointsAreaLegend" class="legend"></div> -->
+                        <!--                         <div id="pointsAreaLegend" class="legend"></div> -->
                     </div>
                 </div>
                 <!-- END: panel-->
@@ -264,8 +278,7 @@
 
     <form id="svgform" method="post" action="download.pl">
         <input type="hidden" id="output_format" name="output_format"
-            value=""> 
-            <input type="hidden" id="data" name="data"
+            value=""> <input type="hidden" id="data" name="data"
             value="">
     </form>
     <!-- END: form-->
