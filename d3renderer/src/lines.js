@@ -139,7 +139,7 @@ function generateLines(data, points) {
 						line['endCoordinate'] = endCoordinate;
 
 						// line bend
-						var bend = scale(Date.parse(line.startTime));
+						var curvature = scale(Date.parse(line.startTime));
 
 //						var bearing = getBearing(startCoordinate, endCoordinate, bend);
 						
@@ -161,7 +161,7 @@ function generateLines(data, points) {
 
 						var dx = targetX - sourceX;
 						var dy = targetY - sourceY;
-						var dr = Math.sqrt(dx * dx + dy * dy) * bend;
+						var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
 
 						var westofsource = (targetX - sourceX) < 0;
 						line['westofsource'] = westofsource;

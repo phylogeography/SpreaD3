@@ -446,51 +446,59 @@ function populateLinePanels(attributes) {
 
 	// line bend listener
 
-	var maxBendSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(0.0)
+	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(0.0)
 			.max(1.0).step(0.1).value(MAX_BEND);
-	d3.select('#maxBendSlider').call(maxBendSlider);
+	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
 
-	maxBendSlider.on("slide", function(evt, value) {
+	maxCurvatureSlider.on("slide", function(evt, value) {
 
 		MAX_BEND = value;
-		var scale = d3.scale.linear().domain([ sliderStartValue, sliderEndValue ])
-		.range([ MIN_BEND, MAX_BEND ]);
-		
-		linesLayer.selectAll(".line") //
-		.transition() //
-		.ease("linear").attr("d", function(d) {
+		var scale = d3.scale.linear().domain(
+				[ sliderStartValue, sliderEndValue ]).range(
+				[ MIN_BEND, MAX_BEND ]);
 
-			var line = d;
+		linesLayer.selectAll(".line").transition().ease("linear") //
+		.attr(
+				"d",
+				function(d) {
 
-			// line bend
-			var bend = scale(Date.parse(line.startTime));
+					var line = d;
 
-			var westofsource = line.westofsource;
-			var targetX = line.targetX;
-			var targetY = line.targetY;
-			var sourceX = line.sourceX;
-			var sourceY = line.sourceY;
+					// line bend
+					var curvature = scale(Date.parse(line.startTime));
 
-			var dx = targetX - sourceX;
-			var dy = targetY - sourceY;
-			var dr = Math.sqrt(dx * dx + dy * dy) * bend;
+					var westofsource = line.westofsource;
+					var targetX = line.targetX;
+					var targetY = line.targetY;
+					var sourceX = line.sourceX;
+					var sourceY = line.sourceY;
 
-			var bearing;
-			if (westofsource) {
-				bearing = "M" + targetX + "," + targetY + "A" + dr
-						+ "," + dr + " 0 0,1 " + sourceX + ","
-						+ sourceY;
-				
-			} else {
+					var dx = targetX - sourceX;
+					var dy = targetY - sourceY;
+					var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
 
-				bearing = "M" + sourceX + "," + sourceY + "A" + dr
-						+ "," + dr + " 0 0,1 " + targetX + ","
-						+ targetY;
-				
-			}
+					var bearing;
+					if (westofsource) {
+						bearing = "M" + targetX + "," + targetY + "A" + dr
+								+ "," + dr + " 0 0,1 " + sourceX + ","
+								+ sourceY;
 
-			return (bearing);
-			
+					} else {
+
+						bearing = "M" + sourceX + "," + sourceY + "A" + dr
+								+ "," + dr + " 0 0,1 " + targetX + ","
+								+ targetY;
+
+					}
+
+					return (bearing);
+
+				}) //
+		.attr("stroke-dasharray", function(d) {
+
+			var totalLength = d3.select(this).node().getTotalLength();
+			return (totalLength + " " + totalLength);
+
 		});
 
 	});
