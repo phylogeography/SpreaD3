@@ -74,12 +74,11 @@ function generateTopoLayer(geojson) {
 
 function generateEmptyLayer(pointAttributes) {
 
-	var xlim = getObject(pointAttributes, "id", "antigenic1").range;
-	var ylim = getObject(pointAttributes, "id", "antigenic2").range;
+	var xlim = getObject(pointAttributes, "id", "antigenic2").range;
+	var ylim = getObject(pointAttributes, "id", "antigenic1").range;
 	var bounds = [ xlim, ylim ];
 
-	//didn't understand this, will define initial scale based on X-axis
-    //scale = (width / 4 / Math.PI);
+	// initial scale based on X-axis
     scale = width / (bounds[0][1] - bounds[0][0]);
 
 	var hscale = scale * width / (bounds[0][1] - bounds[0][0]);
@@ -89,18 +88,9 @@ function generateEmptyLayer(pointAttributes) {
     //still need to correct the scaling, not too happy about this ...
     scale = 0.70 * scale;
 
-    //	scale = 2000;
-	
-	// var offset = [ (bounds[0][1] - bounds[0][0]) / 2,
-	// (bounds[1][1] - bounds[1][0]) / 2
-	// ];
-
-    //used to be: var offset = [ (bounds[0][1] - bounds[0][0]) * 8,
-    // (height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
-
 	var offset = [ width / 2 / (bounds[0][1] - bounds[0][0]),
-        (height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
-
+	               (height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
+    
     // projection
 	projection = d3.geo.mercator().scale(scale).translate(offset);
 
