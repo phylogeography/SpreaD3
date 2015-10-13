@@ -5,8 +5,14 @@ function generateTopoLayer(geojson) {
 	// first guess for the projection
 	var center = d3.geo.centroid(geojson);
 
+    //console.log(center);
+
 	scale = 150;
 	var offset = [ width / 2, height / 2 ];
+
+    //console.log(scale);
+    //console.log(offset);
+
 	projection = d3.geo.mercator().scale(scale).center(center)
 			.translate(offset);
 	path = d3.geo.path().projection(projection);
@@ -72,23 +78,30 @@ function generateEmptyLayer(pointAttributes) {
 	var xlim = getObject(pointAttributes, "id", "antigenic2").range;
 	var bounds = [ xlim, ylim ];
 
-	scale = (width / 2 / Math.PI);
-	var hscale = scale * width / (bounds[1][1] - bounds[1][0]);
-	var vscale = scale * height / (bounds[1][0] - bounds[0][0]);
+	//didn't understand this, will define initial scale based on X-axis
+    //scale = (width / 4 / Math.PI);
+    scale = width / (bounds[0][1] - bounds[0][0]);
+
+	var hscale = scale * width / (bounds[0][1] - bounds[0][0]);
+	var vscale = scale * height / (bounds[1][1] - bounds[1][0]);
+
 	scale = (hscale < vscale) ? hscale : vscale;
+    //still need to correct the scaling, not too happy about this ...
+    scale = 0.70 * scale;
 
-	console.log(scale);
-
-//	scale = 2000;
+    //	scale = 2000;
 	
 	// var offset = [ (bounds[0][1] - bounds[0][0]) / 2,
 	// (bounds[1][1] - bounds[1][0]) / 2
 	// ];
 
-	var offset = [ (bounds[1][0] - bounds[0][0]) / 2,
-			(bounds[1][1] - bounds[1][0]) / 2 ];
+    //used to be: var offset = [ (bounds[0][1] - bounds[0][0]) * 8,
+    // (height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
 
-	// projection
+	var offset = [ width / 2 / (bounds[0][1] - bounds[0][0]),
+        (height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
+
+    // projection
 	projection = d3.geo.mercator().scale(scale).translate(offset);
 
 	// path
