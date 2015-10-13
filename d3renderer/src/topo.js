@@ -74,8 +74,8 @@ function generateTopoLayer(geojson) {
 
 function generateEmptyLayer(pointAttributes) {
 
-	var ylim = getObject(pointAttributes, "id", "antigenic1").range;
-	var xlim = getObject(pointAttributes, "id", "antigenic2").range;
+	var xlim = getObject(pointAttributes, "id", "antigenic1").range;
+	var ylim = getObject(pointAttributes, "id", "antigenic2").range;
 	var bounds = [ xlim, ylim ];
 
 	//didn't understand this, will define initial scale based on X-axis
