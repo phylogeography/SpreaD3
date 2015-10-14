@@ -204,7 +204,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.ease("linear") //
 	.duration(1000) //
 	.attr("visibility", "visible") //
-	.attr("opacity", COUNT_OPACITY);
+	.attr("opacity", POLYGON_OPACITY);
 	
 	// ---COUNTS---//
 
@@ -238,7 +238,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.duration(100) //
 	.ease("linear") //
 	.attr("visibility", "visible") //
-	.attr("opacity", COUNT_OPACITY);
+	.attr("opacity", POLYGON_OPACITY);
 
 }// END: update
 
@@ -303,7 +303,7 @@ function clicked() {
 
 	// console.log(zoom.scale());
 
-	zoom.scale(zoom.scale() * Math.pow(1.5, +this.getAttribute("data-zoom")));
+	zoom.scale(zoom.scale() * Math.pow(1.5, + this.getAttribute("data-zoom")));
 
 	if (zoom.scale() < minScaleExtent) {
 		zoom.scale(minScaleExtent);
@@ -372,7 +372,9 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
+//d3.json("data/ebov_nomap.json", function ready(error, json) {
 // d3.json("data/ebov_discrete.json", function ready(error, json) {
+//d3.json("data/continuous_nomap.json", function ready(error, json) {
 // d3.json("data/continuous_test.json", function ready(error, json) {
 d3.json("data/antigenic_test.json", function ready(error, json) {
 
@@ -444,7 +446,9 @@ d3.json("data/antigenic_test.json", function ready(error, json) {
 	if (!mapRendered) {
 
 		populateMapBackground();
-		generateEmptyLayer(pointAttributes);
+		
+		var axisAttributes = json.axisAttributes;
+		generateEmptyLayer(pointAttributes, axisAttributes);
 
 		// ---TIME SLIDER---//
 

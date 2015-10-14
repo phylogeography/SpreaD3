@@ -1,4 +1,4 @@
-var COUNT_OPACITY = 0.5;
+var POLYGON_OPACITY = 0.5;
 
 d3.kodama
 		.themeRegistry(
@@ -57,7 +57,7 @@ function generateAreas(data) {
 	.attr("fill", "brown") //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", COUNT_OPACITY) //
+	.attr("opacity", POLYGON_OPACITY) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
@@ -140,7 +140,7 @@ function generateCounts(data, countAttribute) {
 	.attr("fill", "brown") //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", COUNT_OPACITY) //
+	.attr("opacity", POLYGON_OPACITY) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 

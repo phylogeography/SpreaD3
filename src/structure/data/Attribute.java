@@ -1,7 +1,6 @@
 package structure.data;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 
 public class Attribute {
 

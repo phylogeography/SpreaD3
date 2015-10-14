@@ -11,6 +11,7 @@ import java.util.List;
 public class SpreadData {
 
 	private final TimeLine timeLine;
+	private final AxisAttributes axisAttributes;
 	private final LinkedList<Attribute> mapAttributes;
 	private final LinkedList<Attribute> lineAttributes;
 	private final LinkedList<Attribute> pointAttributes;
@@ -18,6 +19,7 @@ public class SpreadData {
 	private final LinkedList<Layer> layers;
 
 	public SpreadData(TimeLine timeLine, //
+			AxisAttributes axisAttributes,
 			LinkedList<Attribute> mapAttributes, //
 			LinkedList<Attribute> lineAttributes, //
 			LinkedList<Attribute> pointAttributes, //
@@ -26,6 +28,7 @@ public class SpreadData {
 	) {
 
 		this.timeLine = timeLine;
+		this.axisAttributes = axisAttributes;
 		this.mapAttributes = mapAttributes;
 		this.lineAttributes = lineAttributes;
 		this.pointAttributes = pointAttributes;
@@ -35,6 +38,7 @@ public class SpreadData {
 	}// END: Constructor
 
 	public SpreadData(TimeLine timeLine, //
+			AxisAttributes axisAttributes,
 			LinkedList<Attribute> mapAttributes, //
 			LinkedList<Attribute> lineAttributes, //
 			LinkedList<Attribute> pointAttributes, //
@@ -42,6 +46,7 @@ public class SpreadData {
 	) {
 
 		this.timeLine = timeLine;
+		this.axisAttributes = axisAttributes;
 		this.mapAttributes = mapAttributes;
 		this.lineAttributes = lineAttributes;
 		this.pointAttributes = pointAttributes;
@@ -72,6 +77,10 @@ public class SpreadData {
 
 	public LinkedList<Attribute> getPointAttributes() {
 		return pointAttributes;
+	}
+
+	public AxisAttributes getAxisAttributes() {
+		return axisAttributes;
 	}
 
 }// END: class

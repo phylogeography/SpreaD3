@@ -8,6 +8,7 @@ import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
 import settings.parsing.ContinuousTreeSettings;
 import structure.data.Attribute;
+import structure.data.AxisAttributes;
 import structure.data.Layer;
 import structure.data.SpreadData;
 import structure.data.TimeLine;
@@ -99,7 +100,19 @@ public class ContinuousTreeSpreadDataParser {
 
 		layersList.add(treeLayer);
 
+		// TODO: get from point attributes
+		
+//		pointAttributes.g
+		
+//		Attribute xCoordinate  = null;
+//		Attribute yCoordinate = null;
+//		
+//		Attribute[] coordinateAttributes = new Attribute[]{xCoordinate, yCoordinate};
+		
+		AxisAttributes axis = new AxisAttributes(settings.xCoordinate, settings.yCoordinate);
+		
 		return new SpreadData(timeLine, //
+				axis,
 				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //

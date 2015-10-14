@@ -7,6 +7,7 @@ import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
 import settings.parsing.DiscreteTreeSettings;
 import structure.data.Attribute;
+import structure.data.AxisAttributes;
 import structure.data.Layer;
 import structure.data.Location;
 import structure.data.SpreadData;
@@ -69,6 +70,12 @@ public class DiscreteTreeSpreadDataParser {
 		lineAttributes = treeParser.getLineAttributes();
 		pointAttributes = treeParser.getPointAttributes();
 
+		Attribute xCoordinate = locationsParser.getxCoordinateAttribute();
+		Attribute yCoordinate = locationsParser.getyCoordinateAttribute();
+		pointAttributes.add(xCoordinate);
+		pointAttributes.add(yCoordinate);
+        AxisAttributes axis = new AxisAttributes(xCoordinate.getId(), yCoordinate.getId());
+		
 		System.out.println("Parsed tree attributes");
 
 		// ---GEOJSON LAYER---//
@@ -117,6 +124,7 @@ public class DiscreteTreeSpreadDataParser {
 		System.out.println("Parsed the tree");
 
 		SpreadData data = new SpreadData(timeLine, //
+				axis,
 				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //

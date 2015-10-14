@@ -10,8 +10,11 @@ h1. NEW PARSERS
 
 h3. DISCRETE TREE PARSING
 
+* with map
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -map /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/combined.geojson -output ebov_discrete.json
 
+* no map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
 
 
 h3. CONTINUOUS TREE PARSING
@@ -21,6 +24,9 @@ h3. CONTINUOUS TREE PARSING
 
 * geographical coordinates example, world map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output continuous_test.json
+
+* geographical coordinates example, no map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -output continuous_nomap.json
 
 * geographical coordinates example, clipped map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
