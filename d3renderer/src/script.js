@@ -339,8 +339,8 @@ function point(coordinates) {
 
 // ---DRAW MAP BACKGROUND---//
 
-var minScaleExtent = 1;
-var maxScaleExtent = 4;
+var minScaleExtent = 0.7;
+var maxScaleExtent = 5;
 
 var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
 		.center([ width / 2, height / 2 ]).size([ width, height ]).on("zoom",

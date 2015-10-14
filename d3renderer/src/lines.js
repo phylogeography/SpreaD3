@@ -29,47 +29,6 @@ d3.kodama
 					}
 				});
 
-function getBearing(startCoordinate, endCoordinate, bend) {
-	
-	var startLatitude = startCoordinate.xCoordinate;
-	var startLongitude = startCoordinate.yCoordinate;
-
-	var endLatitude = endCoordinate.xCoordinate;
-	var endLongitude = endCoordinate.yCoordinate;
-
-	var sourceXY = projection([ startLongitude,
-			startLatitude ]);
-	var targetXY = projection([ endLongitude, endLatitude ]);
-
-	var sourceX = sourceXY[0]; // lat
-	var sourceY = sourceXY[1]; // long
-
-	var targetX = targetXY[0];
-	var targetY = targetXY[1];
-
-	var dx = targetX - sourceX;
-	var dy = targetY - sourceY;
-	var dr = Math.sqrt(dx * dx + dy * dy) * bend;
-
-	var west_of_source = (targetX - sourceX) < 0;
-	line['westofsource'] = west_of_source;
-
-	var bearing;
-	if (west_of_source) {
-		bearing = "M" + targetX + "," + targetY + "A" + dr
-				+ "," + dr + " 0 0,1 " + sourceX + ","
-				+ sourceY;
-	} else {
-
-		bearing = "M" + sourceX + "," + sourceY + "A" + dr
-				+ "," + dr + " 0 0,1 " + targetX + ","
-				+ targetY;
-	}
-
-	return (bearing);
-	
-}
-
 // ---GENERATE LINES--//
 
 function generateLines(data, points) {
@@ -106,7 +65,7 @@ function generateLines(data, points) {
 
 						var startNodeId = line.startNodeId;
 						var startPoint = getObject(points, "id", startNodeId);
-						// line['startPoint'] = startPoint;
+						line['startPoint'] = startPoint;
 
 						var startCoordinate;
 						var startLocation = startPoint.location;
@@ -119,11 +78,11 @@ function generateLines(data, points) {
 							startCoordinate = startPoint.coordinate;
 
 						}
-						line['startCoordinate'] = startCoordinate;
+						// line['startCoordinate'] = startCoordinate;
 
 						var endNodeId = line.endNodeId;
 						var endPoint = getObject(points, "id", endNodeId);
-						// line['endPoint'] = endPoint;
+						line['endPoint'] = endPoint;
 
 						var endCoordinate;
 						var endLocation = endPoint.location;
@@ -136,13 +95,11 @@ function generateLines(data, points) {
 							endCoordinate = endPoint.coordinate;
 
 						}
-						line['endCoordinate'] = endCoordinate;
+						// line['endCoordinate'] = endCoordinate;
 
 						// line bend
 						var curvature = scale(Date.parse(line.startTime));
 
-//						var bearing = getBearing(startCoordinate, endCoordinate, bend);
-						
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
 
@@ -169,19 +126,19 @@ function generateLines(data, points) {
 						line['targetY'] = targetY;
 						line['sourceX'] = sourceX;
 						line['sourceY'] = sourceY;
-						
+
 						var bearing;
 						if (westofsource) {
 							bearing = "M" + targetX + "," + targetY + "A" + dr
 									+ "," + dr + " 0 0,1 " + sourceX + ","
 									+ sourceY;
-							
+
 						} else {
 
 							bearing = "M" + sourceX + "," + sourceY + "A" + dr
 									+ "," + dr + " 0 0,1 " + targetX + ","
 									+ targetY;
-							
+
 						}
 
 						return (bearing);
