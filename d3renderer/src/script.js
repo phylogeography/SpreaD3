@@ -372,11 +372,13 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-//d3.json("data/ebov_nomap.json", function ready(error, json) {
 // d3.json("data/ebov_discrete.json", function ready(error, json) {
-//d3.json("data/continuous_nomap.json", function ready(error, json) {
+d3.json("data/languages_worldmap.json", function ready(error, json) {
+//	d3.json("data/continuous_worldmap.json", function ready(error, json) {
+	//d3.json("data/ebov_nomap.json", function ready(error, json) {
+	 //d3.json("data/continuous_nomap.json", function ready(error, json) {
 // d3.json("data/continuous_test.json", function ready(error, json) {
-d3.json("data/antigenic_test.json", function ready(error, json) {
+//d3.json("data/antigenic_test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 

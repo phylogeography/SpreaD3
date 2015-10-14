@@ -23,7 +23,10 @@ h3. CONTINUOUS TREE PARSING
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic1 -yCoordinate antigenic2 -hpd 80 -mrsd 2011-01-01 -output antigenic_test.json
 
 * geographical coordinates example, world map
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output continuous_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/ContinuousH5N1/HA_alignedEd_diff_gammaRRW_MCC.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output continuous_worldmap.json
+
+* geographical coordinates example 2, world map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/IE2011_RelaxedCovarion_AllSingletonsGeo2_Combined.tree -xCoordinate trait1 -yCoordinate trait2 -hpd 80 -mrsd 2011-01-01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
 
 * geographical coordinates example, no map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011-01-01 -output continuous_nomap.json
