@@ -1,6 +1,10 @@
 package parsers;
 
+import java.text.SimpleDateFormat;
+
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import structure.data.TimeLine;
 import utils.Utils;
@@ -11,10 +15,13 @@ public class TimeParser {
 	private String mrsd;
 	private LocalDate endDate;
 
+	private DateTimeFormatter dateFormatter;// = new SimpleDateFormat("MM/dd/yyyy")
+	
 	public TimeParser(String mrsd) {
 
 		this.mrsd = mrsd;
-
+this.dateFormatter =  DateTimeFormat.forPattern("yyyy/MM/dd");
+		
 	}// END: Constructor
 
 	public void parseTime() throws AnalysisException {
@@ -32,11 +39,11 @@ public class TimeParser {
 			month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
 			day = Integer.valueOf(endDateFields[Utils.DAY_INDEX]);
 
-			System.out.println("MRSD in a decimal date format corresponds to: " + year +"-" + month + "-" + day);
+			System.out.println("MRSD in a decimal date format corresponds to yyyy/MM/dd format: " + year +"/" + month + "/" + day);
 			
-		} else if(mrsd.contains("-")) {
+		} else if(mrsd.contains("/")) {
 			
-			endDateFields = mrsd.split("-");
+			endDateFields = mrsd.split("/");
 			if (endDateFields.length == 3) {
 
 				year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
@@ -56,7 +63,7 @@ public class TimeParser {
 				throw new AnalysisException("Unrecognised date format " + this.mrsd);
 			}
 			
-			System.out.println("MRSD is in a daytime format: " + year +"-" + month + "-" + day);
+			System.out.println("MRSD is in yyyy/MM/dd format : " + year +"/" + month + "/" + day);
 			
 		} else {
 			
@@ -80,7 +87,8 @@ public class TimeParser {
 	public TimeLine getTimeLine(double rootNodeHeight) {
 		
 		String startDate = this.getNodeDate(rootNodeHeight);
-		String endDate = this.endDate.toString();
+//		String endDate = this.endDate.toString();
+		String endDate = dateFormatter.print(this.endDate);
 		
 		TimeLine timeLine = new TimeLine(startDate, endDate);
 		
@@ -95,8 +103,9 @@ public class TimeParser {
 		Integer days = Integer.valueOf(fields[Utils.DAY_INDEX]);
 		LocalDate date = endDate.minusYears(years).minusMonths(months)
 				.minusDays(days);
-		String stringDate = date.toString();
-
+//		String stringDate = date.toString();
+String stringDate = dateFormatter.print(date );
+		
 		return stringDate;
 	}// END: getNodeDate
 

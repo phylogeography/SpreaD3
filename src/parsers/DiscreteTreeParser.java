@@ -396,7 +396,13 @@ public class DiscreteTreeParser {
 			Object nodeAttribute = node.getAttribute(attributeName);
 
 			if (!(nodeAttribute instanceof Object[])) {
+				
+				// TODO: remove invalid characters
+				attributeName = attributeName.replaceAll("%", "");
+				attributeName = attributeName.replaceAll("!", "");
+				
 				attributes.put(attributeName, nodeAttribute);
+				
 			} // END: multivariate check
 
 		} // END: attributes loop

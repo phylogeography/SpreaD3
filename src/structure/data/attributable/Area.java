@@ -6,11 +6,10 @@ import java.util.Map;
 import structure.data.primitive.Polygon;
 
 public class Area {
-
-	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 	
-	private final Polygon polygon;
 	private final String startTime;
+	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+	private final Polygon polygon;
 	
 	public Area( Polygon polygon, String startTime, Map<String, Object> attributes) {
 		
