@@ -141,7 +141,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 				console.log(dateFormat(new Date(value)));
 //			
 				console.log("lineStartDate");
-				console.log(linePath.attributes.startTime.value);
+//				console.log(linePath.attributes.startTime.value);
 				console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
 				
 // console.log("timePassed");
@@ -180,8 +180,11 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 				}// END: instantaneous line check
 
-// console.log("offset");
-// console.log(offset);
+				 console.log("totalLength");
+				 console.log(totalLength);
+				
+ console.log("offset");
+ console.log(offset);
 				
 				return (offset);
 			}) //
