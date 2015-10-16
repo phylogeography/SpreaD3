@@ -23,6 +23,19 @@ var scale;
 // ---FUNCTIONS---//
 // /////////////////
 
+function formDate(dateString) {
+
+	var dateFields = dateString.split("/");
+	var year = dateFields[0];
+	var month = dateFields[1];
+	var day = dateFields[2];
+
+	var date = new Date(year, month, day);
+// var date = Date.UTC(year, month, day);
+
+	return (date);
+}// END: formDate
+
 function move() {
 
 	var t = d3.event.translate;
@@ -60,6 +73,11 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 			var lines = layer.lines;
 			generateLines(lines, points);
 
+			var areas = layer.areas;
+			if (typeof areas != 'undefined') {
+				generateAreas(areas);
+			}
+
 		} else if (type == COUNTS) {
 
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
@@ -92,61 +110,98 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	// ---select lines painting now---//
 
 	linesLayer.selectAll("path.line") //
-	.filter(function(d) {
+	.filter(
+			function(d) {
 
-		var linePath = this;
-		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
-		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
+				var linePath = this;
+				var lineStartDate = formDate(linePath.attributes.startTime.value).getTime();
+// dateFormat .parse(linePath.attributes.startTime.value);
+				var lineEndDate = formDate(linePath.attributes.endTime.value).getTime();
+// dateFormat .parse(linePath.attributes.endTime.value);
 
-		return (lineStartDate <= value && value <= lineEndDate);
-	}) //
+				return (lineStartDate <= value && value <= lineEndDate);
+			}) //
 	.transition() //
 	.ease("linear") //
-	.attr("stroke-dashoffset", function(d, i) {
+	.attr(
+			"stroke-dashoffset",
+			function(d, i) {
 
-		var linePath = this;
-		var totalLength = linePath.getTotalLength();
+				var linePath = this;
+				var totalLength = linePath.getTotalLength();
 
-		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
-		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
-		var duration = lineEndDate - lineStartDate;
+				var lineStartDate = formDate(linePath.attributes.startTime.value).getTime();
+				var lineEndDate = formDate(linePath.attributes.endTime.value).getTime();
+				var duration = lineEndDate - lineStartDate;
+				var timePassed = value - lineStartDate;
 
-		var timePassed = value - lineStartDate;
+				
+				// TODO
+				console.log("currentTime");
+				console.log(dateFormat(new Date(value)));
+//			
+				console.log("lineStartDate");
+//				console.log(linePath.attributes.startTime.value);
+				console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
+				
+// console.log("timePassed");
+// console.log(timePassed);
+				
+				
+// console.log("startTime");
+// console.log(linePath.attributes.startTime.value);
+//
+// console.log("endTime");
+// console.log(linePath.attributes.endTime.value);
+// console.log("lineEndDate");
+// console.log(lineEndDate);
+//				
+//				
+// console.log("duration");
+// console.log(duration);
+				
+				var offset = totalLength;
+				if (duration == 0) {
 
-		var offset = totalLength;
-		if (duration == 0) {
+					offset = 0;
 
-			offset = 0;
+				} else {
 
-		} else {
+					offset = map(timePassed, 0, duration, 0, totalLength);
 
-			offset = map(timePassed, 0, duration, 0, totalLength);
+					if (d.westofsource) {
 
-			if (d.westofsource) {
+						offset = offset + totalLength;
 
-				offset = offset + totalLength;
+					} else {
 
-			} else {
+						offset = totalLength - offset;
+					}
 
-				offset = totalLength - offset;
-			}
+				}// END: instantaneous line check
 
-		}// END: instantaneous line check
-
-		return (offset);
-	}) //
+				 console.log("totalLength");
+				 console.log(totalLength);
+				
+ console.log("offset");
+ console.log(offset);
+				
+				return (offset);
+			}) //
 	.style("visibility", "visible") //
 	.attr("opacity", 1);
 
 	// ---select lines yet to be painted---//
 
 	linesLayer.selectAll("path.line") //
-	.filter(function(d) {
-		var linePath = this;
-		var lineStartDate = Date.parse(linePath.attributes.startTime.value);
+	.filter(
+			function(d) {
+				var linePath = this;
+				var lineStartDate = formDate(linePath.attributes.startTime.value).getTime(); 
+// dateFormat .parse(linePath.attributes.startTime.value);
 
-		return (lineStartDate > value);
-	}) //
+				return (lineStartDate > value);
+			}) //
 	.attr("stroke-dashoffset", function(d, i) {
 		var linePath = this;
 		var totalLength = linePath.getTotalLength();
@@ -161,7 +216,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	linesLayer.selectAll("path.line") //
 	.filter(function(d) {
 		var linePath = this;
-		var lineEndDate = Date.parse(linePath.attributes.endTime.value);
+		var lineEndDate = formDate(linePath.attributes.endTime.value).getTime(); 
+// dateFormat.parse(linePath.attributes.endTime.value);
 
 		return (lineEndDate < value);
 	}) //
@@ -169,15 +225,59 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.style("visibility", "visible") //
 	.attr("opacity", 1);
 
+	// ---POLYGONS---//
+
+	// ---select polygons yet to be displayed---//
+
+	areasLayer.selectAll(".polygon") //
+	.filter(function(d) {
+		var polygon = this;
+		var startDate = formDate(polygon.attributes.startTime.value).getTime(); 
+// dateFormat.parse(polygon.attributes.startTime.value);
+
+		return (value < startDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.duration(1000) //
+	.attr("visibility", "hidden") //
+	.attr("opacity", 0);
+
+	// ---select polygons displayed now---//
+
+	areasLayer.selectAll(".polygon") //
+	.filter(function(d) {
+		var polygon = this;
+		var startDate = formDate(polygon.attributes.startTime.value).getTime(); 
+// dateFormat.parse(polygon.attributes.startTime.value);
+
+		
+// console.log("currentTime");
+// console.log(dateFormat(new Date(value)));
+//	
+// console.log("polygonStartDate");
+// console.log(polygon.attributes.startTime.value);
+// console.log(formDate(polygon.attributes.startTime.value));
+		
+		return (value >= startDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+	.duration(1000) //
+	.attr("visibility", "visible") //
+	.attr("opacity", POLYGON_OPACITY);
+
 	// ---COUNTS---//
 
 	// ---select counts yet to be displayed or already displayed---//
 
-	areasLayer.selectAll(".point") //
+	areasLayer.selectAll(".circle") //
 	.filter(function(d) {
 		var point = this;
-		var startDate = Date.parse(point.attributes.startTime.value);
-		var endDate = Date.parse(point.attributes.endTime.value);
+		var startDate = formDate(point.attributes.startTime.value).getTime(); 
+// dateFormat.parse(point.attributes.startTime.value);
+		var endDate = formDate(point.attributes.endTime.value).getTime(); 
+// dateFormat.parse(point.attributes.endTime.value);
 
 		return (value < startDate || value > endDate);
 	}) //
@@ -189,11 +289,13 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".point") //
+	areasLayer.selectAll(".circle") //
 	.filter(function() {
 		var point = this;
-		var startDate = Date.parse(point.attributes.startTime.value);
-		var endDate = Date.parse(point.attributes.endTime.value);
+		var startDate = formDate(point.attributes.startTime.value).getTime(); 
+// dateFormat.parse(point.attributes.startTime.value);
+		var endDate = formDate(point.attributes.endTime.value).getTime(); 
+			// dateFormat.parse(point.attributes.endTime.value);
 
 		return (value > startDate && value < endDate);
 	}) //
@@ -201,12 +303,11 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.duration(100) //
 	.ease("linear") //
 	.attr("visibility", "visible") //
-	.attr("opacity", COUNT_OPACITY);
+	.attr("opacity", POLYGON_OPACITY);
 
 }// END: update
 
-function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-		dateFormat) {
+function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat) {
 
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
@@ -240,8 +341,7 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 								}
 
 								timeSlider.value(sliderValue);
-								update(sliderValue, timeScale,
-										currentDateDisplay, dateFormat);
+								update(sliderValue, timeScale, currentDateDisplay, dateFormat);
 
 								currentSliderValue = sliderValue;
 
@@ -302,8 +402,8 @@ function point(coordinates) {
 
 // ---DRAW MAP BACKGROUND---//
 
-var minScaleExtent = 1;
-var maxScaleExtent = 4;
+var minScaleExtent = 0.7;
+var maxScaleExtent = 5;
 
 var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
 		.center([ width / 2, height / 2 ]).size([ width, height ]).on("zoom",
@@ -335,23 +435,24 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/ebov_discrete.json", function ready(error, json) {
-//d3.json("data/continuous_test.json", function ready(error, json) {
-//d3.json("data/antigenic_test.json", function ready(error, json) {
+ d3.json("data/languages_worldmap.json", function ready(error, json) {
+// d3.json("data/ebov_discrete.json", function ready(error, json) {
+	// TODO: needs debugging
+	// d3.json("data/ebov_nomap.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 
-	var dateFormat = d3.time.format("%Y-%m-%d");
+	var dateFormat = d3.time.format("%Y/%m/%d");
 	var timeLine = json.timeLine;
+	
+	var startDate = formDate(timeLine.startTime);
+	sliderStartValue = startDate.getTime();
 
-	var startDate = new Date(timeLine.startTime);
-	var endDate = new Date(timeLine.endTime);
+	var endDate = formDate(timeLine.endTime);
+	sliderEndValue = endDate.getTime();
 
-	sliderStartValue = Date.parse(timeLine.startTime);
-	sliderEndValue = Date.parse(timeLine.endTime);
 	currentSliderValue = sliderStartValue;
 
-	// TODO: slider for speed control
 	var sliderSpeed = 100;
 	var duration = sliderEndValue - sliderStartValue;
 	sliderInterval = duration / sliderSpeed;
@@ -394,8 +495,6 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 			var geojson = layer.geojson;
 			generateTopoLayer(geojson);
-			// TODO: make it look good with the world layer
-			// generateWorldLayer(geojson);
 
 			mapRendered = true;
 
@@ -407,7 +506,9 @@ d3.json("data/ebov_discrete.json", function ready(error, json) {
 	if (!mapRendered) {
 
 		populateMapBackground();
-		generateEmptyLayer(pointAttributes);
+
+		var axisAttributes = json.axisAttributes;
+		generateEmptyLayer(pointAttributes, axisAttributes);
 
 		// ---TIME SLIDER---//
 

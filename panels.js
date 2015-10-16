@@ -172,7 +172,7 @@ function populateMapPanels(attributes) {
 							var color = scale(attributeValue);
 
 							return (color);
-						})
+						});
 
 					});
 
@@ -293,8 +293,6 @@ function populatePointPanels(attributes) {
 
 						}
 
-						// TODO
-
 						pointsLayer.selectAll(".point").transition() //
 						.ease("linear") //
 						.attr("fill", function() {
@@ -368,7 +366,7 @@ function populatePointPanels(attributes) {
 							var radius = Math.sqrt(area / Math.PI);
 
 							return (radius);
-						})
+						});
 					});
 
 }// END: populateNodePanels
@@ -432,7 +430,7 @@ function populateLinePanels(attributes) {
 
 						}
 
-						d3.selectAll(".line") //
+						linesLayer.selectAll(".line") //
 						.transition() //
 						.ease("linear") //
 						.attr("stroke", function() {
@@ -442,9 +440,68 @@ function populateLinePanels(attributes) {
 							var color = scale(attributeValue);
 
 							return (color);
-						})
+						});
 
 					});
+
+	// line bend listener
+
+	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(0.0)
+			.max(1.0).step(0.1).value(MAX_BEND);
+	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
+
+	maxCurvatureSlider.on("slide", function(evt, value) {
+
+		MAX_BEND = value;
+		var scale = d3.scale.linear().domain(
+				[ sliderStartValue, sliderEndValue ]).range(
+				[ MIN_BEND, MAX_BEND ]);
+
+		linesLayer.selectAll(".line").transition().ease("linear") //
+		.attr(
+				"d",
+				function(d) {
+
+					var line = d;
+
+					// line bend
+					var curvature = scale(Date.parse(line.startTime));
+
+					var westofsource = line.westofsource;
+					var targetX = line.targetX;
+					var targetY = line.targetY;
+					var sourceX = line.sourceX;
+					var sourceY = line.sourceY;
+
+					var dx = targetX - sourceX;
+					var dy = targetY - sourceY;
+					var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
+
+					var bearing;
+					if (westofsource) {
+						bearing = "M" + targetX + "," + targetY + "A" + dr
+								+ "," + dr + " 0 0,1 " + sourceX + ","
+								+ sourceY;
+
+					} else {
+
+						bearing = "M" + sourceX + "," + sourceY + "A" + dr
+								+ "," + dr + " 0 0,1 " + targetX + ","
+								+ targetY;
+
+					}
+
+					return (bearing);
+
+				}) //
+		.attr("stroke-dasharray", function(d) {
+
+			var totalLength = d3.select(this).node().getTotalLength();
+			return (totalLength + " " + totalLength);
+
+		});
+
+	});
 
 }// END: populateDataPanels
 

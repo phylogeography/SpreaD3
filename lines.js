@@ -1,4 +1,5 @@
-// ---GENERATE LINES--//
+var MIN_BEND = 0.0;
+var MAX_BEND = 1.0;
 
 d3.kodama
 		.themeRegistry(
@@ -28,9 +29,11 @@ d3.kodama
 					}
 				});
 
+// ---GENERATE LINES--//
+
 function generateLines(data, points) {
 
-	// TODO
+	// TODO : voronoi hover
 	// http://bl.ocks.org/mbostock/8033015
 	// var voronoi = d3.geom.voronoi() //
 	// .x(function(d) {
@@ -40,6 +43,11 @@ function generateLines(data, points) {
 	// return y(d.value);
 	// }) //
 	// .clipExtent([ [ 0, 0 ], [ width, height ] ]);
+
+	// bend values in [0,1]
+	// 0 gives straight lines, closer to 1 results in more bent lines
+	var scale = d3.scale.linear().domain([ sliderStartValue, sliderEndValue ])
+			.range([ MIN_BEND, MAX_BEND ]);
 
 	var lines = linesLayer
 			.selectAll("path")
@@ -60,45 +68,37 @@ function generateLines(data, points) {
 						line['startPoint'] = startPoint;
 
 						var startCoordinate;
-						var startLocation = line.startPoint.location;
+						var startLocation = startPoint.location;
 						if (typeof startLocation != 'undefined') {
 
 							startCoordinate = startLocation.coordinate;
 
 						} else {
 
-							startCoordinate = line.startPoint.coordinate;
+							startCoordinate = startPoint.coordinate;
 
 						}
+						// line['startCoordinate'] = startCoordinate;
 
 						var endNodeId = line.endNodeId;
 						var endPoint = getObject(points, "id", endNodeId);
 						line['endPoint'] = endPoint;
 
 						var endCoordinate;
-						var endLocation = line.endPoint.location;
+						var endLocation = endPoint.location;
 						if (typeof startLocation != 'undefined') {
 
 							endCoordinate = endLocation.coordinate;
 
 						} else {
 
-							endCoordinate = line.endPoint.coordinate;
+							endCoordinate = endPoint.coordinate;
 
 						}
+						// line['endCoordinate'] = endCoordinate;
 
-						// TODO: slider for bend, recomputes everything
-						var MAX_BEND = 0.5; // 0-1, values closer to 1 give more
-						// bent lines
-
-						// bend, values closer to 1 result in more straight
-						// lines
-						var bend = map(Date.parse(line.startTime), //
-						sliderEndValue, //
-						sliderStartValue, //
-						MAX_BEND, //
-						1 //
-						);
+						// line bend
+						var curvature = scale(Date.parse(line.startTime));
 
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
@@ -118,21 +118,27 @@ function generateLines(data, points) {
 
 						var dx = targetX - sourceX;
 						var dy = targetY - sourceY;
-						var dr = Math.sqrt(dx * dx + dy * dy) * bend;
+						var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
 
-						var west_of_source = (targetX - sourceX) < 0;
-						line['westofsource'] = west_of_source;
+						var westofsource = (targetX - sourceX) < 0;
+						line['westofsource'] = westofsource;
+						line['targetX'] = targetX;
+						line['targetY'] = targetY;
+						line['sourceX'] = sourceX;
+						line['sourceY'] = sourceY;
 
 						var bearing;
-						if (west_of_source) {
+						if (westofsource) {
 							bearing = "M" + targetX + "," + targetY + "A" + dr
 									+ "," + dr + " 0 0,1 " + sourceX + ","
 									+ sourceY;
+
 						} else {
 
 							bearing = "M" + sourceX + "," + sourceY + "A" + dr
 									+ "," + dr + " 0 0,1 " + targetX + ","
 									+ targetY;
+
 						}
 
 						return (bearing);

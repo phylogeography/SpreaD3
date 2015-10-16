@@ -17,12 +17,13 @@
 <!-- <script type="text/javascript" src="../lib/colorbrewer/colorbrewer.js"></script> -->
 
 <!-- sources -->
-<script type="text/javascript" src=utils.js></script>
+<script type="text/javascript" src="utils.js"></script>
 <script type="text/javascript" src="topo.js"></script>
 <script type="text/javascript" src="panels.js"></script>
 <script type="text/javascript" src="lines.js"></script>
 <script type="text/javascript" src="locations.js"></script>
 <script type="text/javascript" src="points.js"></script>
+<script type="text/javascript" src="areas.js"></script>
 
 <style type="text/css">
 #container {
@@ -90,13 +91,13 @@
 }
 
 /* styling for collapsible panels */
-.panel,.panelcollapsed {
+.panel, .panelcollapsed {
 	margin-top: 5px;
 	margin-right: 5px;
 }
 
 /* panel heading */
-.panel h2,.panelcollapsed h2 {
+.panel h2, .panelcollapsed h2 {
 	font-size: 14px;
 	font-weight: 300;
 	margin: 0px;
@@ -116,7 +117,7 @@
 }
 
 /* panel heading on rollover */
-.panel h2:hover,.panelcollapsed h2:hover {
+.panel h2:hover, .panelcollapsed h2:hover {
 	background-color: #F5F7F9;
 }
 
@@ -150,126 +151,151 @@
 	/* 	margin: 10px; */
 	/* 	float: left; */
 }
+
+.wrapper {
+	width: 190px;
+	margin-left: 10px;
+	margin-right: 15px;
+}
+
+.wrapper>div {
+	margin: 25px 0;
+}
 </style>
 </head>
 
 <body>
 
-    <div class="all" style="display: block;">
+	<div class="all" style="display: block;">
 
-        <div id="controls">
-            <h2>
-                Current date: <span id="currentDate"> 0 </span>
-            </h2>
-            <!-- 			<div id="wrapper" style="display: block;"> -->
-            <div>
-                <div id="playPause"></div>
-                <div id="timeSlider"></div>
-            </div>
-        </div>
-
-
-        <div class="selectorsANDcontainer" style="display: block;">
-
-            <div class="selectors" style="display: block;">
-
-                <!-- SELECTORS -->
+		<div id="controls">
+			<h2>
+				Current date: <span id="currentDate"> 0 </span>
+			</h2>
+			<!-- 			<div id="wrapper" style="display: block;"> -->
+			<div>
+				<div id="playPause"></div>
+				<div id="timeSlider"></div>
+			</div>
+		</div>
 
 
-                <div class="buttons">
-                    <button data-zoom="+1">Zoom In</button>
-                    <button data-zoom="-1">Zoom Out</button>
-                </div>
+		<div class="selectorsANDcontainer" style="display: block;">
 
-                <div class="panel">
-                    <h2>Export</h2>
-                    <div class="panelcontent">
-                        <button id="saveSVG">Save SVG</button>
-                    </div>
-                </div>
-                <!-- END: panel-->
+			<div class="selectors" style="display: block;">
 
-                <div class="panel">
-                    <h2>Line color attribute</h2>
-                    <div class="panelcontent" >
-                        <select id="linecolor">
-                        </select>
-                        <div id="linesColorLegend" class="legend"></div>
-                    </div>
-                </div>
-                <!-- END: panel-->
-
-                <div class="panel">
-                    <h2>Point color attribute</h2>
-                    <div class="panelcontent">
-                        <select id="pointcolor">
-                        </select>
-                        <div id="pointsColorLegend" class="legend"></div>
-                    </div>
-                </div>
-                <!-- END: panel-->
-
-                <div class="panel">
-                    <h2>Point area attribute</h2>
-                    <div class="panelcontent">
-                        <select id="pointarea">
-                        </select>
-<!--                         <div id="pointsAreaLegend" class="legend"></div> -->
-                    </div>
-                </div>
-                <!-- END: panel-->
-
-                <div class="panel">
-                    <h2>Map fill attribute</h2>
-                    <div class="panelcontent">
-                        <select id="mapcolor">
-                        </select>
-                        <div id="mapColorLegend" class="legend"></div>
-                    </div>
-                </div>
-                <!-- END: panel-->
+				<!-- SELECTORS -->
 
 
-                <div class="panel">
-                    <h2>Background color</h2>
-                    <div class="panelcontent">
-                        <select id="mapbackground">
-                        </select>
-                        <div id="mapBackgroundLegend" class="legend"></div>
-                    </div>
-                </div>
-                <!-- END: panel-->
+				<div class="buttons">
+					<button data-zoom="+1">Zoom In</button>
+					<button data-zoom="-1">Zoom Out</button>
+				</div>
 
-                <div class="panel">
-                    <h2>Label color</h2>
-                    <div class="panelcontent">
-                        <select id="labelcolor">
-                        </select>
-                        <div id="labelColorLegend" class="legend"></div>
-                    </div>
-                </div>
-                <!-- END: panel-->
+				<div class="panel">
+					<h2>Export</h2>
+					<div class="panelcontent">
+						<button id="saveSVG">Save SVG</button>
+					</div>
+				</div>
+				<!-- END: panel-->
 
-            </div>
-            <!-- END: selectors-->
+				<div class="panel">
+					<h2>Line color attribute</h2>
+					<div class="panelcontent">
+						<select id="linecolor">
+						</select>
+						<div id="linesColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
 
-            <div id="container"></div>
+				<div class="panel">
+					<h2>Line curvature</h2>
+					<div class="panelcontent">
 
-        </div>
-        <!-- END: selectorsANDcontainer-->
+						<div class="wrapper">
+<!-- 							<h6>Min bend</h6> -->
+<!-- 							<div id="minBendSlider"></div> -->
 
-    </div>
-    <!-- END: all-->
+							<h6>Max curvature</h6>
+							<div id="maxCurvatureSlider"></div>
+						</div>
+						<!-- END: wrapper-->
 
-    <form id="svgform" method="post" action="download.pl">
-        <input type="hidden" id="output_format" name="output_format"
-            value=""> 
-            <input type="hidden" id="data" name="data"
-            value="">
-    </form>
-    <!-- END: form-->
+					</div>
+				</div>
+				<!-- END: panel-->
 
-    <script type="text/javascript" src="script.js"></script>
+				<div class="panel">
+					<h2>Point color attribute</h2>
+					<div class="panelcontent">
+						<select id="pointcolor">
+						</select>
+						<div id="pointsColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Point area attribute</h2>
+					<div class="panelcontent">
+						<select id="pointarea">
+						</select>
+						<!--                         <div id="pointsAreaLegend" class="legend"></div> -->
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Map fill attribute</h2>
+					<div class="panelcontent">
+						<select id="mapcolor">
+						</select>
+						<div id="mapColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Background color</h2>
+					<div class="panelcontent">
+						<select id="mapbackground">
+						</select>
+						<div id="mapBackgroundLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Label color</h2>
+					<div class="panelcontent">
+						<select id="labelcolor">
+						</select>
+						<div id="labelColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+			</div>
+			<!-- END: selectors-->
+
+			<div id="container"></div>
+
+		</div>
+		<!-- END: selectorsANDcontainer-->
+
+	</div>
+	<!-- END: all-->
+
+	<form id="svgform" method="post" action="download.pl">
+		<input type="hidden" id="output_format" name="output_format" value="">
+		<input type="hidden" id="data" name="data" value="">
+	</form>
+	<!-- END: form-->
+
+	<script type="text/javascript" src="script.js"></script>
 
 </body>
 </html>
