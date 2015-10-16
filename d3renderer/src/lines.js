@@ -98,8 +98,10 @@ function generateLines(data, points) {
 						// line['endCoordinate'] = endCoordinate;
 
 						// line bend
-						var curvature = scale(Date.parse(line.startTime));
+//						var curvature = scale(Date.parse(line.startTime));
 
+						var curvature = scale(formDate(line.startTime));
+						
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
 
@@ -120,6 +122,11 @@ function generateLines(data, points) {
 						var dy = targetY - sourceY;
 						var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
 
+						console.log("dr " + dr);
+						console.log("curvature " + curvature);
+//						console.log("sqr " + Math.sqrt(dx * dx + dy * dy));
+						
+						
 						var westofsource = (targetX - sourceX) < 0;
 						line['westofsource'] = westofsource;
 						line['targetX'] = targetX;
