@@ -54,6 +54,25 @@ public class SpreadData {
 		this.layers = layers;
 
 	}// END: Constructor
+
+//	public SpreadData(TimeLine timeLine, //
+//			AxisAttributes axisAttributes,
+//			LinkedList<Location> locations, //
+//			LinkedList<Attribute> mapAttributes, //
+//			LinkedList<Attribute> lineAttributes, //
+//			LinkedList<Layer> layers //
+//	) {
+//
+//		this.timeLine = timeLine;
+//		this.axisAttributes = axisAttributes;
+//		this.mapAttributes = mapAttributes;
+//		this.lineAttributes = lineAttributes;
+//		this.pointAttributes = null;
+//		this.locations = locations;
+//		this.layers = layers;
+//
+//	}// END: Constructor
+	
 	
 	public List<Layer> getLayers() {
 		return layers;

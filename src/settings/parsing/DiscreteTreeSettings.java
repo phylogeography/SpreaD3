@@ -16,7 +16,7 @@ public class DiscreteTreeSettings {
 	//---OPTIONAL---//
 	
 	// node trait attribute names
-	public String[] traits = null;
+//	public String[] traits = null;
 	
 	// number of discrete intervals
 	public Integer intervals = 10;

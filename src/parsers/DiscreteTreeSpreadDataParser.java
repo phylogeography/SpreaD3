@@ -44,40 +44,25 @@ public class DiscreteTreeSpreadDataParser {
 
 		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
 
+		System.out.println("Imported tree");
+		
+		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
+				settings.locations, settings.header);
+		locationsList = locationsParser.parseLocations();
+
+		System.out.println("Imported locations");
+		
 		// ---PARSE AND FILL STRUCTURES---//
 
+		// ---TIME---//
+		
 		TimeParser timeParser = new TimeParser(settings.mrsd);
 		timeParser.parseTime();
 		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree
 				.getRootNode()));
 
 		System.out.println("Parsed time line");
-
-		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-				settings.locations, settings.header);
-		locationsList = locationsParser.parseLocations();
-
-		System.out.println("Parsed locations");
-
-		DiscreteTreeParser treeParser = new DiscreteTreeParser(rootedTree, //
-				settings.locationTrait, //
-				locationsList, //
-				settings.mrsd, //
-				settings.timescaleMultiplier//
-		);
-		treeParser.parseTree();
-
-		lineAttributes = treeParser.getLineAttributes();
-		pointAttributes = treeParser.getPointAttributes();
-
-		Attribute xCoordinate = locationsParser.getxCoordinateAttribute();
-		Attribute yCoordinate = locationsParser.getyCoordinateAttribute();
-		pointAttributes.add(xCoordinate);
-		pointAttributes.add(yCoordinate);
-        AxisAttributes axis = new AxisAttributes(xCoordinate.getId(), yCoordinate.getId());
 		
-		System.out.println("Parsed tree attributes");
-
 		// ---GEOJSON LAYER---//
 
 		if (settings.geojson != null) {
@@ -97,8 +82,17 @@ public class DiscreteTreeSpreadDataParser {
 			System.out.println("Parsed map attributes");
 
 		}// END: null check
-
+		
 		// ---DATA LAYER (POINTS WITH COUNTS)---//
+		
+		DiscreteTreeParser treeParser = new DiscreteTreeParser( //
+				rootedTree, //
+				settings.locationTrait, //
+				locationsList, //
+				settings.mrsd, //
+				settings.timescaleMultiplier//
+		);
+		treeParser.parseTree();
 
 		LinkedList<Point> countsList = treeParser.getCountsList();
 		Layer countsLayer = new Layer(settings.tree, //
@@ -107,7 +101,9 @@ public class DiscreteTreeSpreadDataParser {
 		);
 
 		layersList.add(countsLayer);
-
+		
+		System.out.println("Parsed counts");
+		
 		// ---DATA LAYER (TREE LINES & POINTS WITH LOCATIONS)---//
 
 		LinkedList<Line> linesList = treeParser.getLinesList();
@@ -121,7 +117,18 @@ public class DiscreteTreeSpreadDataParser {
 
 		layersList.add(treeLayer);
 
-		System.out.println("Parsed the tree");
+		System.out.println("Parsed lines and points");
+		
+		lineAttributes = treeParser.getLineAttributes();
+		pointAttributes = treeParser.getPointAttributes();
+
+		Attribute xCoordinate = locationsParser.getxCoordinateAttribute();
+		Attribute yCoordinate = locationsParser.getyCoordinateAttribute();
+		pointAttributes.add(xCoordinate);
+		pointAttributes.add(yCoordinate);
+        AxisAttributes axis = new AxisAttributes(xCoordinate.getId(), yCoordinate.getId());
+		
+		System.out.println("Parsed tree attributes");
 
 		SpreadData data = new SpreadData(timeLine, //
 				axis,

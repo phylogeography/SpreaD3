@@ -46,7 +46,7 @@ function generateLines(data, points) {
 
 	// bend values in [0,1]
 	// 0 gives straight lines, closer to 1 results in more bent lines
-	var scale = d3.scale.linear().domain([ sliderStartValue, sliderEndValue ])
+	var scale = d3.scale.linear().domain([ sliderEndValue, sliderStartValue ])
 			.range([ MIN_BEND, MAX_BEND ]);
 
 	var lines = linesLayer
@@ -98,9 +98,19 @@ function generateLines(data, points) {
 						// line['endCoordinate'] = endCoordinate;
 
 						// line bend
-//						var curvature = scale(Date.parse(line.startTime));
-
-						var curvature = scale(formDate(line.startTime));
+						
+						var curvature;
+						var startTime = line.startTime;
+						if(typeof startTime != "undefined") {
+						
+						curvature = scale(formDate(line.startTime));
+						
+						} else {
+							
+							curvature = MAX_BEND;
+							
+						}
+						
 						
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
@@ -122,11 +132,6 @@ function generateLines(data, points) {
 						var dy = targetY - sourceY;
 						var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
 
-						console.log("dr " + dr);
-						console.log("curvature " + curvature);
-//						console.log("sqr " + Math.sqrt(dx * dx + dy * dy));
-						
-						
 						var westofsource = (targetX - sourceX) < 0;
 						line['westofsource'] = westofsource;
 						line['targetX'] = targetX;

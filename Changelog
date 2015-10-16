@@ -11,10 +11,18 @@ h1. NEW PARSERS
 h3. DISCRETE TREE PARSING
 
 * with map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -map /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/combined.geojson -output ebov_discrete.json
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -map /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/combined.geojson -output ebov_discrete.json
 
 * no map [BUG]
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_nomap.json
+* with map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
+
+h3. BAYES FACTORS PARSING
+
+* with map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output test_bf.json
+
+
 
 
 h3. CONTINUOUS TREE PARSING
