@@ -18,8 +18,11 @@ public class TimeSlicerSettings {
 	// path to trees file
 	public String trees = null;
 
-	// location attribute name
-	public String locationTrait = null;
+//	// location attribute name
+//	public String locationTrait = null;
+	
+	// 2D trait for contouring
+	public String trait;
 	
 	//---OPTIONAL---//
 	
@@ -30,17 +33,20 @@ public class TimeSlicerSettings {
 	public int burnIn = 1;
 
 	// contouring hpd level
-	public double hpdLevel = 0.95;
+	public double hpdLevel = 0.8;
 
-	public String[] traits = null;
+//	public String[] traits = null;
 	
-	// path to json output file 
-	public String output = "output.json";
-
 	// most recent sampling date yyy/mm/dd
 	public String mrsd = "0-0-0";
 
 	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
 	public double timescaleMultiplier = 1.0;
 	
+	// path to json output file 
+	public String output = "output.json";
+
+	// geojson 
+	public String geojson;
+
 }//END: class

@@ -20,7 +20,7 @@ import utils.Utils;
 
 public class ContinuousTreeSpreadDataParser {
 
-	private ContinuousTreeSettings settings;
+	private final ContinuousTreeSettings settings;
 
 	public ContinuousTreeSpreadDataParser(ContinuousTreeSettings settings) {
 

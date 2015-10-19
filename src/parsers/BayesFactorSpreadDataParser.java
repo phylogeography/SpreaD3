@@ -106,6 +106,9 @@ public class BayesFactorSpreadDataParser {
 				layersList //
 		);
 
+		System.out.println("Bayes factors table: ");
+		bayesFactorParser.printBfTable();
+		
 		return data;
 	}// END: parse
 

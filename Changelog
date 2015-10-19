@@ -35,3 +35,14 @@ h3. CONTINUOUS TREE PARSING
 
 * geographical coordinates example, clipped map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
+
+
+h3. TIME SLICING
+
+* Slices defined by MCC tree, world map
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
+
+* Override some of the default settings
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
+
+

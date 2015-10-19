@@ -400,19 +400,23 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/test_bf.json", function ready(error, json) {
-	// d3.json("data/languages_worldmap.json", function ready(error, json) {
+//d3.json("data/test_bf.json", function ready(error, json) {
+	 d3.json("data/languages_worldmap.json", function ready(error, json) {
 	// d3.json("data/ebov_discrete.json", function ready(error, json) {
 	// TODO: needs debugging
 	// d3.json("data/ebov_nomap.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
+	var hasTime = false;
+	var timeSlider = null;
+	var timeScale = null;
+	var currentDateDisplay = null;
+	var dateFormat = null;
 
 	var timeLine = json.timeLine;
-	var hasTime = false;
 	if (typeof timeLine != 'undefined') {
 
-		var dateFormat = d3.time.format("%Y/%m/%d");
+		dateFormat = d3.time.format("%Y/%m/%d");
 
 		var startDate = formDate(timeLine.startTime);
 		sliderStartValue = startDate.getTime();
@@ -427,12 +431,12 @@ d3.json("data/test_bf.json", function ready(error, json) {
 		sliderInterval = duration / sliderSpeed;
 
 		// initial value
-		var currentDateDisplay = d3.select('#currentDate').text(
+		currentDateDisplay = d3.select('#currentDate').text(
 				dateFormat(startDate));
 
-		var timeScale = d3.time.scale.utc().domain([ startDate, endDate ])
-				.range([ 0, 1 ]);
-		var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+		timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
+				[ 0, 1 ]);
+		timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
 		d3.select('#timeSlider').call(timeSlider);
 
 		hasTime = true;
