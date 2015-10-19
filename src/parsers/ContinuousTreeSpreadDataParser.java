@@ -28,8 +28,7 @@ public class ContinuousTreeSpreadDataParser {
 
 	}// END: Constructor
 
-	public SpreadData parse() throws IOException, ImportException,
-			AnalysisException {
+	public SpreadData parse() throws IOException, ImportException, AnalysisException {
 
 		TimeLine timeLine = null;
 		LinkedList<Attribute> mapAttributes = null;
@@ -45,9 +44,8 @@ public class ContinuousTreeSpreadDataParser {
 		// ---PARSE AND FILL STRUCTURES---//
 
 		TimeParser timeParser = new TimeParser(settings.mrsd);
-//		timeParser.parseTime();
-		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree
-				.getRootNode()));
+		// timeParser.parseTime();
+		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree.getRootNode()));
 
 		System.out.println("Parsed time line");
 
@@ -56,8 +54,7 @@ public class ContinuousTreeSpreadDataParser {
 				settings.yCoordinate, //
 				settings.hpd, //
 				timeParser, //
-				settings.timescaleMultiplier
-		);
+				settings.timescaleMultiplier);
 
 		treeParser.parseTree();
 
@@ -84,7 +81,7 @@ public class ContinuousTreeSpreadDataParser {
 
 			System.out.println("Parsed map attributes");
 
-		}// END: null check
+		} // END: null check
 
 		// ---DATA LAYER (TREE LINES & POINTS, AREAS)---//
 
@@ -100,9 +97,9 @@ public class ContinuousTreeSpreadDataParser {
 		layersList.add(treeLayer);
 
 		AxisAttributes axis = new AxisAttributes(settings.xCoordinate, settings.yCoordinate);
-		
+
 		return new SpreadData(timeLine, //
-				axis,
+				axis, //
 				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //

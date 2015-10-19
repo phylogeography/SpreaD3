@@ -24,13 +24,13 @@ public class TimeSlicerParser {
 	private double[] sliceHeights;
 	private NexusImporter treesImporter;
 	private String traitName;
-    private TimeParser timeParser;
-	
+	private TimeParser timeParser;
+
 	private int assumedTrees;
 	private int burnIn;
 	private double hpdLevel;
-	private double timescaleMultiplier ;
-	
+	private double timescaleMultiplier;
+
 	private int gridSize;
 
 	private LinkedList<Area> areasList;
@@ -44,8 +44,7 @@ public class TimeSlicerParser {
 			int gridSize, //
 			double timescaleMultiplier, //
 			double[] sliceHeights //
-			
-			
+
 	) {
 
 		this.sliceHeights = sliceHeights;
@@ -58,9 +57,7 @@ public class TimeSlicerParser {
 
 		this.gridSize = gridSize;
 		this.timescaleMultiplier = timescaleMultiplier;
-		
-		
-		
+
 		this.areasList = new LinkedList<Area>();
 
 	}// END: Constructor
@@ -136,10 +133,6 @@ public class TimeSlicerParser {
 		progressBar = new ProgressBar(barLength);
 		progressBar.start();
 
-		// Iterator<Double> iterator = traitMap.keySet().iterator();
-		// while (iterator.hasNext()) {
-		// Double sliceHeight = iterator.next();
-
 		for (Double sliceHeight : slicesMap.keySet()) {
 
 			List<double[]> coords = slicesMap.get(sliceHeight);
@@ -173,27 +166,23 @@ public class TimeSlicerParser {
 					coordinateList.add(new Coordinate(latitude[i], longitude[i]));
 				}
 
-//				Map<String, Trait> attributes = new LinkedHashMap<String, Trait>();
-//
-//				Trait hpdTrait = new Trait(hpdLevel);
-//				attributes.put(Utils.HPD, hpdTrait);
-//
-//				Trait attributeName = new Trait(traitName);
-//				attributes.put(Utils.TRAIT, attributeName);
+				Polygon polygon = new Polygon(coordinateList);
+
+				// Map<String, Trait> attributes = new LinkedHashMap<String,
+				// Trait>();
+				//
+				// Trait hpdTrait = new Trait(hpdLevel);
+				// attributes.put(Utils.HPD, hpdTrait);
+				//
+				// Trait attributeName = new Trait(traitName);
+				// attributes.put(Utils.TRAIT, attributeName);
 
 				String startTime = timeParser.getNodeDate(sliceHeight * timescaleMultiplier);
-
-				Polygon polygon = new Polygon(coordinateList
-//						, //
-//						startTime, //
-//						attributes //
-				);
-
 
 				// TODO: no attributes?
 				Area area = new Area(polygon, startTime, null);
 				areasList.add(area);
-				
+
 			} // END: paths loop
 
 			counter++;
@@ -205,33 +194,6 @@ public class TimeSlicerParser {
 		progressBar.showCompleted();
 		progressBar.setShowProgress(false);
 		System.out.print("\n");
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		// TODO
 
 	}// END: parse
 

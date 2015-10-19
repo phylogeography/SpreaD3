@@ -42,6 +42,9 @@ h3. TIME SLICING
 * Slices defined by MCC tree, world map
 -parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
 
+* Slices defined by slice heights, world map
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trait location -mrsd 2011.1 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
+
 * Override some of the default settings
 -parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
 

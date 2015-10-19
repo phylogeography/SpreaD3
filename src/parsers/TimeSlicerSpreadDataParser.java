@@ -24,19 +24,17 @@ import utils.Utils;
 
 public class TimeSlicerSpreadDataParser {
 
-	private static final int FIRST_SLICE_INDEX = 0;
+//	private static final int FIRST_SLICE_INDEX = 0;
 	private final TimeSlicerSettings settings;
 
 	public TimeSlicerSpreadDataParser(TimeSlicerSettings settings) {
-
 		this.settings = settings;
-
 	}// END: Constructor
 
 	public SpreadData parse() throws IOException, ImportException, AnalysisException {
 
 		TimeLine timeLine = null;
-		// TODO: we need axisAtt's
+		// TODO: we need axis Att's
 		AxisAttributes axis = null;
 		LinkedList<Attribute> mapAttributes = null;
 		// LinkedList<Attribute> lineAttributes = null;
@@ -77,7 +75,7 @@ public class TimeSlicerSpreadDataParser {
 
 		TimeParser timeParser = new TimeParser(settings.mrsd);
 		// timeParser.parseTime();
-		timeLine = timeParser.getTimeLine(sliceHeights[FIRST_SLICE_INDEX]);
+		timeLine = timeParser.getTimeLine(sliceHeights[sliceHeights.length-1]);
 
 		System.out.println("Parsed time line");
 

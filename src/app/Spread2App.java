@@ -20,10 +20,10 @@ public class Spread2App {
     private static final String DATE_STRING = "2015";
 	
 	private static final String FILIP_BIELEJEC = "Filip Bielejec";
+	private static final String GUY_BAELE = "Guy Baele";
 	private static final String ANDREW_RAMBAUT = "Andrew Rambaut";
 	private static final String MARC_SUCHARD = "Marc A. Suchard";
 	private static final String PHILIPPE_LEMEY = "Philippe 'The Wise' Lemey";
-	private static final String GUY_BAELE = "Guy Baele";
 	
 	public static void main(String[] args) {
 		
@@ -48,7 +48,7 @@ public class Spread2App {
         System.out.println();
         centreLine(SHORT_NAME + " version " + VERSION + " (" + DATE_STRING + ")" + " -- " + CODENAME , 60);
         centreLine(LONG_NAME, 60);
-        centreLine("Authors: " + FILIP_BIELEJEC + ", " + ANDREW_RAMBAUT + ", " + MARC_SUCHARD + ", " + PHILIPPE_LEMEY + " and " + GUY_BAELE, 60);
+        centreLine("Authors: " + FILIP_BIELEJEC + ", " + GUY_BAELE + ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and "  + PHILIPPE_LEMEY , 60);
         centreLine("Thanks to: Stephan Nylinder " + "", 60);
         
         System.out.println();        
