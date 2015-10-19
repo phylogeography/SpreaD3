@@ -26,7 +26,7 @@ public class ContinuousTreeParser {
 	private String xCoordinate;
 	private String yCoordinate;
 	private String hpd;
-	private String mrsd;
+//	private String mrsd;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
 
@@ -41,7 +41,7 @@ public class ContinuousTreeParser {
 			String xCoordinate, //
 			String yCoordinate, //
 			String hpd, //
-			String mrsd, //
+			TimeParser timeParser, //
 			double timescaleMultiplier //
 
 	) {
@@ -50,7 +50,7 @@ public class ContinuousTreeParser {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 		this.hpd = hpd;
-		this.mrsd = mrsd;
+		this.timeParser = timeParser;
 		this.timescaleMultiplier = timescaleMultiplier;
 
 		this.uniqueBranchAttributes = new LinkedList<Attribute>();
@@ -71,8 +71,8 @@ public class ContinuousTreeParser {
 		String modalityAttributeName = prefix.concat("_").concat(hpd)
 				.concat("%").concat("HPD_modality");
 		
-		this.timeParser = new TimeParser(mrsd);
-		timeParser.parseTime();
+//		this.timeParser = new TimeParser(mrsd);
+//		timeParser.parseTime();
 
 		int index = 0;
 		for (Node node : rootedTree.getNodes()) {

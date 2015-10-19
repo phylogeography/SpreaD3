@@ -57,7 +57,7 @@ public class DiscreteTreeSpreadDataParser {
 		// ---TIME---//
 		
 		TimeParser timeParser = new TimeParser(settings.mrsd);
-		timeParser.parseTime();
+//		timeParser.parseTime();
 		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree
 				.getRootNode()));
 
@@ -89,7 +89,8 @@ public class DiscreteTreeSpreadDataParser {
 				rootedTree, //
 				settings.locationTrait, //
 				locationsList, //
-				settings.mrsd, //
+//				settings.mrsd, //
+				timeParser, //
 				settings.timescaleMultiplier//
 		);
 		treeParser.parseTree();

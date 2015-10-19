@@ -45,7 +45,7 @@ public class ContinuousTreeSpreadDataParser {
 		// ---PARSE AND FILL STRUCTURES---//
 
 		TimeParser timeParser = new TimeParser(settings.mrsd);
-		timeParser.parseTime();
+//		timeParser.parseTime();
 		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree
 				.getRootNode()));
 
@@ -55,7 +55,7 @@ public class ContinuousTreeSpreadDataParser {
 				settings.xCoordinate, //
 				settings.yCoordinate, //
 				settings.hpd, //
-				settings.mrsd, //
+				timeParser, //
 				settings.timescaleMultiplier
 		);
 
@@ -97,18 +97,8 @@ public class ContinuousTreeSpreadDataParser {
 				pointsList, //
 				linesList, //
 				areasList);
-
 		layersList.add(treeLayer);
 
-		// TODO: get from point attributes
-		
-//		pointAttributes.g
-		
-//		Attribute xCoordinate  = null;
-//		Attribute yCoordinate = null;
-//		
-//		Attribute[] coordinateAttributes = new Attribute[]{xCoordinate, yCoordinate};
-		
 		AxisAttributes axis = new AxisAttributes(settings.xCoordinate, settings.yCoordinate);
 		
 		return new SpreadData(timeLine, //

@@ -14,9 +14,11 @@ import jebl.evolution.io.NexusImporter;
 import jebl.evolution.trees.RootedTree;
 import settings.parsing.TimeSlicerSettings;
 import structure.data.Attribute;
+import structure.data.AxisAttributes;
 import structure.data.Layer;
 import structure.data.SpreadData;
 import structure.data.TimeLine;
+import structure.data.attributable.Area;
 import structure.geojson.GeoJsonData;
 import utils.Utils;
 
@@ -24,63 +26,61 @@ public class TimeSlicerSpreadDataParser {
 
 	private static final int FIRST_SLICE_INDEX = 0;
 	private final TimeSlicerSettings settings;
-	
-	
+
 	public TimeSlicerSpreadDataParser(TimeSlicerSettings settings) {
-		
+
 		this.settings = settings;
-		
-	}//END: Constructor
+
+	}// END: Constructor
 
 	public SpreadData parse() throws IOException, ImportException, AnalysisException {
-		
+
 		TimeLine timeLine = null;
+		// TODO: we need axisAtt's
+		AxisAttributes axis = null;
 		LinkedList<Attribute> mapAttributes = null;
-		LinkedList<Attribute> lineAttributes = null;
-		LinkedList<Attribute> pointAttributes = null;
+		// LinkedList<Attribute> lineAttributes = null;
+		// LinkedList<Attribute> pointAttributes = null;
 
 		LinkedList<Layer> layersList = new LinkedList<Layer>();
-		
+
 		// ---IMPORT---//
-		
+
 		// import slice heights
 		double sliceHeights[] = null;
-		if(settings.sliceHeights != null) {
-			
+		if (settings.sliceHeights != null) {
+
 			SliceHeightsParser sliceHeightsParser = new SliceHeightsParser(settings.sliceHeights);
 			sliceHeights = sliceHeightsParser.parseSliceHeights();
-			
-		} else if(settings.tree != null) {
-			
-		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
-		sliceHeights = generateSliceHeights(rootedTree,
-					settings.intervals);
-			
+
+		} else if (settings.tree != null) {
+
+			RootedTree rootedTree = Utils.importRootedTree(settings.tree);
+			sliceHeights = generateSliceHeights(rootedTree, settings.intervals);
+
 		} else {
-			
+
 			throw new AnalysisException("Error parsing slice heights!");
-			
-		}//END: settings check
-		
+
+		} // END: settings check
+
 		// sort them in ascending order
 		Arrays.sort(sliceHeights);
-	
+
 		System.out.println("Using as slice heights: ");
-		Utils.printArray(sliceHeights);	
-		
+		Utils.printArray(sliceHeights);
+
 		// import trees
-		NexusImporter treesImporter = new NexusImporter(new FileReader(
-				settings.trees));
-		
+		NexusImporter treesImporter = new NexusImporter(new FileReader(settings.trees));
+
 		// ---PARSE AND FILL STRUCTURES---//
-		
-		
+
 		TimeParser timeParser = new TimeParser(settings.mrsd);
-		timeParser.parseTime();
+		// timeParser.parseTime();
 		timeLine = timeParser.getTimeLine(sliceHeights[FIRST_SLICE_INDEX]);
 
 		System.out.println("Parsed time line");
-		
+
 		// ---GEOJSON LAYER---//
 
 		if (settings.geojson != null) {
@@ -99,46 +99,62 @@ public class TimeSlicerSpreadDataParser {
 
 			System.out.println("Parsed map attributes");
 
-		}// END: null check
-		
+		} // END: null check
+
 		// ---DATA LAYER (CONTOURING AREAS)---//
-		
+
 		int assumedTrees = getAssumedTrees(settings.trees);
-		if(settings.burnIn >= assumedTrees) {
+		if (settings.burnIn >= assumedTrees) {
 			throw new AnalysisException("Trying to burn too many trees!");
 		}
-		
-		TimeSlicerParser parser = new TimeSlicerParser(
-				
-				assumedTrees //
-				
-				);
-		parser.parse();
-		
-		
-		
-		
-		return null;
-	}//END: parse
 
-	private double[] generateSliceHeights(RootedTree rootedTree,
-			int numberOfIntervals) {
+		TimeSlicerParser parser = new TimeSlicerParser(settings.trait, //
+				treesImporter, //
+				timeParser, settings.burnIn, //
+				assumedTrees, //
+				settings.hpdLevel, //
+				settings.gridSize, //
+				settings.timescaleMultiplier,  //
+				sliceHeights //
+		);
+		parser.parse();
+
+		LinkedList<Area> areasList = parser.getAreasList();
+
+		Layer contoursLayer = new Layer(settings.trees, //
+				"Contour visualisation", //
+				null, //
+				null, //
+				areasList //
+		);
+
+		layersList.add(contoursLayer);
+
+		return new SpreadData(timeLine, //
+				axis, //
+				mapAttributes, //
+				null, //
+				null, //
+				layersList //
+		);
+	}// END: parse
+
+	private double[] generateSliceHeights(RootedTree rootedTree, int numberOfIntervals) {
 
 		double rootHeight = rootedTree.getHeight(rootedTree.getRootNode());
 		double[] timeSlices = new double[numberOfIntervals];
 
 		for (int i = 0; i < numberOfIntervals; i++) {
 
-			timeSlices[i] = rootHeight
-					- (rootHeight / (double) numberOfIntervals) * ((double) i);
+			timeSlices[i] = rootHeight - (rootHeight / (double) numberOfIntervals) * ((double) i);
 		}
 
 		return timeSlices;
 	}// END: generateSliceHeights
-	
+
 	private int getAssumedTrees(String file) throws IOException {
 		// TODO: this method is a hack
-		
+
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
 
 		try {
@@ -169,7 +185,7 @@ public class TimeSlicerSpreadDataParser {
 
 				}
 
-			}// END: loop
+			} // END: loop
 
 			count = count - 1;
 			return (count == 0 && !empty) ? 1 : count;
@@ -178,5 +194,5 @@ public class TimeSlicerSpreadDataParser {
 			is.close();
 		}
 	}// END: getAssumedTrees
-	
-}//END: class
+
+}// END: class

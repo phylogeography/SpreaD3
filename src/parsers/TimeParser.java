@@ -15,14 +15,16 @@ public class TimeParser {
 
 	private DateTimeFormatter dateFormatter;// = new SimpleDateFormat("MM/dd/yyyy")
 	
-	public TimeParser(String mrsd) {
+	public TimeParser(String mrsd) throws AnalysisException {
 
 		this.mrsd = mrsd;
-this.dateFormatter =  DateTimeFormat.forPattern("yyyy/MM/dd");
+        this.dateFormatter =  DateTimeFormat.forPattern("yyyy/MM/dd");
 		
+        parseTime();
+        
 	}// END: Constructor
 
-	public void parseTime() throws AnalysisException {
+	private void parseTime() throws AnalysisException {
 
 		Integer year = 0;
 		Integer month = 0;
