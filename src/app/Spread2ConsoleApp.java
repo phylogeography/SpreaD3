@@ -88,29 +88,24 @@ public class Spread2ConsoleApp {
 	private static final String KML = "kml";
 	private static final String GEOJSON = "geojson";
 
-	//---POINTS---//
-	
+	// ---POINTS---//
+
+	private static final String POINTS_SUBSET = "pointsSubset";
+	private static final String POINTS_CUTOFF = "pointsCutoff";
+	private static final String POINTS_VALUE = "pointsValue";
+
 	private static final String POINT_AREA = "pointArea";
 	private static final String POINT_AREA_MAPPING = "pointAreaMapping";
-	
+
 	private static final String POINT_COLOR = "pointColor";
 	private static final String POINT_COLOR_MAPPING = "pointColorMapping";
 	private static final String POINT_COLORS = "pointColors";
 
-	//---AREAS---//
+	private static final String POINT_ALPHA = "pointAlpha";
+	private static final String POINT_ALPHA_MAPPING = "pointAlphaMapping";
 
-	private static final String AREA_SUBSET = "linesSubset";
-	private static final String AREA_CUTOFF = "linesCutoff";
-	private static final String AREA_VALUE = "linesValue";
-	
-	private static final String AREA_COLOR = "areaColor";
-	private static final String AREA_ALPHA = "areaAlpha";
-	
-	//---COUNTS---//
-	//TODO
-	
-	//---LINES---//
-	
+	// ---LINES---//
+
 	private static final String LINES_SUBSET = "linesSubset";
 	private static final String LINES_CUTOFF = "linesCutoff";
 	private static final String LINES_VALUE = "linesValue";
@@ -127,6 +122,20 @@ public class Spread2ConsoleApp {
 
 	private static final String LINE_WIDTH_MAPPING = "lineWidthMapping";
 	private static final String LINE_WIDTH = "lineWidth";
+
+	// ---AREAS---//
+
+	// private static final String AREA_SUBSET = "linesSubset";
+	// private static final String AREA_CUTOFF = "linesCutoff";
+	// private static final String AREA_VALUE = "linesValue";
+
+	private static final String AREA_COLOR = "areaColor";
+	private static final String AREA_ALPHA = "areaAlpha";
+
+	// ---COUNTS---//
+
+	private static final String COUNT_COLOR = "countColor";
+	private static final String COUNT_ALPHA = "countAlpha";
 
 	// ---READING---//
 
@@ -274,52 +283,76 @@ public class Spread2ConsoleApp {
 				/////////////////
 				// ---POINTS---//
 				/////////////////
-				
+
+				// ---POINT SUBSETS---//
+
+				new Arguments.StringOption(POINTS_SUBSET, "",
+						"attribute to select a subset of values above the certain cutoff."),
+
+				new Arguments.RealOption(POINTS_CUTOFF, "specify cutoff value to create a subset"),
+
+				new Arguments.StringOption(POINTS_VALUE, "", "specify fixed value to create a subset"),
+
 				// ---POINT COLORS---//
-				
+
 				new Arguments.RealArrayOption(POINT_COLOR, 3, "specify RGB value"),
-				
+
 				new Arguments.StringOption(POINT_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
-				
+
 				new Arguments.StringOption(POINT_COLORS, "", "file with RGB(A) colors to map attribute values to."),
-				
+
 				// ---POINT ALPHA---//
-				//TODO
-				
+
+				new Arguments.RealOption(POINT_ALPHA, "specify alpha value"),
+
+				new Arguments.StringOption(POINT_ALPHA_MAPPING, "",
+						"attribute to map alpha aesthetic. Higher values will be more opaque, lower values will be more translucent. "),
+
 				// ---POINT AREA---//
-				
-				new Arguments.RealOption(POINT_AREA,  "specify point areas"),
-				
+
+				new Arguments.RealOption(POINT_AREA, "specify point areas"),
+
 				new Arguments.StringOption(POINT_AREA_MAPPING, "", "attribute to map area aesthetics"),
-				
-				
+
 				////////////////
 				// ---AREAS---//
 				////////////////
-				
+
+				// ---SUBSETS---//
+
+				// new Arguments.StringOption(AREA_SUBSET, "",
+				// "attribute to select a subset of values above the certain
+				// cutoff."),
+				//
+				// new Arguments.RealOption(AREA_CUTOFF, "specify cutoff value
+				// to create a subset"),
+				//
+				// new Arguments.StringOption(AREA_VALUE, "", "specify fixed
+				// value to create a subset"),
+
 				// ---AREA COLOR---//
 
 				// TODO: this should read RGB or RGBA
 						new Arguments.RealArrayOption(AREA_COLOR, 3, "specify RGB value"),
 
-//				// ---AREA ALPHA---//
+				// // ---AREA ALPHA---//
 
 				new Arguments.RealOption(AREA_ALPHA,
-						"specify A value. Higher values are more opaque, lower values more translucent."),
+						"specify alpha value. Higher values are more opaque, lower values more translucent."),
 
-//				new Arguments.StringOption(AREA_SUBSET, "",
-//						"attribute to select a subset of values above the certain cutoff."),
-//
-//				new Arguments.RealOption(AREA_CUTOFF, "specify cutoff value to create a subset"),
-//
-//				new Arguments.StringOption(AREA_VALUE, "", "specify fixed value to create a subset"),
-				
-				
-				
-				
-				
-				
-				
+				////////////////
+				// ---LINES---//
+				////////////////
+
+				// ---SUBSETS---//
+
+				new Arguments.StringOption(LINES_SUBSET, "",
+						"attribute to select a subset of values above the certain cutoff."),
+
+				new Arguments.RealOption(LINES_CUTOFF, "specify cutoff value to create a subset"),
+
+				new Arguments.StringOption(LINES_VALUE, "", "specify fixed value to create a subset"),
+
 				// ---LINE WIDTH---//
 
 				new Arguments.RealOption(LINE_WIDTH, "specify line width"),
@@ -351,8 +384,6 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(LINE_ALPHA_MAPPING, "",
 						"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
-
-			
 
 		});
 
@@ -1056,23 +1087,43 @@ public class Spread2ConsoleApp {
 					//////////////////
 					// ---POINTS---//
 					/////////////////
-					
+
+					// ---AREA SUBSET---//
+
+					if (kmlRenderArguments.hasOption(POINTS_SUBSET)) {
+
+						settings.kmlRendererSettings.pointsSubset = kmlRenderArguments.getStringOption(POINTS_SUBSET);
+
+						if (kmlRenderArguments.hasOption(POINTS_CUTOFF)) {
+
+							settings.kmlRendererSettings.pointsCutoff = kmlRenderArguments.getRealOption(POINTS_CUTOFF);
+
+						} else if (kmlRenderArguments.hasOption(POINTS_VALUE)) {
+
+							settings.kmlRendererSettings.pointsValue = kmlRenderArguments.getStringOption(POINTS_VALUE);
+
+						} else {
+
+							throw new ArgumentException("Can't create a subset from these options!");
+
+						}
+
+					} // END: option check
+
 					// ---POINT COLOR---//
-					
+
 					if (kmlRenderArguments.hasOption(POINT_COLOR_MAPPING)) {
 
 						settings.kmlRendererSettings.pointColorMapping = kmlRenderArguments
 								.getStringOption(POINT_COLOR_MAPPING);
 
 						if (kmlRenderArguments.hasOption(POINT_COLORS)) {
-							settings.kmlRendererSettings.pointColors = kmlRenderArguments
-									.getStringOption(POINT_COLORS);
+							settings.kmlRendererSettings.pointColors = kmlRenderArguments.getStringOption(POINT_COLORS);
 						}
 
 					} else if (kmlRenderArguments.hasOption(POINT_COLOR)) {
 
-						settings.kmlRendererSettings.pointColor = kmlRenderArguments
-								.getRealArrayOption(POINT_COLOR);
+						settings.kmlRendererSettings.pointColor = kmlRenderArguments.getRealArrayOption(POINT_COLOR);
 
 					} else if (kmlRenderArguments.hasOption(POINT_COLOR_MAPPING)
 							&& kmlRenderArguments.hasOption(POINT_COLOR)) {
@@ -1084,12 +1135,32 @@ public class Spread2ConsoleApp {
 						// use defaults
 
 					}
-					
-					//---POINT ALPHA---//
-					//TODO
-					
+
+					// ---POINT ALPHA---//
+
+					if (kmlRenderArguments.hasOption(POINT_ALPHA_MAPPING)) {
+
+						settings.kmlRendererSettings.pointAlphaMapping = kmlRenderArguments
+								.getStringOption(POINT_ALPHA_MAPPING);
+
+					} else if (kmlRenderArguments.hasOption(POINT_ALPHA)) {
+
+						settings.kmlRendererSettings.pointAlpha = kmlRenderArguments.getRealOption(POINT_ALPHA);
+						settings.kmlRendererSettings.pointAlphaChanged = true;
+
+					} else if (kmlRenderArguments.hasOption(POINT_ALPHA_MAPPING)
+							&& kmlRenderArguments.hasOption(POINT_ALPHA)) {
+
+						throw new ArgumentException("Can't both map and have a defined point alpha!");
+
+					} else {
+
+						// use defaults
+
+					}
+
 					// ---POINT AREA---//
-					
+
 					if (kmlRenderArguments.hasOption(POINT_AREA_MAPPING)) {
 
 						settings.kmlRendererSettings.pointAreaMapping = kmlRenderArguments
@@ -1109,36 +1180,11 @@ public class Spread2ConsoleApp {
 						// use defaults
 
 					}
-					
-					//////////////////
+
+					////////////////
 					// ---AREAS---//
-					/////////////////
+					////////////////
 
-					// ---AREA SUBSET---//
-
-					if (kmlRenderArguments.hasOption(AREA_SUBSET)) {
-
-						settings.kmlRendererSettings.areasSubset = kmlRenderArguments
-								.getStringOption(AREA_SUBSET);
-
-						if (kmlRenderArguments.hasOption(AREA_CUTOFF)) {
-
-							settings.kmlRendererSettings.areasCutoff = kmlRenderArguments
-									.getRealOption(AREA_CUTOFF);
-
-						} else if (kmlRenderArguments.hasOption(AREA_VALUE)) {
-
-							settings.kmlRendererSettings.areasValue = kmlRenderArguments
-									.getStringOption(AREA_VALUE);
-
-						} else {
-
-							throw new ArgumentException("Can't create a subset from these options!");
-
-						}
-
-					} // END: option check
-					
 					// ---AREA COLOR---//
 
 					if (kmlRenderArguments.hasOption(AREA_COLOR)) {
@@ -1146,7 +1192,7 @@ public class Spread2ConsoleApp {
 						settings.kmlRendererSettings.areaColor = kmlRenderArguments.getRealArrayOption(AREA_COLOR);
 
 					}
-	 
+
 					// ---AREA ALPHA---//
 
 					if (kmlRenderArguments.hasOption(AREA_ALPHA)) {
@@ -1158,7 +1204,7 @@ public class Spread2ConsoleApp {
 					////////////////
 					// ---LINES---//
 					////////////////
-					
+
 					// ---LINES SUBSET---//
 
 					if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
@@ -1180,7 +1226,7 @@ public class Spread2ConsoleApp {
 						}
 
 					} // END: option check
-					
+
 					// ---LINE COLOR---//
 
 					if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)) {

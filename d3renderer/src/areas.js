@@ -28,11 +28,7 @@ d3.kodama
 					}
 				});
 
-// https://gist.github.com/arunkjn/5042953
-// https://stackoverflow.com/questions/13204562/proper-format-for-drawing-polygon-data-in-d3
 function generateAreas(data) {
-
-	// console.log(data);
 
 	areasLayer.selectAll("polygon").data(data).enter().append("polygon") //
 	.attr("class", "polygon") //
@@ -84,9 +80,6 @@ function generateAreas(data) {
 	}) //
 	.theme('countsTheme'));
 
-	
-	//TODO: dump attributes, color mapping
-	
 }// END: generateAreas
 
 function generateCounts(data, countAttribute) {

@@ -26,6 +26,7 @@ import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
 import kmlframework.kml.TimeSpan;
 import parsers.DiscreteColorsParser;
+import parsers.DiscreteTreeParser;
 import renderers.Renderer;
 import settings.rendering.KmlRendererSettings;
 import structure.data.Attribute;
@@ -33,6 +34,7 @@ import structure.data.Layer;
 import structure.data.Location;
 import structure.data.SpreadData;
 import structure.data.attributable.Area;
+import structure.data.attributable.Line;
 import structure.data.attributable.Point;
 import structure.data.primitive.Coordinate;
 import utils.Trait;
@@ -40,10 +42,9 @@ import utils.Utils;
 
 public class KmlRenderer implements Renderer {
 
-	// private static final int MIN_INDEX=0;
-	// private static final int MAX_INDEX=1;
-
 	private static final String TREE_LAYER_TYPE = "tree";
+	private static final String COUNTS_LAYER_TYPE = "counts";
+
 	private static final String ORDINAL = "ordinal";
 	private static final String LINEAR = "linear";
 
@@ -55,18 +56,15 @@ public class KmlRenderer implements Renderer {
 	private Map<Object, Color> pointColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> pointAlphaMap = new LinkedHashMap<Object, Integer>();
 
-	// Areas: color, alpha
-	private Map<Object, Color> areaColorMap = new LinkedHashMap<Object, Color>();
-	private Map<Object, Integer> areaAlphaMap = new LinkedHashMap<Object, Integer>();
-
 	// Lines: color, alpha, altitude, width
 	private Map<Object, Color> lineColorMap = new LinkedHashMap<Object, Color>();
 	private Map<Object, Integer> lineAlphaMap = new LinkedHashMap<Object, Integer>();
 	private Map<Object, Double> lineAltitudeMap = new LinkedHashMap<Object, Double>();
 	private Map<Object, Double> lineWidthMap = new LinkedHashMap<Object, Double>();
 
-	// Counts: 
-	
+	// Counts: area
+	private Map<Object, Double> countAreaMap = new LinkedHashMap<Object, Double>();
+
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 
 	public KmlRenderer(SpreadData data, KmlRendererSettings settings) {
@@ -161,68 +159,96 @@ public class KmlRenderer implements Renderer {
 				folder.addFeature(generatePoints(layer.getPoints()));
 			}
 
-			// TODO : lines, areas
-
-			// if (layer.hasLines()) {
-			// folder.addFeature(generateLines(layer.getLines()));
-			// }
+			if (layer.hasLines()) {
+				folder.addFeature(generateLines(layer.getLines()));
+			}
 
 			if (layer.hasAreas()) {
 				folder.addFeature(generateAreas(layer.getAreas()));
 			}
 
+		} else if (layer.getType().equalsIgnoreCase(COUNTS_LAYER_TYPE)) {
+
+			if (layer.hasPoints()) {
+				folder.addFeature(generateCounts(layer.getPoints()));
+			}
+
+		} else {
+			//
 		} // END: type check
 
 		return folder;
 	}// END: generateLayer
+
+	// ---LINES---//
+	// TODO
+	public Feature generateLines(List<Line> lines) {
+
+		Folder folder = new Folder();
+		folder.setName("lines");
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		return folder;
+	}// END: generateLines
 
 	// ---AREAS---//
 
 	public Feature generateAreas(List<Area> areas) throws IOException {
 
 		Folder folder = new Folder();
-		folder.setName("polygons");
+		folder.setName("areas");
 
 		for (Area area : areas) {
 
-			Feature feature = generateArea(area );
+			Feature feature = generateArea(area);
 			folder.addFeature(feature);
 
 		} // END: points loop
-		
+
 		return folder;
 	}// END: generateAreas
 
 	private Feature generateArea(Area area) {
-		
+
 		Placemark placemark = new Placemark();
 		LinearRing linearRing = new LinearRing();
 		List<kmlframework.kml.Point> points = new ArrayList<kmlframework.kml.Point>();
 		String name = "";
 		String label = "";
-		
+
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
 		timeSpan.setBegin(area.getStartTime());
 		placemark.setTimePrimitive(timeSpan);
-		
+
 		// add coordinates
-		for(Coordinate coordinate: area.getPolygon().getCoordinates()) {
-			
+		for (Coordinate coordinate : area.getPolygon().getCoordinates()) {
+
 			points.add(generatePoint(coordinate));
-			
-		}//END: coordinates loop
+
+		} // END: coordinates loop
 
 		linearRing.setCoordinates(points);
 
-		//---COLOR---//
+		// ---COLOR---//
 		int red = (int) settings.areaColor[KmlRendererSettings.R];
 		int green = (int) settings.areaColor[KmlRendererSettings.G];
 		int blue = (int) settings.areaColor[KmlRendererSettings.B];
 		int alpha = (int) settings.areaAlpha;
 
 		Color color = new Color(red, green, blue, alpha);
-		
+
 		KmlStyle style = new KmlStyle(color);
 		style.setId(style.toString());
 
@@ -245,8 +271,96 @@ public class KmlRenderer implements Renderer {
 		placemark.setDescription(label);
 
 		return placemark;
-	}//END: generateArea
-	
+	}// END: generateArea
+
+	// ---COUNTS---//
+
+	private Feature generateCounts(List<Point> counts) throws IOException {
+
+		Folder folder = new Folder();
+		folder.setName("counts");
+
+		Attribute countAttribute = getAttribute(data.getPointAttributes(), DiscreteTreeParser.COUNT);
+
+		for (Point count : counts) {
+
+			Feature feature = generateCount(count, countAttribute);
+			folder.addFeature(feature);
+
+		} // END: points loop
+
+		return folder;
+	}// END: generateCounts
+
+	private Feature generateCount(Point count, Attribute countAttribute) {
+
+		int numPoints = 36;
+
+		Placemark placemark = new Placemark();
+		LinearRing linearRing = new LinearRing();
+		List<kmlframework.kml.Point> points = new ArrayList<kmlframework.kml.Point>();
+		String name = "";
+		String label = "";
+
+		// ---AREA---//
+
+		Double area = 0.0;
+		Double countAttributeValue = (Double) count.getAttributes().get(DiscreteTreeParser.COUNT);
+		if (countAreaMap.containsKey(countAttributeValue)) { // get from map
+
+			area = countAreaMap.get(countAttributeValue);
+
+		} else { // map it
+
+			double minValue = countAttribute.getRange()[0];
+			double maxValue = countAttribute.getRange()[1];
+
+			area = map(countAttributeValue, minValue, maxValue, settings.minPointArea, settings.maxPointArea);
+
+			// store for future reference
+			countAreaMap.put(countAttributeValue, area);
+		} // END: key check
+
+		label = ("area[" + DiscreteTreeParser.COUNT + ":" + countAttributeValue.toString() + "]");
+
+		Coordinate coordinate = count.getLocation().getCoordinate();
+		points.addAll(generateCircle(coordinate, area, numPoints));
+		linearRing.setCoordinates(points);
+
+		// ---COLOR---//
+
+		int red = (int) settings.countColor[KmlRendererSettings.R];
+		int green = (int) settings.countColor[KmlRendererSettings.G];
+		int blue = (int) settings.countColor[KmlRendererSettings.B];
+		int alpha = (int) settings.countAlpha;
+
+		Color color = new Color(red, green, blue, alpha);
+
+		KmlStyle style = new KmlStyle(color);
+		style.setId(style.toString());
+
+		if (!styles.contains(style)) {
+			styles.add(style);
+		}
+
+		PolyStyle polyStyle = new PolyStyle();
+		polyStyle.setOutline(false);
+		polyStyle.setColor(getKMLColor(style.getFillColor()));
+		style.setPolyStyle(polyStyle);
+		placemark.setStyleUrl(style.getId());
+
+		kmlframework.kml.Polygon kfPolygon = new kmlframework.kml.Polygon();
+		kfPolygon.setTessellate(true);
+		kfPolygon.setOuterBoundary(linearRing);
+		placemark.setGeometry(kfPolygon);
+		placemark.setName(name);
+
+		placemark.setDescription(label);
+
+		return placemark;
+
+	}// END: generateCount
+
 	// ---POINTS---//
 
 	private Feature generatePoints(List<Point> points) throws IOException {
@@ -283,6 +397,8 @@ public class KmlRenderer implements Renderer {
 	}// END: generatePoints
 
 	private Feature generatePoint(Point point, Attribute areaAttribute, Attribute colorAttribute) {
+
+		// TODO: process includes (subsets)
 
 		int numPoints = 36;
 
@@ -352,6 +468,7 @@ public class KmlRenderer implements Renderer {
 		int red = (int) settings.pointColor[KmlRendererSettings.R];
 		int green = (int) settings.pointColor[KmlRendererSettings.G];
 		int blue = (int) settings.pointColor[KmlRendererSettings.B];
+		// TODO: alpha mapping
 		int alpha = (int) settings.pointAlpha;
 
 		Color color = new Color(red, green, blue, alpha);
@@ -360,7 +477,8 @@ public class KmlRenderer implements Renderer {
 
 			Object colorAttributeValue = point.getAttributes().get(settings.pointColorMapping);
 
-			if (pointColorMap.containsKey(colorAttributeValue)) { // get from map
+			if (pointColorMap.containsKey(colorAttributeValue)) { // get from
+																	// map
 
 				color = pointColorMap.get(colorAttributeValue);
 
