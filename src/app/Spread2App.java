@@ -13,9 +13,9 @@ public class Spread2App {
 
 	public static final boolean DEBUG = true;
 	
-	private static final String SHORT_NAME = "SPREAD2";
-	private static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics 2";
-    private static final String VERSION = "0.0.1";
+	private static final String SHORT_NAME = "SPREAD";
+	private static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
+    private static final String VERSION = "2.0.1";
     private static final String CODENAME = "One O'Clock Gun";
     private static final String DATE_STRING = "2015";
 	

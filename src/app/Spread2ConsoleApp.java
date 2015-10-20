@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import jebl.evolution.io.ImportException;
+import kmlframework.kml.KmlException;
 import parsers.BayesFactorSpreadDataParser;
 import parsers.ContinuousTreeSpreadDataParser;
 import parsers.DiscreteTreeSpreadDataParser;
 import parsers.TimeSlicerSpreadDataParser;
+import renderers.kml.KmlRenderer;
 import settings.Settings;
 import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
@@ -86,37 +88,45 @@ public class Spread2ConsoleApp {
 	private static final String KML = "kml";
 	private static final String GEOJSON = "geojson";
 
+	//---POINTS---//
+	
+	private static final String POINT_AREA = "pointArea";
+	private static final String POINT_AREA_MAPPING = "pointAreaMapping";
+	
+	private static final String POINT_COLOR = "pointColor";
+	private static final String POINT_COLOR_MAPPING = "pointColorMapping";
+	private static final String POINT_COLORS = "pointColors";
+
+	//---AREAS---//
+
+	private static final String AREA_SUBSET = "linesSubset";
+	private static final String AREA_CUTOFF = "linesCutoff";
+	private static final String AREA_VALUE = "linesValue";
+	
+	private static final String AREA_COLOR = "areaColor";
+	private static final String AREA_ALPHA = "areaAlpha";
+	
+	//---COUNTS---//
+	//TODO
+	
+	//---LINES---//
+	
 	private static final String LINES_SUBSET = "linesSubset";
 	private static final String LINES_CUTOFF = "linesCutoff";
 	private static final String LINES_VALUE = "linesValue";
 
-	// TODO: polygon cutoffs
-	private static final String POLYGONS_SUBSET = "polygonsSubset";
-	private static final String POLYGONS_CUTOFF = "polygonsCutoff";
-	private static final String POLYGONS_VALUE = "polygonsValue";
+	private static final String LINE_COLOR_MAPPING = "lineColormapping";
+	private static final String LINE_COLORS = "lineColors";
+	private static final String LINE_COLOR = "lineColor";
 
-	private static final String POLYGON_COLOR_MAPPING = "polygoncolormapping";
-	private static final String POLYGON_COLORS = "polygoncolors";
-	private static final String POLYGON_COLOR = "polygoncolor";
+	private static final String LINE_ALPHA = "lineAlpha";
+	private static final String LINE_ALPHA_MAPPING = "lineAlphaMapping";
 
-	private static final String POLYGON_ALPHA_MAPPING = "polygonalphamapping";
-	private static final String POLYGON_ALPHA = "polygonalpha";
+	private static final String LINE_ALTITUDE_MAPPING = "lineAltitudeMapping";
+	private static final String LINE_ALTITUDE = "lineAltitude";
 
-	private static final String POLYGON_AREA = "polygonarea";
-	private static final String POLYGON_AREA_MAPPING = "polygonareamapping";
-
-	private static final String LINE_COLOR_MAPPING = "linecolormapping";
-	private static final String LINE_COLORS = "linecolors";
-	private static final String LINE_COLOR = "linecolor";
-
-	private static final String LINE_ALPHA = "linealpha";
-	private static final String LINE_ALPHA_MAPPING = "linealphamapping";
-
-	private static final String LINE_ALTITUDE_MAPPING = "linealtitudemapping";
-	private static final String LINE_ALTITUDE = "linealtitude";
-
-	private static final String LINE_WIDTH_MAPPING = "linewidthmapping";
-	private static final String LINE_WIDTH = "linewidth";
+	private static final String LINE_WIDTH_MAPPING = "lineWidthMapping";
+	private static final String LINE_WIDTH = "lineWidth";
 
 	// ---READING---//
 
@@ -261,6 +271,55 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(OUTPUT, "", "kml output file name"),
 
+				/////////////////
+				// ---POINTS---//
+				/////////////////
+				
+				// ---POINT COLORS---//
+				
+				new Arguments.RealArrayOption(POINT_COLOR, 3, "specify RGB value"),
+				
+				new Arguments.StringOption(POINT_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
+				
+				new Arguments.StringOption(POINT_COLORS, "", "file with RGB(A) colors to map attribute values to."),
+				
+				// ---POINT ALPHA---//
+				//TODO
+				
+				// ---POINT AREA---//
+				
+				new Arguments.RealOption(POINT_AREA,  "specify point areas"),
+				
+				new Arguments.StringOption(POINT_AREA_MAPPING, "", "attribute to map area aesthetics"),
+				
+				
+				////////////////
+				// ---AREAS---//
+				////////////////
+				
+				// ---AREA COLOR---//
+
+				// TODO: this should read RGB or RGBA
+						new Arguments.RealArrayOption(AREA_COLOR, 3, "specify RGB value"),
+
+//				// ---AREA ALPHA---//
+
+				new Arguments.RealOption(AREA_ALPHA,
+						"specify A value. Higher values are more opaque, lower values more translucent."),
+
+//				new Arguments.StringOption(AREA_SUBSET, "",
+//						"attribute to select a subset of values above the certain cutoff."),
+//
+//				new Arguments.RealOption(AREA_CUTOFF, "specify cutoff value to create a subset"),
+//
+//				new Arguments.StringOption(AREA_VALUE, "", "specify fixed value to create a subset"),
+				
+				
+				
+				
+				
+				
+				
 				// ---LINE WIDTH---//
 
 				new Arguments.RealOption(LINE_WIDTH, "specify line width"),
@@ -277,7 +336,7 @@ public class Spread2ConsoleApp {
 						Utils.DURATION //
 				}, false, "attribute to map line altitude"),
 
-				// ---LINE COLORS---//
+				// ---LINE COLOR---//
 
 				// TODO: this should read RGB or RGBA
 						new Arguments.RealArrayOption(LINE_COLOR, 3, "specify RGB value"),
@@ -286,51 +345,14 @@ public class Spread2ConsoleApp {
 
 				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map attribute values."),
 
-				// ---LINE ALPHA CHANEL---//
+				// ---LINE ALPHA---//
 
 				new Arguments.RealOption(LINE_ALPHA, "specify A value"),
 
 				new Arguments.StringOption(LINE_ALPHA_MAPPING, "",
 						"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
 
-				// ---POLYGON COLORS---//
-
-				// TODO: this should read RGB or RGBA
-						new Arguments.RealArrayOption(POLYGON_COLOR, 3, "specify RGB value"),
-
-				new Arguments.StringOption(POLYGON_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
-
-				new Arguments.StringOption(POLYGON_COLORS, "", "file with RGB(A) colors to map attribute values"),
-
-				// ---POLYGON ALPHA CHANEL---//
-
-				new Arguments.RealOption(POLYGON_ALPHA,
-						"specify A value. Higher values are more opaque, lower values more translucent."),
-
-				new Arguments.StringOption(POLYGON_ALPHA_MAPPING, "",
-						"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent."),
-
-				// ---POLYGON RADIUS---//
-
-				new Arguments.RealOption(POLYGON_AREA,
-						"specify circular polygons area. Makes sense only for polygons with locations."),
-
-				new Arguments.StringOption(POLYGON_AREA_MAPPING, "",
-						"attribute to map circular polygons area aesthetic. Only makes sense for polygons with locations."),
-
-				new Arguments.StringOption(LINES_SUBSET, "",
-						"attribute to select a subset of values above the certain cutoff."),
-
-				new Arguments.RealOption(LINES_CUTOFF, "specify cutoff value to create a subset"),
-
-				new Arguments.StringOption(LINES_VALUE, "", "specify fixed value to create a subset"),
-
-				new Arguments.StringOption(POLYGONS_SUBSET, "",
-						"attribute to select a subset of values above the certain cutoff."),
-
-				new Arguments.RealOption(POLYGONS_CUTOFF, "specify cutoff value to create a subset"),
-
-				new Arguments.StringOption(POLYGONS_VALUE, "", "specify fixed value to create a subset"),
+			
 
 		});
 
@@ -910,23 +932,23 @@ public class Spread2ConsoleApp {
 					fw.close();
 
 				} catch (IOException e) {
-					
+
 					gracefullyExit(e.getMessage(), args4, e);
-					
+
 				} catch (ImportException e) {
-					
+
 					gracefullyExit(e.getMessage(), args4, e);
-					
+
 				} catch (AnalysisException e) {
-					
+
 					gracefullyExit(e.getMessage(), args4, e);
-					
+
 				} catch (UnsupportedClassVersionError e) {
-					
+
 					String message = "Java version found " + System.getProperty("java.version")
 							+ " is too old. Please update";
 					gracefullyExit(message, args4, new AnalysisException(e.getMessage()));
-					
+
 				}
 
 				System.out.println("Created JSON file");
@@ -1031,95 +1053,83 @@ public class Spread2ConsoleApp {
 
 					}
 
-					// ---POLYGON COLOR---//
+					//////////////////
+					// ---POINTS---//
+					/////////////////
+					
+					// ---POINT COLOR---//
+					
+					if (kmlRenderArguments.hasOption(POINT_COLOR_MAPPING)) {
 
-					if (kmlRenderArguments.hasOption(POLYGON_COLOR_MAPPING)) {
+						settings.kmlRendererSettings.pointColorMapping = kmlRenderArguments
+								.getStringOption(POINT_COLOR_MAPPING);
 
-						settings.kmlRendererSettings.polygonColorMapping = kmlRenderArguments
-								.getStringOption(POLYGON_COLOR_MAPPING);
-
-						if (kmlRenderArguments.hasOption(POLYGON_COLORS)) {
-							settings.kmlRendererSettings.polygonColors = kmlRenderArguments
-									.getStringOption(POLYGON_COLORS);
+						if (kmlRenderArguments.hasOption(POINT_COLORS)) {
+							settings.kmlRendererSettings.pointColors = kmlRenderArguments
+									.getStringOption(POINT_COLORS);
 						}
 
-					} else if (kmlRenderArguments.hasOption(POLYGON_COLOR)) {
+					} else if (kmlRenderArguments.hasOption(POINT_COLOR)) {
 
-						settings.kmlRendererSettings.polygonColor = kmlRenderArguments
-								.getRealArrayOption(POLYGON_COLOR);
+						settings.kmlRendererSettings.pointColor = kmlRenderArguments
+								.getRealArrayOption(POINT_COLOR);
 
-					} else if (kmlRenderArguments.hasOption(POLYGON_COLOR_MAPPING)
-							&& kmlRenderArguments.hasOption(POLYGON_COLOR)) {
+					} else if (kmlRenderArguments.hasOption(POINT_COLOR_MAPPING)
+							&& kmlRenderArguments.hasOption(POINT_COLOR)) {
 
-						throw new ArgumentException("Can't both map and have a defined polygon color!");
-
-					} else {
-
-						// use defaults
-
-					}
-
-					// ---POLYGON ALPHA---//
-
-					if (kmlRenderArguments.hasOption(POLYGON_ALPHA_MAPPING)) {
-
-						settings.kmlRendererSettings.polygonAlphaMapping = kmlRenderArguments
-								.getStringOption(POLYGON_ALPHA_MAPPING);
-
-					} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
-
-						settings.kmlRendererSettings.polygonAlpha = kmlRenderArguments.getRealOption(POLYGON_ALPHA);
-						settings.kmlRendererSettings.polygonAlphaChanged = true;
-
-					} else if (kmlRenderArguments.hasOption(POLYGON_ALPHA_MAPPING)
-							&& kmlRenderArguments.hasOption(POLYGON_ALPHA)) {
-
-						throw new ArgumentException("Can't both map and have a defined polygon alpha!");
+						throw new ArgumentException("Can't both map and have a defined point color!");
 
 					} else {
 
 						// use defaults
 
 					}
+					
+					//---POINT ALPHA---//
+					//TODO
+					
+					// ---POINT AREA---//
+					
+					if (kmlRenderArguments.hasOption(POINT_AREA_MAPPING)) {
 
-					// ---POLYGON AREA---//
+						settings.kmlRendererSettings.pointAreaMapping = kmlRenderArguments
+								.getStringOption(POINT_AREA_MAPPING);
 
-					if (kmlRenderArguments.hasOption(POLYGON_AREA_MAPPING)) {
+					} else if (kmlRenderArguments.hasOption(POINT_AREA)) {
 
-						settings.kmlRendererSettings.polygonAreaMapping = kmlRenderArguments
-								.getStringOption(POLYGON_AREA_MAPPING);
+						settings.kmlRendererSettings.pointArea = kmlRenderArguments.getRealOption(POINT_AREA);
 
-					} else if (kmlRenderArguments.hasOption(POLYGON_AREA)) {
+					} else if (kmlRenderArguments.hasOption(POINT_AREA_MAPPING)
+							&& kmlRenderArguments.hasOption(POINT_AREA)) {
 
-						settings.kmlRendererSettings.polygonArea = kmlRenderArguments.getRealOption(POLYGON_AREA);
-
-					} else if (kmlRenderArguments.hasOption(POLYGON_AREA_MAPPING)
-							&& kmlRenderArguments.hasOption(POLYGON_AREA)) {
-
-						throw new ArgumentException("Can't both map and have a defined polygon radius!");
+						throw new ArgumentException("Can't both map and have a defined point area!");
 
 					} else {
 
 						// use defaults
 
 					}
+					
+					//////////////////
+					// ---AREAS---//
+					/////////////////
 
-					// ---POLYGONS SUBSET---//
+					// ---AREA SUBSET---//
 
-					if (kmlRenderArguments.hasOption(POLYGONS_SUBSET)) {
+					if (kmlRenderArguments.hasOption(AREA_SUBSET)) {
 
-						settings.kmlRendererSettings.polygonsSubset = kmlRenderArguments
-								.getStringOption(POLYGONS_SUBSET);
+						settings.kmlRendererSettings.areasSubset = kmlRenderArguments
+								.getStringOption(AREA_SUBSET);
 
-						if (kmlRenderArguments.hasOption(POLYGONS_CUTOFF)) {
+						if (kmlRenderArguments.hasOption(AREA_CUTOFF)) {
 
-							settings.kmlRendererSettings.polygonsCutoff = kmlRenderArguments
-									.getRealOption(POLYGONS_CUTOFF);
+							settings.kmlRendererSettings.areasCutoff = kmlRenderArguments
+									.getRealOption(AREA_CUTOFF);
 
-						} else if (kmlRenderArguments.hasOption(POLYGONS_VALUE)) {
+						} else if (kmlRenderArguments.hasOption(AREA_VALUE)) {
 
-							settings.kmlRendererSettings.polygonsValue = kmlRenderArguments
-									.getStringOption(POLYGONS_VALUE);
+							settings.kmlRendererSettings.areasValue = kmlRenderArguments
+									.getStringOption(AREA_VALUE);
 
 						} else {
 
@@ -1128,7 +1138,49 @@ public class Spread2ConsoleApp {
 						}
 
 					} // END: option check
+					
+					// ---AREA COLOR---//
 
+					if (kmlRenderArguments.hasOption(AREA_COLOR)) {
+
+						settings.kmlRendererSettings.areaColor = kmlRenderArguments.getRealArrayOption(AREA_COLOR);
+
+					}
+	 
+					// ---AREA ALPHA---//
+
+					if (kmlRenderArguments.hasOption(AREA_ALPHA)) {
+
+						settings.kmlRendererSettings.areaAlpha = kmlRenderArguments.getRealOption(AREA_ALPHA);
+
+					}
+
+					////////////////
+					// ---LINES---//
+					////////////////
+					
+					// ---LINES SUBSET---//
+
+					if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
+
+						settings.kmlRendererSettings.linesSubset = kmlRenderArguments.getStringOption(LINES_SUBSET);
+
+						if (kmlRenderArguments.hasOption(LINES_CUTOFF)) {
+
+							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments.getRealOption(LINES_CUTOFF);
+
+						} else if (kmlRenderArguments.hasOption(LINES_VALUE)) {
+
+							settings.kmlRendererSettings.linesValue = kmlRenderArguments.getStringOption(LINES_VALUE);
+
+						} else {
+
+							throw new ArgumentException("Can't create a subset from these options!");
+
+						}
+
+					} // END: option check
+					
 					// ---LINE COLOR---//
 
 					if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)) {
@@ -1222,28 +1274,6 @@ public class Spread2ConsoleApp {
 
 					}
 
-					// ---LINES SUBSET---//
-
-					if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
-
-						settings.kmlRendererSettings.linesSubset = kmlRenderArguments.getStringOption(LINES_SUBSET);
-
-						if (kmlRenderArguments.hasOption(LINES_CUTOFF)) {
-
-							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments.getRealOption(LINES_CUTOFF);
-
-						} else if (kmlRenderArguments.hasOption(LINES_VALUE)) {
-
-							settings.kmlRendererSettings.linesValue = kmlRenderArguments.getStringOption(LINES_VALUE);
-
-						} else {
-
-							throw new ArgumentException("Can't create a subset from these options!");
-
-						}
-
-					} // END: option check
-
 				} catch (ArgumentException e) {
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 				} // END: try-catch
@@ -1256,24 +1286,23 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-					// KmlRenderer renderer = new KmlRenderer(input,
-					// settings.kmlRendererSettings);
-					// renderer.render();
+					KmlRenderer renderer = new KmlRenderer(input, settings.kmlRendererSettings);
+					renderer.render();
 
 					System.out.println("Rendered KML.");
 
-					// } catch (KmlException e) {
-					//
-					// gracefullyExit(e.getMessage(), kmlRenderArguments, e);
+				} catch (KmlException e) {
+
+					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
 
 				} catch (IOException e) {
 
 					gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-
+					//
 					// } catch (MissingAttributeException e) {
 					//
 					// gracefullyExit(e.getMessage(), kmlRenderArguments, e);
-					//
+
 					// } catch (AnalysisException e) {
 					//
 					// gracefullyExit(e.getMessage(), kmlRenderArguments, e);

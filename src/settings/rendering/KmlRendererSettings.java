@@ -9,15 +9,58 @@ public class KmlRendererSettings {
 	public String json = null;
 	public String output = "output.kml";
 	
+	////////////////
+	//---POINTS---//
+	////////////////
+	
+	// ---COLOR---//
+	
+	// For continuous attributes
+	public String pointColorMapping = null;
+	public Double minPointRed = 100.0; public Double maxPointRed = 250.0;
+	public Double minPointGreen = 50.0; public Double maxPointGreen = 100.0;
+	public Double minPointBlue = 50.0; public Double maxPointBlue = 100.0;
+	
+	// For discrete attributes
+	public String pointColors = null;
+	
+	// Fixed
+	public double[] pointColor = new double[] { 50,// R,
+			250,// G
+			50 // B
+	};
+	
+	// ---ALPHA---//
+	// TODO: mapping
+	
+	// Fixed
+	public double pointAlpha = 100;
+	
+	// ---AREA---//
+	
+	// For continuous attributes
+	public String pointAreaMapping= null;
+	public Double minPointArea = 1000.0; public Double maxPointArea = 10000.0;
+	
+	// For discrete attributes
+	
+	// Fixed
+	public double pointArea = 1000;
+	
 	///////////////
 	//---LINES---//
 	///////////////
+	
+	// ---SUBSETTING---//
+	
+	public String linesSubset = null;
+	public Double linesCutoff = null;
+	public String linesValue = null;
 	
 	// ---COLOR---//
 	
 	// For continuous attributes
 	public String lineColorMapping = null;
-	//TODO: parse min and max values
 	public Double minLineRed = 100.0; public Double maxLineRed = 250.0;
 	public Double minLineGreen = 50.0; public Double maxLineGreen = 100.0;
 	public Double minLineBlue = 50.0; public Double maxLineBlue = 100.0;
@@ -31,7 +74,7 @@ public class KmlRendererSettings {
 			50 // B
 	};
 	
-	// ---ALPHA CHANNEL---//
+	// ---ALPHA---//
 	
 	// For continuous attributes
 	public String lineAlphaMapping;
@@ -40,8 +83,6 @@ public class KmlRendererSettings {
 	// Fixed
 	public double lineAlpha = 255;
 	public boolean lineAlphaChanged = false;
-	
-	
 	
 	// ---ALTITUDE---//
 	
@@ -61,66 +102,49 @@ public class KmlRendererSettings {
 	// Fixed
 	public Double lineWidth = 2.0;
 	
-	
+	///////////////
+	//---AREAS---//
+	///////////////
+
 	// ---SUBSETTING---//
 	
-	public String linesSubset = null;
-	public Double linesCutoff = null;
-	public String linesValue = null;
+	public String areasSubset = null;
+	public Double areasCutoff = null;
+	public String areasValue = null;
 	
-	
-	
-	
-	//////////////////
-	//---POLYGONS---//
-	//////////////////
-
 	// ---COLOR---//
 	
-	// For continuous attributes
-	public String polygonColorMapping = null;
-	public Double minPolygonRed = 50.0; public Double maxPolygonRed = 100.0;
-	public Double minPolygonGreen = 50.0; public Double maxPolygonGreen = 100.0;
-	public Double minPolygonBlue = 100.0; public Double maxPolygonBlue = 250.0;
-
-	// For discrete attributes
-	public String polygonColors = null;
-	
 	// Fixed
-	public double[] polygonColor = new double[] { 50,// R,
+	public double[] areaColor = new double[] { 50,// R,
 			50,// G
 			250 // B
 	};
 	
 	
-	// ---ALPHA CHANNEL---//
-	
-	// For continuous attributes
-	public String polygonAlphaMapping = null;
-	public Double minPolygonAlpha = 50.0; public Double maxPolygonAlpha = 100.0;
+	// ---ALPHA---//
 	
 	// Fixed
-	public double polygonAlpha = 100;
-	public boolean polygonAlphaChanged = false;
+	public double areaAlpha = 100;
 
+	////////////////
+	// --COUNTS---//
+	////////////////
 	
-	// --CIRCULAR POLYGONS AREA---//
+	//---AREA---//
 	
 	// For continuous attributes
-	public String polygonAreaMapping= null;
-	public Double minPolygonArea = 20000.0; public Double maxPolygonRadius = 200000.0;
+	public String countAreaMapping= null;
+	public Double minCountArea = 20000.0; public Double maxCountArea = 200000.0;
 	
 	// For discrete attributes
-    //TODO: make a joint CSS [?] style sheet for all these settings
 	
 	// Fixed
-	public Double polygonArea = 20000.0;
+	public Double countArea = 20000.0;
+
+	//---COLOR---//
+// TODO
 	
-	// ---SUBSETTING---//
-	
-	public String polygonsSubset = null;
-	public Double polygonsCutoff = null;
-	public String polygonsValue = null;
+
 	
 	
 }//END: class

@@ -14,7 +14,7 @@ public class Point {
 	private final String startTime;
 	private final String endTime;
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
-	
+
 	public String getId() {
 		return id;
 	}
@@ -26,7 +26,7 @@ public class Point {
 		this.startTime = null;
 		this.endTime = null;
 	}
-	
+
 	public Point(String id, Location location, String startTime, Map<String, Object> attributes) {
 
 		this.id = id;
@@ -54,7 +54,7 @@ public class Point {
 		}
 
 	}// END: Constructor
-	
+
 	public Point(String id, Coordinate coordinate, String startTime, Map<String, Object> attributes) {
 
 		this.id = id;
@@ -76,7 +76,17 @@ public class Point {
 	public String getEndTime() {
 		return endTime;
 	}
-	
+
+	public boolean hasLocation() {
+
+		boolean hasLocation = false;
+		if (this.location != null) {
+			hasLocation = true;
+		}
+
+		return hasLocation;
+	}//END: hasLocation
+
 	public Location getLocation() {
 		return location;
 	}
@@ -88,14 +98,14 @@ public class Point {
 	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
-	
-	public void addAttribute(String name, Object trait) {
-		attributes.put(name, trait);
+
+	public void addAttribute(String name, Object value) {
+		attributes.put(name, value);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		
+
 		if (obj == null) {
 			return false;
 		}
@@ -103,11 +113,11 @@ public class Point {
 		if (obj == this) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof Location)) {
 			return false;
 		}
-		
+
 		Point point = (Point) obj;
 		if (point.getId().equals(this.id)) {
 			return true;

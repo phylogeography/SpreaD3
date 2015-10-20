@@ -404,10 +404,10 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/slicing_test.json", function ready(error, json) {
+//d3.json("data/slicing_test.json", function ready(error, json) {
 	// d3.json("data/test_bf.json", function ready(error, json) {
 	// d3.json("data/languages_worldmap.json", function ready(error, json) {
-	// d3.json("data/ebov_discrete.json", function ready(error, json) {
+	 d3.json("data/ebov_discrete.json", function ready(error, json) {
 	// TODO: needs debugging
 	// d3.json("data/ebov_nomap.json", function ready(error, json) {
 

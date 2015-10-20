@@ -3,7 +3,7 @@
 ===================
 *Spatial Phylogenetic Reconstruction of EvolutionAry Dynamics 2*
 Version: 0.0.1, 2015
-Authors: Filip Bielejec, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
+Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
 
@@ -13,236 +13,66 @@ SPREAD 2 is a program supporting processing and visualizations of Bayesian phylo
 
 h1. USAGE EXAMPLES
 
-
-h3. CONTINUOUS TREE
-
-
-h3. PARSING
-
-* parse all traits (a default)
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -mrsd 2011-01-01 -output test.json
-
-* parse two traits
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host,posterior -mrsd 2011-01-01 -output test.json
-
-* parse one trait
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011-01-01 -output test_host.json
-
-* mrsd in decimal format
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011.653 -output test_host.json
-
-* time scale multiplier option
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -locationTrait location -hpd 80 -traits host -mrsd 2011.653 -timescaleMultiplier 10 -output test_host.json
-
-h3. RENDERING
-
-* use all default settings
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -output test.kml
-
-h4. POLYGONS
-
-* override default polygon color settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolor 255 255 0 -output test.kml
-
-* map polygon colors to host attribute values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -output test.kml
-
-* map polygon colors to host attribute values, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
-
-* specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -polygonalpha 100 -output test.kml
-
-* map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -output test.kml
-
-# TODO
-* polygons cutoff
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonsSubset posterior -polygonsCutoff 5 -output test.kml
-
-h4. LINES
-
-* override default line color settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolor 250 0 0 -output test.kml
-
-* map line colors to host attribute values, use built-in color schemes. For lines which change host line color will be interpolated to reflect that
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -output test.kml
-
-* map line colors to host attribute values, use supplied color sheet (RGB or RGBA values). For lines which change host line color will be interpolated to reflect that
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
-
-* map line colors to duration attribute values, use supplied color sheet (RGB or RGBA values). Duration attribute applies to a whole branch and colors are not interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping duration -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -output test.kml
-
-* specify alpha channel for lines, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealpha 150 -output test.kml
-
-* map alpha channel for lines to host attribute values, this option overwrites all previous settings, including those in color sheet. For lines which change host line alpha will be interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -output test.kml
-
-* map alpha channel for lines to duration attribute values, this option overwrites all previous settings, including those in color sheet. Duration attribute applies to a whole branch and alpha is not interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping duration -output test.kml
-
-* override default line width settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -output test.kml
-
-* map lines width to duration attribute values. Width can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidthmapping duration -output test.kml
-
-* override default line altitude settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealphamapping host -linewidth 2 -linealtitude 50000 -output test.kml
-
-* map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_host.json -polygoncolormapping host -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
-
-* mapping aesthetic to other parsed traits. Usefull when parsing all univariate traits found on branches. 
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test.json -polygoncolormapping host.prob -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/3colors2 -polygonalphamapping modality -linecolormapping host.rate -output test.kml 
-
-
 h3. DISCRETE TREE
 
-h3. PARSING
+h3. DISCRETE TREE PARSING
 
-* cut into 10 discrete time intervals
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011-01-01 -output test_discrete.json
+* with map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -map /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/combined.geojson -output ebov_discrete.json
 
-* mrsd in decimal format
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011.653 -output test_discrete.json
+* no map [BUG, SHIFTED IN JSON]
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
 
-* time scale multiplier option
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_MCC.tre -locationTrait states -intervals 10 -mrsd 2011.653 -timescaleMultiplier 10 -output test_discrete.json
-
-h3. RENDERING
+h3. DISCRETE TREE KML RENDERING
 
 * use all default settings
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -output test.kml
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -output test.kml
 
-h4. POLYGONS
+* map point area attribute to a continuous trait
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
 
-* override default polygon color settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolor 0 255 255 -output test.kml
+* map point area attribute to a discrete trait
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping location -output test.kml
 
-* map polygon colors to count attribute values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping count -output test.kml
+* map point color attribute to a continuous trait
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping height -output test.kml
 
-* map polygon colors to location values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -output test.kml
+* map point color attribute to a discrete trait
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping location -output test.kml
 
-* map polygon colors to location values, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
-
-* specify alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalpha 100 -output test.kml
-
-* map alpha channel for polygons, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -output test.kml
-
-* override default polygon area (in KM^2) settings: 
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonarea 200000 -output test.kml
-
-* map polygon area to count attribute values
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping count -output test.kml
-
-* map polygon area to location attribute values
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -output test.kml
+* override default area color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping location -areacolor 0 255 255 -output test.kml
 
 
-h4. LINES
 
-* override default line color settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolor 250 0 0 -output test.kml
+h3. BAYES FACTORS PARSING
 
-* map line colors to distance attribute values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping distance -output test.kml
+* with map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output test_bf.json
 
-* map line colors to locations, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
+h3. CONTINUOUS TREE PARSING
 
-* specify alpha channel for lines, this option overwrites all previous settings, including those in color sheet:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 150 -output test.kml
+* antigenic coordinates example
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic1 -yCoordinate antigenic2 -hpd 80 -mrsd 2011-01-01 -output antigenic_test.json
 
-* map alpha channel for lines to duration attribute values, this option overwrites all previous settings, including those in color sheet. Duration attribute applies to a whole branch and colors are not interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping duration -output test.kml
+* geographical coordinates example, world map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
 
-* map alpha channel for lines to locations, this option overwrites all previous settings, including those in color sheet. For lines which change location line alpha will be interpolated to reflect that:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -output test.kml
-
-* override default line width settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealphamapping location -linewidth 3 -output test.kml
-
-* map lines width to duration attribute values. Width can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -output test.kml
-
-* override default line altitude settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitude 100000 -output test.kml
-
-* map lines altitude to distance attribute values. Altitude can only be mapped to attributes which apply to a whole branch.
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -polygonalphamapping count -polygonareamapping location -linecolormapping location -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -linealpha 255 -linewidthmapping duration -linealtitudemapping distance -output test.kml
-
-
-h3. BAYES FACTORS
-
-h3. PARSING
-
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -output test_bf.json
-
-h3. RENDERING
-
-* use all default settings
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_bf.json -output test.kml
-
-h4. LINES
-
-* attribute cutoff [bayes factor values]
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_bf.json -linesSubset bayesFactor -linesCutoff 5 -output test.kml
-
-* map line colors to bayes factor attribute values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_bf.json -linesSubset bayesFactor -linesCutoff 5 -linecolormapping bayesFactor -output test.kml
-
-* override default line width settings:
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_bf.json -linesSubset bayesFactor -linesCutoff 5 -linecolormapping bayesFactor -linewidth 5 -output test.kml
+* geographical coordinates example, clipped map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
 
 
 h3. TIME SLICING
 
-h3. PARSING
+* Slices defined by MCC tree, world map
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
 
-* parse using default settings
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -traits location -output test_slice.json
+* Slices defined by slice heights, world map
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trait location -mrsd 2011.1 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
 
-* parse overriding default settings
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
+* Override some of the default settings
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
 
-* parse other numerical 2D traits for imputing
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_mcc.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/locationHost/HA_loc_host_small.trees -traits location,trait2 -hpd 0.8 -intervals 20 -burnin 5 -mrsd 2011-01-01 -output test_slice.json
-
-* mrsd in decimal format
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -intervals 15 -burnin 5 -mrsd 2011.653 -output test_slice.json
-
-* custom slice heights
--parse -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -traits location -hpd 0.8 -burnin 5 -mrsd 2011.653 -output test_slice.json
-
-* time scale multiplier option
--parse -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -traits location -hpd 0.8 -burnin 5 -mrsd 2011.653 -timescaleMultiplier 10 -output test_slice.json
-
-h3. RENDERING
-
-* use all default settings
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -output test.kml
-
-* map polygon colors to trait name attribute values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -polygoncolormapping trait -output test.kml
-
-h3. MANIPULATING JSON OUTPUT
-
-* parse the continuous tree 
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -locationTrait location -hpd 95 -mrsd 2011-01-01 -output test_continuous.json
-
-* read polygons and lines, merge
--read -polygons /home/filip/Dropbox/JavaProjects/Spread2/test_slice.json -lines /home/filip/Dropbox/JavaProjects/Spread2/test_continuous.json -output test_merge.json
-
-* render, default settings
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_merge.json -output test.kml
 
 h1. LICENSE
 
@@ -258,27 +88,13 @@ h1. LICENSE
 
 h1. TODO
 
-* D3 renderer
- - rolling map: http://bl.ocks.org/patricksurry/6621971
 * KML renderer
-    - Show node ages in the kml
-    - control arc curvature [0 - 1]
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]
 * Write tests    
-* Non-geographic locations (e.g. antigenic locations)
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
-* Display warning if one or more of the discrete states are not found. 
 * Uncaught exception handler (for bug reports).
 * Processing large tree distributions on GPUs. Write small library and JNI to it.  
 
 h1. BUGS
-
-#TODO: no Fujian
-* map polygon colors to location values, use built-in color schemes
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -output test.kml
-
-# appears
-* map polygon colors to location values, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/test_discrete.json -polygoncolormapping location -polygoncolors /home/filip/Dropbox/JavaProjects/Spread2/data/H5N1colors -output test.kml
 
