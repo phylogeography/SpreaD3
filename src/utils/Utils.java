@@ -51,6 +51,11 @@ public class Utils {
 	public static final int MONTH_INDEX = 1;
 	public static final int DAY_INDEX = 2;
 
+	public static String splitString(String string, String c) {
+		 String[] id = string.split(c);
+		 return id[id.length - 1];
+	}//END: splitString
+	
 	public static Double getNodeHeight(RootedTree tree, Node node) {
 
 		Double nodeHeight = tree.getHeight(node);

@@ -63,8 +63,8 @@ function generateLines(data, points) {
 
 						var line = d;
 
-						var startNodeId = line.startNodeId;
-						var startPoint = getObject(points, "id", startNodeId);
+						var startPointId = line.startPointId;
+						var startPoint = getObject(points, "id", startPointId);
 						line['startPoint'] = startPoint;
 
 						var startCoordinate;
@@ -80,8 +80,8 @@ function generateLines(data, points) {
 						}
 						// line['startCoordinate'] = startCoordinate;
 
-						var endNodeId = line.endNodeId;
-						var endPoint = getObject(points, "id", endNodeId);
+						var endPointId = line.endPointId;
+						var endPoint = getObject(points, "id", endPointId);
 						line['endPoint'] = endPoint;
 
 						var endCoordinate;
@@ -98,20 +98,17 @@ function generateLines(data, points) {
 						// line['endCoordinate'] = endCoordinate;
 
 						// line bend
-						
+
 						var curvature;
 						var startTime = line.startTime;
-						if(typeof startTime != "undefined") {
-						
-						curvature = scale(formDate(line.startTime));
-						
+						if (typeof startTime != "undefined") {
+
+							curvature = scale(formDate(line.startTime));
+
 						} else {
-							
 							curvature = MAX_BEND;
-							
 						}
-						
-						
+
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
 

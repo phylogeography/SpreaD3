@@ -22,10 +22,13 @@ public class KmlRendererSettings {
 
 	// For continuous attributes
 	public String pointColorMapping = null;
-	public Double minPointRed = 100.0;
-	public Double maxPointRed = 250.0;
-	public Double minPointGreen = 50.0;
-	public Double maxPointGreen = 100.0;
+	
+	public Double minPointRed = 50.0;
+	public Double maxPointRed = 100.0;
+	
+	public Double minPointGreen = 100.0;
+	public Double maxPointGreen = 250.0;
+	
 	public Double minPointBlue = 50.0;
 	public Double maxPointBlue = 100.0;
 

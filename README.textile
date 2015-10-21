@@ -28,20 +28,48 @@ h3. DISCRETE TREE KML RENDERING
 * use all default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -output test.kml
 
-* map point area attribute to a continuous trait
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
+****************
+* ---POINTS--- *
+****************
 
-* map point area attribute to a discrete trait
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping location -output test.kml
+* ---COLOR--- *
 
-* map point color attribute to a continuous trait
+* override default points color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColor 0 255 255 -output test.kml
+
+* map points color to a continuous trait
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping height -output test.kml
 
-* map point color attribute to a discrete trait
+* map points color to a discrete trait
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping location -output test.kml
 
-* override default area color
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping location -areacolor 0 255 255 -output test.kml
+* map points color to a discrete trait, use supplied color sheet (RGB or RGBA values)
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -pointColorMapping location -pointcolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
+
+* ---AREA--- *
+
+* map points area to a continuous trait
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
+
+* map points area to a discrete trait
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping location -output test.kml
+
+
+***************
+* ---LINES--- *
+***************
+
+* override default lines color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColor 250 0 0 -output test.kml
+
+
+
+
+
+
+
+
+
 
 
 
@@ -53,7 +81,10 @@ h3. BAYES FACTORS PARSING
 h3. CONTINUOUS TREE PARSING
 
 * antigenic coordinates example
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic1 -yCoordinate antigenic2 -hpd 80 -mrsd 2011-01-01 -output antigenic_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -hpd 80 -mrsd 2011.1 -output antigenic_test.json
+
+* antigenic coordinates example, antigenic coordinate vs time
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate height -yCoordinate antigenic1 -hpd 80 -mrsd 2011.1 -output antigenic_test.json
 
 * geographical coordinates example, world map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json

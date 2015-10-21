@@ -72,8 +72,8 @@ public class ContinuousTreeSpreadDataParser {
 
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
 
-			// TODO: filename only as id
-			Layer geojsonLayer = new Layer(settings.geojson, //
+			String id = Utils.splitString(settings.geojson, "/");
+			Layer geojsonLayer = new Layer(id, //
 					"GeoJson layer", //
 					geojson);
 
@@ -89,7 +89,8 @@ public class ContinuousTreeSpreadDataParser {
 		LinkedList<Point> pointsList = treeParser.getPointsList();
 		LinkedList<Area> areasList = treeParser.getAreasList();
 
-		Layer treeLayer = new Layer(settings.tree, //
+		String id = Utils.splitString(settings.tree, "/");
+		Layer treeLayer = new Layer(id, //
 				"Continuous tree visualisation", //
 				pointsList, //
 				linesList, //

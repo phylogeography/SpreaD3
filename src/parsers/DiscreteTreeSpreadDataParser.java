@@ -72,8 +72,8 @@ public class DiscreteTreeSpreadDataParser {
 
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
 
-			// TODO: filename only as id
-			Layer geojsonLayer = new Layer(settings.geojson, //
+			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);
 
@@ -89,14 +89,15 @@ public class DiscreteTreeSpreadDataParser {
 				rootedTree, //
 				settings.locationTrait, //
 				locationsList, //
-//				settings.mrsd, //
 				timeParser, //
 				settings.timescaleMultiplier//
 		);
 		treeParser.parseTree();
 
 		LinkedList<Point> countsList = treeParser.getCountsList();
-		Layer countsLayer = new Layer(settings.tree, //
+		
+		String countsLayerId = Utils.splitString(settings.tree, "/");
+		Layer countsLayer = new Layer(countsLayerId, //
 				"Lineages holding the state", //
 				countsList //
 		);
@@ -110,7 +111,8 @@ public class DiscreteTreeSpreadDataParser {
 		LinkedList<Line> linesList = treeParser.getLinesList();
 		LinkedList<Point> pointsList = treeParser.getPointsList();
 
-		Layer treeLayer = new Layer(settings.tree, //
+		String treeLayerId = Utils.splitString(settings.tree, "/");
+		Layer treeLayer = new Layer(treeLayerId, //
 				"Discrete tree visualisation", //
 				pointsList, //
 				linesList //

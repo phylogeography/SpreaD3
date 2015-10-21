@@ -98,7 +98,9 @@ public class FortuneCookies {
 "Bruce Campbell is an ex CIA operative",
 "Bruce Campbell will lead the human slaves against the alien invasion",
 "Bruce Campbell Slays Deadites and Slings One-liners",
-
+"Alright you Primitive Screwheads, listen up! You see this? This... is my boomstick! The twelve-gauge double-barreled Remington. S-Mart's top of the line.",
+"Come get some.",
+"Name's Ash. [cocks rifle] Housewares."
 
 	};
 

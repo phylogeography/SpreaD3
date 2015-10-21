@@ -5,23 +5,23 @@ import java.util.Map;
 
 public class Line {
 
-	private final String startNodeId;
-	private final String endNodeId;
+	private final String startPointId;
+	private final String endPointId;
 
 	private final String startTime;
 	private final String endTime;
 	
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 	
-	public Line(String startNodeId, //
-			String endNodeId, //
+	public Line(String startPointId, //
+			String endPointId, //
 			String startTime, //
 			String endTime, //
 			Map<String, Object> attributes //
 	) {
 
-		this.startNodeId = startNodeId;
-		this.endNodeId = endNodeId;
+		this.startPointId = startPointId;
+		this.endPointId = endPointId;
 
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -32,13 +32,13 @@ public class Line {
 
 	}// END: Constructor
 
-	public Line(String startNodeId, //
-			String endNodeId, //
+	public Line(String startPointId, //
+			String endPointId, //
 			Map<String, Object> attributes //
 	) {
 
-		this.startNodeId = startNodeId;
-		this.endNodeId = endNodeId;
+		this.startPointId = startPointId;
+		this.endPointId = endPointId;
 
 		this.startTime = null;
 		this.endTime = null;
@@ -57,12 +57,12 @@ public class Line {
 		return endTime;
 	}
 
-	public String getStartNodeId() {
-		return startNodeId;
+	public String getStartPointId() {
+		return startPointId;
 	}
 
-	public String getEndNodeId() {
-		return endNodeId;
+	public String getEndPointId() {
+		return endPointId;
 	}
 
 	public Map<String, Object> getAttributes() {

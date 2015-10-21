@@ -11,11 +11,11 @@ public class KmlStyle extends kmlframework.kml.Style {
 	private final Color strokeColor;
 	private final Double strokeWidth;
 	private final Color fillColor;
-	
+
 	public KmlStyle(final Color fillColor) {
 		this(null, null, fillColor);
 	}
-	
+
 	public KmlStyle(final Color strokeColor, final Double strokeWidth) {
 		this(strokeColor, strokeWidth, null);
 	}
@@ -41,29 +41,36 @@ public class KmlStyle extends kmlframework.kml.Style {
 
 	@Override
 	public boolean equals(final Object o) {
-		
+
 		if (this == o) {
 			return true;
 		}
-		
+
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
 
 		final KmlStyle style = (KmlStyle) o;
 
-		if (strokeWidth != null && Double.compare(style.strokeWidth, strokeWidth) != 0){
-			return false;
-    	}
-		
-		if (fillColor != null ? !fillColor.equals(style.fillColor) : style.fillColor != null) {
+		if (style.strokeWidth != null && Double.compare(style.strokeWidth, strokeWidth) != 0) {
 			return false;
 		}
-		
-		if (strokeColor != null ? !strokeColor.equals(style.strokeColor) : style.strokeColor != null) {
+
+		// if (strokeWidth != null && Double.compare(style.strokeWidth,
+		// strokeWidth) != 0){
+		// return false;
+		// }
+
+		if (fillColor != null ? !fillColor.equals(style.fillColor)
+				: style.fillColor != null) {
 			return false;
 		}
-		
+
+		if (strokeColor != null ? !strokeColor.equals(style.strokeColor)
+				: style.strokeColor != null) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -83,5 +90,5 @@ public class KmlStyle extends kmlframework.kml.Style {
 		return "KmlStyle [strokeColor=" + strokeColor + ", strokeWidth="
 				+ strokeWidth + ", fillColor=" + fillColor + "]";
 	}
-	
+
 }
