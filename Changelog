@@ -1,8 +1,13 @@
-2015: SPREAD version 2.0.0 rc
------------------------------
+2015: SPREAD version 2.0.1 One O'Clock Gun
+------------------------------------------
 * implemented custom slice heights
 * reinstated time scale multiplier option
 * Discrete and Continuous annotated tree parsers: by default all univariate traits found on branches are parsed
+
+
+2015: SPREAD version 2.0.2 Classy & Fabulous
+--------------------------------------------
 * D3 renderer
-
-
+* Any continuous traits found on tree nodes can be parsed as coordinates
+* new JSON format centered around attributes
+* new KML renderer

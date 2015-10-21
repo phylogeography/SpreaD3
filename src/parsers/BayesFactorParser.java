@@ -1,6 +1,5 @@
 package parsers;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -8,15 +7,13 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jebl.evolution.graphs.Node;
-import exceptions.AnalysisException;
-import exceptions.LocationNotFoundException;
 import structure.data.Attribute;
 import structure.data.Location;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
-import structure.data.primitive.Coordinate;
 import utils.Utils;
+import exceptions.AnalysisException;
+import exceptions.LocationNotFoundException;
 
 public class BayesFactorParser {
 

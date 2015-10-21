@@ -66,14 +66,10 @@ public class ContinuousTreeParser {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 		
-		//TODO: hack
+		// hack
 		String prefix = xCoordinate.replaceAll("\\d*$", "");
-		String modalityAttributeName = prefix.concat("_").concat(hpd)
-				.concat("%").concat("HPD_modality");
+		String modalityAttributeName = prefix.concat("_").concat(hpd) .concat("%").concat("HPD_modality");
 		
-//		this.timeParser = new TimeParser(mrsd);
-//		timeParser.parseTime();
-
 		int index = 0;
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
@@ -81,6 +77,7 @@ public class ContinuousTreeParser {
 				// node parsed first
 
 				Coordinate nodeCoordinate = null;
+				
 				try {
 
 					Double nodeCoordinateY = (Double) Utils
@@ -88,8 +85,6 @@ public class ContinuousTreeParser {
 					Double nodeCoordinateX = (Double) Utils
 							.getObjectNodeAttribute(node, xCoordinate);
 
-//					System.out.println("X: " + nodeCoordinateX + " Y: " + nodeCoordinateY);
-					
 					nodeCoordinate = new Coordinate(nodeCoordinateX,
 							nodeCoordinateY);
 
@@ -142,6 +137,7 @@ public class ContinuousTreeParser {
 
 				linesList.add(line);
 
+				// TODO: antigenic coordinates will have uncertainty on external too
 				if (!rootedTree.isExternal(node)) {
 
 					Integer modality = 0;
@@ -158,9 +154,6 @@ public class ContinuousTreeParser {
 						System.out.println(message);
 						continue;
 					}
-					
-					
-//					System.out.println(modality);
 					
 					for (int m = 1; m <= modality; m++) {
 
@@ -350,7 +343,7 @@ public class ContinuousTreeParser {
 
 			if (!(nodeAttribute instanceof Object[])) {
 				
-				// TODO: remove invalid characters
+				// remove invalid characters
 				attributeName = attributeName.replaceAll("%", "");
 				attributeName = attributeName.replaceAll("!", "");
 				

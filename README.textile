@@ -1,15 +1,15 @@
-===================
-.:: SPREAD 2::.
-===================
-*Spatial Phylogenetic Reconstruction of EvolutionAry Dynamics 2*
-Version: 0.0.1, 2015
+==============
+.:: SPREAD ::.
+==============
+*Spatial Phylogenetic Reconstruction of EvolutionAry Dynamics*
+Version: 2.0.2, 2015 
 Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
 
 h1. PURPOSE
 
-SPREAD 2 is a program supporting processing and visualizations of Bayesian phylogeographic models.
+SPREAD is a program supporting processing and visualizations of Bayesian phylogeographic models.
 
 h1. USAGE EXAMPLES
 
@@ -30,11 +30,9 @@ h3. DISCRETE TREE KML RENDERER
 * use all default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -output test.kml
 
-****************
-* ---POINTS--- *
-****************
+h4. POINTS
 
-* ---COLOR--- *
+h5. Color
 
 * override default points color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColor 0 255 255 -output test.kml
@@ -48,7 +46,7 @@ h3. DISCRETE TREE KML RENDERER
 * map point colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping location -pointcolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
 
-* ---AREA--- *
+h5.  Area 
 
 * map point areas to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
@@ -56,11 +54,9 @@ h3. DISCRETE TREE KML RENDERER
 * map point areas to a discrete attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping location -output test.kml
 
-***************
-* ---LINES--- *
-***************
+h4. LINES
 
-* ---COLOR--- *
+h5. Color
 
 * override default lines color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColor 250 0 0 -output test.kml
@@ -74,12 +70,12 @@ h3. DISCRETE TREE KML RENDERER
 * map line colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping country -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
 
-* ---WIDTH--- *
+h5. Width
 
 * override default lines width
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineWidth 4 -output test.kml
 
-* ---ALTITUDE--- *
+h5. Altitude
 
 * override default lines altitude
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitude 0 -output test.kml
@@ -90,11 +86,9 @@ h3. DISCRETE TREE KML RENDERER
 * map line altitude to a discrete attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitudeMapping country -output test.kml
 
-****************
-* ---COUNTS--- *
-****************
+h4. COUNTS
 
-* ---COLOR--- *
+h5. Color
 
 * override default count color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -countColor 0 0 250 -output test.kml
@@ -116,11 +110,9 @@ h3. BAYES FACTORS KML RENDERER
 * default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -output test.kml
 
-***************
-* ---LINES--- *
-***************
+h4. LINES
 
-* ---COLOR--- *
+h5. Color
 
 * override default lines color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineColor 250 0 0 -output test.kml
@@ -128,7 +120,7 @@ h3. BAYES FACTORS KML RENDERER
 * map line colors to a BF attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineColorMapping bayesFactor -output test.kml
 
-* ---ALTITUDE--- *
+h4. Altitude
 
 * map line altitude to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineAltitudeMapping posteriorProbability -output test.kml
@@ -155,11 +147,9 @@ h3. CONTINUOUS TREE KML RENDERER
 * default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -output test.kml
 
-***************
-* ---AREAS--- *
-***************
+h4. AREAS
 
-* ---COLOR--- *
+h5. Color
 
 * override default areas color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColor 150 50 50 -output test.kml
@@ -200,7 +190,6 @@ h1. LICENSE
 
 h1. TODO
 
-* KML renderer
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]
 * Write tests    

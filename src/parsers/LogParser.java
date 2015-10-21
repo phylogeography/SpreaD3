@@ -64,7 +64,7 @@ public class LogParser {
 								.println("Empty or malformed input at line "
 										+ (row + SKIPPED_LINES)
 										+ " inside log file. Resulting output may not be correct!");
-						
+
 						// copy array with one less row
 						indicators = cloneArray(indicators, i);
 						break;
@@ -88,7 +88,7 @@ public class LogParser {
 
 	private Double[][] cloneArray(Double[][] src, int nrow) {
 
-		// int length = src.length;
+		/** Make a copy of array up to and a row number nrow */
 		Double[][] target = new Double[nrow][src[0].length];
 
 		for (int i = 0; i < nrow; i++) {
@@ -96,6 +96,6 @@ public class LogParser {
 		}
 
 		return target;
-	}
+	}// END: cloneArray
 
 }// END: class

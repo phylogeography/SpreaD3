@@ -88,8 +88,8 @@ public class TimeSlicerSpreadDataParser {
 
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
 
-			// TODO: filename only as id
-			Layer geojsonLayer = new Layer(settings.geojson, //
+			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);
 
@@ -119,7 +119,8 @@ public class TimeSlicerSpreadDataParser {
 
 		LinkedList<Area> areasList = parser.getAreasList();
 
-		Layer contoursLayer = new Layer(settings.trees, //
+		String contoursLayerId = Utils.splitString(settings.trees, "/");
+		Layer contoursLayer = new Layer(contoursLayerId, //
 				"Contour visualisation", //
 				null, //
 				null, //
@@ -151,7 +152,7 @@ public class TimeSlicerSpreadDataParser {
 	}// END: generateSliceHeights
 
 	private int getAssumedTrees(String file) throws IOException {
-		// TODO: this method is a hack
+		// this method is a hack
 
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
 

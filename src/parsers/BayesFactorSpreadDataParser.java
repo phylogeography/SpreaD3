@@ -1,12 +1,8 @@
 package parsers;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import exceptions.AnalysisException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
 import settings.parsing.BayesFactorsSettings;
 import structure.data.Attribute;
 import structure.data.AxisAttributes;
@@ -17,6 +13,10 @@ import structure.data.TimeLine;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
 import structure.geojson.GeoJsonData;
+import utils.Utils;
+import exceptions.AnalysisException;
+import exceptions.IllegalCharacterException;
+import exceptions.LocationNotFoundException;
 
 public class BayesFactorSpreadDataParser {
 
@@ -59,17 +59,17 @@ public class BayesFactorSpreadDataParser {
 			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
 
-			// TODO: filename only as id
-			Layer geojsonLayer = new Layer(settings.geojson, //
+			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);
 
 			layersList.add(geojsonLayer);
 
 			System.out.println("Parsed map");
-			
+
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
-			
+
 			System.out.println("Parsed map attributes");
 
 		}// END: null check
@@ -83,7 +83,8 @@ public class BayesFactorSpreadDataParser {
 		LinkedList<Line> linesList = bayesFactorParser.getLinesList();
 		LinkedList<Point> pointsList = bayesFactorParser.getPointsList();
 
-		Layer bfLayer = new Layer(settings.log, //
+		String bfLayerId = Utils.splitString(settings.log, "/");
+		Layer bfLayer = new Layer(bfLayerId, //
 				"Bayes factors visualisation", //
 				pointsList, //
 				linesList //
@@ -99,7 +100,8 @@ public class BayesFactorSpreadDataParser {
 		System.out.println("Parsed line attributes");
 
 		SpreadData data = new SpreadData(timeLine, //
-				axis, mapAttributes, //
+				axis, //
+				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //
 				locationsList, //
@@ -108,7 +110,7 @@ public class BayesFactorSpreadDataParser {
 
 		System.out.println("Bayes factors table: ");
 		bayesFactorParser.printBfTable();
-		
+
 		return data;
 	}// END: parse
 
