@@ -33,36 +33,36 @@ public class FortuneCookies {
 
 //---INSERT BENDER QUOTES HERE---//
 
-"Anything less than immortality is a complete waste of time -- Bender", //
-"Let the looting begin -- Bender", //
+"Anything less than immortality is a complete waste of time", //
+"Let the looting begin", //
 
 
 //---CHARLIE SHEEN CLASSICS GO HERE---//
 
-"You can't process me with a normal brain -- Charlie Sheen", //
-"I'm sorry, man, but I've got magic -- Charlie Sheen", //
+"You can't process me with a normal brain", //
+"I'm sorry, man, but I've got magic", //
 
 //---RAMPAGE JACKSON :) ---//
 
-"Well, right now I'm 23, so in two years, I see myself 25  -- Quinton 'Rampage' Jackson", //
-"He's in the video game, and I'm not -- Quinton 'Rampage' Jackson", //
-"My momma said never trust a catfish with a mustache -- Quinton 'Rampage' Jackson", //
-"I don't mean to make excuses for all my losses, but I can make excuses for all my losses -- Quinton 'Rampage' Jackson", //
+"Well, right now I'm 23, so in two years, I see myself 25", //
+"He's in the video game, and I'm not", //
+"My momma said never trust a catfish with a mustache", //
+"I don't mean to make excuses for all my losses, but I can make excuses for all my losses", //
 
 //---THE GODFATHER :) ---//
 
-"Never let anyone know what you are thinking -- Don Vito Corelone", //
-"Just when I thought I was out.. they pull me back in -- Michael Corleone", //
+"Never let anyone know what you are thinking", //
+"Just when I thought I was out.. they pull me back in", //
 
 //---SIMPSONS ---//
 
-"Do I know what rhetorical means? -- Homer Simpson", //
-"Homer no function beer well without -- Homer Simpson", //
-"Pffft. Who needs English? I'm never going to England -- Homer Simpson", //
+"Do I know what rhetorical means?", //
+"Homer no function beer well without", //
+"Pffft. Who needs English? I'm never going to England", //
 
 //---STARCRAFT ---//
 
-"Y'all need some good ol' fashioned discipline -- Edmund Duke", //
+"Y'all need some good ol' fashioned discipline", //
 "Is something burning?",// -- Firebat", //
 "Somebody call for an exterminator?",// -- Ghost", //
 "I'm about to overload my aggression inhibitors",// -- Ghost", //
@@ -72,11 +72,11 @@ public class FortuneCookies {
 
 //---GANG ALBANII ---//
 
-"habarala habarala hesk -- Popek",
+"habarala habarala hesk",
 
 //--- ACTION BRONSON ---//
-"Eat burgers, they're good for you -- Action Bronson",
-"I question your mother's upbringing if you don't like me  -- Action Bronson",
+"Eat burgers, they're good for you",
+"I question your mother's upbringing if you don't like me",
 
 //---DAVE JONES---//
 
@@ -84,6 +84,8 @@ public class FortuneCookies {
 "Bob's your uncle",
 "Good enough for Australia",
 "In like Flynn. Errol that is",
+"Feels like a brick dunny",
+"Dry as a dead dingo's donger",
 
 // --- Bruce Campbell --- //
 
@@ -100,7 +102,7 @@ public class FortuneCookies {
 "Bruce Campbell Slays Deadites and Slings One-liners",
 "Alright you Primitive Screwheads, listen up! You see this? This... is my boomstick! The twelve-gauge double-barreled Remington. S-Mart's top of the line.",
 "Come get some.",
-"Name's Ash. [cocks rifle] Housewares."
+"Name's Ash. [cocks rifle]. Housewares."
 
 	};
 

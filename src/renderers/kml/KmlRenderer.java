@@ -699,16 +699,17 @@ public class KmlRenderer implements Renderer {
 		String name = "";
 		String label = "";
 
+		//TODO: time
+		
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
-		timeSpan.setBegin(area.getStartTime());
+		LocalDate startDate = formatter.parseLocalDate(area.getStartTime());
+		timeSpan.setBegin(startDate.toString());
 		placemark.setTimePrimitive(timeSpan);
 
 		// add coordinates
 		for (Coordinate coordinate : area.getPolygon().getCoordinates()) {
-
 			points.add(generatePoint(coordinate));
-
 		} // END: coordinates loop
 
 		linearRing.setCoordinates(points);
@@ -821,9 +822,11 @@ public class KmlRenderer implements Renderer {
 
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
-		DateTime startDate = formatter.parseDateTime(count.getStartTime());
-		DateTime endDate = formatter.parseDateTime(count.getEndTime());
-
+//		DateTime startDate = formatter.parseDateTime(count.getStartTime());
+//		DateTime endDate = formatter.parseDateTime(count.getEndTime());
+		LocalDate startDate = formatter.parseLocalDate(count.getStartTime());
+		LocalDate endDate = formatter.parseLocalDate(count.getEndTime());
+		
 		timeSpan.setBegin(startDate.toString());
 		timeSpan.setEnd(endDate.toString());
 		placemark.setTimePrimitive(timeSpan);
