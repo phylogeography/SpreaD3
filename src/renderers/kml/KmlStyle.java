@@ -40,49 +40,43 @@ public class KmlStyle extends kmlframework.kml.Style {
 	}
 
 	@Override
-	public boolean equals(final Object o) {
-
-		if (this == o) {
-			return true;
-		}
-
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-
-		final KmlStyle style = (KmlStyle) o;
-
-		if (style.strokeWidth != null && Double.compare(style.strokeWidth, strokeWidth) != 0) {
-			return false;
-		}
-
-		// if (strokeWidth != null && Double.compare(style.strokeWidth,
-		// strokeWidth) != 0){
-		// return false;
-		// }
-
-		if (fillColor != null ? !fillColor.equals(style.fillColor)
-				: style.fillColor != null) {
-			return false;
-		}
-
-		if (strokeColor != null ? !strokeColor.equals(style.strokeColor)
-				: style.strokeColor != null) {
-			return false;
-		}
-
-		return true;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((fillColor == null) ? 0 : fillColor.hashCode());
+		result = prime * result
+				+ ((strokeColor == null) ? 0 : strokeColor.hashCode());
+		result = prime * result
+				+ ((strokeWidth == null) ? 0 : strokeWidth.hashCode());
+		return result;
 	}
 
 	@Override
-	public int hashCode() {
-		int result;
-		long temp;
-		result = strokeColor != null ? strokeColor.hashCode() : 0;
-		temp = strokeWidth != +0.0d ? Double.doubleToLongBits(strokeWidth) : 0L;
-		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		result = 31 * result + (fillColor != null ? fillColor.hashCode() : 0);
-		return result;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		KmlStyle other = (KmlStyle) obj;
+		if (fillColor == null) {
+			if (other.fillColor != null)
+				return false;
+		} else if (!fillColor.equals(other.fillColor))
+			return false;
+		if (strokeColor == null) {
+			if (other.strokeColor != null)
+				return false;
+		} else if (!strokeColor.equals(other.strokeColor))
+			return false;
+		if (strokeWidth == null) {
+			if (other.strokeWidth != null)
+				return false;
+		} else if (!strokeWidth.equals(other.strokeWidth))
+			return false;
+		return true;
 	}
 
 	@Override
@@ -91,4 +85,4 @@ public class KmlStyle extends kmlframework.kml.Style {
 				+ strokeWidth + ", fillColor=" + fillColor + "]";
 	}
 
-}
+}//END: class

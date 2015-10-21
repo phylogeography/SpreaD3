@@ -261,6 +261,10 @@ public class KmlRenderer implements Renderer {
 		Point endPoint = getPoint(points, line.getEndPointId());
 		Coordinate endCoordinate = getCoordinate(endPoint);
 
+		if(startPoint.hasLocation() && endPoint.hasLocation()) {
+			 name += startPoint.getLocation().getId() + " to " + endPoint.getLocation().getId(); 
+		}
+		
 		// ---COLOR---//
 
 		int red = (int) settings.lineColor[KmlRendererSettings.R];
@@ -349,7 +353,7 @@ public class KmlRenderer implements Renderer {
 					double maxValue = altitudeAttribute.getRange()[1];
 
 					altitude = map(value, minValue, maxValue,
-							settings.minPointArea, settings.maxPointArea);
+							settings.minLineAltitude, settings.maxLineAltitude);
 
 				} else if (altitudeAttribute.getScale().equalsIgnoreCase(
 						ORDINAL)) {
@@ -362,7 +366,7 @@ public class KmlRenderer implements Renderer {
 					double maxValue = altitudeAttribute.getDomain().size();
 
 					altitude = map(value, minValue, maxValue,
-							settings.minPointArea, settings.maxPointArea);
+							settings.minLineAltitude, settings.maxLineAltitude);
 
 				} else {
 					//
@@ -390,12 +394,17 @@ public class KmlRenderer implements Renderer {
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate,
 				endCoordinate, sliceCount);
 
-		String startTime = line.getStartTime();
-		// DateTime startDate = new DateTime(startTime);
-		DateTime startDate = formatter.parseDateTime(startTime);
+		DateTime startDate = new DateTime();
+		if (line.hasTime()) {
+			String startTime = line.getStartTime();
+			startDate = formatter.parseDateTime(startTime);
+		}
 
-		String endTime = line.getEndTime();
-		DateTime endDate = formatter.parseDateTime(endTime);
+		DateTime endDate = new DateTime();
+		if (line.hasTime()) {
+			String endTime = line.getEndTime();
+			endDate = formatter.parseDateTime(endTime);
+		}
 
 		Interval interval = new Interval(startDate, endDate);
 		long millis = interval.toDurationMillis();

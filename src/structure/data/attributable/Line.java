@@ -10,9 +10,9 @@ public class Line {
 
 	private final String startTime;
 	private final String endTime;
-	
+
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
-	
+
 	public Line(String startPointId, //
 			String endPointId, //
 			String startTime, //
@@ -47,6 +47,15 @@ public class Line {
 			this.attributes.putAll(attributes);
 		}
 
+	}
+
+	public boolean hasTime() {
+		boolean hasTime = false;
+		if (startTime != null) {
+			hasTime = true;
+		}
+
+		return hasTime;
 	}
 
 	public String getStartTime() {

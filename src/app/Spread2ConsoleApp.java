@@ -151,20 +151,19 @@ public class Spread2ConsoleApp {
 
 		// ---MODES---//
 
-		modeArguments = new Arguments(
-				new Arguments.Option[] {
+		modeArguments = new Arguments(new Arguments.Option[] {
 
-				new Arguments.Option(HELP, "print this information and exit"),
+		new Arguments.Option(HELP, "print this information and exit"),
 
-				new Arguments.Option(READ, "read existing JSON file"),
+		new Arguments.Option(READ, "read existing JSON file"),
 
-				new Arguments.Option(PARSE, "create JSON from input files"),
+		new Arguments.Option(PARSE, "create JSON from input files"),
 
 				// new Arguments.Option(RENDER, "render from JSON file"),
 
 				new Arguments.StringOption(RENDER, new String[] { KML, //
 						GEOJSON //
-				}, false, "render from JSON file"),
+						}, false, "render from JSON file"),
 
 		});
 
@@ -174,45 +173,49 @@ public class Spread2ConsoleApp {
 		args1 = new Arguments(
 				new Arguments.Option[] {
 
-				new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
+						new Arguments.StringOption(LOCATIONS, "",
+								"location coordinates file"),
 
-				new Arguments.StringOption(HEADER, new String[] { TRUE, //
-						FALSE //
-				}, false, "locations file has header line"),
+						new Arguments.StringOption(HEADER, new String[] { TRUE, //
+								FALSE //
+								}, false, "locations file has header line"),
 
-				new Arguments.StringOption(TREE, "", "tree file name"),
+						new Arguments.StringOption(TREE, "", "tree file name"),
 
-				new Arguments.StringOption(LOCATION_TRAIT, "", "location trait name"),
+						new Arguments.StringOption(LOCATION_TRAIT, "",
+								"location trait name"),
 
-				new Arguments.IntegerOption(INTERVALS, "number of time intervals"),
+						new Arguments.IntegerOption(INTERVALS,
+								"number of time intervals"),
 
-				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
+						new Arguments.StringOption(MRSD, "",
+								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
-				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
-						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
+						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
+								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-				new Arguments.StringOption(MAP, "", "geojson file name"),
+						new Arguments.StringOption(MAP, "", "geojson file name"),
 
-				// new Arguments.StringArrayOption(TRAITS, -1, "",
-				// "traits to be parsed from nodes"),
+						// new Arguments.StringArrayOption(TRAITS, -1, "",
+						// "traits to be parsed from nodes"),
 
-				new Arguments.StringOption(OUTPUT, "", "json output file name"),
+						new Arguments.StringOption(OUTPUT, "",
+								"json output file name"),
 
-		});
+				});
 
 		// bayes factor arguments
-		args2 = new Arguments(
-				new Arguments.Option[] {
+		args2 = new Arguments(new Arguments.Option[] {
 
-				new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
+		new Arguments.StringOption(LOCATIONS, "", "location coordinates file"),
 
-				new Arguments.StringOption(LOG, "", "tree file name"),
+		new Arguments.StringOption(LOG, "", "tree file name"),
 
-				new Arguments.RealOption(BURNIN, "log file burning in %"),
+		new Arguments.RealOption(BURNIN, "log file burning in %"),
 
-				new Arguments.StringOption(MAP, "", "geojson file name"),
+		new Arguments.StringOption(MAP, "", "geojson file name"),
 
-				new Arguments.StringOption(OUTPUT, "", "json output file name")
+		new Arguments.StringOption(OUTPUT, "", "json output file name")
 
 		});
 
@@ -220,189 +223,236 @@ public class Spread2ConsoleApp {
 		args3 = new Arguments(
 				new Arguments.Option[] {
 
-				new Arguments.StringOption(TREE, "", "tree file name"),
+						new Arguments.StringOption(TREE, "", "tree file name"),
 
-				new Arguments.StringOption(X_COORDINATE, "", "x location trait name (latitude)"),
+						new Arguments.StringOption(X_COORDINATE, "",
+								"x location trait name (latitude)"),
 
-				new Arguments.StringOption(Y_COORDINATE, "", "y location trait name (longitude)"),
+						new Arguments.StringOption(Y_COORDINATE, "",
+								"y location trait name (longitude)"),
 
-				new Arguments.StringOption(HPD, "", "hpd level"),
+						new Arguments.StringOption(HPD, "", "hpd level"),
 
-				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
+						new Arguments.StringOption(MRSD, "",
+								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
-				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
-						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
+						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
+								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-				new Arguments.StringOption(MAP, "", "geojson file name"),
+						new Arguments.StringOption(MAP, "", "geojson file name"),
 
-				new Arguments.StringOption(OUTPUT, "", "json output file name"),
+						new Arguments.StringOption(OUTPUT, "",
+								"json output file name"),
 
-		});
+				});
 
 		// time slicer arguments
 		args4 = new Arguments(
 				new Arguments.Option[] {
 
-				new Arguments.StringOption(TREE, "", "tree file name"),
+						new Arguments.StringOption(TREE, "", "tree file name"),
 
-				new Arguments.StringOption(TREES, "", "trees file name"),
+						new Arguments.StringOption(TREES, "", "trees file name"),
 
-				new Arguments.StringOption(SLICE_HEIGHTS, "", "slice heights file name"),
+						new Arguments.StringOption(SLICE_HEIGHTS, "",
+								"slice heights file name"),
 
-				// new Arguments.StringArrayOption(TRAITS, -1, "",
-				// "traits to be parsed from nodes"),
+						// new Arguments.StringArrayOption(TRAITS, -1, "",
+						// "traits to be parsed from nodes"),
 
-				new Arguments.StringOption(TRAIT, "", "2D trait used for contouring"),
+						new Arguments.StringOption(TRAIT, "",
+								"2D trait used for contouring"),
 
-				new Arguments.StringOption(MAP, "", "geojson file name"),
+						new Arguments.StringOption(MAP, "", "geojson file name"),
 
-				new Arguments.StringOption(MRSD, "", "most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
+						new Arguments.StringOption(MRSD, "",
+								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
 
-				new Arguments.RealOption(TIMESCALE_MULTIPLIER,
-						"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
+						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
+								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-				new Arguments.IntegerOption(INTERVALS, "number of time intervals for slicing"),
+						new Arguments.IntegerOption(INTERVALS,
+								"number of time intervals for slicing"),
 
-				new Arguments.IntegerOption(BURNIN, "how many trees to discard as burn-in (in # trees)"),
+						new Arguments.IntegerOption(BURNIN,
+								"how many trees to discard as burn-in (in # trees)"),
 
-				new Arguments.RealOption(HPD, "hpd level for contouring"),
+						new Arguments.RealOption(HPD,
+								"hpd level for contouring"),
 
-				new Arguments.StringOption(OUTPUT, "", "json output file name"),
+						new Arguments.StringOption(OUTPUT, "",
+								"json output file name"),
 
-		});
+				});
 
 		// ---RENDERERS---//
 
 		kmlRenderArguments = new Arguments(
 				new Arguments.Option[] {
 
-				new Arguments.StringOption(JSON, "", "json input file name"),
+						new Arguments.StringOption(JSON, "",
+								"json input file name"),
 
-				new Arguments.StringOption(OUTPUT, "", "kml output file name"),
+						new Arguments.StringOption(OUTPUT, "",
+								"kml output file name"),
 
-				/////////////////
-				// ---POINTS---//
-				/////////////////
+						// ///////////////
+						// ---POINTS---//
+						// ///////////////
 
-				// ---POINT SUBSETS---//
+						// ---POINT SUBSETS---//
 
-				new Arguments.StringOption(POINTS_SUBSET, "",
-						"attribute to select a subset of values above the certain cutoff."),
+						new Arguments.StringOption(POINTS_SUBSET, "",
+								"attribute to select a subset of values above the certain cutoff."),
 
-				new Arguments.RealOption(POINTS_CUTOFF, "specify cutoff value to create a subset"),
+						new Arguments.RealOption(POINTS_CUTOFF,
+								"specify cutoff value to create a subset"),
 
-				new Arguments.StringOption(POINTS_VALUE, "", "specify fixed value to create a subset"),
+						new Arguments.StringOption(POINTS_VALUE, "",
+								"specify fixed value to create a subset"),
 
-				// ---POINT COLORS---//
+						// ---POINT COLORS---//
 
-				new Arguments.RealArrayOption(POINT_COLOR, 3, "specify RGB value"),
+						new Arguments.RealArrayOption(POINT_COLOR, 3,
+								"specify RGB value"),
 
-				new Arguments.StringOption(POINT_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
+						new Arguments.StringOption(POINT_COLOR_MAPPING, "",
+								"attribute to map RGB aesthetics"),
 
-				new Arguments.StringOption(POINT_COLORS, "", "file with RGB(A) colors to map attribute values to."),
+						new Arguments.StringOption(POINT_COLORS, "",
+								"file with RGB(A) colors to map attribute values to."),
 
-				// ---POINT ALPHA---//
+						// ---POINT ALPHA---//
 
-				new Arguments.RealOption(POINT_ALPHA, "specify alpha value"),
+						new Arguments.RealOption(POINT_ALPHA,
+								"specify alpha value"),
 
-				new Arguments.StringOption(POINT_ALPHA_MAPPING, "",
-						"attribute to map alpha aesthetic. Higher values will be more opaque, lower values will be more translucent. "),
+						new Arguments.StringOption(
+								POINT_ALPHA_MAPPING,
+								"",
+								"attribute to map alpha aesthetic. Higher values will be more opaque, lower values will be more translucent. "),
 
-				// ---POINT AREA---//
+						// ---POINT AREA---//
 
-				new Arguments.RealOption(POINT_AREA, "specify point areas"),
+						new Arguments.RealOption(POINT_AREA,
+								"specify point areas"),
 
-				new Arguments.StringOption(POINT_AREA_MAPPING, "", "attribute to map area aesthetics"),
+						new Arguments.StringOption(POINT_AREA_MAPPING, "",
+								"attribute to map area aesthetics"),
 
-				////////////////
-				// ---AREAS---//
-				////////////////
+						// //////////////
+						// ---AREAS---//
+						// //////////////
 
-				// ---SUBSETS---//
+						// ---SUBSETS---//
 
-				// new Arguments.StringOption(AREA_SUBSET, "",
-				// "attribute to select a subset of values above the certain
-				// cutoff."),
-				//
-				// new Arguments.RealOption(AREA_CUTOFF, "specify cutoff value
-				// to create a subset"),
-				//
-				// new Arguments.StringOption(AREA_VALUE, "", "specify fixed
-				// value to create a subset"),
+						// new Arguments.StringOption(AREA_SUBSET, "",
+						// "attribute to select a subset of values above the
+						// certain
+						// cutoff."),
+						//
+						// new Arguments.RealOption(AREA_CUTOFF, "specify cutoff
+						// value
+						// to create a subset"),
+						//
+						// new Arguments.StringOption(AREA_VALUE, "", "specify
+						// fixed
+						// value to create a subset"),
 
-				// ---AREA COLOR---//
+						// ---AREA COLOR---//
 
-				// TODO: this should read RGB or RGBA
-						new Arguments.RealArrayOption(AREA_COLOR, 3, "specify RGB value"),
+						// TODO: this should read RGB or RGBA
+						new Arguments.RealArrayOption(AREA_COLOR, 3,
+								"specify RGB value"),
 
-				// // ---AREA ALPHA---//
+						// // ---AREA ALPHA---//
 
-				new Arguments.RealOption(AREA_ALPHA,
-						"specify alpha value. Higher values are more opaque, lower values more translucent."),
+						new Arguments.RealOption(
+								AREA_ALPHA,
+								"specify alpha value. Higher values are more opaque, lower values more translucent."),
 
-				////////////////
-				// ---LINES---//
-				////////////////
+						// //////////////
+						// ---LINES---//
+						// //////////////
 
-				// ---SUBSETS---//
+						// ---SUBSETS---//
 
-				new Arguments.StringOption(LINES_SUBSET, "",
-						"attribute to select a subset of values above the certain cutoff."),
+						new Arguments.StringOption(LINES_SUBSET, "",
+								"attribute to select a subset of values above the certain cutoff."),
 
-				new Arguments.RealOption(LINES_CUTOFF, "specify cutoff value to create a subset"),
+						new Arguments.RealOption(LINES_CUTOFF,
+								"specify cutoff value to create a subset"),
 
-				new Arguments.StringOption(LINES_VALUE, "", "specify fixed value to create a subset"),
+						new Arguments.StringOption(LINES_VALUE, "",
+								"specify fixed value to create a subset"),
 
-				// ---LINE WIDTH---//
+						// ---LINE WIDTH---//
 
-				new Arguments.RealOption(LINE_WIDTH, "specify line width"),
+						new Arguments.RealOption(LINE_WIDTH,
+								"specify line width"),
 
-				new Arguments.StringOption(LINE_WIDTH_MAPPING, new String[] { Utils.DISTANCE, //
-						Utils.DURATION //
-				}, false, "attribute to map line width"),
+						new Arguments.StringOption(LINE_WIDTH_MAPPING,
+								new String[] { Utils.DISTANCE, //
+										Utils.DURATION //
+								}, false, "attribute to map line width"),
 
-				// ---LINE ALTITUDE---//
+						// ---LINE ALTITUDE---//
 
-				new Arguments.RealOption(LINE_ALTITUDE, "specify line altitude"),
+						new Arguments.RealOption(LINE_ALTITUDE,
+								"specify line altitude"),
 
-				new Arguments.StringOption(LINE_ALTITUDE_MAPPING, new String[] { Utils.DISTANCE, //
-						Utils.DURATION //
-				}, false, "attribute to map line altitude"),
+						new Arguments.StringOption(LINE_ALTITUDE_MAPPING, "",
+								"attribute to map line altitude"),
 
-				// ---LINE COLOR---//
+						// ---LINE COLOR---//
 
-				// TODO: this should read RGB or RGBA
-						new Arguments.RealArrayOption(LINE_COLOR, 3, "specify RGB value"),
+						// TODO: this should read RGB or RGBA
+						new Arguments.RealArrayOption(LINE_COLOR, 3,
+								"specify RGB value"),
 
-				new Arguments.StringOption(LINE_COLOR_MAPPING, "", "attribute to map RGB aesthetics"),
+						new Arguments.StringOption(LINE_COLOR_MAPPING, "",
+								"attribute to map RGB aesthetics"),
 
-				new Arguments.StringOption(LINE_COLORS, "", "file with RGB(A) colors to map attribute values."),
+						new Arguments.StringOption(LINE_COLORS, "",
+								"file with RGB(A) colors to map attribute values."),
 
-				// ---LINE ALPHA---//
+						// ---LINE ALPHA---//
 
-				new Arguments.RealOption(LINE_ALPHA, "specify A value"),
+						new Arguments.RealOption(LINE_ALPHA, "specify A value"),
 
-				new Arguments.StringOption(LINE_ALPHA_MAPPING, "",
-						"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
+						new Arguments.StringOption(
+								LINE_ALPHA_MAPPING,
+								"",
+								"attribute to map A aesthetics. Higher values will be more opaque, lower values will be more translucent. "),
 
-		});
+						// //////////////
+						// ---COUNTS---//
+						// //////////////
+
+						// TODO: this should read RGB or RGBA
+						new Arguments.RealArrayOption(COUNT_COLOR, 3,
+								"specify RGB value"),
+
+				});
 
 		geojsonRenderArguments = new Arguments(new Arguments.Option[] {
 
-				// TODO: fill with options
+		// TODO: fill with options
 
-		});
+				});
 
 		// ---READER---//
 
-		jsonReaderArguments = new Arguments(
-				new Arguments.Option[] {
+		jsonReaderArguments = new Arguments(new Arguments.Option[] {
 
-				new Arguments.StringArrayOption(LOCATIONS, -1, "", "json file names with locations to read"),
+				new Arguments.StringArrayOption(LOCATIONS, -1, "",
+						"json file names with locations to read"),
 
-				new Arguments.StringArrayOption(LINES, -1, "", "json file names with lines to read"),
+				new Arguments.StringArrayOption(LINES, -1, "",
+						"json file names with lines to read"),
 
-				new Arguments.StringArrayOption(POLYGONS, -1, "", "json file names with polygons to read"),
+				new Arguments.StringArrayOption(POLYGONS, -1, "",
+						"json file names with polygons to read"),
 
 				new Arguments.StringOption(OUTPUT, "", "json output file name")
 
@@ -480,7 +530,8 @@ public class Spread2ConsoleApp {
 
 				settings.kml = true;
 
-			} else if (modeArguments.getStringOption(RENDER).equalsIgnoreCase(GEOJSON)) {
+			} else if (modeArguments.getStringOption(RENDER).equalsIgnoreCase(
+					GEOJSON)) {
 
 				settings.geojson = true;
 
@@ -522,7 +573,8 @@ public class Spread2ConsoleApp {
 				System.out.println("In continuous mode");
 
 				if (Arrays.asList(otherArgs).contains("-" + TREES)
-						|| Arrays.asList(otherArgs).contains("-" + SLICE_HEIGHTS)) {
+						|| Arrays.asList(otherArgs).contains(
+								"-" + SLICE_HEIGHTS)) {
 
 					System.out.println("In time slicer mode");
 					settings.timeSlicer = true;
@@ -552,11 +604,13 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(LOCATIONS)) {
 
-						settings.discreteTreeSettings.locations = args1.getStringOption(LOCATIONS);
+						settings.discreteTreeSettings.locations = args1
+								.getStringOption(LOCATIONS);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + LOCATIONS + " is missing.");
+						throw new ArgumentException("Required argument "
+								+ LOCATIONS + " is missing.");
 
 					} // END: option check
 
@@ -571,41 +625,49 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(TREE)) {
 
-						settings.discreteTreeSettings.tree = args1.getStringOption(TREE);
+						settings.discreteTreeSettings.tree = args1
+								.getStringOption(TREE);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + TREE + " is missing.");
+						throw new ArgumentException("Required argument " + TREE
+								+ " is missing.");
 
 					} // END: option check
 
 					if (args1.hasOption(LOCATION_TRAIT)) {
 
-						settings.discreteTreeSettings.locationTrait = args1.getStringOption(LOCATION_TRAIT);
+						settings.discreteTreeSettings.locationTrait = args1
+								.getStringOption(LOCATION_TRAIT);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + LOCATION_TRAIT + " is missing.");
+						throw new ArgumentException("Required argument "
+								+ LOCATION_TRAIT + " is missing.");
 
 					} // END: option check
 
 					if (args1.hasOption(INTERVALS)) {
 
-						settings.discreteTreeSettings.intervals = args1.getIntegerOption(INTERVALS);
+						settings.discreteTreeSettings.intervals = args1
+								.getIntegerOption(INTERVALS);
 
 					} // END: option check
 
 					if (args1.hasOption(MRSD)) {
-						settings.discreteTreeSettings.mrsd = args1.getStringOption(MRSD);
+						settings.discreteTreeSettings.mrsd = args1
+								.getStringOption(MRSD);
 					}
 
 					if (args1.hasOption(TIMESCALE_MULTIPLIER)) {
-						settings.discreteTreeSettings.timescaleMultiplier = args1.getRealOption(TIMESCALE_MULTIPLIER);
+						settings.discreteTreeSettings.timescaleMultiplier = args1
+								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
 					if (args1.hasOption(MAP)) {
 
-						settings.discreteTreeSettings.geojson = args1.getStringOption(MAP);
+						settings.discreteTreeSettings.geojson = args1
+								.getStringOption(MAP);
 					}
 
 					// if (args1.hasOption(TRAITS)) {
@@ -617,7 +679,8 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(OUTPUT)) {
 
-						settings.discreteTreeSettings.output = args1.getStringOption(OUTPUT);
+						settings.discreteTreeSettings.output = args1
+								.getStringOption(OUTPUT);
 
 					} // END: option check
 
@@ -685,24 +748,30 @@ public class Spread2ConsoleApp {
 					args2.parseArguments(otherArgs);
 
 					if (args2.hasOption(LOCATIONS)) {
-						settings.bayesFactorsSettings.locations = args2.getStringOption(LOCATIONS);
+						settings.bayesFactorsSettings.locations = args2
+								.getStringOption(LOCATIONS);
 					} else {
-						throw new ArgumentException("Required argument " + LOCATIONS + " is missing.");
+						throw new ArgumentException("Required argument "
+								+ LOCATIONS + " is missing.");
 					} // END: option check
 
 					if (args2.hasOption(LOG)) {
-						settings.bayesFactorsSettings.log = args2.getStringOption(LOG);
+						settings.bayesFactorsSettings.log = args2
+								.getStringOption(LOG);
 					} else {
-						throw new ArgumentException("Required argument " + LOG + " is missing.");
+						throw new ArgumentException("Required argument " + LOG
+								+ " is missing.");
 					} // END: option check
 
 					if (args2.hasOption(OUTPUT)) {
-						settings.bayesFactorsSettings.output = args2.getStringOption(OUTPUT);
+						settings.bayesFactorsSettings.output = args2
+								.getStringOption(OUTPUT);
 					} // END: option check
 
 					if (args2.hasOption(MAP)) {
 
-						settings.bayesFactorsSettings.geojson = args2.getStringOption(MAP);
+						settings.bayesFactorsSettings.geojson = args2
+								.getStringOption(MAP);
 					}
 
 					if (args2.hasOption(BURNIN)) {
@@ -711,7 +780,8 @@ public class Spread2ConsoleApp {
 
 						if (burnin < 0.0 || burnin > 100.0) {
 
-							throw new ArgumentException("Burnin outside of [0,100].");
+							throw new ArgumentException(
+									"Burnin outside of [0,100].");
 
 						} else {
 							settings.bayesFactorsSettings.burnin = burnin;
@@ -727,7 +797,8 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					BayesFactorSpreadDataParser parser = new BayesFactorSpreadDataParser(settings.bayesFactorsSettings);
+					BayesFactorSpreadDataParser parser = new BayesFactorSpreadDataParser(
+							settings.bayesFactorsSettings);
 					SpreadData data = parser.parse();
 
 					// ---EXPORT TO JSON---//
@@ -773,36 +844,44 @@ public class Spread2ConsoleApp {
 					args3.parseArguments(otherArgs);
 
 					if (args3.hasOption(TREE)) {
-						settings.continuousTreeSettings.tree = args3.getStringOption(TREE);
+						settings.continuousTreeSettings.tree = args3
+								.getStringOption(TREE);
 					}
 
 					if (args3.hasOption(X_COORDINATE)) {
-						settings.continuousTreeSettings.xCoordinate = args3.getStringOption(X_COORDINATE);
+						settings.continuousTreeSettings.xCoordinate = args3
+								.getStringOption(X_COORDINATE);
 					}
 
 					if (args3.hasOption(Y_COORDINATE)) {
-						settings.continuousTreeSettings.yCoordinate = args3.getStringOption(Y_COORDINATE);
+						settings.continuousTreeSettings.yCoordinate = args3
+								.getStringOption(Y_COORDINATE);
 					}
 
 					if (args3.hasOption(HPD)) {
-						settings.continuousTreeSettings.hpd = args3.getStringOption(HPD);
+						settings.continuousTreeSettings.hpd = args3
+								.getStringOption(HPD);
 					}
 
 					if (args3.hasOption(MRSD)) {
-						settings.continuousTreeSettings.mrsd = args3.getStringOption(MRSD);
+						settings.continuousTreeSettings.mrsd = args3
+								.getStringOption(MRSD);
 					}
 
 					if (args3.hasOption(TIMESCALE_MULTIPLIER)) {
-						settings.continuousTreeSettings.timescaleMultiplier = args3.getRealOption(TIMESCALE_MULTIPLIER);
+						settings.continuousTreeSettings.timescaleMultiplier = args3
+								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
 					if (args3.hasOption(MAP)) {
 
-						settings.continuousTreeSettings.geojson = args3.getStringOption(MAP);
+						settings.continuousTreeSettings.geojson = args3
+								.getStringOption(MAP);
 					}
 
 					if (args3.hasOption(OUTPUT)) {
-						settings.continuousTreeSettings.output = args3.getStringOption(OUTPUT);
+						settings.continuousTreeSettings.output = args3
+								.getStringOption(OUTPUT);
 					} // END: option check
 
 				} catch (ArgumentException e) {
@@ -864,48 +943,59 @@ public class Spread2ConsoleApp {
 
 					if (args4.hasOption(TREE)) {
 
-						settings.timeSlicerSettings.tree = args4.getStringOption(TREE);
+						settings.timeSlicerSettings.tree = args4
+								.getStringOption(TREE);
 
 					} else if (args4.hasOption(SLICE_HEIGHTS)) {
 
-						settings.timeSlicerSettings.sliceHeights = args4.getStringOption(SLICE_HEIGHTS);
+						settings.timeSlicerSettings.sliceHeights = args4
+								.getStringOption(SLICE_HEIGHTS);
 
-					} else if (args4.hasOption(TREE) && args4.hasOption(SLICE_HEIGHTS)) {
+					} else if (args4.hasOption(TREE)
+							&& args4.hasOption(SLICE_HEIGHTS)) {
 
-						throw new ArgumentException("Can't use both a" + TREE + " and " + SLICE_HEIGHTS + " argument.");
+						throw new ArgumentException("Can't use both a" + TREE
+								+ " and " + SLICE_HEIGHTS + " argument.");
 
 					} else {
 
-						throw new ArgumentException("Must specify" + TREE + " or " + SLICE_HEIGHTS + " argument.");
+						throw new ArgumentException("Must specify" + TREE
+								+ " or " + SLICE_HEIGHTS + " argument.");
 
 					} // END: option check
 
 					if (args4.hasOption(TREES)) {
 
-						settings.timeSlicerSettings.trees = args4.getStringOption(TREES);
+						settings.timeSlicerSettings.trees = args4
+								.getStringOption(TREES);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + TREES + " is missing.");
+						throw new ArgumentException("Required argument "
+								+ TREES + " is missing.");
 
 					} // END: option check
 
 					if (args4.hasOption(TRAIT)) {
 
-						settings.timeSlicerSettings.trait = args4.getStringOption(TRAIT);
+						settings.timeSlicerSettings.trait = args4
+								.getStringOption(TRAIT);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + LOCATION_TRAIT + " is missing.");
+						throw new ArgumentException("Required argument "
+								+ LOCATION_TRAIT + " is missing.");
 
 					} // END: option check
 
 					if (args4.hasOption(INTERVALS)) {
-						settings.timeSlicerSettings.intervals = args4.getIntegerOption(INTERVALS);
+						settings.timeSlicerSettings.intervals = args4
+								.getIntegerOption(INTERVALS);
 					}
 
 					if (args4.hasOption(BURNIN)) {
-						settings.timeSlicerSettings.burnIn = args4.getIntegerOption(BURNIN);
+						settings.timeSlicerSettings.burnIn = args4
+								.getIntegerOption(BURNIN);
 					}
 
 					if (args4.hasOption(HPD)) {
@@ -914,7 +1004,8 @@ public class Spread2ConsoleApp {
 
 						if (hpdLevel < 0.0 || hpdLevel > 1.0) {
 
-							throw new ArgumentException(HPD + "argument outside of [0.0, 1.0].");
+							throw new ArgumentException(HPD
+									+ "argument outside of [0.0, 1.0].");
 
 						} else {
 							settings.timeSlicerSettings.hpdLevel = hpdLevel;
@@ -923,20 +1014,24 @@ public class Spread2ConsoleApp {
 					} // END: option check
 
 					if (args4.hasOption(MRSD)) {
-						settings.timeSlicerSettings.mrsd = args4.getStringOption(MRSD);
+						settings.timeSlicerSettings.mrsd = args4
+								.getStringOption(MRSD);
 					}
 
 					if (args4.hasOption(TIMESCALE_MULTIPLIER)) {
-						settings.timeSlicerSettings.timescaleMultiplier = args4.getRealOption(TIMESCALE_MULTIPLIER);
+						settings.timeSlicerSettings.timescaleMultiplier = args4
+								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
 					if (args4.hasOption(MAP)) {
 
-						settings.timeSlicerSettings.geojson = args4.getStringOption(MAP);
+						settings.timeSlicerSettings.geojson = args4
+								.getStringOption(MAP);
 					}
 
 					if (args4.hasOption(OUTPUT)) {
-						settings.timeSlicerSettings.output = args4.getStringOption(OUTPUT);
+						settings.timeSlicerSettings.output = args4
+								.getStringOption(OUTPUT);
 					} // END: option check
 
 				} catch (ArgumentException e) {
@@ -947,7 +1042,8 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					TimeSlicerSpreadDataParser parser = new TimeSlicerSpreadDataParser(settings.timeSlicerSettings);
+					TimeSlicerSpreadDataParser parser = new TimeSlicerSpreadDataParser(
+							settings.timeSlicerSettings);
 					SpreadData data = parser.parse();
 
 					// ---EXPORT TO JSON---//
@@ -976,9 +1072,11 @@ public class Spread2ConsoleApp {
 
 				} catch (UnsupportedClassVersionError e) {
 
-					String message = "Java version found " + System.getProperty("java.version")
+					String message = "Java version found "
+							+ System.getProperty("java.version")
 							+ " is too old. Please update";
-					gracefullyExit(message, args4, new AnalysisException(e.getMessage()));
+					gracefullyExit(message, args4,
+							new AnalysisException(e.getMessage()));
 
 				}
 
@@ -999,30 +1097,37 @@ public class Spread2ConsoleApp {
 				jsonReaderArguments.parseArguments(otherArgs);
 
 				if (jsonReaderArguments.hasOption(LOCATIONS)) {
-					settings.jsonReaderSettings.locations = jsonReaderArguments.getStringArrayOption(LOCATIONS);
+					settings.jsonReaderSettings.locations = jsonReaderArguments
+							.getStringArrayOption(LOCATIONS);
 				}
 
 				if (jsonReaderArguments.hasOption(LINES)) {
-					settings.jsonReaderSettings.lines = jsonReaderArguments.getStringArrayOption(LINES);
+					settings.jsonReaderSettings.lines = jsonReaderArguments
+							.getStringArrayOption(LINES);
 				}
 
 				if (jsonReaderArguments.hasOption(POLYGONS)) {
-					settings.jsonReaderSettings.polygons = jsonReaderArguments.getStringArrayOption(POLYGONS);
+					settings.jsonReaderSettings.polygons = jsonReaderArguments
+							.getStringArrayOption(POLYGONS);
 				}
 
-				if (settings.jsonReaderSettings.locations == null && settings.jsonReaderSettings.lines == null
+				if (settings.jsonReaderSettings.locations == null
+						&& settings.jsonReaderSettings.lines == null
 						&& settings.jsonReaderSettings.polygons == null) {
-					throw new ArgumentException("Must specify at least one of " + LOCATIONS + ", " + LINES + ", "
-							+ " or " + POLYGONS + " arguments.");
+					throw new ArgumentException("Must specify at least one of "
+							+ LOCATIONS + ", " + LINES + ", " + " or "
+							+ POLYGONS + " arguments.");
 				}
 
 				if (jsonReaderArguments.hasOption(OUTPUT)) {
 
-					settings.jsonReaderSettings.output = jsonReaderArguments.getStringOption(OUTPUT);
+					settings.jsonReaderSettings.output = jsonReaderArguments
+							.getStringOption(OUTPUT);
 
 				} else {
 
-					throw new ArgumentException("Required argument " + OUTPUT + " is missing.");
+					throw new ArgumentException("Required argument " + OUTPUT
+							+ " is missing.");
 				}
 
 			} catch (ArgumentException e) {
@@ -1070,41 +1175,48 @@ public class Spread2ConsoleApp {
 					settings.kmlRendererSettings = new KmlRendererSettings();
 					if (kmlRenderArguments.hasOption(JSON)) {
 
-						settings.kmlRendererSettings.json = kmlRenderArguments.getStringOption(JSON);
+						settings.kmlRendererSettings.json = kmlRenderArguments
+								.getStringOption(JSON);
 
 					} else {
 
-						throw new ArgumentException("Required argument " + JSON + " is missing.");
+						throw new ArgumentException("Required argument " + JSON
+								+ " is missing.");
 
 					} // END: option check
 
 					if (kmlRenderArguments.hasOption(OUTPUT)) {
 
-						settings.kmlRendererSettings.output = kmlRenderArguments.getStringOption(OUTPUT);
+						settings.kmlRendererSettings.output = kmlRenderArguments
+								.getStringOption(OUTPUT);
 
 					}
 
-					//////////////////
+					// ////////////////
 					// ---POINTS---//
-					/////////////////
+					// ///////////////
 
 					// ---AREA SUBSET---//
 
 					if (kmlRenderArguments.hasOption(POINTS_SUBSET)) {
 
-						settings.kmlRendererSettings.pointsSubset = kmlRenderArguments.getStringOption(POINTS_SUBSET);
+						settings.kmlRendererSettings.pointsSubset = kmlRenderArguments
+								.getStringOption(POINTS_SUBSET);
 
 						if (kmlRenderArguments.hasOption(POINTS_CUTOFF)) {
 
-							settings.kmlRendererSettings.pointsCutoff = kmlRenderArguments.getRealOption(POINTS_CUTOFF);
+							settings.kmlRendererSettings.pointsCutoff = kmlRenderArguments
+									.getRealOption(POINTS_CUTOFF);
 
 						} else if (kmlRenderArguments.hasOption(POINTS_VALUE)) {
 
-							settings.kmlRendererSettings.pointsValue = kmlRenderArguments.getStringOption(POINTS_VALUE);
+							settings.kmlRendererSettings.pointsValue = kmlRenderArguments
+									.getStringOption(POINTS_VALUE);
 
 						} else {
 
-							throw new ArgumentException("Can't create a subset from these options!");
+							throw new ArgumentException(
+									"Can't create a subset from these options!");
 
 						}
 
@@ -1118,17 +1230,21 @@ public class Spread2ConsoleApp {
 								.getStringOption(POINT_COLOR_MAPPING);
 
 						if (kmlRenderArguments.hasOption(POINT_COLORS)) {
-							settings.kmlRendererSettings.pointColors = kmlRenderArguments.getStringOption(POINT_COLORS);
+							settings.kmlRendererSettings.pointColors = kmlRenderArguments
+									.getStringOption(POINT_COLORS);
 						}
 
 					} else if (kmlRenderArguments.hasOption(POINT_COLOR)) {
 
-						settings.kmlRendererSettings.pointColor = kmlRenderArguments.getRealArrayOption(POINT_COLOR);
+						settings.kmlRendererSettings.pointColor = kmlRenderArguments
+								.getRealArrayOption(POINT_COLOR);
 
-					} else if (kmlRenderArguments.hasOption(POINT_COLOR_MAPPING)
+					} else if (kmlRenderArguments
+							.hasOption(POINT_COLOR_MAPPING)
 							&& kmlRenderArguments.hasOption(POINT_COLOR)) {
 
-						throw new ArgumentException("Can't both map and have a defined point color!");
+						throw new ArgumentException(
+								"Can't both map and have a defined point color!");
 
 					} else {
 
@@ -1145,13 +1261,16 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(POINT_ALPHA)) {
 
-						settings.kmlRendererSettings.pointAlpha = kmlRenderArguments.getRealOption(POINT_ALPHA);
+						settings.kmlRendererSettings.pointAlpha = kmlRenderArguments
+								.getRealOption(POINT_ALPHA);
 						settings.kmlRendererSettings.pointAlphaChanged = true;
 
-					} else if (kmlRenderArguments.hasOption(POINT_ALPHA_MAPPING)
+					} else if (kmlRenderArguments
+							.hasOption(POINT_ALPHA_MAPPING)
 							&& kmlRenderArguments.hasOption(POINT_ALPHA)) {
 
-						throw new ArgumentException("Can't both map and have a defined point alpha!");
+						throw new ArgumentException(
+								"Can't both map and have a defined point alpha!");
 
 					} else {
 
@@ -1168,12 +1287,14 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(POINT_AREA)) {
 
-						settings.kmlRendererSettings.pointArea = kmlRenderArguments.getRealOption(POINT_AREA);
+						settings.kmlRendererSettings.pointArea = kmlRenderArguments
+								.getRealOption(POINT_AREA);
 
 					} else if (kmlRenderArguments.hasOption(POINT_AREA_MAPPING)
 							&& kmlRenderArguments.hasOption(POINT_AREA)) {
 
-						throw new ArgumentException("Can't both map and have a defined point area!");
+						throw new ArgumentException(
+								"Can't both map and have a defined point area!");
 
 					} else {
 
@@ -1181,15 +1302,16 @@ public class Spread2ConsoleApp {
 
 					}
 
-					////////////////
+					// //////////////
 					// ---AREAS---//
-					////////////////
+					// //////////////
 
 					// ---AREA COLOR---//
 
 					if (kmlRenderArguments.hasOption(AREA_COLOR)) {
 
-						settings.kmlRendererSettings.areaColor = kmlRenderArguments.getRealArrayOption(AREA_COLOR);
+						settings.kmlRendererSettings.areaColor = kmlRenderArguments
+								.getRealArrayOption(AREA_COLOR);
 
 					}
 
@@ -1197,31 +1319,49 @@ public class Spread2ConsoleApp {
 
 					if (kmlRenderArguments.hasOption(AREA_ALPHA)) {
 
-						settings.kmlRendererSettings.areaAlpha = kmlRenderArguments.getRealOption(AREA_ALPHA);
+						settings.kmlRendererSettings.areaAlpha = kmlRenderArguments
+								.getRealOption(AREA_ALPHA);
 
 					}
 
-					////////////////
+					// //////////////
+					// ---COUNTS---//
+					// //////////////
+
+					// ---COUNT COLOR---//
+
+					if (kmlRenderArguments.hasOption(COUNT_COLOR)) {
+
+						settings.kmlRendererSettings.countColor = kmlRenderArguments
+								.getRealArrayOption(COUNT_COLOR);
+
+					}
+
+					// /////////////
 					// ---LINES---//
-					////////////////
+					// /////////////
 
 					// ---LINES SUBSET---//
 
 					if (kmlRenderArguments.hasOption(LINES_SUBSET)) {
 
-						settings.kmlRendererSettings.linesSubset = kmlRenderArguments.getStringOption(LINES_SUBSET);
+						settings.kmlRendererSettings.linesSubset = kmlRenderArguments
+								.getStringOption(LINES_SUBSET);
 
 						if (kmlRenderArguments.hasOption(LINES_CUTOFF)) {
 
-							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments.getRealOption(LINES_CUTOFF);
+							settings.kmlRendererSettings.linesCutoff = kmlRenderArguments
+									.getRealOption(LINES_CUTOFF);
 
 						} else if (kmlRenderArguments.hasOption(LINES_VALUE)) {
 
-							settings.kmlRendererSettings.linesValue = kmlRenderArguments.getStringOption(LINES_VALUE);
+							settings.kmlRendererSettings.linesValue = kmlRenderArguments
+									.getStringOption(LINES_VALUE);
 
 						} else {
 
-							throw new ArgumentException("Can't create a subset from these options!");
+							throw new ArgumentException(
+									"Can't create a subset from these options!");
 
 						}
 
@@ -1235,17 +1375,20 @@ public class Spread2ConsoleApp {
 								.getStringOption(LINE_COLOR_MAPPING);
 
 						if (kmlRenderArguments.hasOption(LINE_COLORS)) {
-							settings.kmlRendererSettings.lineColors = kmlRenderArguments.getStringOption(LINE_COLORS);
+							settings.kmlRendererSettings.lineColors = kmlRenderArguments
+									.getStringOption(LINE_COLORS);
 						}
 
 					} else if (kmlRenderArguments.hasOption(LINE_COLOR)) {
 
-						settings.kmlRendererSettings.lineColor = kmlRenderArguments.getRealArrayOption(LINE_COLOR);
+						settings.kmlRendererSettings.lineColor = kmlRenderArguments
+								.getRealArrayOption(LINE_COLOR);
 
 					} else if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_COLOR)) {
 
-						throw new ArgumentException("Can't both map and have a defined line color!");
+						throw new ArgumentException(
+								"Can't both map and have a defined line color!");
 
 					} else {
 
@@ -1262,13 +1405,15 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(LINE_ALPHA)) {
 
-						settings.kmlRendererSettings.lineAlpha = kmlRenderArguments.getRealOption(LINE_ALPHA);
+						settings.kmlRendererSettings.lineAlpha = kmlRenderArguments
+								.getRealOption(LINE_ALPHA);
 						settings.kmlRendererSettings.lineAlphaChanged = true;
 
 					} else if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_ALPHA)) {
 
-						throw new ArgumentException("Can't both map and have a defined line alpha!");
+						throw new ArgumentException(
+								"Can't both map and have a defined line alpha!");
 
 					} else {
 
@@ -1285,12 +1430,14 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(LINE_WIDTH)) {
 
-						settings.kmlRendererSettings.lineWidth = kmlRenderArguments.getRealOption(LINE_WIDTH);
+						settings.kmlRendererSettings.lineWidth = kmlRenderArguments
+								.getRealOption(LINE_WIDTH);
 
 					} else if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_WIDTH)) {
 
-						throw new ArgumentException("Can't both map and have a defined line altitude!");
+						throw new ArgumentException(
+								"Can't both map and have a defined line altitude!");
 
 					} else {
 
@@ -1307,12 +1454,15 @@ public class Spread2ConsoleApp {
 
 					} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
 
-						settings.kmlRendererSettings.lineAltitude = kmlRenderArguments.getRealOption(LINE_ALTITUDE);
+						settings.kmlRendererSettings.lineAltitude = kmlRenderArguments
+								.getRealOption(LINE_ALTITUDE);
 
-					} else if (kmlRenderArguments.hasOption(LINE_ALTITUDE_MAPPING)
+					} else if (kmlRenderArguments
+							.hasOption(LINE_ALTITUDE_MAPPING)
 							&& kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
 
-						throw new ArgumentException("Can't both map and have a defined line altitude!");
+						throw new ArgumentException(
+								"Can't both map and have a defined line altitude!");
 
 					} else {
 
@@ -1328,11 +1478,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					Reader reader = new FileReader(settings.kmlRendererSettings.json);
+					Reader reader = new FileReader(
+							settings.kmlRendererSettings.json);
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-					KmlRenderer renderer = new KmlRenderer(input, settings.kmlRendererSettings);
+					KmlRenderer renderer = new KmlRenderer(input,
+							settings.kmlRendererSettings);
 					renderer.render();
 
 					System.out.println("Rendered KML.");
@@ -1375,11 +1527,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					Reader reader = new FileReader(settings.geoJSONRendererSettings.json);
+					Reader reader = new FileReader(
+							settings.geoJSONRendererSettings.json);
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-					System.out.println("Geo JSON renderer not yet implemented!");
+					System.out
+							.println("Geo JSON renderer not yet implemented!");
 					System.exit(0);
 
 					// GeoJSONRenderer renderer = new GeoJSONRenderer(input,
