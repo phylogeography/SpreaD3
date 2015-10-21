@@ -213,8 +213,8 @@ public class Utils {
 	}// END: printArray
 
 	public static void print2DArray(Object[][] array) {
-		int nRow = array[0].length;  
-		int nCol = array.length;  
+		int nRow = array.length;  
+		int nCol = array[0].length;  
 		for (int row = 0; row < nRow; row++) {
 			for (int col = 0; col < nCol; col++) {
 				System.out.print(array[row][col] + " ");

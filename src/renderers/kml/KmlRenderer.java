@@ -48,10 +48,6 @@ import utils.Utils;
 
 public class KmlRenderer implements Renderer {
 
-	// private static final String TREE_LAYER_TYPE = "tree";
-	// private static final String COUNTS_LAYER_TYPE = "counts";
-	// private static final String MAP_LAYER_TYPE = "counts";
-
 	private static final String ORDINAL = "ordinal";
 	private static final String LINEAR = "linear";
 
@@ -699,8 +695,6 @@ public class KmlRenderer implements Renderer {
 		String name = "";
 		String label = "";
 
-		//TODO: time
-		
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
 		LocalDate startDate = formatter.parseLocalDate(area.getStartTime());

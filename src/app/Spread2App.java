@@ -15,8 +15,8 @@ public class Spread2App {
 	
 	private static final String SHORT_NAME = "SPREAD";
 	private static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
-    private static final String VERSION = "2.0.1";
-    private static final String CODENAME = "One O'Clock Gun";
+    private static final String VERSION = "2.0.2";
+    private static final String CODENAME = "Classy & Fabulous.";
     private static final String DATE_STRING = "2015";
 	
 	private static final String FILIP_BIELEJEC = "Filip Bielejec";
@@ -48,7 +48,7 @@ public class Spread2App {
         System.out.println();
         centreLine(SHORT_NAME + " version " + VERSION + " (" + DATE_STRING + ")" + " -- " + CODENAME , 60);
         centreLine(LONG_NAME, 60);
-        centreLine("Authors: " + FILIP_BIELEJEC + ", " + GUY_BAELE + ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and "  + PHILIPPE_LEMEY , 60);
+        centreLine("Authors: " + FILIP_BIELEJEC + ", " + GUY_BAELE + ", " + ANDREW_RAMBAUT + ", " + MARC_SUCHARD + " and "  + PHILIPPE_LEMEY , 60);
         centreLine("Thanks to: Stephan Nylinder " + "", 60);
         
         System.out.println();        
