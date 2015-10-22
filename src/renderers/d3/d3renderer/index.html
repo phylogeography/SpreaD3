@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spread2 JS/D3 Renderer</title>
+
+<!-- libs -->
+<script type="text/javascript" src="lib/d3/d3.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="lib/d3.slider/d3.slider.js"></script>
+<link rel="stylesheet" href="lib/d3.slider/d3.slider.css" />
+<script type="text/javascript" src="lib/collabsible/collabsible.js"></script>
+<script type="text/javascript" src="lib/colorlegend/colorlegend.js"></script>
+<script type="text/javascript" src="lib/queue/queue.v1.min.js"></script>
+<script type="text/javascript" src="lib/kodama/kodama.js"></script>
+
+<!-- <script type="text/javascript" src="../lib/colorbrewer/colorbrewer.js"></script> -->
+
+<!-- sources -->
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="topo.js"></script>
+<script type="text/javascript" src="panels.js"></script>
+<script type="text/javascript" src="lines.js"></script>
+<script type="text/javascript" src="locations.js"></script>
+<script type="text/javascript" src="points.js"></script>
+<script type="text/javascript" src="areas.js"></script>
+
+<style type="text/css">
+#container {
+	margin-top: 1.5cm;
+	border: 2px solid #000;
+	border-radius: 5px;
+	height: 100%;
+	overflow: hidden;
+	/* 	background: #000000; */
+	/* 	background: #ffffff; */
+}
+
+.graticule {
+	fill: none;
+	stroke: #bbb;
+	stroke-width: .5px;
+	stroke-opacity: .5;
+}
+
+.equator {
+	stroke: #ccc;
+	stroke-width: 1px;
+}
+
+.line.hover {
+	stroke: #2298c4
+}
+
+/* .topo { */
+/* 	fill: #282828; */
+/* 	stroke: #C0C0C0; */
+/* 	fill: #ffffff; */
+/* 	stroke: #000000; */
+/* } */
+.selectors {
+	margin-top: 1.5cm;
+	float: left;
+}
+
+.buttons {
+	position: absolute;
+	left: 10px;
+	top: 150px;
+}
+
+.playPause {
+	float: left;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #CCCCCC;
+	border-radius: 5px;
+	width: 40px;
+	height: 40px;
+	/*  position: absolute; */
+	background: url('img/play.png');
+}
+
+#timeSlider {
+	margin-left: 80px;
+	margin-right: 5px;
+}
+
+.playPause.playing {
+	background: url('img/pause.png');
+}
+
+/* styling for collapsible panels */
+.panel, .panelcollapsed {
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+/* panel heading */
+.panel h2, .panelcollapsed h2 {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 0px;
+	padding: 4px;
+	padding-left: 20px;
+	/*	background: #EEEEEE; */
+	background-image: url('img/arrow-up.gif');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-top: 1px solid #CCC;
+	/*	border-bottom: 1px solid #CCC;
+			border-right: 1px solid #CCC;
+			border-left: 1px solid #CCC;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			*/
+}
+
+/* panel heading on rollover */
+.panel h2:hover, .panelcollapsed h2:hover {
+	background-color: #F5F7F9;
+}
+
+/* heading of a collapsed panel */
+.panelcollapsed h2 {
+	/*	background: #DDDDDD; */
+	background-image: url('img/arrow-dn.gif');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-color: #CCC;
+}
+
+/* panel content - do not set borders or paddings */
+.panelcontent {
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+/* collapsed panel content */
+.panelcollapsed .panelcontent {
+	display: none;
+}
+
+/* color legends */
+.legend {
+	background-color: #fff;
+	width: 100px;
+	height: 300px;
+	font-size: 20px;
+	/*  	border: 1px solid #bbb; */
+	/* 	margin: 10px; */
+	/* 	float: left; */
+}
+
+.wrapper {
+	width: 190px;
+	margin-left: 10px;
+	margin-right: 15px;
+}
+
+.wrapper>div {
+	margin: 25px 0;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="all" style="display: block;">
+
+		<div id="controls">
+			<h2>
+				Current date: <span id="currentDate"> 0 </span>
+			</h2>
+			<!-- 			<div id="wrapper" style="display: block;"> -->
+			<div>
+				<div id="playPause"></div>
+				<div id="timeSlider"></div>
+			</div>
+		</div>
+
+
+		<div class="selectorsANDcontainer" style="display: block;">
+
+			<div class="selectors" style="display: block;">
+
+				<!-- SELECTORS -->
+
+
+				<div class="buttons">
+					<button data-zoom="+1">Zoom In</button>
+					<button data-zoom="-1">Zoom Out</button>
+				</div>
+
+				<div class="panel">
+					<h2>Export</h2>
+					<div class="panelcontent">
+						<button id="saveSVG">Save SVG</button>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Line color attribute</h2>
+					<div class="panelcontent">
+						<select id="linecolor">
+						</select>
+						<div id="linesColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Line curvature</h2>
+					<div class="panelcontent">
+
+						<div class="wrapper">
+<!-- 							<h6>Min bend</h6> -->
+<!-- 							<div id="minBendSlider"></div> -->
+
+							<h6>Max curvature</h6>
+							<div id="maxCurvatureSlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Point color attribute</h2>
+					<div class="panelcontent">
+						<select id="pointcolor">
+						</select>
+						<div id="pointsColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Point area attribute</h2>
+					<div class="panelcontent">
+						<select id="pointarea">
+						</select>
+						<!--                         <div id="pointsAreaLegend" class="legend"></div> -->
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Map fill attribute</h2>
+					<div class="panelcontent">
+						<select id="mapcolor">
+						</select>
+						<div id="mapColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Background color</h2>
+					<div class="panelcontent">
+						<select id="mapbackground">
+						</select>
+						<div id="mapBackgroundLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Label color</h2>
+					<div class="panelcontent">
+						<select id="labelcolor">
+						</select>
+						<div id="labelColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+			</div>
+			<!-- END: selectors-->
+
+			<div id="container"></div>
+
+		</div>
+		<!-- END: selectorsANDcontainer-->
+
+	</div>
+	<!-- END: all-->
+
+	<form id="svgform" method="post" action="download.pl">
+		<input type="hidden" id="output_format" name="output_format" value="">
+		<input type="hidden" id="data" name="data" value="">
+	</form>
+	<!-- END: form-->
+
+	<script type="text/javascript" src="script.js"></script>
+
+</body>
+</html>

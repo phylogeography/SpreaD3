@@ -5,7 +5,7 @@ import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.parsing.TimeSlicerSettings;
 import settings.reading.JsonReaderSettings;
-import settings.rendering.GeoJSONRendererSettings;
+import settings.rendering.D3RendererSettings;
 import settings.rendering.KmlRendererSettings;
 
 public class Settings {
@@ -35,8 +35,8 @@ public class Settings {
 	public boolean kml = false;
 	public KmlRendererSettings kmlRendererSettings = null;
 
-	public boolean geojson = false;
-	public GeoJSONRendererSettings geoJSONRendererSettings = null;
+	public boolean d3 = false;
+	public D3RendererSettings d3RendererSettings = null;
 
 	// ---READERS---//
 
