@@ -23,6 +23,11 @@ h3. DISCRETE TREE PARSER
 * no map [BUG, SHIFTED IN JSON]
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
 
+h3. DISCRETE TREE D3 RENDERER
+
+* this will generate a webpage and point system default browser to it:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/ebov_discrete.json -output /home/filip/Pulpit/output
+
 
 h3. DISCRETE TREE KML RENDERER
 
@@ -104,6 +109,13 @@ h3. BAYES FACTORS PARSER
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/locations.txt -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/FMDV_Ecuador.log -burnin 10 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output fmdv_bf.json
 
 
+h3. BAYES FACTORS D3 RENDERER
+
+
+* this will generate a webpage and point system default browser to it:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/test_bf.json -output /home/filip/Pulpit/output
+
+
 h3. BAYES FACTORS KML RENDERER
 
 
@@ -142,6 +154,13 @@ h3. CONTINUOUS TREE PARSER
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
 
 
+h3. CONTINUOUS TREE D3 RENDERER
+
+
+* this will generate a webpage in the output directory and point system default browser to it:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/languages_worldmap.json -output /home/filip/Pulpit/output
+
+
 h3. CONTINUOUS TREE KML RENDERER
 
 * default settings
@@ -166,6 +185,13 @@ h3. TIME SLICING PARSER
 
 * Override some of the default settings
 -parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
+
+
+h3. TIME SLICING D3 RENDERER
+
+
+* this will generate a webpage in the output directory and point system default browser to it. Previous output is overwritten:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/slicing_test.json -output /home/filip/Pulpit/output
 
 
 h3. TIME SLICING KML RENDERER

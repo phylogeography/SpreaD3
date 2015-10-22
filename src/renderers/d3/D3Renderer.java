@@ -8,11 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 import org.apache.commons.io.FileUtils;
-
 import settings.rendering.D3RendererSettings;
 
 public class D3Renderer {
@@ -20,7 +16,7 @@ public class D3Renderer {
 	private static final String D3_RENDERER_DIR = "/renderers/d3/d3renderer";
 	private static final String D3_DATA_DIR = "/data/data.json";
 	private static final String HTML = "index.html";
-	
+
 	private D3RendererSettings settings;
 
 	public D3Renderer(D3RendererSettings settings) {
@@ -52,7 +48,7 @@ public class D3Renderer {
 		// point system default browser to index.html
 		String htmlPath = settings.output.concat("/").concat(HTML);
 		openInBrowser(htmlPath);
-		
+
 	}// END: render
 
 	private String getRunningJarName() {
@@ -76,7 +72,8 @@ public class D3Renderer {
 
 		try {
 
-			URI uri = new URL(url).toURI();
+			File htmlFile = new File(url);
+			URI uri = htmlFile.toURI();
 			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
 
 			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -85,10 +82,6 @@ public class D3Renderer {
 
 		} catch (MalformedURLException e) {
 
-			handleBrowseException(url);
-
-		} catch (URISyntaxException e) {
-			
 			handleBrowseException(url);
 
 		} catch (IOException e) {
