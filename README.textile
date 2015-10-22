@@ -13,11 +13,9 @@ SPREAD is a program supporting processing and visualizations of Bayesian phyloge
 
 h1. USAGE EXAMPLES
 
-Spread visualisation comprises 2-steps: 
-Parsing is done to a JSON file (data format). 
-All the style choices are done in a second, renderering step, avoiding time consuming re-runs.
+Spread visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), and then all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
 
-Spread supports KML output for viewing in GoogleEarth www.google.com/intl/pl/earth/ as well as in-browser, interactive display of the data, driven by D3 libraries www.d3js.org. 
+Spread supports KML output for viewing in GoogleEarth [www.google.com/intl/pl/earth/] as well as in-browser, interactive display of the data, driven by D3 libraries [www.d3js.org]. 
 
 h3. DISCRETE TREE PARSER
 
