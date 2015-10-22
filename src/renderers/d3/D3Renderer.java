@@ -5,16 +5,22 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
 import org.apache.commons.io.FileUtils;
 import settings.rendering.D3RendererSettings;
 
 public class D3Renderer {
 
-	private static final String D3_RENDERER_DIR = "/renderers/d3/d3renderer";
-	private static final String D3_DATA_DIR = "/data/data.json";
+	private static final String D3_RENDERER_DIR = "renderers/d3/d3renderer/";
+	private static final String D3_DATA_DIR = "data/data.json";
 	private static final String HTML = "index.html";
 
 	private D3RendererSettings settings;
@@ -28,26 +34,72 @@ public class D3Renderer {
 	public void render() throws IOException {
 
 		// Copy d3renderer dir to path/output
-		String d3rendererPath;
 		String runningJarName = getRunningJarName();
 		if (runningJarName != null) {
-			d3rendererPath = "jar:" + this.getClass().getResource(D3_RENDERER_DIR).getPath();
-		} else {
-			d3rendererPath = this.getClass().getResource(D3_RENDERER_DIR).getPath();
+
+			JarFile jarfile = new JarFile(runningJarName);
+			Enumeration<JarEntry> enumeration = jarfile.entries();
+
+			while (enumeration.hasMoreElements()) {
+
+				String destdir = settings.output;
+				JarEntry je = enumeration.nextElement();
+
+				if (je.toString().startsWith(D3_RENDERER_DIR)) {
+
+					// System.out.println(je.getName());
+
+					File fl = new File(destdir, je.getName());
+					if (!fl.exists()) {
+						fl.getParentFile().mkdirs();
+						fl = new File(destdir, je.getName());
+					}
+
+					if (je.isDirectory()) {
+						continue;
+					}
+
+					java.io.InputStream is = jarfile.getInputStream(je);
+					java.io.FileOutputStream fo = new java.io.FileOutputStream(fl);
+
+					while (is.available() > 0) {
+						fo.write(is.read());
+					}
+
+					fo.close();
+					is.close();
+				}
+
+			} // END: entries loop
+			jarfile.close();
+
+			// copy input.json to path/output/data/data.json
+			File srcDir = new File(settings.json);
+			String destPath = settings.output.concat("/").concat(D3_RENDERER_DIR).concat(D3_DATA_DIR);
+			File destDir = new File(destPath);
+			FileUtils.copyFile(srcDir, destDir);
+
+			// point system default browser to index.html
+			String htmlPath = settings.output.concat("/").concat(D3_RENDERER_DIR).concat(HTML);
+			openInBrowser(htmlPath);
+
+		} else {// running from IDE
+
+			String d3rendererPath = this.getClass().getResource("/".concat(D3_RENDERER_DIR)).getPath();
+			File srcDir = new File(d3rendererPath);
+			File destDir = new File(settings.output);
+			FileUtils.copyDirectory(srcDir, destDir);
+
+			// copy input.json to path/output/data/data.json
+			srcDir = new File(settings.json);
+			destDir = new File(settings.output.concat(D3_DATA_DIR));
+			FileUtils.copyFile(srcDir, destDir);
+
+			// point system default browser to index.html
+			String htmlPath = settings.output.concat("/").concat(HTML);
+			openInBrowser(htmlPath);
+
 		}
-
-		File srcDir = new File(d3rendererPath);
-		File destDir = new File(settings.output);
-		FileUtils.copyDirectory(srcDir, destDir);
-
-		// copy input.json to path/output/data/data.json
-		srcDir = new File(settings.json);
-		destDir = new File(settings.output.concat(D3_DATA_DIR));
-		FileUtils.copyFile(srcDir, destDir);
-
-		// point system default browser to index.html
-		String htmlPath = settings.output.concat("/").concat(HTML);
-		openInBrowser(htmlPath);
 
 	}// END: render
 
