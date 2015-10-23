@@ -96,19 +96,19 @@ public class DefaultHelpMenuFactory implements MenuFactory {
 				
 				Desktop.getDesktop()
 						.browse(new URI(
-								"http://rega.kuleuven.be/cev/ecv/software/buss"));
+								"http://rega.kuleuven.be/cev/ecv/software/spread"));
 				
 			} catch (IOException e) {
 				
-//				Utils.handleException(
-//						e,
-//						"Problem occurred while trying to open this link in your system's standard browser.");
+				InterfaceUtils.handleException(
+						e,
+						"Problem occurred while trying to open this link in your system's standard browser.");
 				
 			} catch (URISyntaxException e) {
 				
-//				Utils.handleException(
-//						e,
-//						"Problem occurred while trying to open this link in your system's standard browser.");
+				InterfaceUtils.handleException(
+						e,
+						"Problem occurred while trying to open this link in your system's standard browser.");
 				
 			}
 
