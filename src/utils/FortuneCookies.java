@@ -30,6 +30,14 @@ public class FortuneCookies {
 "Ice cream soup", //
 "Making fun of someones name is pretty immature", //
 "Gobbledegook", //
+"Come on-a my house, my house, I'm gonna give you candy",
+
+
+//---TEAM AMERICA---//
+"Remember, there's is no I in Team America",
+"Great job, team. Head back to base for debriefing and cocktails",
+
+
 
 //---INSERT BENDER QUOTES HERE---//
 
