@@ -68,6 +68,7 @@ public class ContinuousTreeParser {
 		
 		// hack
 		String prefix = xCoordinate.replaceAll("\\d*$", "");
+		//TODO: parse HPD automagically
 		String modalityAttributeName = prefix.concat("_").concat(hpd) .concat("%").concat("HPD_modality");
 		
 		int index = 0;

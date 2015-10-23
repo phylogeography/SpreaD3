@@ -13,12 +13,12 @@ public class Spread2App {
 
 	public static final boolean DEBUG = true;
 	
-	private static final String SHORT_NAME = "SPREAD";
-	private static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
-    private static final String VERSION = "2.0.2";
+	public static final String SHORT_NAME = "SPREAD";
+	public static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
+    public static final String VERSION = "2.0.2";
+    public  static final String DATE_STRING = "2015";
     private static final String CODENAME = "Classy & Fabulous.";
-    private static final String DATE_STRING = "2015";
-	
+    
 	private static final String FILIP_BIELEJEC = "Filip Bielejec";
 	private static final String GUY_BAELE = "Guy Baele";
 	private static final String ANDREW_RAMBAUT = "Andrew Rambaut";
@@ -37,7 +37,8 @@ public class Spread2App {
 				
 			} else {
 				
-				Spread2UIApp gui = new Spread2UIApp();
+//				Spread2UIApp gui = 
+						new Spread2UIApp();
 				
 			}
 
