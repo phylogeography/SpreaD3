@@ -584,7 +584,7 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(TREE)) {
 
-						settings.discreteTreeSettings.tree = args1.getStringOption(TREE);
+						settings.discreteTreeSettings.treeFilename = args1.getStringOption(TREE);
 
 					} else {
 

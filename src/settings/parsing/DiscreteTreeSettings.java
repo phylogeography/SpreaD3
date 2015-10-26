@@ -1,11 +1,13 @@
 package settings.parsing;
 
+import jebl.evolution.trees.RootedTree;
+
 public class DiscreteTreeSettings {
 
 	//---REQUIRED---//
 	
 	// path to tree file
-	public String tree = null;
+	public String treeFilename = null;
 	
 	// path to locations file
 	public String locations = null;
@@ -33,5 +35,9 @@ public class DiscreteTreeSettings {
 	public boolean header = false;
 
 	public String geojson = null;
+	
+	//---GUI---//
+	
+	public RootedTree rootedTree = null;
 	
 }//END: class

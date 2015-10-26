@@ -42,7 +42,7 @@ public class DiscreteTreeSpreadDataParser {
 
 		// ---IMPORT---//
 
-		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
+		RootedTree rootedTree = Utils.importRootedTree(settings.treeFilename);
 
 		System.out.println("Imported tree");
 		
@@ -96,7 +96,7 @@ public class DiscreteTreeSpreadDataParser {
 
 		LinkedList<Point> countsList = treeParser.getCountsList();
 		
-		String countsLayerId = Utils.splitString(settings.tree, "/");
+		String countsLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer countsLayer = new Layer(countsLayerId, //
 				"Lineages holding the state", //
 				countsList //
@@ -111,7 +111,7 @@ public class DiscreteTreeSpreadDataParser {
 		LinkedList<Line> linesList = treeParser.getLinesList();
 		LinkedList<Point> pointsList = treeParser.getPointsList();
 
-		String treeLayerId = Utils.splitString(settings.tree, "/");
+		String treeLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer treeLayer = new Layer(treeLayerId, //
 				"Discrete tree visualisation", //
 				pointsList, //

@@ -30,12 +30,14 @@ import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NexusImporter;
 import jebl.evolution.trees.RootedTree;
 import settings.Settings;
+import settings.parsing.DiscreteTreeSettings;
 import utils.Utils;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DataPanel extends JPanel implements Exportable {
 
-	private Settings settings;
+//	private Settings settings;
+	private DiscreteTreeSettings discreteTreeSettings;
 	private MainFrame frame;
 
 	// Panels
@@ -44,7 +46,8 @@ public class DataPanel extends JPanel implements Exportable {
 
 	// Buttons
 	private JButton loadTree;
-
+   private JButton setupLocationCoordinates;
+	
 	// Combo boxes
 	private JComboBox parserSelector;
 	private ComboBoxModel parserSelectorModel;
@@ -53,10 +56,12 @@ public class DataPanel extends JPanel implements Exportable {
 	// Directories
 	// private File workingDirectory = null;
 
-	public DataPanel(MainFrame frame, Settings settings) {
+	public DataPanel(MainFrame frame
+//			, Settings settings
+			) {
 
 		this.frame = frame;
-		this.settings = settings;
+//		this.settings = settings;
 
 		optionPanel = new OptionsPanel(12, 12, SwingConstants.CENTER);
 		holderPanel = new OptionsPanel(12, 12, SwingConstants.CENTER);
@@ -126,6 +131,8 @@ public class DataPanel extends JPanel implements Exportable {
 
 	private void populateDiscreteTreePanels() {
 
+		 discreteTreeSettings = new DiscreteTreeSettings();
+		
 		holderPanel.removeAll();
 
 		loadTree = new JButton("Load",
@@ -165,7 +172,8 @@ public class DataPanel extends JPanel implements Exportable {
 						frame.setWorkingDirectory(tmpDir);
 					}
 
-					populateLocationAttributeCombobox(treeFilename);
+				 discreteTreeSettings.treeFilename = treeFilename;
+					populateLocationAttributeCombobox( discreteTreeSettings.treeFilename);
 
 				} else {
 					frame.setStatus("Could not Open! \n");
@@ -191,12 +199,13 @@ public class DataPanel extends JPanel implements Exportable {
 
 					NexusImporter importer = new NexusImporter(new FileReader(
 							treeFilename));
-					RootedTree tree = (RootedTree) importer.importNextTree();
-
+//					RootedTree rootedTree = (RootedTree) importer.importNextTree();
+                    discreteTreeSettings.rootedTree = (RootedTree) importer.importNextTree();
+					
 					LinkedHashSet<String> uniqueAttributes = new LinkedHashSet<String>();
 
-					for (Node node : tree.getNodes()) {
-						if (!tree.isRoot(node)) {
+					for (Node node : discreteTreeSettings.rootedTree.getNodes()) {
+						if (!discreteTreeSettings.rootedTree.isRoot(node)) {
 
 							uniqueAttributes.addAll(node.getAttributeNames());
 
@@ -258,10 +267,14 @@ public class DataPanel extends JPanel implements Exportable {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
 
 				Object item = event.getItem();
-
-				// TODO
-
-				frame.setStatus("Location attribute '" + item.toString() + "'"
+				String locationAttribute = item.toString();
+				
+				setupLocationCoordinates = new JButton("Setup", InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+				setupLocationCoordinates .addActionListener(new ListenOpenLocationCoordinatesEditor());
+				holderPanel.addComponentWithLabel("Setup location attribute coordinates:", setupLocationCoordinates);
+				
+				discreteTreeSettings.locationAttribute = locationAttribute;
+				frame.setStatus("Location attribute '" + locationAttribute + "'"
 						+ " selected");
 
 			}// END: selected check
@@ -269,6 +282,22 @@ public class DataPanel extends JPanel implements Exportable {
 
 	}// END: ListenParserSelector
 
+	
+	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			// TODO
+
+				LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame, frame.getWorkingDirectory(),  discreteTreeSettings);
+				locationCoordinatesEditor.launch();
+				
+//				table = locationCoordinatesEditor.getTable();
+
+
+
+		}// END: actionPerformed
+	}// END: ListenOpenLocations
+	
 	// ////////////////////
 	// ---BAYES FACTOR---//
 	// ////////////////////

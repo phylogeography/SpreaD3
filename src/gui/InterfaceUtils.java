@@ -16,6 +16,8 @@ public class InterfaceUtils {
 	public static final String SPREAD_ICON = "/gui/icons/spread.png";
 	public static final String ERROR_ICON = "/gui/icons/error.png";
 	public static final String TREE_ICON = "/gui/icons/tree.png";
+	public static final String LOCATIONS_ICON = "/gui/icons/locations.png";
+	
 	
 	
 	public static Image CreateImage(String path) {

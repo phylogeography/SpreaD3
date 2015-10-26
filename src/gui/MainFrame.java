@@ -22,7 +22,7 @@ import settings.Settings;
 
 public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
-	private Settings settings;
+//	private Settings settings;
 
 	// tabs, there shall be two
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -42,7 +42,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		super();
 
 		setTitle(title);
-		settings = new Settings();
+//		settings = new Settings();
 
 	}// END: Constructor
 
@@ -52,7 +52,9 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		setSize(new Dimension(1300, 600));
 		setMinimumSize(new Dimension(260, 100));
 
-		dataPanel = new DataPanel(this, settings);
+		dataPanel = new DataPanel(this
+//				, settings
+				);
 		tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
 
 		statusLabel = new JLabel("Welcome to " + Spread2App.SHORT_NAME);
