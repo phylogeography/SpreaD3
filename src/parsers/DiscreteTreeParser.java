@@ -25,7 +25,6 @@ public class DiscreteTreeParser {
 
 	private String locationTrait;
 	private RootedTree rootedTree;
-//	private String mrsd;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
 
@@ -40,7 +39,6 @@ public class DiscreteTreeParser {
 	public DiscreteTreeParser(RootedTree rootedTree, //
 			String locationTrait, //
 			LinkedList<Location> locationsList, //
-//			String mrsd, //
 			TimeParser timeParser, //
 			double timescaleMultiplier //
 	) throws AnalysisException {
@@ -49,7 +47,6 @@ public class DiscreteTreeParser {
 		this.rootedTree = rootedTree;
 		this.timeParser = timeParser;
 		this.timescaleMultiplier = timescaleMultiplier;
-//		this.timeParser = new TimeParser(this.mrsd);
 
 		// structures
 		this.locationsList = locationsList;
@@ -70,8 +67,6 @@ public class DiscreteTreeParser {
 		Double[] sliceHeights = createSliceHeights(10);
 		int[][] locationCounts = new int[sliceHeights.length][locationsList
 				.size()];
-
-//		timeParser.parseTime();
 
 		int index = 0;
 		Location dummy;

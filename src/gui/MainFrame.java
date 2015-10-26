@@ -14,78 +14,149 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.BorderUIResource;
 
 import app.Spread2App;
 import settings.Settings;
 
-
 public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 	private Settings settings;
-	
+
 	// tabs, there shall be two
-    private JTabbedPane tabbedPane = new JTabbedPane();
-    
-    private final String DATA_TAB_NAME = "Data";
-    private DataPanel dataPanel;
-    
-    
-    // labels
-    private JLabel statusLabel;
-    private JProgressBar progressBar;
-    
-	public MainFrame(String title)  {
+	private JTabbedPane tabbedPane = new JTabbedPane();
 
-        super();
+	private final String DATA_TAB_NAME = "Data";
+	private DataPanel dataPanel;
 
-        setTitle(title);
-	    settings =  new Settings();
-        
-	}//END: Constructor
+	// labels
+	private JLabel statusLabel;
+	private JProgressBar progressBar;
 
-	
+	// Directories
+	private File workingDirectory = null;
+
+	public MainFrame(String title) {
+
+		super();
+
+		setTitle(title);
+		settings = new Settings();
+
+	}// END: Constructor
+
 	@Override
 	protected void initializeComponents() {
 
-        setSize(new Dimension(1300, 600));
-        setMinimumSize(new Dimension(260, 100));
-		
-		
-        dataPanel = new DataPanel(this, settings);
-        tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
-		
-        
-        statusLabel = new JLabel("Welcome to " + Spread2App.SHORT_NAME);
+		setSize(new Dimension(1300, 600));
+		setMinimumSize(new Dimension(260, 100));
 
-        JPanel progressPanel = new JPanel(new BorderLayout(0, 0));
-        progressBar = new JProgressBar();
-        progressPanel.add(progressBar, BorderLayout.CENTER);
+		dataPanel = new DataPanel(this, settings);
+		tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
 
-        JPanel statusPanel = new JPanel(new BorderLayout(0, 0));
-        statusPanel.add(statusLabel, BorderLayout.CENTER);
-        statusPanel.add(progressPanel, BorderLayout.EAST);
-        statusPanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
-                new Insets(0, 6, 0, 6)));
+		statusLabel = new JLabel("Welcome to " + Spread2App.SHORT_NAME);
 
-        JPanel tabbedPanePanel = new JPanel(new BorderLayout(0, 0));
-        tabbedPanePanel.add(tabbedPane, BorderLayout.CENTER);
-        tabbedPanePanel.add(statusPanel, BorderLayout.SOUTH);
-        tabbedPanePanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
-                new Insets(12, 12, 12, 12)));
+		JPanel progressPanel = new JPanel(new BorderLayout(0, 0));
+		progressBar = new JProgressBar();
+		progressPanel.add(progressBar, BorderLayout.CENTER);
 
-        getContentPane().setLayout(new java.awt.BorderLayout(0, 0));
-        getContentPane().add(tabbedPanePanel, BorderLayout.CENTER);
+		JPanel statusPanel = new JPanel(new BorderLayout(0, 0));
+		statusPanel.add(statusLabel, BorderLayout.CENTER);
+		statusPanel.add(progressPanel, BorderLayout.EAST);
+		statusPanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
+				new Insets(0, 6, 0, 6)));
 
-        tabbedPane.setSelectedComponent(dataPanel);
-        
-        
-	}//END: initializeComponents
+		JPanel tabbedPanePanel = new JPanel(new BorderLayout(0, 0));
+		tabbedPanePanel.add(tabbedPane, BorderLayout.CENTER);
+		tabbedPanePanel.add(statusPanel, BorderLayout.SOUTH);
+		tabbedPanePanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
+				new Insets(12, 12, 12, 12)));
+
+		getContentPane().setLayout(new java.awt.BorderLayout(0, 0));
+		getContentPane().add(tabbedPanePanel, BorderLayout.CENTER);
+
+		tabbedPane.setSelectedComponent(dataPanel);
+
+	}// END: initializeComponents
+
+	// //////////////////////
+	// ---SHARED METHODS---//
+	// //////////////////////
+
+	public void setStatus(final String status) {
+
+		if (SwingUtilities.isEventDispatchThread()) {
+
+			statusLabel.setText(status);
+
+		} else {
+
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+
+					statusLabel.setText(status);
+
+				}
+			});
+		}// END: edt check
+
+	}// END: setStatus
+
+    public void setBusy() {
+
+        if (SwingUtilities.isEventDispatchThread()) {
+
+//            simulationPanel.setBusy();
+            progressBar.setIndeterminate(true);
+
+        } else {
+
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+
+//                    simulationPanel.setBusy();
+                    progressBar.setIndeterminate(true);
+
+                }
+            });
+        }// END: edt check
+
+    }// END: setBusy
+
+    public void setIdle() {
+
+        if (SwingUtilities.isEventDispatchThread()) {
+
+//            simulationPanel.setIdle();
+            progressBar.setIndeterminate(false);
+
+        } else {
+
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+
+//                    simulationPanel.setIdle();
+                    progressBar.setIndeterminate(false);
+
+                }
+            });
+        }// END: edt check
+
+    }// END: setIdle
 	
-    // /////////////////
-    // ---MAIN MENU---//
-    // /////////////////
-	
+	public File getWorkingDirectory() {
+		return workingDirectory;
+	}// END: getWorkingDirectory
+
+	public void setWorkingDirectory(File workingDirectory) {
+		this.workingDirectory = workingDirectory;
+	}// END: setWorkingDirectory
+
+	// /////////////////
+	// ---MAIN MENU---//
+	// /////////////////
+
 	@Override
 	public Action getLoadSettingsAction() {
 		// TODO Auto-generated method stub
@@ -116,7 +187,4 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		return false;
 	}
 
-	
-	
-	
-}//END: class
+}// END: class

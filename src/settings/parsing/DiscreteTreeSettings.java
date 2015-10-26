@@ -11,7 +11,7 @@ public class DiscreteTreeSettings {
 	public String locations = null;
 	
 	// location attribute name
-	public String locationTrait = null;
+	public String locationAttribute = null;
 	
 	//---OPTIONAL---//
 	

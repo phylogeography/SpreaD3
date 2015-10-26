@@ -87,7 +87,7 @@ public class DiscreteTreeSpreadDataParser {
 		
 		DiscreteTreeParser treeParser = new DiscreteTreeParser( //
 				rootedTree, //
-				settings.locationTrait, //
+				settings.locationAttribute, //
 				locationsList, //
 				timeParser, //
 				settings.timescaleMultiplier//
