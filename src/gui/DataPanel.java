@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
@@ -36,7 +37,7 @@ import utils.Utils;
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DataPanel extends JPanel implements Exportable {
 
-//	private Settings settings;
+	// private Settings settings;
 	private DiscreteTreeSettings discreteTreeSettings;
 	private MainFrame frame;
 
@@ -46,22 +47,41 @@ public class DataPanel extends JPanel implements Exportable {
 
 	// Buttons
 	private JButton loadTree;
-   private JButton setupLocationCoordinates;
+	private boolean loadTreeCreated = false;
+	private JButton setupLocationCoordinates;
+	private boolean setupLocationCoordinatesCreated = false;
+	private JButton loadGeojson;
+	private boolean loadGeojsonCreated = false;
+	private JButton output;
+	private boolean outputCreated = false;
+
+	
 	
 	// Combo boxes
 	private JComboBox parserSelector;
 	private ComboBoxModel parserSelectorModel;
 	private JComboBox locationAttributeSelector;
+	private boolean locationAttributeSelectorCreated = false;
+
+	// Date editor
+	private DateEditor dateEditor;
+	private boolean dateEditorCreated = false;
+
+	// Text fields
+	private JTextField timescaleMultiplier;
+	private boolean timescaleMultiplierCreated = false;
+	private JTextField intervals;
+	private boolean intervalsCreated = false;
 
 	// Directories
 	// private File workingDirectory = null;
 
 	public DataPanel(MainFrame frame
-//			, Settings settings
-			) {
+	// , Settings settings
+	) {
 
 		this.frame = frame;
-//		this.settings = settings;
+		// this.settings = settings;
 
 		optionPanel = new OptionsPanel(12, 12, SwingConstants.CENTER);
 		holderPanel = new OptionsPanel(12, 12, SwingConstants.CENTER);
@@ -120,7 +140,7 @@ public class DataPanel extends JPanel implements Exportable {
 
 				frame.setStatus(item.toString() + " selected");
 
-			}// END: selected check
+			} // END: selected check
 		}// END: itemStateChanged
 
 	}// END: ListenParserSelector
@@ -129,19 +149,28 @@ public class DataPanel extends JPanel implements Exportable {
 	// ---DISCRETE TREE---//
 	// /////////////////////
 
+	private void resetDiscreteTreeFlags() {
+
+		loadTreeCreated = false;
+		locationAttributeSelectorCreated = false;
+		setupLocationCoordinatesCreated = false;
+
+	}// END: resetDiscreteTreeFlags
+
 	private void populateDiscreteTreePanels() {
 
-		 discreteTreeSettings = new DiscreteTreeSettings();
-		
+		discreteTreeSettings = new DiscreteTreeSettings();
+
 		holderPanel.removeAll();
+		resetDiscreteTreeFlags();
 
-		loadTree = new JButton("Load",
-				InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+		loadTree = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
 		loadTree.addActionListener(new ListenLoadTree());
-		holderPanel.addComponentWithLabel("Load tree file:", loadTree);
 
-		// tmpPanel.add(loadTree);
-		// optionPanel.add(tmpPanel);
+		if (!loadTreeCreated) {
+			holderPanel.addComponentWithLabel("Load tree file:", loadTree);
+			loadTreeCreated = true;
+		}
 
 	}// END: populateDiscreteTreePanels
 
@@ -155,12 +184,10 @@ public class DataPanel extends JPanel implements Exportable {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading tree file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
-						"Tree files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -172,8 +199,8 @@ public class DataPanel extends JPanel implements Exportable {
 						frame.setWorkingDirectory(tmpDir);
 					}
 
-				 discreteTreeSettings.treeFilename = treeFilename;
-					populateLocationAttributeCombobox( discreteTreeSettings.treeFilename);
+					discreteTreeSettings.treeFilename = treeFilename;
+					populateLocationAttributeCombobox(discreteTreeSettings.treeFilename);
 
 				} else {
 					frame.setStatus("Could not Open! \n");
@@ -181,7 +208,7 @@ public class DataPanel extends JPanel implements Exportable {
 
 			} catch (Exception e) {
 				InterfaceUtils.handleException(e, e.getMessage());
-			}// END: try-catch block
+			} // END: try-catch block
 
 		}// END: actionPerformed
 	}// END: ListenOpenTree
@@ -197,11 +224,11 @@ public class DataPanel extends JPanel implements Exportable {
 
 				try {
 
-					NexusImporter importer = new NexusImporter(new FileReader(
-							treeFilename));
-//					RootedTree rootedTree = (RootedTree) importer.importNextTree();
-                    discreteTreeSettings.rootedTree = (RootedTree) importer.importNextTree();
-					
+					NexusImporter importer = new NexusImporter(new FileReader(treeFilename));
+					// RootedTree rootedTree = (RootedTree)
+					// importer.importNextTree();
+					discreteTreeSettings.rootedTree = (RootedTree) importer.importNextTree();
+
 					LinkedHashSet<String> uniqueAttributes = new LinkedHashSet<String>();
 
 					for (Node node : discreteTreeSettings.rootedTree.getNodes()) {
@@ -209,47 +236,47 @@ public class DataPanel extends JPanel implements Exportable {
 
 							uniqueAttributes.addAll(node.getAttributeNames());
 
-						}// END: root check
-					}// END: nodeloop
+						} // END: root check
+					} // END: nodeloop
 
 					// re-initialise combobox
 					locationAttributeSelector = new JComboBox();
 					ComboBoxModel locationAttributeSelectorModel = new DefaultComboBoxModel(
 							uniqueAttributes.toArray(new String[0]));
-					locationAttributeSelector
-							.setModel(locationAttributeSelectorModel);
-					locationAttributeSelector
-							.addItemListener(new ListenLocationAttributeSelector());
-					holderPanel.addComponentWithLabel(
-							"Select location attribute",
-							locationAttributeSelector);
+					locationAttributeSelector.setModel(locationAttributeSelectorModel);
+					locationAttributeSelector.addItemListener(new ListenLocationAttributeSelector());
+
+					if (!locationAttributeSelectorCreated) {
+						holderPanel.addComponentWithLabel("Select location attribute", locationAttributeSelector);
+						locationAttributeSelectorCreated = true;
+					}
 
 				} catch (FileNotFoundException e) {
-					
+
 					InterfaceUtils.handleException(e, e.getMessage());
 					frame.setIdle();
 					frame.setStatus("Exception occured.");
-					
+
 				} catch (IOException e) {
-					
+
 					InterfaceUtils.handleException(e, e.getMessage());
 					frame.setIdle();
 					frame.setStatus("Exception occured.");
-					
+
 				} catch (ImportException e) {
-					
+
 					InterfaceUtils.handleException(e, e.getMessage());
 					frame.setIdle();
 					frame.setStatus("Exception occured.");
-					
-				}// END: try-catch block
+
+				} // END: try-catch block
 
 				return null;
 			}// END: doInBackground
 
 			// Executed in event dispatch thread
 			public void done() {
-				
+
 				frame.setStatus("Opened " + treeFilename + "\n");
 				frame.setIdle();
 
@@ -268,36 +295,74 @@ public class DataPanel extends JPanel implements Exportable {
 
 				Object item = event.getItem();
 				String locationAttribute = item.toString();
-				
-				setupLocationCoordinates = new JButton("Setup", InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
-				setupLocationCoordinates .addActionListener(new ListenOpenLocationCoordinatesEditor());
-				holderPanel.addComponentWithLabel("Setup location attribute coordinates:", setupLocationCoordinates);
-				
-				discreteTreeSettings.locationAttribute = locationAttribute;
-				frame.setStatus("Location attribute '" + locationAttribute + "'"
-						+ " selected");
 
-			}// END: selected check
+				setupLocationCoordinates = new JButton("Setup",
+						InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+				setupLocationCoordinates.addActionListener(new ListenOpenLocationCoordinatesEditor());
+
+				if (!setupLocationCoordinatesCreated) {
+					holderPanel.addComponentWithLabel("Setup location attribute coordinates:",
+							setupLocationCoordinates);
+					setupLocationCoordinatesCreated = true;
+				}
+
+				discreteTreeSettings.locationAttributeName = locationAttribute;
+				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
+
+			} // END: selected check
 		}// END: itemStateChanged
 
 	}// END: ListenParserSelector
 
-	
 	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
-			// TODO
+			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame,
+					discreteTreeSettings);
+			locationCoordinatesEditor.launch();
 
-				LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame, frame.getWorkingDirectory(),  discreteTreeSettings);
-				locationCoordinatesEditor.launch();
+			if (locationCoordinatesEditor.isEdited()) {
+
+				// TODO: listeners
+
+				if (!dateEditorCreated) {
+					dateEditor = new DateEditor();
+					holderPanel.addComponentWithLabel("Most recent sampling date:", dateEditor);
+					dateEditorCreated = true;
+				}
+
+				if (!timescaleMultiplierCreated) {
+					timescaleMultiplier = new JTextField(String.valueOf(discreteTreeSettings.timescaleMultiplier), 10);
+					holderPanel.addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
+					timescaleMultiplierCreated = true;
+				}
+
+				if (!loadGeojsonCreated) {
+					loadGeojson = new JButton("Load",
+							InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+					holderPanel.addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+					loadGeojsonCreated = true;
+				}
+
+				if (!intervalsCreated) {
+					intervals = new JTextField(String.valueOf(discreteTreeSettings.intervals), 10);
+					holderPanel.addComponentWithLabel("Number of intervals:", intervals);
+					intervalsCreated = true;
+				}
 				
-//				table = locationCoordinatesEditor.getTable();
+				if (!outputCreated) {
+					output = new JButton("Output",
+							InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+					holderPanel.addComponentWithLabel("Parse JSON:", output);
+					outputCreated = true;
+				}
+				
 
-
+			} // END: edited check
 
 		}// END: actionPerformed
 	}// END: ListenOpenLocations
-	
+
 	// ////////////////////
 	// ---BAYES FACTOR---//
 	// ////////////////////

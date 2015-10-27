@@ -36,11 +36,12 @@ public class InteractiveTableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int row, int column) {
-		if (column == HIDDEN_INDEX)
+		if (column == HIDDEN_INDEX) {
 			return false;
-		else
+		} else {
 			return true;
-	}
+		}
+	}// END: isCellEditable
 
 	public Class<?> getColumnClass(int column) {
 		switch (column) {
@@ -53,7 +54,7 @@ public class InteractiveTableModel extends AbstractTableModel {
 		}
 	}
 
-	public Object getValueAt(int row, int column) {
+	public String getValueAt(int row, int column) {
 		TableRecord record = (TableRecord) dataVector.get(row);
 		switch (column) {
 		case LOCATION_INDEX:
@@ -63,7 +64,7 @@ public class InteractiveTableModel extends AbstractTableModel {
 		case LATITUDE_INDEX:
 			return record.getLatitude();
 		default:
-			return new Object();
+			return new String();
 		}
 	}
 
@@ -120,20 +121,15 @@ public class InteractiveTableModel extends AbstractTableModel {
 	}
 
 	public void cleanTable() {
-		// dataVector.clear();
-		for (int i = 0; i < dataVector.size(); i++) {
-			deleteRow(i);
-		}
-	}
+		dataVector.clear();
+	}// END: cleanTable
 
 	public boolean hasEmptyRow() {
 
 		if (dataVector.size() == 0)
 			return false;
-		TableRecord tableRecord = (TableRecord) dataVector.get(dataVector
-				.size() - 1);
-		if (tableRecord.getLocation().trim().equals("")
-				&& tableRecord.getLongitude().trim().equals("")
+		TableRecord tableRecord = (TableRecord) dataVector.get(dataVector.size() - 1);
+		if (tableRecord.getLocation().trim().equals("") && tableRecord.getLongitude().trim().equals("")
 				&& tableRecord.getLatitude().trim().equals("")) {
 			return true;
 		} else

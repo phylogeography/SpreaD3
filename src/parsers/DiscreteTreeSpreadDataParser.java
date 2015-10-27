@@ -47,7 +47,7 @@ public class DiscreteTreeSpreadDataParser {
 		System.out.println("Imported tree");
 		
 		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-				settings.locations, settings.header);
+				settings.locationsFilename, settings.header);
 		locationsList = locationsParser.parseLocations();
 
 		System.out.println("Imported locations");
@@ -87,7 +87,7 @@ public class DiscreteTreeSpreadDataParser {
 		
 		DiscreteTreeParser treeParser = new DiscreteTreeParser( //
 				rootedTree, //
-				settings.locationAttribute, //
+				settings.locationAttributeName, //
 				locationsList, //
 				timeParser, //
 				settings.timescaleMultiplier//

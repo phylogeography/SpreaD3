@@ -28,6 +28,7 @@ public class Utils {
 	// ---PARSING UTILS---//
 	// /////////////////////
 
+	public static final String EMPTY_STRING = "";
 	public static final String BLANK_SPACE = "\\s+";
 	public static final String TAB = "\t";
 	public static final String HASH_COMMENT = "#";

@@ -69,7 +69,7 @@ public class DiscreteLocationsParser {
 			Coordinate coordinate = new Coordinate(latitude, longitude);
 
 			// create Location and add to the list of Locations
-			Location location = new Location(locationName, "", coordinate);
+			Location location = new Location(locationName,   coordinate);
 			locationsList.add(location);
 
 			// update coordinates range

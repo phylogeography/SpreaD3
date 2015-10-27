@@ -565,7 +565,7 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(LOCATIONS)) {
 
-						settings.discreteTreeSettings.locations = args1.getStringOption(LOCATIONS);
+						settings.discreteTreeSettings.locationsFilename = args1.getStringOption(LOCATIONS);
 
 					} else {
 
@@ -594,7 +594,7 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(LOCATION_TRAIT)) {
 
-						settings.discreteTreeSettings.locationAttribute = args1.getStringOption(LOCATION_TRAIT);
+						settings.discreteTreeSettings.locationAttributeName = args1.getStringOption(LOCATION_TRAIT);
 
 					} else {
 

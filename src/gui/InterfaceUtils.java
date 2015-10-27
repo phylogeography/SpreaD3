@@ -17,7 +17,9 @@ public class InterfaceUtils {
 	public static final String ERROR_ICON = "/gui/icons/error.png";
 	public static final String TREE_ICON = "/gui/icons/tree.png";
 	public static final String LOCATIONS_ICON = "/gui/icons/locations.png";
-	
+	public static final String CHECK_ICON = "/gui/icons/check.png";
+	public static final String SAVE_ICON = "/gui/icons/save.png";
+	public static final String GEOJSON_ICON = "/gui/icons/geojson.png";
 	
 	
 	public static Image CreateImage(String path) {

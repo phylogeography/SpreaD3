@@ -5,10 +5,7 @@ import structure.data.primitive.Polygon;
 
 public class Location {
 
-//	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
-
 	private final String id;
-//	private final String description;
 	private final Polygon polygon;
 	private final Coordinate coordinate;
 
@@ -19,9 +16,7 @@ public class Location {
 	}
 
 	public Location(String id, //
-			String description, //
 			Polygon polygon //
-//			Map<String, Object> attributes //
 	) {
 
 		super();
@@ -30,16 +25,10 @@ public class Location {
 		this.coordinate = null;
 		this.polygon = polygon;
 
-//		if (attributes != null) {
-//			this.attributes.putAll(attributes);
-//		}
-
 	}
 
 	public Location(String id, //
-			String description, //
 			Coordinate coordinate //
-//			Map<String, Object> attributes //
 	) {
 
 		super();
@@ -47,10 +36,6 @@ public class Location {
 		this.id = id;
 		this.coordinate = coordinate;
 		this.polygon = null;
-
-//		if (attributes != null) {
-//			this.attributes.putAll(attributes);
-//		}
 
 	}
 
@@ -90,7 +75,7 @@ public class Location {
 		}
 
 		Location location = (Location) obj;
-		if (location.getId().equals(this.id)) {
+		if (location.getId().equalsIgnoreCase(this.id)) {
 			return true;
 		} else {
 			return false;
