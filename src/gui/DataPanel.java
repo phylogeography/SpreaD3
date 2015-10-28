@@ -1,5 +1,6 @@
 package gui;
 
+import gui.panels.DiscreteTreePanel;
 import jam.framework.Exportable;
 import jam.panels.OptionsPanel;
 
@@ -15,8 +16,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-
-import panels.DiscreteTreePanel;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DataPanel extends JPanel implements Exportable {

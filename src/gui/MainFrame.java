@@ -1,12 +1,12 @@
 package gui;
 
+import jam.framework.DocumentFrame;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
-
-import jam.framework.DocumentFrame;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -18,11 +18,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.plaf.BorderUIResource;
 
 import app.Spread2App;
-import settings.Settings;
 
+@SuppressWarnings("serial")
 public class MainFrame extends DocumentFrame implements FileMenuHandler {
-
-//	private Settings settings;
 
 	// tabs, there shall be two
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -42,7 +40,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		super();
 
 		setTitle(title);
-//		settings = new Settings();
+		// settings = new Settings();
 
 	}// END: Constructor
 
@@ -52,9 +50,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		setSize(new Dimension(1300, 600));
 		setMinimumSize(new Dimension(260, 100));
 
-		dataPanel = new DataPanel(this
-//				, settings
-				);
+		dataPanel = new DataPanel(this);
 		tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
 
 		statusLabel = new JLabel("Welcome to " + Spread2App.SHORT_NAME);
@@ -105,48 +101,48 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 	}// END: setStatus
 
-    public void setBusy() {
+	public void setBusy() {
 
-        if (SwingUtilities.isEventDispatchThread()) {
+		if (SwingUtilities.isEventDispatchThread()) {
 
-//            simulationPanel.setBusy();
-            progressBar.setIndeterminate(true);
+			// simulationPanel.setBusy();
+			progressBar.setIndeterminate(true);
 
-        } else {
+		} else {
 
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
 
-//                    simulationPanel.setBusy();
-                    progressBar.setIndeterminate(true);
+					// simulationPanel.setBusy();
+					progressBar.setIndeterminate(true);
 
-                }
-            });
-        }// END: edt check
+				}
+			});
+		}// END: edt check
 
-    }// END: setBusy
+	}// END: setBusy
 
-    public void setIdle() {
+	public void setIdle() {
 
-        if (SwingUtilities.isEventDispatchThread()) {
+		if (SwingUtilities.isEventDispatchThread()) {
 
-//            simulationPanel.setIdle();
-            progressBar.setIndeterminate(false);
+			// simulationPanel.setIdle();
+			progressBar.setIndeterminate(false);
 
-        } else {
+		} else {
 
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
 
-//                    simulationPanel.setIdle();
-                    progressBar.setIndeterminate(false);
+					// simulationPanel.setIdle();
+					progressBar.setIndeterminate(false);
 
-                }
-            });
-        }// END: edt check
+				}
+			});
+		}// END: edt check
 
-    }// END: setIdle
-	
+	}// END: setIdle
+
 	public File getWorkingDirectory() {
 		return workingDirectory;
 	}// END: getWorkingDirectory

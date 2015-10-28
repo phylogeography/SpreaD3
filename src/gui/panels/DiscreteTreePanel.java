@@ -1,4 +1,4 @@
-package panels;
+package gui.panels;
 
 import exceptions.AnalysisException;
 import gui.DateEditor;
@@ -403,19 +403,11 @@ public class DiscreteTreePanel {
 
 				try {
 
-					SpreadData data = null ;
-//					try {
 					
 					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(
 							settings);
-					 data = parser.parse();
+					SpreadData data = parser.parse();
 
-//					} catch(AnalysisException e) {
-//						InterfaceUtils.handleException(e, e.getMessage());
-//						frame.setStatus("Exception occured.");
-//						frame.setIdle();
-//					}
-					
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
