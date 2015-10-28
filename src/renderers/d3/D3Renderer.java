@@ -42,7 +42,7 @@ public class D3Renderer {
 
 			while (enumeration.hasMoreElements()) {
 
-				String destdir = settings.output;
+				String destdir = settings.outputFilename;
 				JarEntry je = enumeration.nextElement();
 
 				if (je.toString().startsWith(D3_RENDERER_DIR)) {
@@ -74,29 +74,29 @@ public class D3Renderer {
 			jarfile.close();
 
 			// copy input.json to path/output/data/data.json
-			File srcDir = new File(settings.json);
-			String destPath = settings.output.concat("/").concat(D3_RENDERER_DIR).concat(D3_DATA_DIR);
+			File srcDir = new File(settings.jsonFilename);
+			String destPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(D3_DATA_DIR);
 			File destDir = new File(destPath);
 			FileUtils.copyFile(srcDir, destDir);
 
 			// point system default browser to index.html
-			String htmlPath = settings.output.concat("/").concat(D3_RENDERER_DIR).concat(HTML);
+			String htmlPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(HTML);
 			openInBrowser(htmlPath);
 
 		} else {// running from IDE
 
 			String d3rendererPath = this.getClass().getResource("/".concat(D3_RENDERER_DIR)).getPath();
 			File srcDir = new File(d3rendererPath);
-			File destDir = new File(settings.output);
+			File destDir = new File(settings.outputFilename);
 			FileUtils.copyDirectory(srcDir, destDir);
 
 			// copy input.json to path/output/data/data.json
-			srcDir = new File(settings.json);
-			destDir = new File(settings.output.concat(D3_DATA_DIR));
+			srcDir = new File(settings.jsonFilename);
+			destDir = new File(settings.outputFilename.concat(D3_DATA_DIR));
 			FileUtils.copyFile(srcDir, destDir);
 
 			// point system default browser to index.html
-			String htmlPath = settings.output.concat("/").concat(HTML);
+			String htmlPath = settings.outputFilename.concat("/").concat(HTML);
 			openInBrowser(htmlPath);
 
 		}

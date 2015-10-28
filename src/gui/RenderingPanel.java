@@ -1,24 +1,23 @@
 package gui;
 
-import gui.panels.DiscreteTreePanel;
-import jam.framework.Exportable;
-import jam.panels.OptionsPanel;
+import gui.panels.D3RenderPanel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import jam.panels.OptionsPanel;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
-public class DataPanel extends JPanel implements Exportable {
+public class RenderingPanel extends JPanel {
 
 	// Main frame
 	private MainFrame frame;
@@ -32,22 +31,21 @@ public class DataPanel extends JPanel implements Exportable {
 	private OptionsPanel holderPanel;
 
 	// Combo boxes
-	private JComboBox parserSelector;
-	private ComboBoxModel parserSelectorModel;
+	private JComboBox rendererSelector;
+	private ComboBoxModel rendererSelectorModel;
 
-
-	public DataPanel(MainFrame frame) {
+	public RenderingPanel(MainFrame frame) {
 
 		this.frame = frame;
 
 		optionPanel = new OptionsPanel(12, 12, SwingConstants.NORTH);
 		holderPanel = new OptionsPanel(12, 12, SwingConstants.CENTER);
+		
+		rendererSelector = new JComboBox();
+		rendererSelectorModel = new DefaultComboBoxModel(RendererTypes.values());
+		rendererSelector.setModel(rendererSelectorModel);
 
-		parserSelector = new JComboBox();
-		parserSelectorModel = new DefaultComboBoxModel(ParserTypes.values());
-		parserSelector.setModel(parserSelectorModel);
-
-		optionPanel.addComponentWithLabel("Select input type:", parserSelector);
+		optionPanel.addComponentWithLabel("Select renderer:", rendererSelector);
 		optionPanel.addSeparator();
 		optionPanel.addComponent(holderPanel);
 
@@ -68,38 +66,30 @@ public class DataPanel extends JPanel implements Exportable {
 		add(scrollPane, BorderLayout.CENTER);
 
 		// Listeners
-		parserSelector.addItemListener(new ListenParserSelector());
-		parserSelector.setSelectedIndex(0);
+		rendererSelector.addItemListener(new ListenRendererSelector());
+		rendererSelector.setSelectedIndex(0);
 
 		// Call first item in selector
-		populateDiscreteTreePanels();
+		populateD3Panels();
 
 	}// END: Constructor
 
-	private class ListenParserSelector implements ItemListener {
+	private class ListenRendererSelector implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
 
 				Object item = event.getItem();
-				ParserTypes type = (ParserTypes) item;
+				RendererTypes type = (RendererTypes) item;
 				switch (type) {
 
-				case DISCRETE_TREE:
-					populateDiscreteTreePanels();
+				case D3:
+					populateD3Panels();
 					break;
 
-				case BAYES_FACTOR:
-					populateBayesFactorPanels();
-					break;
-
-				case CONTINUOUS_TREE:
-					populateContinuousTreePanels();
-					break;
-
-				case TIME_SLICER:
-					populateTimeSlicerPanels();
+				case KML:
+					populateKmlPanels();
 					break;
 
 				default:
@@ -114,53 +104,25 @@ public class DataPanel extends JPanel implements Exportable {
 
 	}// END: ListenParserSelector
 
-	// /////////////////////
-	// ---DISCRETE TREE---//
-	// /////////////////////
+	// //////////
+	// ---D3---//
+	// //////////
 
-	private void populateDiscreteTreePanels() {
+	private void populateD3Panels() {
 
-		DiscreteTreePanel panel = new DiscreteTreePanel(frame, holderPanel);
+		D3RenderPanel panel = new D3RenderPanel(frame, holderPanel);
 		panel.populateHolderPanel();
-		
-	}//END: populateDiscreteTreePanels
-	
-	// ////////////////////
-	// ---BAYES FACTOR---//
-	// ////////////////////
 
-	private void populateBayesFactorPanels() {
+	}// END: populateD3Panels
 
-		holderPanel.removeAll();
+	// ///////////
+	// ---KML---//
+	// ///////////
+
+	private void populateKmlPanels() {
 
 		System.out.println("TODO");
-	}
 
-	// ///////////////////////
-	// ---CONTINUOUS TREE---//
-	// ///////////////////////
-
-	private void populateContinuousTreePanels() {
-
-		holderPanel.removeAll();
-
-		System.out.println("TODO");
-	}
-
-	// ///////////////////
-	// ---TIME SLICER---//
-	// ///////////////////
-
-	private void populateTimeSlicerPanels() {
-
-		holderPanel.removeAll();
-
-		System.out.println("TODO");
-	}
-
-	@Override
-	public JComponent getExportableComponent() {
-		return this;
-	}// END: getExportableComponent
+	}// END: populateD3Panels
 
 }// END: class

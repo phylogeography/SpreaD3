@@ -17,6 +17,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.BorderUIResource;
 
+import utils.FortuneCookies;
 import app.Spread2App;
 
 @SuppressWarnings("serial")
@@ -27,7 +28,9 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 	private final String DATA_TAB_NAME = "Data";
 	private DataPanel dataPanel;
-
+	private final String RENDERING_TAB_NAME = "Rendering";
+	private RenderingPanel renderingPanel;
+	
 	// labels
 	private JLabel statusLabel;
 	private JProgressBar progressBar;
@@ -52,8 +55,11 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 		dataPanel = new DataPanel(this);
 		tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
-
-		statusLabel = new JLabel("Welcome to " + Spread2App.SHORT_NAME);
+		
+		renderingPanel = new RenderingPanel(this);
+		tabbedPane.addTab(RENDERING_TAB_NAME, null, renderingPanel);
+		
+		statusLabel = new JLabel(FortuneCookies.nextCookie());
 
 		JPanel progressPanel = new JPanel(new BorderLayout(0, 0));
 		progressBar = new JProgressBar();

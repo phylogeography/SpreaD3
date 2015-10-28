@@ -1506,7 +1506,7 @@ public class Spread2ConsoleApp {
 
 					if (d3RenderArguments.hasOption(JSON)) {
 
-						settings.d3RendererSettings.json = d3RenderArguments
+						settings.d3RendererSettings.jsonFilename = d3RenderArguments
 								.getStringOption(JSON);
 
 					} else {
@@ -1518,7 +1518,7 @@ public class Spread2ConsoleApp {
 
 					if (d3RenderArguments.hasOption(OUTPUT)) {
 
-						settings.d3RendererSettings.output = d3RenderArguments
+						settings.d3RendererSettings.outputFilename = d3RenderArguments
 								.getStringOption(OUTPUT);
 
 					}

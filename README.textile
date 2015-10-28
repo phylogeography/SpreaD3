@@ -29,7 +29,7 @@ h3. DISCRETE TREE PARSER
 h3. DISCRETE TREE D3 RENDERER
 
 * this will generate a webpage and point system default browser to it:
--render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/ebov_discrete.json -output /home/filip/Pulpit/output
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/ebov_discrete.json -output /home/filip/Desktop/output
 
 
 h3. DISCRETE TREE KML RENDERER

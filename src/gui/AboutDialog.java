@@ -30,7 +30,7 @@ import app.Spread2App;
 public class AboutDialog extends JDialog {
 
 	private static final int WIDTH = 700;
-	private static final int HEIGHT = 700;
+	private static final int HEIGHT = 650;
 	private static final int FONT_SIZE = 15;
 
 	private static final String CITATION1 = "To cite " + Spread2App.SHORT_NAME + " in publications, please use:";
@@ -156,12 +156,12 @@ public class AboutDialog extends JDialog {
 
 		add(Box.createRigidArea(new Dimension(0, 20)));
 
-		label = new JLabel(FortuneCookies.nextCookie());
-		label.setFont(new Font("Serif", Font.PLAIN, FONT_SIZE - 3));
-		label.setAlignmentX(0.5f);
-		add(label);
-		
-		add(Box.createRigidArea(new Dimension(0, 20)));
+//		label = new JLabel(FortuneCookies.nextCookie());
+//		label.setFont(new Font("Serif", Font.PLAIN, FONT_SIZE - 3));
+//		label.setAlignmentX(0.5f);
+//		add(label);
+//		
+//		add(Box.createRigidArea(new Dimension(0, 20)));
 
 		JButton close = new JButton("Close");
 		close.addActionListener(new ActionListener() {

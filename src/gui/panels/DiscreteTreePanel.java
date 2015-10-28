@@ -1,6 +1,5 @@
 package gui.panels;
 
-import exceptions.AnalysisException;
 import gui.DateEditor;
 import gui.InterfaceUtils;
 import gui.LocationCoordinatesEditor;
@@ -80,7 +79,7 @@ public class DiscreteTreePanel {
 		settings = new DiscreteTreeSettings();
 
 		holderPanel.removeAll();
-		resetDiscreteTreeFlags();
+		resetFlags();
 
 		loadTree = new JButton("Load",
 				InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
@@ -93,7 +92,7 @@ public class DiscreteTreePanel {
 
 	}// END: populateDiscreteTreePanels
 
-	private void resetDiscreteTreeFlags() {
+	private void resetFlags() {
 
 		loadTreeCreated = false;
 		locationAttributeSelectorCreated = false;
@@ -124,7 +123,7 @@ public class DiscreteTreePanel {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
-					String treeFilename = file.getAbsolutePath();
+					String filename = file.getAbsolutePath();
 
 					File tmpDir = chooser.getCurrentDirectory();
 
@@ -132,7 +131,8 @@ public class DiscreteTreePanel {
 						frame.setWorkingDirectory(tmpDir);
 					}
 
-					settings.treeFilename = treeFilename;
+					settings.treeFilename = filename;
+					frame.setStatus(settings.treeFilename + " selected.");
 					populateLocationAttributeCombobox(settings.treeFilename);
 
 				} else {
@@ -441,6 +441,6 @@ public class DiscreteTreePanel {
 
 		worker.execute();
 
-	}// END: collectSettings
+	}// END: generateOutput
 
 }// END: class
