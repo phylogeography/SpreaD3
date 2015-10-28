@@ -15,8 +15,6 @@ import structure.data.attributable.Point;
 import structure.geojson.GeoJsonData;
 import utils.Utils;
 import exceptions.AnalysisException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
 
 public class BayesFactorSpreadDataParser {
 
@@ -26,8 +24,8 @@ public class BayesFactorSpreadDataParser {
 		this.settings = settings;
 	}// END: Constructor
 
-	public SpreadData parse() throws IOException, IllegalCharacterException,
-			AnalysisException, LocationNotFoundException {
+	public SpreadData parse() throws IOException,
+			AnalysisException {
 
 		TimeLine timeLine = null;
 		AxisAttributes axis = null;

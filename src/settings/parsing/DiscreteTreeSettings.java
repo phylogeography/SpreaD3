@@ -40,6 +40,6 @@ public class DiscreteTreeSettings {
 	
 	public RootedTree rootedTree = null;
 	public LinkedList<Location> locationsList = null;
-	public boolean locationsEdited = false;
+//	public boolean locationsEdited = false;
 	
 }//END: class

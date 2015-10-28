@@ -40,7 +40,6 @@ public class Spread2App {
 		} else {
 
 			Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-			// Spread2UIApp gui =
 			new Spread2UIApp();
 
 		}

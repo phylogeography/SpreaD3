@@ -1,12 +1,12 @@
 package structure.data.primitive;
 
+import exceptions.AnalysisException;
+
 public class Coordinate {
-	
-	// latitude, xCoordinate
-	private final double xCoordinate;
-	// longitude, yCoordinate
-	private final double yCoordinate;
-	private double altitude;
+
+	private final Double xCoordinate;
+	private final Double yCoordinate;
+	private Double altitude;
 
 	public Coordinate(Double latitude, //
 			Double longitude, //
@@ -29,20 +29,33 @@ public class Coordinate {
 
 	}// END: Constructor
 
-	public double getLatitude() {
+	public double getXCoordinate() throws AnalysisException {
+
+		if (xCoordinate == null) {
+			throw new AnalysisException("xCoordinate attribute is empty.");
+		}
+
 		return xCoordinate;
-	}
+	}// END: getXCoordinate
 
-	public double getLongitude() {
+	public double getYCoordinate() throws AnalysisException {
+
+		if (yCoordinate == null) {
+			throw new AnalysisException("yCoordinate attribute is empty.");
+		}
+
 		return yCoordinate;
-	}
+	}// END: yCoordinate
 
-	public Double getAltitude() {
+	public Double getAltitude() throws AnalysisException {
+		if (altitude == null) {
+			throw new AnalysisException("altitude attribute is empty.");
+		}
 		return altitude;
-	}
+	}// END: getAltitude
 
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
-	}
+	}// END: setAltitude
 
 }// END: class

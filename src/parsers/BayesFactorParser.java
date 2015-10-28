@@ -13,7 +13,6 @@ import structure.data.attributable.Line;
 import structure.data.attributable.Point;
 import utils.Utils;
 import exceptions.AnalysisException;
-import exceptions.LocationNotFoundException;
 
 public class BayesFactorParser {
 
@@ -45,7 +44,7 @@ public class BayesFactorParser {
 		
 	}// END: Constructor
 
-	public void parse() throws AnalysisException, LocationNotFoundException {
+	public void parse() throws AnalysisException {
 
 		parseBayesFactors();
 		parseGraph();
@@ -128,7 +127,7 @@ public class BayesFactorParser {
 
 	}// END: parseBayesFactors
 
-	private void parseGraph() throws LocationNotFoundException {
+	private void parseGraph() throws AnalysisException {
 
 		HashMap<Location, Point> pointsMap = new HashMap<Location, Point>();
 
@@ -171,8 +170,9 @@ public class BayesFactorParser {
 			if (locationsList.contains(dummy)) {
 				toLocationIndex = locationsList.indexOf(dummy);
 			} else {
-				throw new LocationNotFoundException(dummy,
-						LocationNotFoundException.Type.PARENT);
+				
+				String message =  "Parent location " + dummy.getId() + " could not be found in the locations file.";
+				throw new  AnalysisException(message);
 			}
 
 			Location toLocation = locationsList.get(toLocationIndex);

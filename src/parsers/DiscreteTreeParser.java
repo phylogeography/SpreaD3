@@ -17,7 +17,6 @@ import structure.data.attributable.Line;
 import structure.data.attributable.Point;
 import utils.Utils;
 import exceptions.AnalysisException;
-import exceptions.LocationNotFoundException;
 
 public class DiscreteTreeParser {
 
@@ -60,7 +59,7 @@ public class DiscreteTreeParser {
 	}// END: Constructor
 
 	public void parseTree() throws IOException, ImportException,
-			LocationNotFoundException, AnalysisException {
+		  AnalysisException {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 
@@ -123,11 +122,8 @@ public class DiscreteTreeParser {
 
 				} else {
 
-					throw new LocationNotFoundException(dummy,
-							LocationNotFoundException.Type.PARENT);
-					// System.out.println();
-					// continue;
-
+					String message =  "Parent location " + dummy.getId() + " could not be found in the locations file.";
+					throw new  AnalysisException(message);
 				}
 
 				Location parentLocation = locationsList.get(locationIndex);
@@ -379,7 +375,7 @@ public class DiscreteTreeParser {
 	}//END: createSliceHeights
 
 	private Point createPoint(int index, Node node, Location location)
-			throws LocationNotFoundException {
+			throws   AnalysisException {
 
 		String id = "point_" + index;
 		Double height = Utils.getNodeHeight(rootedTree, node)

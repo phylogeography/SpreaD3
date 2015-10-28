@@ -330,7 +330,7 @@ public class ContinuousTreeParser {
 
 	}// END: parseTree
 
-	private Point createPoint(int index, Node node, Coordinate coordinate) {
+	private Point createPoint(int index, Node node, Coordinate coordinate) throws AnalysisException {
 
 		String id = "point_" + index;
 		Double height = Utils.getNodeHeight(rootedTree, node)

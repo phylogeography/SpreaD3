@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,19 +52,49 @@ public class Utils {
 	public static final int YEAR_INDEX = 0;
 	public static final int MONTH_INDEX = 1;
 	public static final int DAY_INDEX = 2;
-
+	public static final int X_INDEX = 0;
+	public static final int Y_INDEX = 1;
+	
 	public static String splitString(String string, String c) {
 		 String[] id = string.split(c);
 		 return id[id.length - 1];
 	}//END: splitString
 	
-	public static Double getNodeHeight(RootedTree tree, Node node) {
+	
+	// //////////////////////////
+	// ---TREE PARSING UTILS---//
+	// //////////////////////////
+	
+	public static RootedTree importTree(String treeFilename) throws IOException, ImportException {
+		
+		NexusImporter importer = new NexusImporter(new FileReader(
+				treeFilename));
+
+		RootedTree rootedTree = (RootedTree) importer
+				.importNextTree();
+		
+		return rootedTree;
+	}//END: importTree
+	
+	
+	public static Object getObjectNodeAttribute(Node node, String attributeName) throws AnalysisException {
+
+		Object nodeAttribute = node.getAttribute(attributeName);
+
+		if (nodeAttribute == null) {
+			throw new AnalysisException("Attribute " + attributeName + " missing from the node. \n");
+		}
+
+		return nodeAttribute;
+	}// END: getObjectNodeAttribute
+	
+	public static Double getNodeHeight(RootedTree tree, Node node) throws AnalysisException {
 
 		Double nodeHeight = tree.getHeight(node);
 
-//		if (nodeHeight == null) {
-//			throw new RuntimeException("Height attribute missing from the node. \n");
-//		}
+		if (nodeHeight == null) {
+			throw new AnalysisException("Height attribute missing from the node. \n");
+		}
 
 		return nodeHeight;
 	}// END: getHeight
@@ -78,17 +109,6 @@ public class Utils {
 
 		return nodeAttribute;
 	}// END: getNodeTrait
-
-	public static Object getObjectNodeAttribute(Node node, String attributeName) throws AnalysisException {
-
-		Object nodeAttribute = node.getAttribute(attributeName);
-
-		if (nodeAttribute == null) {
-			throw new AnalysisException("Attribute " + attributeName + " missing from the node. \n");
-		}
-
-		return nodeAttribute;
-	}// END: getObjectNodeAttribute
 
 	public static Object[] getObjectArrayNodeAttribute(Node node, String attributeName) throws AnalysisException {
 
@@ -271,7 +291,7 @@ public class Utils {
 	// ---GEOGRAPHY UTILS---//
 	// ///////////////////////
 
-	public static double rhumbDistance(Coordinate startCoordinate, Coordinate endCoordinate) {
+	public static double rhumbDistance(Coordinate startCoordinate, Coordinate endCoordinate) throws AnalysisException {
 		/**
 		 * Returns the distance from start point to the end point in km,
 		 * travelling along a rhumb line
@@ -280,10 +300,10 @@ public class Utils {
 		 * @param endCoordinate
 		 * @return distance in km
 		 */
-		double rlon1 = Math.toRadians(startCoordinate.getLongitude());
-		double rlat1 = Math.toRadians(startCoordinate.getLatitude());
-		double rlon2 = Math.toRadians(endCoordinate.getLongitude());
-		double rlat2 = Math.toRadians(endCoordinate.getLatitude());
+		double rlon1 = Math.toRadians(startCoordinate.getYCoordinate());
+		double rlat1 = Math.toRadians(startCoordinate.getXCoordinate());
+		double rlon2 = Math.toRadians(endCoordinate.getYCoordinate());
+		double rlat2 = Math.toRadians(endCoordinate.getXCoordinate());
 
 		double dLat = (rlat2 - rlat1);
 		double dLon = Math.abs(rlon2 - rlon1);

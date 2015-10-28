@@ -20,8 +20,7 @@ public class InterfaceUtils {
 	public static final String CHECK_ICON = "/gui/icons/check.png";
 	public static final String SAVE_ICON = "/gui/icons/save.png";
 	public static final String GEOJSON_ICON = "/gui/icons/geojson.png";
-	
-	
+
 	public static Image CreateImage(String path) {
 		URL imgURL = Spread2App.class.getResource(path);
 		Toolkit kit = Toolkit.getDefaultToolkit();
@@ -35,7 +34,7 @@ public class InterfaceUtils {
 		}
 
 	}// END: CreateImage
-	
+
 	public static ImageIcon createImageIcon(String path) {
 
 		ImageIcon icon = null;
@@ -48,7 +47,7 @@ public class InterfaceUtils {
 
 		return icon;
 	}// END: CreateImageIcon
-	
+
 	public static Frame getActiveFrame() {
 		Frame result = null;
 		Frame[] frames = Frame.getFrames();
@@ -60,9 +59,8 @@ public class InterfaceUtils {
 			}
 		}
 		return result;
-	}//END: getActiveFrame
-	
-	
+	}// END: getActiveFrame
+
 	// ////////////////////////////////
 	// ---EXCEPTION HANDLING UTILS---//
 	// ////////////////////////////////
@@ -72,62 +70,39 @@ public class InterfaceUtils {
 		final Thread t = Thread.currentThread();
 
 		if (SwingUtilities.isEventDispatchThread()) {
-			showExceptionDialog(t, e, message);
+
+			logException(t, e);
+			showExceptionDialog(message);
+
 		} else {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					showExceptionDialog(t, e, message);
+
+					logException(t, e);
+					showExceptionDialog(message);
+
 				}
 			});
 		}// END: edt check
 	}// END: uncaughtException
 
-	public static void handleException(final Throwable e) {
-
-		final Thread t = Thread.currentThread();
-
-		if (SwingUtilities.isEventDispatchThread()) {
-			showExceptionDialog(t, e);
-		} else {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					showExceptionDialog(t, e);
-				}
-			});
-		}// END: edt check
-	}// END: handleException
-
-	private static void showExceptionDialog(Thread t, Throwable e) {
-
-		String msg = String.format("Unexpected problem on thread %s: %s",
-				t.getName(), e.getMessage());
-
-		logException(t, e);
-
-		JOptionPane.showMessageDialog( getActiveFrame(), //
-				msg, //
+	private static void showExceptionDialog(String message) {
+		JOptionPane.showMessageDialog(getActiveFrame(), //
+				message, //
 				"Error", //
 				JOptionPane.ERROR_MESSAGE, //
-				 createImageIcon( ERROR_ICON));
-	}// END: showExceptionDialog
-
-	private static void showExceptionDialog(Thread t, Throwable e,
-			String message) {
-
-		String msg = String.format("Unexpected problem on thread %s: %s" + "\n"
-				+ message, t.getName(), e.getMessage());
-
-		logException(t, e);
-
-		JOptionPane.showMessageDialog( getActiveFrame(), //
-				msg, //
-				"Error", //
-				JOptionPane.ERROR_MESSAGE, //
-				 createImageIcon( ERROR_ICON));
+				createImageIcon(ERROR_ICON));
 	}// END: showExceptionDialog
 
 	private static void logException(Thread t, Throwable e) {
+
+		String msg = String.format("Unexpected problem on thread %s: %s",
+				t.getName(), e.getMessage());
+		System.out.println(msg);
+
+		System.out.println("Stack trace:");
 		e.printStackTrace();
+
 	}// END: logException
-	
-}//END: class
+
+}// END: class

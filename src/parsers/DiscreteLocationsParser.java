@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import structure.data.Attribute;
 import structure.data.Location;
 import structure.data.primitive.Coordinate;
 import utils.Utils;
-import exceptions.IllegalCharacterException;
+import exceptions.AnalysisException;
 
 public class DiscreteLocationsParser {
 
@@ -19,8 +18,8 @@ public class DiscreteLocationsParser {
 	private LinkedList<Location> locationsList;
 	private boolean header;
 
-	private Attribute xCoordinate;
-	private Attribute yCoordinate;
+//	private Attribute xCoordinate;
+//	private Attribute yCoordinate;
 
 	public DiscreteLocationsParser(String locations, boolean header) {
 
@@ -29,18 +28,17 @@ public class DiscreteLocationsParser {
 
 	}// END: Constructor
 
-	public LinkedList<Location> parseLocations() throws IOException,
-			IllegalCharacterException {
+	public LinkedList<Location> parseLocations() throws IOException, AnalysisException  {
 
 		this.locationsList = new LinkedList<Location>();
 
-		double[] xCoordinateRange = new double[2];
-		xCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
-		xCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
-
-		double[] yCoordinateRange = new double[2];
-		yCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
-		yCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
+//		double[] xCoordinateRange = new double[2];
+//		xCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
+//		xCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
+//
+//		double[] yCoordinateRange = new double[2];
+//		yCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
+//		yCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
 
 		// create list from the coordinates file
 		String[] lines = Utils.readLines(locations, Utils.HASH_COMMENT);
@@ -58,9 +56,8 @@ public class DiscreteLocationsParser {
 			String illegalCharacter = "+";
 			if (locationName.contains(illegalCharacter)) {
 
-				throw new IllegalCharacterException(locationName,
-						illegalCharacter);
-
+				throw new AnalysisException("Location " + locationName + " contains illegal character " + illegalCharacter);
+				
 			}
 
 			Double latitude = Double.valueOf(line[LATITUDE_COLUMN]);
@@ -74,36 +71,36 @@ public class DiscreteLocationsParser {
 
 			// update coordinates range
 
-			if (latitude < xCoordinateRange[Attribute.MIN_INDEX]) {
-				xCoordinateRange[Attribute.MIN_INDEX] = latitude;
-			} // END: min check
-
-			if (latitude > xCoordinateRange[Attribute.MAX_INDEX]) {
-				xCoordinateRange[Attribute.MAX_INDEX] = latitude;
-			} // END: max check
-
-			if (longitude < yCoordinateRange[Attribute.MIN_INDEX]) {
-				yCoordinateRange[Attribute.MIN_INDEX] = longitude;
-			} // END: min check
-
-			if (longitude > yCoordinateRange[Attribute.MAX_INDEX]) {
-				yCoordinateRange[Attribute.MAX_INDEX] = longitude;
-			} // END: max check
+//			if (latitude < xCoordinateRange[Attribute.MIN_INDEX]) {
+//				xCoordinateRange[Attribute.MIN_INDEX] = latitude;
+//			} // END: min check
+//
+//			if (latitude > xCoordinateRange[Attribute.MAX_INDEX]) {
+//				xCoordinateRange[Attribute.MAX_INDEX] = latitude;
+//			} // END: max check
+//
+//			if (longitude < yCoordinateRange[Attribute.MIN_INDEX]) {
+//				yCoordinateRange[Attribute.MIN_INDEX] = longitude;
+//			} // END: min check
+//
+//			if (longitude > yCoordinateRange[Attribute.MAX_INDEX]) {
+//				yCoordinateRange[Attribute.MAX_INDEX] = longitude;
+//			} // END: max check
 
 		}// END: i loop
 
-		xCoordinate = new Attribute("xCoordinate", xCoordinateRange);
-		yCoordinate = new Attribute("yCoordinate", yCoordinateRange);
+//		xCoordinate = new Attribute("xCoordinate", xCoordinateRange);
+//		yCoordinate = new Attribute("yCoordinate", yCoordinateRange);
 
 		return locationsList;
 	}// END: parseLocations
 
-	public Attribute getxCoordinateAttribute() {
-		return xCoordinate;
-	}
-
-	public Attribute getyCoordinateAttribute() {
-		return yCoordinate;
-	}
+//	public Attribute getxCoordinateAttribute() {
+//		return xCoordinate;
+//	}
+//
+//	public Attribute getyCoordinateAttribute() {
+//		return yCoordinate;
+//	}
 
 }// END: class

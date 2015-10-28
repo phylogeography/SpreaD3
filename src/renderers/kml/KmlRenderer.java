@@ -32,6 +32,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import exceptions.AnalysisException;
 import parsers.DiscreteColorsParser;
 import parsers.DiscreteTreeParser;
 import renderers.Renderer;
@@ -81,7 +82,7 @@ public class KmlRenderer implements Renderer {
 
 	}// END: Constructor
 
-	public void render() throws KmlException, IOException {
+	public void render() throws KmlException, IOException, AnalysisException {
 
 		PrintWriter writer = new PrintWriter(new File(settings.output));
 
@@ -119,7 +120,7 @@ public class KmlRenderer implements Renderer {
 	// ---LOCATIONS---//
 	// /////////////////
 
-	public Feature generateLocations(List<Location> locations) {
+	public Feature generateLocations(List<Location> locations) throws AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("locations");
@@ -133,7 +134,7 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateLocations
 
-	private Placemark generateLocation(Location location) {
+	private Placemark generateLocation(Location location) throws AnalysisException {
 
 		Placemark placemark = new Placemark();
 		placemark.setName(location.getId());
@@ -144,13 +145,13 @@ public class KmlRenderer implements Renderer {
 
 	// ---KML POINT---//
 
-	private kmlframework.kml.Point generatePoint(Coordinate coordinate) {
+	private kmlframework.kml.Point generatePoint(Coordinate coordinate) throws AnalysisException {
 
 		kmlframework.kml.Point point = new kmlframework.kml.Point();
 		point.setAltitudeMode(AltitudeModeEnum.relativeToGround);
 		point.setAltitude(coordinate.getAltitude());
-		point.setLatitude(coordinate.getLatitude());
-		point.setLongitude(coordinate.getLongitude());
+		point.setLatitude(coordinate.getXCoordinate());
+		point.setLongitude(coordinate.getYCoordinate());
 
 		return point;
 	}// END: generatePoint
@@ -159,7 +160,7 @@ public class KmlRenderer implements Renderer {
 	// ---LAYERS---//
 	// //////////////
 
-	private Feature generateLayer(Layer layer) throws IOException {
+	private Feature generateLayer(Layer layer) throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 
@@ -199,7 +200,7 @@ public class KmlRenderer implements Renderer {
 	// ---LINES---//
 
 	public Feature generateLines(List<Line> lines, List<Point> points)
-			throws IOException {
+			throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("lines");
@@ -241,7 +242,7 @@ public class KmlRenderer implements Renderer {
 
 	private Feature generateLine(Line line, List<Point> points,
 			Attribute colorAttribute, Attribute altitudeAttribute,
-			Attribute widthAttribute) {
+			Attribute widthAttribute) throws AnalysisException {
 
 		// TODO: process includes (subsets)
 
@@ -447,7 +448,7 @@ public class KmlRenderer implements Renderer {
 			Coordinate endCoordinate, //
 			String startTime, //
 			KmlStyle style //
-	) {
+	) throws AnalysisException {
 
 		Placemark placemark = new Placemark();
 
@@ -480,7 +481,7 @@ public class KmlRenderer implements Renderer {
 
 	// ---POINTS---//
 
-	private Feature generatePoints(List<Point> points) throws IOException {
+	private Feature generatePoints(List<Point> points) throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("points");
@@ -514,7 +515,7 @@ public class KmlRenderer implements Renderer {
 	}// END: generatePoints
 
 	private Feature generatePoint(Point point, Attribute areaAttribute,
-			Attribute colorAttribute) {
+			Attribute colorAttribute) throws AnalysisException {
 
 		// TODO: process includes (subsets)
 
@@ -672,7 +673,7 @@ public class KmlRenderer implements Renderer {
 
 	// ---AREAS---//
 
-	public Feature generateAreas(List<Area> areas) throws IOException {
+	public Feature generateAreas(List<Area> areas) throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("areas");
@@ -687,7 +688,7 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateAreas
 
-	private Feature generateArea(Area area) {
+	private Feature generateArea(Area area) throws AnalysisException {
 
 		Placemark placemark = new Placemark();
 		LinearRing linearRing = new LinearRing();
@@ -742,7 +743,7 @@ public class KmlRenderer implements Renderer {
 
 	// ---COUNTS---//
 
-	private Feature generateCounts(List<Point> counts) throws IOException {
+	private Feature generateCounts(List<Point> counts) throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("counts");
@@ -760,7 +761,7 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateCounts
 
-	private Feature generateCount(Point count, Attribute countAttribute) {
+	private Feature generateCount(Point count, Attribute countAttribute) throws AnalysisException {
 
 		int numPoints = 36;
 
@@ -848,12 +849,12 @@ public class KmlRenderer implements Renderer {
 	// /////////////
 
 	private List<kmlframework.kml.Point> generateCircle(Coordinate centroid,
-			double area, int numPoints) {
+			double area, int numPoints) throws AnalysisException {
 
 		double radius = Math.sqrt(area / Math.PI);
 
-		Double latitude = centroid.getLatitude();
-		Double longitude = centroid.getLongitude();
+		Double latitude = centroid.getXCoordinate();
+		Double longitude = centroid.getYCoordinate();
 
 		List<kmlframework.kml.Point> points = new ArrayList<kmlframework.kml.Point>();
 
@@ -947,7 +948,7 @@ public class KmlRenderer implements Renderer {
 	}// END: map
 
 	private LinkedList<Coordinate> getIntermediateCoords(
-			Coordinate startCoordinate, Coordinate endCoordinate, int sliceCount) {
+			Coordinate startCoordinate, Coordinate endCoordinate, int sliceCount) throws AnalysisException {
 
 		LinkedList<Coordinate> coords = new LinkedList<Coordinate>();
 
@@ -957,11 +958,11 @@ public class KmlRenderer implements Renderer {
 
 		// Convert to radians
 		double rlon1 = longNormalise(Math.toRadians(startCoordinate
-				.getLongitude()));
-		double rlat1 = Math.toRadians(startCoordinate.getLatitude());
+				.getYCoordinate()));
+		double rlat1 = Math.toRadians(startCoordinate.getXCoordinate());
 		double rlon2 = longNormalise(Math.toRadians(endCoordinate
-				.getLongitude()));
-		double rlat2 = Math.toRadians(endCoordinate.getLatitude());
+				.getYCoordinate()));
+		double rlat2 = Math.toRadians(endCoordinate.getXCoordinate());
 
 		coords.add(0, startCoordinate);
 		for (int i = 1; i < sliceCount; i++) {

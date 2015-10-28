@@ -1,8 +1,5 @@
 package panels;
 
-import exceptions.AnalysisException;
-import exceptions.IllegalCharacterException;
-import exceptions.LocationNotFoundException;
 import gui.DateEditor;
 import gui.InterfaceUtils;
 import gui.LocationCoordinatesEditor;
@@ -15,8 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -29,17 +24,18 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import jebl.evolution.graphs.Node;
+import jebl.evolution.io.ImportException;
+import jebl.evolution.trees.RootedTree;
+import parsers.DiscreteTreeSpreadDataParser;
+import settings.parsing.DiscreteTreeSettings;
+import structure.data.SpreadData;
+import utils.Utils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import parsers.DiscreteTreeSpreadDataParser;
-import jebl.evolution.graphs.Node;
-import jebl.evolution.io.ImportException;
-import jebl.evolution.io.NexusImporter;
-import jebl.evolution.trees.RootedTree;
-import settings.parsing.DiscreteTreeSettings;
-import structure.data.SpreadData;
-
+@SuppressWarnings("rawtypes")
 public class DiscreteTreePanel {
 
 	private MainFrame frame;
@@ -96,7 +92,6 @@ public class DiscreteTreePanel {
 
 	}// END: populateDiscreteTreePanels
 
-	// TODO: put resets here
 	private void resetDiscreteTreeFlags() {
 
 		loadTreeCreated = false;
@@ -157,16 +152,28 @@ public class DiscreteTreePanel {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
 			// Executed in background thread
+			@SuppressWarnings("unchecked")
 			public Void doInBackground() {
 
 				try {
 
-					NexusImporter importer = new NexusImporter(new FileReader(
-							treeFilename));
-					// RootedTree rootedTree = (RootedTree)
-					// importer.importNextTree();
-					settings.rootedTree = (RootedTree) importer
-							.importNextTree();
+					try {
+
+						RootedTree rootedTree = Utils
+								.importRootedTree(treeFilename);
+						settings.rootedTree = rootedTree;
+
+					} catch (IOException e) {
+
+						String message = "I/O Exception occured when importing tree. I suspect wrong or malformed tree file.";
+						InterfaceUtils.handleException(e, message);
+
+					} catch (ImportException e) {
+
+						String message = "Import exception occured when importing tree. I suspect wrong or malformed tree file.";
+						InterfaceUtils.handleException(e, message);
+
+					}
 
 					LinkedHashSet<String> uniqueAttributes = new LinkedHashSet<String>();
 
@@ -194,25 +201,11 @@ public class DiscreteTreePanel {
 						locationAttributeSelectorCreated = true;
 					}
 
-				} catch (FileNotFoundException e) {
-
+				} catch (Exception e) {
 					InterfaceUtils.handleException(e, e.getMessage());
-					frame.setIdle();
 					frame.setStatus("Exception occured.");
-
-				} catch (IOException e) {
-
-					InterfaceUtils.handleException(e, e.getMessage());
 					frame.setIdle();
-					frame.setStatus("Exception occured.");
-
-				} catch (ImportException e) {
-
-					InterfaceUtils.handleException(e, e.getMessage());
-					frame.setIdle();
-					frame.setStatus("Exception occured.");
-
-				} // END: try-catch block
+				}// END: try-catch
 
 				return null;
 			}// END: doInBackground
@@ -268,7 +261,7 @@ public class DiscreteTreePanel {
 					frame, settings);
 			locationCoordinatesEditor.launch();
 
-			if (settings.locationsEdited) {
+			if (locationCoordinatesEditor.isEdited()) {
 
 				if (!dateEditorCreated) {
 					dateEditor = new DateEditor();
@@ -395,7 +388,7 @@ public class DiscreteTreePanel {
 		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
 				.getText());
 		settings.mrsd = dateEditor.getValue();
-		
+
 	}// END: collectSettings
 
 	private void generateOutput() {
@@ -424,37 +417,13 @@ public class DiscreteTreePanel {
 
 					System.out.println("Created JSON file");
 
-				} catch (IOException e) {
-					
-					InterfaceUtils.handleException(e);
+				} catch (Exception e) {
+
+					InterfaceUtils.handleException(e, e.getMessage());
 					frame.setStatus("Exception occured.");
 					frame.setIdle();
-					
-				} catch (ImportException e) {
-					
-					InterfaceUtils.handleException(e);
-					frame.setStatus("Exception occured.");
-					frame.setIdle();
-					
-				} catch (AnalysisException e) {
-					
-					InterfaceUtils.handleException(e);
-					frame.setStatus("Exception occured.");
-					frame.setIdle();
-					
-				} catch (IllegalCharacterException e) {
-					
-					InterfaceUtils.handleException(e);
-					frame.setStatus("Exception occured.");
-					frame.setIdle();
-					
-				} catch (LocationNotFoundException e) {
-					
-					InterfaceUtils.handleException(e);
-					frame.setStatus("Exception occured.");
-					frame.setIdle();
-					
-				}
+
+				}// END: try-catch
 
 				return null;
 			}// END: doInBackground
