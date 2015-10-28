@@ -57,7 +57,6 @@ public class DiscreteTreeSpreadDataParser {
 		// ---TIME---//
 		
 		TimeParser timeParser = new TimeParser(settings.mrsd);
-//		timeParser.parseTime();
 		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree
 				.getRootNode()));
 
@@ -65,14 +64,14 @@ public class DiscreteTreeSpreadDataParser {
 		
 		// ---GEOJSON LAYER---//
 
-		if (settings.geojson != null) {
+		if (settings.geojsonFilename != null) {
 
-			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
+			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojsonFilename);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
 
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
 
-			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			String geojsonLayerId = Utils.splitString(settings.geojsonFilename, "/");
 			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);

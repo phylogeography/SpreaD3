@@ -20,27 +20,26 @@ public class DiscreteTreeSettings {
 	
 	//---OPTIONAL---//
 	
-	// moste recent sampling date string yyy-MM-dd
-	public String mrsd = "0-0-0";
+	// moste recent sampling date string yyyy/MM/dd
+	public String mrsd = "0/0/0";
 	
 	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
 	public double timescaleMultiplier = 1;
 	
-	public String geojson = null;
+	public String geojsonFilename = null;
 	
 	// number of discrete intervals
 	public Integer intervals = 10;
 	
 	// path to json output file 
-	public String output = "output.json";
+	public String outputFilename = "output.json";
 
 	public boolean header = false;
-
 	
 	//---GUI---//
 	
 	public RootedTree rootedTree = null;
 	public LinkedList<Location> locationsList = null;
-//	public boolean locationsEdited = false;
+	public boolean locationsEdited = false;
 	
 }//END: class

@@ -317,6 +317,7 @@ public class LocationCoordinatesEditor {
 			saveEdits();
 
 			window.setVisible(false);
+			settings.locationsEdited = true;
 			settings.locationsList = locationsList;
 			locationsEdited = true;
 

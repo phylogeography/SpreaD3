@@ -20,12 +20,12 @@ public class DateEditor extends JPanel {
 
 	public DateEditor() {
 
-		formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+		formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
 		today = new Date();
 
 		spinner = new JSpinner(new SpinnerDateModel(today, null, null, Calendar.MONTH));
 
-		spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy-MM-dd"));
+		spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy/MM/dd"));
 		spinner.setOpaque(false);
 
 		add(spinner);

@@ -618,7 +618,7 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(MAP)) {
 
-						settings.discreteTreeSettings.geojson = args1.getStringOption(MAP);
+						settings.discreteTreeSettings.geojsonFilename = args1.getStringOption(MAP);
 					}
 
 					// if (args1.hasOption(TRAITS)) {
@@ -630,7 +630,7 @@ public class Spread2ConsoleApp {
 
 					if (args1.hasOption(OUTPUT)) {
 
-						settings.discreteTreeSettings.output = args1.getStringOption(OUTPUT);
+						settings.discreteTreeSettings.outputFilename = args1.getStringOption(OUTPUT);
 
 					} // END: option check
 
@@ -642,9 +642,6 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					// DiscreteTreeParserOld parser = new DiscreteTreeParserOld(
-					// settings.discreteTreeSettings);
-
 					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(
 							settings.discreteTreeSettings);
 					SpreadData data = parser.parse();
@@ -653,7 +650,7 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.discreteTreeSettings.output);
+					File file = new File(settings.discreteTreeSettings.outputFilename);
 					FileWriter fw;
 					fw = new FileWriter(file);
 					fw.write(s);
