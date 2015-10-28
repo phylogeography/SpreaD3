@@ -28,7 +28,7 @@ public class DiscreteTreeSpreadDataParser {
 	}// END: Constructor
 
 	public SpreadData parse() throws IOException, ImportException,
-			AnalysisException  {
+			AnalysisException {
 
 		TimeLine timeLine = null;
 		LinkedList<Attribute> mapAttributes = null;
@@ -173,14 +173,14 @@ public class DiscreteTreeSpreadDataParser {
 		for (Location location : locationsList) {
 
 			Coordinate coordinate = location.getCoordinate();
+			if (coordinate == null) {
+				throw new AnalysisException("Location " + location.getId()
+						+ " has no coordinates set.");
+			}
 
 			Double latitude = coordinate.getXCoordinate();
-			
 			Double longitude = coordinate.getYCoordinate();
-			if(longitude == null) {
-				throw new AnalysisException("Range attribute is empty.");
-			}
-			
+
 			// update coordinates range
 
 			if (latitude < xCoordinateRange[Attribute.MIN_INDEX]) {

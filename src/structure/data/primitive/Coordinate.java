@@ -30,27 +30,14 @@ public class Coordinate {
 	}// END: Constructor
 
 	public double getXCoordinate() throws AnalysisException {
-
-		if (xCoordinate == null) {
-			throw new AnalysisException("xCoordinate attribute is empty.");
-		}
-
 		return xCoordinate;
 	}// END: getXCoordinate
 
 	public double getYCoordinate() throws AnalysisException {
-
-		if (yCoordinate == null) {
-			throw new AnalysisException("yCoordinate attribute is empty.");
-		}
-
 		return yCoordinate;
 	}// END: yCoordinate
 
 	public Double getAltitude() throws AnalysisException {
-		if (altitude == null) {
-			throw new AnalysisException("altitude attribute is empty.");
-		}
 		return altitude;
 	}// END: getAltitude
 

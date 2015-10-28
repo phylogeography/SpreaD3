@@ -875,7 +875,7 @@ public class KmlRenderer implements Renderer {
 		return points;
 	}// END: GenerateCircle
 
-	private Coordinate getCoordinate(Point point) {
+	private Coordinate getCoordinate(Point point) throws AnalysisException {
 
 		Coordinate coordinate = null;
 		if (point.hasLocation()) {

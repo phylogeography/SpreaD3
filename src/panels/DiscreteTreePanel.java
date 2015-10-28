@@ -1,5 +1,6 @@
 package panels;
 
+import exceptions.AnalysisException;
 import gui.DateEditor;
 import gui.InterfaceUtils;
 import gui.LocationCoordinatesEditor;
@@ -402,10 +403,19 @@ public class DiscreteTreePanel {
 
 				try {
 
+					SpreadData data = null ;
+//					try {
+					
 					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(
 							settings);
-					SpreadData data = parser.parse();
+					 data = parser.parse();
 
+//					} catch(AnalysisException e) {
+//						InterfaceUtils.handleException(e, e.getMessage());
+//						frame.setStatus("Exception occured.");
+//						frame.setIdle();
+//					}
+					
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
