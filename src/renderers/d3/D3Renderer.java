@@ -5,9 +5,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Enumeration;
@@ -15,6 +13,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.apache.commons.io.FileUtils;
+
 import settings.rendering.D3RendererSettings;
 
 public class D3Renderer {
@@ -92,7 +91,7 @@ public class D3Renderer {
 
 			// copy input.json to path/output/data/data.json
 			srcDir = new File(settings.jsonFilename);
-			destDir = new File(settings.outputFilename.concat(D3_DATA_DIR));
+			destDir = new File(settings.outputFilename.concat("/").concat(D3_DATA_DIR));
 			FileUtils.copyFile(srcDir, destDir);
 
 			// point system default browser to index.html

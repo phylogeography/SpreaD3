@@ -21,6 +21,7 @@ public class InterfaceUtils {
 	public static final String SAVE_ICON = "/gui/icons/save.png";
 	public static final String GEOJSON_ICON = "/gui/icons/geojson.png";
 	public static final String JSON_ICON = "/gui/icons/json.png";
+	public static final String COLOR_WHEEL_ICON = "/gui/icons/colorwheel.png";
 	
 	public static Image CreateImage(String path) {
 		URL imgURL = Spread2App.class.getResource(path);

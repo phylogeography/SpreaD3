@@ -1164,7 +1164,7 @@ public class Spread2ConsoleApp {
 					settings.kmlRendererSettings = new KmlRendererSettings();
 					if (kmlRenderArguments.hasOption(JSON)) {
 
-						settings.kmlRendererSettings.json = kmlRenderArguments
+						settings.kmlRendererSettings.jsonFilename = kmlRenderArguments
 								.getStringOption(JSON);
 
 					} else {
@@ -1468,7 +1468,7 @@ public class Spread2ConsoleApp {
 				try {
 
 					Reader reader = new FileReader(
-							settings.kmlRendererSettings.json);
+							settings.kmlRendererSettings.jsonFilename);
 					Gson gson = new GsonBuilder().create();
 					SpreadData input = gson.fromJson(reader, SpreadData.class);
 

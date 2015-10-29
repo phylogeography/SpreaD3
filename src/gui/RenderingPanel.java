@@ -1,6 +1,7 @@
 package gui;
 
 import gui.panels.D3RenderPanel;
+import gui.panels.KmlRendererPanel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -121,8 +122,9 @@ public class RenderingPanel extends JPanel {
 
 	private void populateKmlPanels() {
 
-		System.out.println("TODO");
+		KmlRendererPanel panel = new KmlRendererPanel(frame, holderPanel);
+		panel.populateHolderPanel();
 
-	}// END: populateD3Panels
+	}// END: populateKmlPanels
 
 }// END: class
