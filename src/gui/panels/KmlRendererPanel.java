@@ -2,6 +2,7 @@ package gui.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -217,7 +218,9 @@ public class KmlRendererPanel extends OptionsPanel {
 
 			constraints = new GridBagConstraints();
 			spinningPanelsHolder = new JPanel();
-
+			spinningPanelsHolder.setLayout(new GridBagLayout());
+			spinningPanelsHolder.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );
+			
 			populatePoints();
 			populateLines();
 			populateAreas();
@@ -561,7 +564,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		// spinner and holder
 		JPanel tmpPanelsHolder = new JPanel();
 		tmpPanelsHolder.setLayout(new GridBagLayout());
-		SpinningPanel spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Points",
+		SpinningPanel spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Counts",
 				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
 						MainFrame.SPINNING_PANEL_HEIGHT));
 
