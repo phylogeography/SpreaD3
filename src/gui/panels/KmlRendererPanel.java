@@ -18,6 +18,9 @@ import java.util.LinkedList;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -51,9 +54,9 @@ public class KmlRendererPanel extends OptionsPanel {
 	private LinkedList<String> lineAttributeNames;
 
 	// Panels
-	private OptionsPanel tmpPanelsHolder;
-	private JPanel tmpPanel;
-	private SpinningPanel spinningPanel;
+//	private OptionsPanel tmpPanelsHolder;
+//	private JPanel tmpPanel;
+//	private SpinningPanel spinningPanel;
 	private JPanel spinningPanelsHolder;
 
 	// Flags
@@ -66,10 +69,10 @@ public class KmlRendererPanel extends OptionsPanel {
 	private JButton lineColor;
 	private JButton areaColor;
 	private JButton countColor;
-	
+
 	// Combo boxes
 	private JComboBox pointColorMapping;
-	private JComboBox areaMapping;
+	private JComboBox pointAreaMapping;
 	private JComboBox lineColorMapping;
 	private JComboBox lineAltitudeMapping;
 
@@ -227,269 +230,6 @@ public class KmlRendererPanel extends OptionsPanel {
 
 	}// END: populateRender
 
-	// TODO: arrange those asshole top to bottom: http://www.hitmaroc.net/2219611-3042-stack-swing-elements-top-bottom.html
-	
-	// //////////////
-	// ---COUNTS---//
-	// //////////////
-
-	private void populateCounts() {
-
-		GridBagConstraints c = new GridBagConstraints();
-
-		// spinner and holder
-		tmpPanelsHolder = new OptionsPanel(12, 12, SwingConstants.NORTH);
-		tmpPanelsHolder.setLayout(new BoxLayout(tmpPanelsHolder,
-				BoxLayout.Y_AXIS));
-		spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Counts",
-				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
-						MainFrame.SPINNING_PANEL_HEIGHT));
-		
-		
-		
-		// color
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Color:"));
-		countColor = new JButton("Color",
-				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
-		countColor.addActionListener(new ListenCountColor());
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(countColor, c);
-		tmpPanelsHolder.add(tmpPanel);
-		
-		
-		
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		spinningPanel.showBottom(true);
-		spinningPanelsHolder.add(spinningPanel, constraints);
-		
-	}//END: populateCounts
-	
-	private class ListenCountColor implements ActionListener {
-		public void actionPerformed(ActionEvent ev) {
-
-			Color defaultColor = new Color(
-					(int) settings.countColor[KmlRendererSettings.R],
-					(int) settings.countColor[KmlRendererSettings.G],
-					(int) settings.countColor[KmlRendererSettings.B]);
-
-			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
-					"Choose color...", defaultColor, true);
-
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
-
-		}// END: actionPerformed
-	}// END: ListenPointColor
-	
-	// //////////////
-	// ---POINTS---//
-	// //////////////
-
-	private void populateAreas() {
-
-		GridBagConstraints c = new GridBagConstraints();
-
-		// spinner and holder
-		tmpPanelsHolder = new OptionsPanel(12, 12, SwingConstants.NORTH);
-		tmpPanelsHolder.setLayout(new BoxLayout(tmpPanelsHolder,
-				BoxLayout.Y_AXIS));
-		spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Areas",
-				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
-						MainFrame.SPINNING_PANEL_HEIGHT));
-
-		// color
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Color:"));
-		areaColor = new JButton("Color",
-				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
-		areaColor.addActionListener(new ListenAreaColor());
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(areaColor, c);
-		tmpPanelsHolder.add(tmpPanel);
-
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		spinningPanel.showBottom(true);
-		spinningPanelsHolder.add(spinningPanel, constraints);
-
-	}// END: populateAreas
-
-	private class ListenAreaColor implements ActionListener {
-		public void actionPerformed(ActionEvent ev) {
-
-			Color defaultColor = new Color(
-					(int) settings.areaColor[KmlRendererSettings.R],
-					(int) settings.areaColor[KmlRendererSettings.G],
-					(int) settings.areaColor[KmlRendererSettings.B]);
-
-			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
-					"Choose color...", defaultColor, true);
-
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
-
-		}// END: actionPerformed
-	}// END: ListenPointColor
-
-	// /////////////
-	// ---LINES---//
-	// /////////////
-
-	private void populateLines() {
-
-		GridBagConstraints c = new GridBagConstraints();
-
-		// spinner and holder
-		tmpPanelsHolder = new OptionsPanel(12, 12, SwingConstants.NORTH);
-		tmpPanelsHolder.setLayout(new BoxLayout(tmpPanelsHolder,
-				BoxLayout.Y_AXIS));
-		spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Lines",
-				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
-						MainFrame.SPINNING_PANEL_HEIGHT));
-
-		// color mapping
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Color attribute:"));
-		lineColorMapping = new JComboBox();
-		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
-				lineAttributeNames.toArray());
-		lineColorMapping.setModel(comboBoxModel);
-		lineColorMapping.addItemListener(new ListenLineColorMapping());
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(lineColorMapping, c);
-		tmpPanelsHolder.add(tmpPanel);
-
-		// color
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Color:"));
-		lineColor = new JButton("Color",
-				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
-		lineColor.addActionListener(new ListenLineColor());
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(lineColor, c);
-		tmpPanelsHolder.add(tmpPanel);
-
-		// altitude maping
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Altitude attribute:"));
-		lineAltitudeMapping = new JComboBox();
-		comboBoxModel = new DefaultComboBoxModel(lineAttributeNames.toArray());
-		lineAltitudeMapping.setModel(comboBoxModel);
-		lineAltitudeMapping.addItemListener(new ListenLineAltitudeMapping());
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(lineAltitudeMapping, c);
-		tmpPanelsHolder.add(tmpPanel);
-
-		// altitude
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Altitude:"));
-		lineAltitude = new JSlider(JSlider.HORIZONTAL,
-				settings.minLineAltitude.intValue(),
-				settings.maxLineAltitude.intValue(),
-				settings.lineAltitude.intValue());
-		lineAltitude.setMajorTickSpacing(100000);
-		// lineAltitude.setMinorTickSpacing(50000);
-		lineAltitude.setPaintTicks(true);
-		lineAltitude.setPaintLabels(true);
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(lineAltitude, c);
-		tmpPanelsHolder.add(tmpPanel);
-
-		// width
-		tmpPanel = new JPanel();
-		tmpPanel.setBorder(new TitledBorder("Width:"));
-		lineWidth = new JSlider(JSlider.HORIZONTAL,
-				settings.minLineWidth.intValue(),
-				settings.maxLineWidth.intValue(), settings.lineWidth.intValue());
-		lineWidth.setMajorTickSpacing(1);
-		// lineWidth.setMinorTickSpacing(50000);
-		lineWidth.setPaintTicks(true);
-		lineWidth.setPaintLabels(true);
-		tmpPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(lineWidth, c);
-		tmpPanelsHolder.add(tmpPanel);
-
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		spinningPanel.showBottom(true);
-		spinningPanelsHolder.add(spinningPanel, constraints);
-
-	}// END: populateLines
-
-	private class ListenLineAltitudeMapping implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent event) {
-			if (event.getStateChange() == ItemEvent.SELECTED) {
-
-				Object item = event.getItem();
-				String attribute = item.toString();
-
-			} // END: selected check
-		}// END: itemStateChanged
-
-	}// END: ListenAreaMapping
-
-	private class ListenLineColorMapping implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent event) {
-			if (event.getStateChange() == ItemEvent.SELECTED) {
-
-				Object item = event.getItem();
-				String attribute = item.toString();
-
-			} // END: selected check
-		}// END: itemStateChanged
-
-	}// END: ListenLineColorMapping
-
-	private class ListenLineColor implements ActionListener {
-		public void actionPerformed(ActionEvent ev) {
-
-			Color defaultColor = new Color(
-					(int) settings.lineColor[KmlRendererSettings.R],
-					(int) settings.lineColor[KmlRendererSettings.G],
-					(int) settings.lineColor[KmlRendererSettings.B]);
-
-			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
-					"Choose color...", defaultColor, true);
-
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
-
-		}// END: actionPerformed
-	}// END: ListenPointColor
-
 	// //////////////
 	// ---POINTS---//
 	// //////////////
@@ -497,12 +237,12 @@ public class KmlRendererPanel extends OptionsPanel {
 	private void populatePoints() {
 
 		GridBagConstraints c = new GridBagConstraints();
-
+		JPanel tmpPanel;
+		
 		// spinner and holder
-		tmpPanelsHolder = new OptionsPanel(12, 12, SwingConstants.NORTH);
-		tmpPanelsHolder.setLayout(new BoxLayout(tmpPanelsHolder,
-				BoxLayout.Y_AXIS));
-		spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Points",
+		JPanel tmpPanelsHolder = new JPanel();
+		tmpPanelsHolder.setLayout(new GridBagLayout());
+		SpinningPanel spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Points",
 				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
 						MainFrame.SPINNING_PANEL_HEIGHT));
 
@@ -514,12 +254,11 @@ public class KmlRendererPanel extends OptionsPanel {
 				pointAttributeNames.toArray());
 		pointColorMapping.setModel(comboBoxModel);
 		pointColorMapping.addItemListener(new ListenPointColorMapping());
-		tmpPanel.setLayout(new GridBagLayout());
+		tmpPanel.add(pointColorMapping);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		tmpPanel.add(pointColorMapping, c);
-		tmpPanelsHolder.add(tmpPanel);
+		tmpPanelsHolder.add(tmpPanel, c);
 
 		// color
 		tmpPanel = new JPanel();
@@ -527,26 +266,24 @@ public class KmlRendererPanel extends OptionsPanel {
 		pointColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		pointColor.addActionListener(new ListenPointColor());
-		tmpPanel.setLayout(new GridBagLayout());
+		tmpPanel.add(pointColor);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(pointColor, c);
-		tmpPanelsHolder.add(tmpPanel);
+		c.gridy = 1;
+		tmpPanelsHolder.add(tmpPanel, c);
 
 		// area mapping
 		tmpPanel = new JPanel();
 		tmpPanel.setBorder(new TitledBorder("Area attribute:"));
-		areaMapping = new JComboBox();
+		pointAreaMapping = new JComboBox();
 		comboBoxModel = new DefaultComboBoxModel(pointAttributeNames.toArray());
-		areaMapping.setModel(comboBoxModel);
-		areaMapping.addItemListener(new ListenAreaMapping());
-		tmpPanel.setLayout(new GridBagLayout());
+		pointAreaMapping.setModel(comboBoxModel);
+		pointAreaMapping.addItemListener(new ListenPointAreaMapping());
+		tmpPanel.add(pointAreaMapping);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(areaMapping, c);
-		tmpPanelsHolder.add(tmpPanel);
+		c.gridy = 2;
+		tmpPanelsHolder.add(tmpPanel, c);
 
 		// area
 		tmpPanel = new JPanel();
@@ -558,22 +295,21 @@ public class KmlRendererPanel extends OptionsPanel {
 		pointArea.setMinorTickSpacing(500);
 		pointArea.setPaintTicks(true);
 		pointArea.setPaintLabels(true);
-		tmpPanel.setLayout(new GridBagLayout());
+		tmpPanel.add(pointArea);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 0;
-		tmpPanel.add(pointArea, c);
-		tmpPanelsHolder.add(tmpPanel);
+		c.gridy = 3;
+		tmpPanelsHolder.add(tmpPanel, c);
 
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		spinningPanel.showBottom(true);
+		constraints.fill = GridBagConstraints.VERTICAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		spinningPanel.showBottom(true);
 		spinningPanelsHolder.add(spinningPanel, constraints);
 
 	}// END: populatePoints
 
-	private class ListenAreaMapping implements ItemListener {
+	private class ListenPointAreaMapping implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent event) {
@@ -585,7 +321,7 @@ public class KmlRendererPanel extends OptionsPanel {
 			} // END: selected check
 		}// END: itemStateChanged
 
-	}// END: ListenAreaMapping
+	}// END: ListenPointAreaMapping
 
 	private class ListenPointColorMapping implements ItemListener {
 
@@ -619,6 +355,253 @@ public class KmlRendererPanel extends OptionsPanel {
 		}// END: actionPerformed
 	}// END: ListenPointColor
 
+	// /////////////
+	// ---LINES---//
+	// /////////////
+
+	private void populateLines() {
+		
+		GridBagConstraints c = new GridBagConstraints();
+		JPanel tmpPanel;
+		
+		// spinner and holder
+		JPanel tmpPanelsHolder = new JPanel();
+		tmpPanelsHolder.setLayout(new GridBagLayout());
+		SpinningPanel spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Lines",
+				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
+						MainFrame.SPINNING_PANEL_HEIGHT));
+
+		// color mapping
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Color attribute:"));
+		lineColorMapping = new JComboBox();
+		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
+				lineAttributeNames.toArray());
+		lineColorMapping.setModel(comboBoxModel);
+		lineColorMapping.addItemListener(new ListenLineColorMapping());
+		tmpPanel.add(lineColorMapping);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		tmpPanelsHolder.add(tmpPanel, c);
+
+		// color
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Color:"));
+		lineColor = new JButton("Color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		lineColor.addActionListener(new ListenLineColor());
+		tmpPanel.add(lineColor);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		tmpPanelsHolder.add(tmpPanel,c);
+
+		// altitude maping
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Altitude attribute:"));
+		lineAltitudeMapping = new JComboBox();
+		comboBoxModel = new DefaultComboBoxModel(lineAttributeNames.toArray());
+		lineAltitudeMapping.setModel(comboBoxModel);
+		lineAltitudeMapping.addItemListener(new ListenLineAltitudeMapping());
+		tmpPanel.add(lineAltitudeMapping);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		tmpPanelsHolder.add(tmpPanel,c);
+
+		// altitude
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Altitude:"));
+		lineAltitude = new JSlider(JSlider.HORIZONTAL,
+				settings.minLineAltitude.intValue(),
+				settings.maxLineAltitude.intValue(),
+				settings.lineAltitude.intValue());
+		lineAltitude.setMajorTickSpacing(100000);
+		lineAltitude.setPaintTicks(true);
+		lineAltitude.setPaintLabels(true);
+		tmpPanel.add(lineAltitude);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		tmpPanelsHolder.add(tmpPanel, c);
+
+		// width
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Width:"));
+		lineWidth = new JSlider(JSlider.HORIZONTAL,
+				settings.minLineWidth.intValue(),
+				settings.maxLineWidth.intValue(), settings.lineWidth.intValue());
+		lineWidth.setMajorTickSpacing(1);
+		lineWidth.setPaintTicks(true);
+		lineWidth.setPaintLabels(true);
+		tmpPanel.add(lineWidth);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 4;
+		tmpPanelsHolder.add(tmpPanel,c);
+
+		spinningPanel.showBottom(true);
+		constraints.fill = GridBagConstraints.VERTICAL;
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		spinningPanelsHolder.add(spinningPanel, constraints);
+
+	}// END: populateLines
+
+	private class ListenLineAltitudeMapping implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				Object item = event.getItem();
+				String attribute = item.toString();
+
+			} // END: selected check
+		}// END: itemStateChanged
+
+	}// END: ListenLineAltitudeMapping
+
+	private class ListenLineColorMapping implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				Object item = event.getItem();
+				String attribute = item.toString();
+
+			} // END: selected check
+		}// END: itemStateChanged
+
+	}// END: ListenLineColorMapping
+
+	private class ListenLineColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color(
+					(int) settings.lineColor[KmlRendererSettings.R],
+					(int) settings.lineColor[KmlRendererSettings.G],
+					(int) settings.lineColor[KmlRendererSettings.B]);
+
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			// if (c != null) {
+			// polygonsMinColor = c;
+			// }
+
+		}// END: actionPerformed
+	}// END: ListenLineColor
+
+	// //////////////
+	// ---AREAS---//
+	// //////////////
+
+	private void populateAreas() {
+
+		GridBagConstraints c = new GridBagConstraints();
+		JPanel tmpPanel;
+		
+		// spinner and holder
+		JPanel tmpPanelsHolder = new JPanel();
+		tmpPanelsHolder.setLayout(new GridBagLayout());
+		SpinningPanel spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Areas",
+				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
+						MainFrame.SPINNING_PANEL_HEIGHT));
+
+		// color
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Color:"));
+		areaColor = new JButton("Color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		areaColor.addActionListener(new ListenAreaColor());
+		tmpPanel.add(areaColor);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		tmpPanelsHolder.add(tmpPanel, c);
+
+		constraints.fill = GridBagConstraints.VERTICAL;
+		constraints.gridx = 2;
+		constraints.gridy = 0;
+		spinningPanel.showBottom(true);
+		spinningPanelsHolder.add(spinningPanel, constraints);
+
+	}// END: populateAreas
+
+	private class ListenAreaColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color(
+					(int) settings.areaColor[KmlRendererSettings.R],
+					(int) settings.areaColor[KmlRendererSettings.G],
+					(int) settings.areaColor[KmlRendererSettings.B]);
+
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			// if (c != null) {
+			// polygonsMinColor = c;
+			// }
+
+		}// END: actionPerformed
+	}// END: ListenAreaColor
+
+	// //////////////
+	// ---COUNTS---//
+	// //////////////
+
+	private void populateCounts() {
+
+		GridBagConstraints c = new GridBagConstraints();
+		JPanel tmpPanel;
+		
+		// spinner and holder
+		JPanel tmpPanelsHolder = new JPanel();
+		tmpPanelsHolder.setLayout(new GridBagLayout());
+		SpinningPanel spinningPanel = new SpinningPanel(tmpPanelsHolder, "   Points",
+				new Dimension(MainFrame.SPINNING_PANEL_WIDTH,
+						MainFrame.SPINNING_PANEL_HEIGHT));
+
+		// color
+		tmpPanel = new JPanel();
+		tmpPanel.setBorder(new TitledBorder("Color:"));
+		countColor = new JButton("Color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		countColor.addActionListener(new ListenCountColor());
+		tmpPanel.add(countColor);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		tmpPanelsHolder.add(tmpPanel,c);
+
+		constraints.fill = GridBagConstraints.VERTICAL;
+		constraints.gridx = 3;
+		constraints.gridy = 0;
+		spinningPanel.showBottom(true);
+		spinningPanelsHolder.add(spinningPanel, constraints);
+
+	}// END: populateCounts
+
+	private class ListenCountColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color(
+					(int) settings.countColor[KmlRendererSettings.R],
+					(int) settings.countColor[KmlRendererSettings.G],
+					(int) settings.countColor[KmlRendererSettings.B]);
+
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			// if (c != null) {
+			// polygonsMinColor = c;
+			// }
+
+		}// END: actionPerformed
+	}// END: ListenPointColor
 
 	private void resetFlags() {
 		loadJsonCreated = false;
