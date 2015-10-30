@@ -35,11 +35,10 @@ import utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-@SuppressWarnings("rawtypes")
-public class DiscreteTreePanel {
+@SuppressWarnings({ "rawtypes", "serial" })
+public class DiscreteTreePanel extends OptionsPanel {
 
 	private MainFrame frame;
-	private OptionsPanel holderPanel;
 
 	private DiscreteTreeSettings settings;
 
@@ -67,18 +66,16 @@ public class DiscreteTreePanel {
 	private JTextField intervals;
 	private boolean intervalsCreated = false;
 
-	public DiscreteTreePanel(MainFrame frame, OptionsPanel holderPanel) {
+	public DiscreteTreePanel(MainFrame frame) {
 
 		this.frame = frame;
-		this.holderPanel = holderPanel;
-
+		populatePanel();
+		
 	}// END: Constructor
 
-	public void populateHolderPanel() {
+	public void populatePanel() {
 
 		settings = new DiscreteTreeSettings();
-
-		holderPanel.removeAll();
 		resetFlags();
 
 		loadTree = new JButton("Load",
@@ -86,7 +83,7 @@ public class DiscreteTreePanel {
 		loadTree.addActionListener(new ListenLoadTree());
 
 		if (!loadTreeCreated) {
-			holderPanel.addComponentWithLabel("Load tree file:", loadTree);
+			addComponentWithLabel("Load tree file:", loadTree);
 			loadTreeCreated = true;
 		}
 
@@ -196,7 +193,7 @@ public class DiscreteTreePanel {
 							.addItemListener(new ListenLocationAttributeSelector());
 
 					if (!locationAttributeSelectorCreated) {
-						holderPanel.addComponentWithLabel(
+						addComponentWithLabel(
 								"Select location attribute",
 								locationAttributeSelector);
 						locationAttributeSelectorCreated = true;
@@ -240,7 +237,7 @@ public class DiscreteTreePanel {
 						.addActionListener(new ListenOpenLocationCoordinatesEditor());
 
 				if (!setupLocationCoordinatesCreated) {
-					holderPanel.addComponentWithLabel(
+					addComponentWithLabel(
 							"Setup location attribute coordinates:",
 							setupLocationCoordinates);
 					setupLocationCoordinatesCreated = true;
@@ -266,7 +263,7 @@ public class DiscreteTreePanel {
 
 				if (!dateEditorCreated) {
 					dateEditor = new DateEditor();
-					holderPanel.addComponentWithLabel(
+					addComponentWithLabel(
 							"Most recent sampling date:", dateEditor);
 					dateEditorCreated = true;
 				}
@@ -274,7 +271,7 @@ public class DiscreteTreePanel {
 				if (!timescaleMultiplierCreated) {
 					timescaleMultiplier = new JTextField(
 							String.valueOf(settings.timescaleMultiplier), 10);
-					holderPanel.addComponentWithLabel("Time scale multiplier:",
+					addComponentWithLabel("Time scale multiplier:",
 							timescaleMultiplier);
 					timescaleMultiplierCreated = true;
 				}
@@ -285,7 +282,7 @@ public class DiscreteTreePanel {
 							InterfaceUtils
 									.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 					loadGeojson.addActionListener(new ListenLoadGeojson());
-					holderPanel.addComponentWithLabel("Load GeoJSON file:",
+					addComponentWithLabel("Load GeoJSON file:",
 							loadGeojson);
 					loadGeojsonCreated = true;
 				}
@@ -293,7 +290,7 @@ public class DiscreteTreePanel {
 				if (!intervalsCreated) {
 					intervals = new JTextField(
 							String.valueOf(settings.intervals), 10);
-					holderPanel.addComponentWithLabel("Number of intervals:",
+					addComponentWithLabel("Number of intervals:",
 							intervals);
 					intervalsCreated = true;
 				}
@@ -303,7 +300,7 @@ public class DiscreteTreePanel {
 							InterfaceUtils
 									.createImageIcon(InterfaceUtils.SAVE_ICON));
 					output.addActionListener(new ListenOutput());
-					holderPanel.addComponentWithLabel("Parse JSON:", output);
+					addComponentWithLabel("Parse JSON:", output);
 					outputCreated = true;
 				}
 

@@ -1,5 +1,7 @@
 package gui;
 
+import gui.panels.DataPanel;
+import gui.panels.RenderingPanel;
 import jam.framework.DocumentFrame;
 
 import java.awt.BorderLayout;
@@ -23,6 +25,9 @@ import app.Spread2App;
 @SuppressWarnings("serial")
 public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
+	public static final int SPINNING_PANEL_HEIGHT = 20;
+	public static final int SPINNING_PANEL_WIDTH = 260;
+	
 	// tabs, there shall be two
 	private JTabbedPane tabbedPane = new JTabbedPane();
 

@@ -16,10 +16,10 @@ import javax.swing.SwingWorker;
 import renderers.d3.D3Renderer;
 import settings.rendering.D3RendererSettings;
 
-public class D3RenderPanel {
+@SuppressWarnings("serial")
+public class D3RenderPanel extends OptionsPanel {
 
 	private MainFrame frame;
-	private OptionsPanel holderPanel;
 
 	private D3RendererSettings settings;
 
@@ -29,25 +29,25 @@ public class D3RenderPanel {
 	private JButton render;
 	private boolean renderCreated = false;
 
-	public D3RenderPanel(MainFrame frame, OptionsPanel holderPanel) {
+	public D3RenderPanel(MainFrame frame) {
 
 		this.frame = frame;
-		this.holderPanel = holderPanel;
+
+		populatePanel();
 
 	}// END: Constructor
 
-	public void populateHolderPanel() {
+	public void populatePanel() {
 
 		this.settings = new D3RendererSettings();
 
-		holderPanel.removeAll();
 		resetFlags();
 
 		if (!loadJsonCreated) {
 			loadJson = new JButton("Load",
 					InterfaceUtils.createImageIcon(InterfaceUtils.JSON_ICON));
 			loadJson.addActionListener(new ListenLoadJson());
-			holderPanel.addComponentWithLabel("Load JSON file:", loadJson);
+			addComponentWithLabel("Load JSON file:", loadJson);
 			loadJsonCreated = true;
 		}
 
@@ -100,7 +100,7 @@ public class D3RenderPanel {
 			render = new JButton("Render",
 					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			render.addActionListener(new ListenRender());
-			holderPanel.addComponentWithLabel("Parse JSON:", render);
+			addComponentWithLabel("Parse JSON:", render);
 			renderCreated = true;
 		}
 	}// END: populateRender
@@ -120,7 +120,6 @@ public class D3RenderPanel {
 				File file = chooser.getSelectedFile();
 				settings.outputFilename = file.getAbsolutePath();
 
-				// collectSettings();
 				render();
 
 				File tmpDir = chooser.getCurrentDirectory();

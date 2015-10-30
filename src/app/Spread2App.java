@@ -39,7 +39,7 @@ public class Spread2App {
 
 		} else {
 
-			Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+//			Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 			new Spread2UIApp();
 
 		}

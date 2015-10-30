@@ -786,7 +786,7 @@ public class KmlRenderer implements Renderer {
 			double maxValue = countAttribute.getRange()[1];
 
 			area = map(countAttributeValue, minValue, maxValue,
-					settings.minPointArea, settings.maxPointArea);
+					settings.minCountArea, settings.maxCountArea);
 
 			// store for future reference
 			countAreaMap.put(countAttributeValue, area);

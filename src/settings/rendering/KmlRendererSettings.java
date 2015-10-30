@@ -62,7 +62,7 @@ public class KmlRendererSettings {
 	// For discrete attributes
 
 	// Fixed
-	public double pointArea = 1000;
+	public Double pointArea = 1000.0;
 
 	///////////////
 	// ---LINES---//
@@ -155,7 +155,6 @@ public class KmlRendererSettings {
 	// ---AREA---//
 
 	// For continuous attributes
-	public String countAreaMapping = null;
 	public Double minCountArea = 20000.0;
 	public Double maxCountArea = 200000.0;
 
