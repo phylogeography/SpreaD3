@@ -25,9 +25,6 @@ import app.Spread2App;
 @SuppressWarnings("serial")
 public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
-	public static final int SPINNING_PANEL_HEIGHT = 20;
-	public static final int SPINNING_PANEL_WIDTH = 260;
-	
 	// tabs, there shall be two
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
