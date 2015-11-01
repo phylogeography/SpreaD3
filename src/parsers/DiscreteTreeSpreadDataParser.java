@@ -55,7 +55,7 @@ public class DiscreteTreeSpreadDataParser {
 			locationsList = settings.locationsList;
 		} else {
 			DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-					settings.locationsFilename, settings.header);
+					settings.locationsFilename, settings.hasHeader);
 			locationsList = locationsParser.parseLocations();
 		}
 

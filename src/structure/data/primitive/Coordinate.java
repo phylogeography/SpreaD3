@@ -1,7 +1,5 @@
 package structure.data.primitive;
 
-import exceptions.AnalysisException;
-
 public class Coordinate {
 
 	private final Double xCoordinate;
@@ -29,15 +27,15 @@ public class Coordinate {
 
 	}// END: Constructor
 
-	public double getXCoordinate() throws AnalysisException {
+	public double getXCoordinate() {
 		return xCoordinate;
 	}// END: getXCoordinate
 
-	public double getYCoordinate() throws AnalysisException {
+	public double getYCoordinate() {
 		return yCoordinate;
 	}// END: yCoordinate
 
-	public Double getAltitude() throws AnalysisException {
+	public Double getAltitude() {
 		return altitude;
 	}// END: getAltitude
 

@@ -1,10 +1,5 @@
 package gui.panels;
 
-import gui.MainFrame;
-import gui.ParserTypes;
-import jam.framework.Exportable;
-import jam.panels.OptionsPanel;
-
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
@@ -13,10 +8,13 @@ import java.awt.event.ItemListener;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+
+import gui.MainFrame;
+import gui.ParserTypes;
+import jam.panels.OptionsPanel;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DataPanel extends OptionsPanel   {
@@ -120,12 +118,9 @@ public class DataPanel extends OptionsPanel   {
 	// /////////////////////
 
 	private void populateDiscreteTreePanels() {
-
-//		DiscreteTreePanel panel = new DiscreteTreePanel(frame, holderPanel);
-//		panel.populateHolderPanel();
 		
 		holderPanel.removeAll();
-		holderPanel.add(new DiscreteTreePanel(frame ));
+		holderPanel.addComponent(new DiscreteTreePanel(frame ));
 		
 	}//END: populateDiscreteTreePanels
 	
@@ -134,11 +129,11 @@ public class DataPanel extends OptionsPanel   {
 	// ////////////////////
 
 	private void populateBayesFactorPanels() {
-
+		
 		holderPanel.removeAll();
-
-		System.out.println("TODO");
-	}
+		holderPanel.addComponent(new BayesFactorsPanel(frame ));
+		
+	}//END: populateBayesFactorPanels
 
 	// ///////////////////////
 	// ---CONTINUOUS TREE---//

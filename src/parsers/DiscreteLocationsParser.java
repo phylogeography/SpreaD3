@@ -18,9 +18,6 @@ public class DiscreteLocationsParser {
 	private LinkedList<Location> locationsList;
 	private boolean header;
 
-//	private Attribute xCoordinate;
-//	private Attribute yCoordinate;
-
 	public DiscreteLocationsParser(String locations, boolean header) {
 
 		this.locations = locations;
@@ -28,17 +25,9 @@ public class DiscreteLocationsParser {
 
 	}// END: Constructor
 
-	public LinkedList<Location> parseLocations() throws IOException, AnalysisException  {
+	public LinkedList<Location> parseLocations() throws IOException, AnalysisException {
 
 		this.locationsList = new LinkedList<Location>();
-
-//		double[] xCoordinateRange = new double[2];
-//		xCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
-//		xCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
-//
-//		double[] yCoordinateRange = new double[2];
-//		yCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
-//		yCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
 
 		// create list from the coordinates file
 		String[] lines = Utils.readLines(locations, Utils.HASH_COMMENT);
@@ -56,8 +45,9 @@ public class DiscreteLocationsParser {
 			String illegalCharacter = "+";
 			if (locationName.contains(illegalCharacter)) {
 
-				throw new AnalysisException("Location " + locationName + " contains illegal character " + illegalCharacter);
-				
+				throw new AnalysisException(
+						"Location " + locationName + " contains illegal character " + illegalCharacter);
+
 			}
 
 			Double latitude = Double.valueOf(line[LATITUDE_COLUMN]);
@@ -66,41 +56,12 @@ public class DiscreteLocationsParser {
 			Coordinate coordinate = new Coordinate(latitude, longitude);
 
 			// create Location and add to the list of Locations
-			Location location = new Location(locationName,   coordinate);
+			Location location = new Location(locationName, coordinate);
 			locationsList.add(location);
 
-			// update coordinates range
-
-//			if (latitude < xCoordinateRange[Attribute.MIN_INDEX]) {
-//				xCoordinateRange[Attribute.MIN_INDEX] = latitude;
-//			} // END: min check
-//
-//			if (latitude > xCoordinateRange[Attribute.MAX_INDEX]) {
-//				xCoordinateRange[Attribute.MAX_INDEX] = latitude;
-//			} // END: max check
-//
-//			if (longitude < yCoordinateRange[Attribute.MIN_INDEX]) {
-//				yCoordinateRange[Attribute.MIN_INDEX] = longitude;
-//			} // END: min check
-//
-//			if (longitude > yCoordinateRange[Attribute.MAX_INDEX]) {
-//				yCoordinateRange[Attribute.MAX_INDEX] = longitude;
-//			} // END: max check
-
-		}// END: i loop
-
-//		xCoordinate = new Attribute("xCoordinate", xCoordinateRange);
-//		yCoordinate = new Attribute("yCoordinate", yCoordinateRange);
+		} // END: i loop
 
 		return locationsList;
 	}// END: parseLocations
-
-//	public Attribute getxCoordinateAttribute() {
-//		return xCoordinate;
-//	}
-//
-//	public Attribute getyCoordinateAttribute() {
-//		return yCoordinate;
-//	}
 
 }// END: class

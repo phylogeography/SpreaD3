@@ -1,6 +1,5 @@
 package structure.data;
 
-import exceptions.AnalysisException;
 import structure.data.primitive.Coordinate;
 import structure.data.primitive.Polygon;
 
@@ -48,7 +47,7 @@ public class Location {
 		return polygon;
 	}
 
-	public Coordinate getCoordinate() throws AnalysisException {
+	public Coordinate getCoordinate()  {
 		return coordinate;
 	}//END: getCoordinate
 

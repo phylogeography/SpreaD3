@@ -27,6 +27,8 @@ import javax.swing.table.TableColumn;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 import parsers.DiscreteLocationsParser;
+import settings.parsing.BayesFactorsSettings;
+import settings.parsing.DiscreteSpreadDataSettings;
 import settings.parsing.DiscreteTreeSettings;
 import structure.data.Location;
 import structure.data.primitive.Coordinate;
@@ -36,7 +38,7 @@ import exceptions.AnalysisException;
 public class LocationCoordinatesEditor {
 
 	private MainFrame frame;
-	private DiscreteTreeSettings settings;
+	// private DiscreteTreeSettings settings;
 
 	// Window
 	private JDialog window;
@@ -59,24 +61,22 @@ public class LocationCoordinatesEditor {
 	private LinkedList<Location> locationsList;
 	private boolean locationsEdited = false;
 
-	public LocationCoordinatesEditor(MainFrame frame, //
-			DiscreteTreeSettings settings) {
+	public LocationCoordinatesEditor(MainFrame frame
+	// DiscreteTreeSettings settings
+	) {
 
 		this.frame = frame;
-		this.settings = settings;
+		// this.settings = settings;
 
 		// Setup Main Menu buttons
-		load = new JButton("Load",
-				InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
-		save = new JButton("Save",
-				InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
-		done = new JButton("Done",
-				InterfaceUtils.createImageIcon(InterfaceUtils.CHECK_ICON));
+		load = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+		save = new JButton("Save", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+		done = new JButton("Done", InterfaceUtils.createImageIcon(InterfaceUtils.CHECK_ICON));
 
-		// Add Main Menu buttons listeners
-		load.addActionListener(new ListenLoad());
-		save.addActionListener(new ListenSave());
-		done.addActionListener(new ListenDone());
+		// // Add Main Menu buttons listeners
+		// load.addActionListener(new ListenLoad());
+		// save.addActionListener(new ListenSave());
+		// done.addActionListener(new ListenDone());
 
 		// Setup menu
 		menu = new JMenuBar();
@@ -95,21 +95,17 @@ public class LocationCoordinatesEditor {
 		table.setModel(tableModel);
 		table.setSurrendersFocusOnKeystroke(true);
 
-		TableColumn hidden = table.getColumnModel().getColumn(
-				InteractiveTableModel.HIDDEN_INDEX);
+		TableColumn hidden = table.getColumnModel().getColumn(InteractiveTableModel.HIDDEN_INDEX);
 		hidden.setMinWidth(2);
 		hidden.setPreferredWidth(2);
 		hidden.setMaxWidth(2);
-		hidden.setCellRenderer(new InteractiveRenderer(table, tableModel,
-				InteractiveTableModel.HIDDEN_INDEX));
+		hidden.setCellRenderer(new InteractiveRenderer(table, tableModel, InteractiveTableModel.HIDDEN_INDEX));
 
-		JScrollPane scrollPane = new JScrollPane(table,
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		RowNumberTable rowNumberTable = new RowNumberTable(table);
 		scrollPane.setRowHeaderView(rowNumberTable);
-		scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-				rowNumberTable.getTableHeader());
+		scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, rowNumberTable.getTableHeader());
 
 		// Setup window
 		owner = InterfaceUtils.getActiveFrame();
@@ -122,15 +118,57 @@ public class LocationCoordinatesEditor {
 
 	}// END: Constructor
 
-	public void launch() {
+	public void launch(BayesFactorsSettings settings) {
 
+		// Add Main Menu buttons listeners
+		load.addActionListener(new ListenLoad(settings));
+		save.addActionListener(new ListenSave());
+		done.addActionListener(new ListenDone(settings));
+
+		// reload if previously set up
+		this.locationsList = settings.locationsList;
+
+		// create one empty row
+		if (locationsList == null) {
+			locationsList = createEmptyLocation();
+		}
+
+		populateTable(locationsList);
+
+		// Display Frame
+		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		window.setSize(new Dimension(350, 300));
+		window.setMinimumSize(new Dimension(100, 100));
+		window.setResizable(true);
+		window.setVisible(true);
+
+	}// END: launch
+
+	private LinkedList<Location> createEmptyLocation() {
+
+		String emptyId = "";
+		Location emptyLocation = new Location(emptyId);
+		LinkedList<Location> emptyList = new LinkedList<Location>();
+		emptyList.add(emptyLocation);
+
+		return emptyList;
+	}// END: getEmptyLocations
+
+	public void launch(DiscreteTreeSettings settings) {
+
+		// Add Main Menu buttons listeners
+		load.addActionListener(new ListenLoad(settings));
+		save.addActionListener(new ListenSave());
+		done.addActionListener(new ListenDone(settings));
+
+		// reload if previously set up
 		this.locationsList = settings.locationsList;
 
 		try {
 
+			// get the locations form tree
 			if (locationsList == null) {
-				locationsList = getUniqueLocations(settings.rootedTree,
-						settings.locationAttributeName);
+				locationsList = getUniqueLocations(settings.rootedTree, settings.locationAttributeName);
 			}
 
 			populateTable(locationsList);
@@ -148,8 +186,7 @@ public class LocationCoordinatesEditor {
 
 	}// END: launch
 
-	private void populateTable(LinkedList<Location> locationsList)
-			throws AnalysisException {
+	private void populateTable(LinkedList<Location> locationsList) {
 
 		tableModel.cleanTable();
 
@@ -165,8 +202,7 @@ public class LocationCoordinatesEditor {
 				latitude = String.valueOf(coordinate.getXCoordinate());
 			}
 
-			tableModel.insertRow(i, new TableRecord(location.getId(),
-					longitude, latitude));
+			tableModel.insertRow(i, new TableRecord(location.getId(), longitude, latitude));
 
 		} // END: row loop
 
@@ -185,8 +221,8 @@ public class LocationCoordinatesEditor {
 		}
 	}// END: InteractiveTableModelListener
 
-	private LinkedList<Location> getUniqueLocations(RootedTree rootedTree,
-			String locationAttributeName) throws AnalysisException {
+	private LinkedList<Location> getUniqueLocations(RootedTree rootedTree, String locationAttributeName)
+			throws AnalysisException {
 
 		LinkedList<Location> locationsList = new LinkedList<Location>();
 
@@ -199,13 +235,11 @@ public class LocationCoordinatesEditor {
 
 					// cast is very important here, see exception handling below
 					// (DO NOT use valueOf()! )
-					nodeState = (String) Utils.getObjectNodeAttribute(node,
-							locationAttributeName);
+					nodeState = (String) Utils.getObjectNodeAttribute(node, locationAttributeName);
 
 				} catch (ClassCastException e) {
 
-					String message = "Attribute "
-							+ locationAttributeName
+					String message = "Attribute " + locationAttributeName
 							+ " cannot be used as a discrete location attribute.";
 					throw new AnalysisException(message);
 				}
@@ -222,6 +256,13 @@ public class LocationCoordinatesEditor {
 	}// END: getUniqueLocations
 
 	private class ListenLoad implements ActionListener {
+
+		private DiscreteSpreadDataSettings settings;
+
+		public ListenLoad(DiscreteSpreadDataSettings settings) {
+			this.settings = settings;
+		}// END: Constructor
+
 		public void actionPerformed(ActionEvent ev) {
 
 			try {
@@ -231,12 +272,12 @@ public class LocationCoordinatesEditor {
 				chooser.setMultiSelectionEnabled(false);
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
-					settings.locationsFilename = file.getAbsolutePath();
+					String locationsFilename = file.getAbsolutePath();
+					settings.setLocationsFilename(locationsFilename);
 
 					File tmpDir = chooser.getCurrentDirectory();
 					if (tmpDir != null) {
@@ -244,9 +285,15 @@ public class LocationCoordinatesEditor {
 						frame.setWorkingDirectory(tmpDir);
 
 						DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-								settings.locationsFilename, settings.header);
-						LinkedList<Location> parsedLocationsList = locationsParser
-								.parseLocations();
+								settings.getLocationsFilename(), settings.hasHeader());
+						LinkedList<Location> parsedLocationsList = locationsParser.parseLocations();
+
+						// remove empty locations, likely just a first row
+						for (Location location : locationsList) {
+							if (location.getId().isEmpty()) {
+								locationsList.remove(location);
+							}
+						}
 
 						for (Location location : parsedLocationsList) {
 
@@ -257,7 +304,6 @@ public class LocationCoordinatesEditor {
 
 							} else {
 
-								System.out.println(location.getId());
 								locationsList.add(location);
 
 							} // END: contains check
@@ -269,7 +315,7 @@ public class LocationCoordinatesEditor {
 
 					} // END: null check
 
-					frame.setStatus("Opened " + settings.locationsFilename);
+					frame.setStatus("Opened " + settings.getLocationsFilename());
 				} else {
 					frame.setStatus("Could not Open! \n");
 				}
@@ -284,7 +330,7 @@ public class LocationCoordinatesEditor {
 				InterfaceUtils.handleException(e, e.getMessage());
 				frame.setStatus("Exception occured.");
 
-			}// END: try-catch block
+			} // END: try-catch block
 
 		}// END: actionPerformed
 	}// END: ListenOpenLocations
@@ -295,8 +341,7 @@ public class LocationCoordinatesEditor {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setDialogTitle("Saving as tab delimited file...");
 
-			int returnVal = chooser.showSaveDialog(InterfaceUtils
-					.getActiveFrame());
+			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				File file = chooser.getSelectedFile();
@@ -321,8 +366,7 @@ public class LocationCoordinatesEditor {
 		}// END: actionPerformed
 	}// END: ListenSaveLocationCoordinates
 
-	private void writeLocations(String filename,
-			LinkedList<Location> locationsList) throws AnalysisException {
+	private void writeLocations(String filename, LinkedList<Location> locationsList) throws AnalysisException {
 
 		try {
 
@@ -340,8 +384,7 @@ public class LocationCoordinatesEditor {
 					latitude = String.valueOf(coordinate.getXCoordinate());
 				}
 
-				printWriter.println(location.getId() + Utils.TAB + longitude
-						+ Utils.TAB + latitude);
+				printWriter.println(location.getId() + Utils.TAB + longitude + Utils.TAB + latitude);
 
 			} // END: row loop
 			printWriter.close();
@@ -353,18 +396,23 @@ public class LocationCoordinatesEditor {
 	}// END: writeLocations
 
 	private class ListenDone implements ActionListener {
+
+		private DiscreteSpreadDataSettings settings;
+
+		public ListenDone(DiscreteSpreadDataSettings settings) {
+			this.settings = settings;
+		}// END: Constructor
+
 		public void actionPerformed(ActionEvent ev) {
 
 			// save edits made manually in the editor
 			saveEdits();
 
 			window.setVisible(false);
-			// settings.locationsEdited = true;
-			settings.locationsList = locationsList;
+			settings.setLocationsList(locationsList);
 			locationsEdited = true;
 
-			frame.setStatus("Loaded " + locationsList.size()
-					+ " discrete locations");
+			frame.setStatus("Loaded " + locationsList.size() + " discrete locations");
 
 		}// END: actionPerformed
 	}// END: ListenDone
@@ -373,14 +421,11 @@ public class LocationCoordinatesEditor {
 
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 
-			String id = (String) tableModel.getValueAt(i,
-					InteractiveTableModel.LOCATION_INDEX);
+			String id = (String) tableModel.getValueAt(i, InteractiveTableModel.LOCATION_INDEX);
 			Location location = new Location(id);
 
-			String longitudeString = tableModel.getValueAt(i,
-					InteractiveTableModel.LONGITUDE_INDEX);
-			String latitudeString = tableModel.getValueAt(i,
-					InteractiveTableModel.LATITUDE_INDEX);
+			String longitudeString = tableModel.getValueAt(i, InteractiveTableModel.LONGITUDE_INDEX);
+			String latitudeString = tableModel.getValueAt(i, InteractiveTableModel.LATITUDE_INDEX);
 
 			if (!longitudeString.isEmpty() && !latitudeString.isEmpty()) {
 

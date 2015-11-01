@@ -625,7 +625,7 @@ public class Spread2ConsoleApp {
 
 						String option = args1.getStringOption(HEADER);
 						if (option.equalsIgnoreCase(TRUE)) {
-							settings.discreteTreeSettings.header = true;
+							settings.discreteTreeSettings.hasHeader = true;
 						}
 
 					} // END: option check
@@ -745,7 +745,7 @@ public class Spread2ConsoleApp {
 					args2.parseArguments(otherArgs);
 
 					if (args2.hasOption(LOCATIONS)) {
-						settings.bayesFactorsSettings.locations = args2
+						settings.bayesFactorsSettings.locationsFilename = args2
 								.getStringOption(LOCATIONS);
 					} else {
 						throw new ArgumentException("Required argument "
@@ -753,7 +753,7 @@ public class Spread2ConsoleApp {
 					} // END: option check
 
 					if (args2.hasOption(LOG)) {
-						settings.bayesFactorsSettings.log = args2
+						settings.bayesFactorsSettings.logFilename = args2
 								.getStringOption(LOG);
 					} else {
 						throw new ArgumentException("Required argument " + LOG
@@ -781,7 +781,7 @@ public class Spread2ConsoleApp {
 									"Burnin outside of [0,100].");
 
 						} else {
-							settings.bayesFactorsSettings.burnin = burnin;
+							settings.bayesFactorsSettings.burninPercent = burnin;
 						}
 
 					} // END: option check

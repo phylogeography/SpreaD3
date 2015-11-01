@@ -37,13 +37,13 @@ public class BayesFactorSpreadDataParser {
 
 		// ---IMPORT---//
 
-		LogParser logParser = new LogParser(settings.log, settings.burnin);
+		LogParser logParser = new LogParser(settings.logFilename, settings.burninPercent);
 		Double[][] indicators = logParser.parseIndicators();
 
 		System.out.println("Imported log file");
 
 		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-				settings.locations, settings.header);
+				settings.locationsFilename, settings.hasHeader);
 		locationsList = locationsParser.parseLocations();
 
 		System.out.println("Imported locations");
@@ -81,7 +81,7 @@ public class BayesFactorSpreadDataParser {
 		LinkedList<Line> linesList = bayesFactorParser.getLinesList();
 		LinkedList<Point> pointsList = bayesFactorParser.getPointsList();
 
-		String bfLayerId = Utils.splitString(settings.log, "/");
+		String bfLayerId = Utils.splitString(settings.logFilename, "/");
 		Layer bfLayer = new Layer(bfLayerId, //
 				"Bayes factors visualisation", //
 				pointsList, //

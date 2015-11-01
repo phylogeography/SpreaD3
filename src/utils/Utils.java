@@ -92,9 +92,9 @@ public class Utils {
 
 		Double nodeHeight = tree.getHeight(node);
 
-		if (nodeHeight == null) {
-			throw new AnalysisException("Height attribute missing from the node. \n");
-		}
+//		if (nodeHeight == null) {
+//			throw new AnalysisException("Height attribute missing from the node. \n");
+//		}
 
 		return nodeHeight;
 	}// END: getHeight

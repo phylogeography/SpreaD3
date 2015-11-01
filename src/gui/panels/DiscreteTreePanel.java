@@ -39,7 +39,6 @@ import com.google.gson.GsonBuilder;
 public class DiscreteTreePanel extends OptionsPanel {
 
 	private MainFrame frame;
-
 	private DiscreteTreeSettings settings;
 
 	// Buttons
@@ -78,11 +77,10 @@ public class DiscreteTreePanel extends OptionsPanel {
 		settings = new DiscreteTreeSettings();
 		resetFlags();
 
-		loadTree = new JButton("Load",
-				InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
-		loadTree.addActionListener(new ListenLoadTree());
-
 		if (!loadTreeCreated) {
+			loadTree = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+			loadTree.addActionListener(new ListenLoadTree());
 			addComponentWithLabel("Load tree file:", loadTree);
 			loadTreeCreated = true;
 		}
@@ -130,7 +128,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 					settings.treeFilename = filename;
 					frame.setStatus(settings.treeFilename + " selected.");
-					populateLocationAttributeCombobox(settings.treeFilename);
+					populateLocationAttributeCombobox();
 
 				} else {
 					frame.setStatus("Could not Open! \n");
@@ -143,7 +141,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}// END: actionPerformed
 	}// END: ListenOpenTree
 
-	private void populateLocationAttributeCombobox(final String treeFilename) {
+	private void populateLocationAttributeCombobox( ) {
 
 		frame.setBusy();
 
@@ -153,12 +151,12 @@ public class DiscreteTreePanel extends OptionsPanel {
 			@SuppressWarnings("unchecked")
 			public Void doInBackground() {
 
-				try {
+//				try {
 
 					try {
 
 						RootedTree rootedTree = Utils
-								.importRootedTree(treeFilename);
+								.importRootedTree(settings.treeFilename);
 						settings.rootedTree = rootedTree;
 
 					} catch (IOException e) {
@@ -199,11 +197,11 @@ public class DiscreteTreePanel extends OptionsPanel {
 						locationAttributeSelectorCreated = true;
 					}
 
-				} catch (Exception e) {
-					InterfaceUtils.handleException(e, e.getMessage());
-					frame.setStatus("Exception occured.");
-					frame.setIdle();
-				}// END: try-catch
+//				} catch (Exception e) {
+//					InterfaceUtils.handleException(e, e.getMessage());
+//					frame.setStatus("Exception occured when opening tree file " + settings.treeFilename);
+//					frame.setIdle();
+//				}// END: try-catch
 
 				return null;
 			}// END: doInBackground
@@ -211,7 +209,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 			// Executed in event dispatch thread
 			public void done() {
 
-				frame.setStatus("Opened " + treeFilename + "\n");
+				frame.setStatus("Opened " + settings.treeFilename + "\n");
 				frame.setIdle();
 
 			}// END: done
@@ -230,16 +228,19 @@ public class DiscreteTreePanel extends OptionsPanel {
 				Object item = event.getItem();
 				String locationAttribute = item.toString();
 
-				setupLocationCoordinates = new JButton("Setup",
-						InterfaceUtils
-								.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
-				setupLocationCoordinates
-						.addActionListener(new ListenOpenLocationCoordinatesEditor());
-
 				if (!setupLocationCoordinatesCreated) {
+					
+					setupLocationCoordinates = new JButton("Setup",
+							InterfaceUtils
+									.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+					
+					setupLocationCoordinates
+							.addActionListener(new ListenOpenLocationCoordinatesEditor());
+					
 					addComponentWithLabel(
 							"Setup location attribute coordinates:",
 							setupLocationCoordinates);
+					
 					setupLocationCoordinatesCreated = true;
 				}
 
@@ -256,8 +257,9 @@ public class DiscreteTreePanel extends OptionsPanel {
 		public void actionPerformed(ActionEvent ev) {
 
 			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(
-					frame, settings);
-			locationCoordinatesEditor.launch();
+					frame);
+//					, settings);
+			locationCoordinatesEditor.launch(settings);
 
 			if (locationCoordinatesEditor.isEdited()) {
 

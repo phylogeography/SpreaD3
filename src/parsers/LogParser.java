@@ -13,20 +13,22 @@ public class LogParser {
 	// two commented lines and header. This is a hack off course
 	private static final int SKIPPED_LINES = 3;
 	private static final int HEADER_ROW = 0;
-	private String log;
+	private String logFilename;
 	private Double burnin;
+
+	private String[] columnNames;
 
 	public LogParser(String log, Double burnin) {
 
-		this.log = log;
+		this.logFilename = log;
 		this.burnin = burnin;
 
 	}// END: Constructor
 
 	public Double[][] parseIndicators() throws IOException {
 
-		String[] lines = Utils.readLines(log, Utils.HASH_COMMENT);
-		String[] columnNames = lines[HEADER_ROW].split("\t");
+		String[] lines = Utils.readLines(logFilename, Utils.HASH_COMMENT);
+		columnNames = lines[HEADER_ROW].split("\t");
 
 		// Utils.printArray(columnNames);
 
@@ -43,7 +45,7 @@ public class LogParser {
 				columns.add(i);
 			}
 
-		}// END: column names loop
+		} // END: column names loop
 
 		int ncol = columns.size();
 		int skip = (int) ((burnin / 100 * nrow));
@@ -60,10 +62,8 @@ public class LogParser {
 				for (int col = 0; col < ncol; col++) {
 
 					if (columns.get(col) > line.length) {
-						System.out
-								.println("Empty or malformed input at line "
-										+ (row + SKIPPED_LINES)
-										+ " inside log file. Resulting output may not be correct!");
+						System.out.println("Empty or malformed input at line " + (row + SKIPPED_LINES)
+								+ " inside log file. Resulting output may not be correct!");
 
 						// copy array with one less row
 						indicators = cloneArray(indicators, i);
@@ -71,17 +71,16 @@ public class LogParser {
 
 					} else {
 
-						indicators[i][col] = Double.valueOf(line[columns
-								.get(col)]);
+						indicators[i][col] = Double.valueOf(line[columns.get(col)]);
 
 					}
 
-				}// END: col loop
+				} // END: col loop
 
 				i++;
-			}// END: burn-in check
+			} // END: burn-in check
 
-		}// END: row loop
+		} // END: row loop
 
 		return indicators;
 	}// END: parseLog
@@ -97,5 +96,9 @@ public class LogParser {
 
 		return target;
 	}// END: cloneArray
+
+	public String[] getColumnNames() {
+		return columnNames;
+	}// END: getColumnNames
 
 }// END: class
