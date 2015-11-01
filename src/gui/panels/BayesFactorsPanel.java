@@ -3,6 +3,7 @@ package gui.panels;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 
@@ -16,6 +17,9 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import gui.InterfaceUtils;
 import gui.LocationCoordinatesEditor;
 import gui.MainFrame;
@@ -24,8 +28,11 @@ import jam.panels.OptionsPanel;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
+import parsers.BayesFactorSpreadDataParser;
+import parsers.DiscreteTreeSpreadDataParser;
 import parsers.LogParser;
 import settings.parsing.BayesFactorsSettings;
+import structure.data.SpreadData;
 import utils.Utils;
 
 @SuppressWarnings("serial")
@@ -39,6 +46,10 @@ public class BayesFactorsPanel extends OptionsPanel {
 	private boolean loadLogCreated = false;
 	private JButton setupLocationCoordinates;
 	private boolean setupLocationCoordinatesCreated = false;
+	private JButton loadGeojson;
+	private boolean loadGeojsonCreated = false;
+	private JButton output;
+	private boolean outputCreated = false;
 	
 	// Sliders
 	private JSlider burninPercent;
@@ -63,6 +74,7 @@ public class BayesFactorsPanel extends OptionsPanel {
 			burninPercent.setPaintLabels(true);
 			burninPercent.addChangeListener(new ListenBurninPercent());
 			addComponentWithLabel("Disregard as burn-in (%):", burninPercent);
+			burninPercentCreated = true;
 		}
 
 		if (!loadLogCreated) {
@@ -79,6 +91,9 @@ public class BayesFactorsPanel extends OptionsPanel {
 		loadLogCreated = false;
 		burninPercentCreated = false;
 		setupLocationCoordinatesCreated = false;
+		loadGeojsonCreated = false;
+		outputCreated = false;
+		
 		
 	}// END: resetFlags
 
@@ -159,23 +174,18 @@ public class BayesFactorsPanel extends OptionsPanel {
 					InterfaceUtils.handleException(e, message);
 				}
 
-				//TODO: coordinates editor with exact number of rows
 				if (!setupLocationCoordinatesCreated) {
-					
+
 					setupLocationCoordinates = new JButton("Setup",
-							InterfaceUtils
-									.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
-					
-					setupLocationCoordinates
-							.addActionListener(new ListenOpenLocationCoordinatesEditor());
-					
-					addComponentWithLabel(
-							"Setup location attribute coordinates:",
-							setupLocationCoordinates);
-					
+							InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+
+					setupLocationCoordinates.addActionListener(new ListenOpenLocationCoordinatesEditor());
+
+					addComponentWithLabel("Setup location attribute coordinates:", setupLocationCoordinates);
+
 					setupLocationCoordinatesCreated = true;
 				}
-				
+
 				return null;
 			}// END: doInBackground
 
@@ -192,26 +202,150 @@ public class BayesFactorsPanel extends OptionsPanel {
 
 	}// END: populateIndicatorsAttributeCombobox
 
-	
-	
-	
 	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
-			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(
-					frame);
-			
+			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame);
 			locationCoordinatesEditor.launch(settings);
-//			if (locationCoordinatesEditor.isEdited()) {
-//				
-//			}
-			
-			
-			}//END: actionPerformed
-		}//END: ListenOpenLocationCoordinatesEditor
+
+			if (locationCoordinatesEditor.isEdited()) {
+
+				// remaining optional settings
+				
+				if (!loadGeojsonCreated) {
+					loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+					loadGeojson.addActionListener(new ListenLoadGeojson());
+					addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+					loadGeojsonCreated = true;
+				}
+				
+				if (!outputCreated) {
+					output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+					output.addActionListener(new ListenOutput());
+					addComponentWithLabel("Parse JSON:", output);
+					outputCreated = true;
+				}
+				
+			} // END: edited check
+
+		}// END: actionPerformed
+	}// END: ListenOpenLocationCoordinatesEditor
+
 	
+	private class ListenLoadGeojson implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			try {
+
+				String[] geojsonFiles = new String[] { "json", "geo", "geojson" };
+
+				final JFileChooser chooser = new JFileChooser();
+				chooser.setDialogTitle("Loading geoJSON file...");
+				chooser.setMultiSelectionEnabled(false);
+				chooser.addChoosableFileFilter(
+						new SimpleFileFilter(geojsonFiles, "geoJSON files (*.json), *.geojson)"));
+				chooser.setCurrentDirectory(frame.getWorkingDirectory());
+
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+					File file = chooser.getSelectedFile();
+					String geojsonFilename = file.getAbsolutePath();
+
+					File tmpDir = chooser.getCurrentDirectory();
+
+					if (tmpDir != null) {
+						frame.setWorkingDirectory(tmpDir);
+					}
+
+					settings.geojsonFilename = geojsonFilename;
+					// populateLocationAttributeCombobox(discreteTreeSettings.treeFilename);
+
+				} else {
+					frame.setStatus("Could not Open! \n");
+				}
+
+			} catch (Exception e) {
+				InterfaceUtils.handleException(e, e.getMessage());
+			} // END: try-catch block
+
+		}// END: actionPerformed
+	}// END: ListenLoadGeojson
 	
+	private class ListenOutput implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Generate...");
+			chooser.setMultiSelectionEnabled(false);
+			chooser.setCurrentDirectory(frame.getWorkingDirectory());
+
+			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+				File file = chooser.getSelectedFile();
+				settings.outputFilename = file.getAbsolutePath();
+
+//				collectSettings();
+				generateOutput();
+
+				File tmpDir = chooser.getCurrentDirectory();
+				if (tmpDir != null) {
+					frame.setWorkingDirectory(tmpDir);
+				}
+
+			} // END: approve check
+
+		}// END: actionPerformed
+	}// END: ListenOutput
 	
-	
+	private void generateOutput() {
+
+		frame.setBusy();
+
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+			// Executed in background thread
+			public Void doInBackground() {
+
+				try {
+
+					BayesFactorSpreadDataParser parser = new BayesFactorSpreadDataParser(settings);
+					SpreadData data = parser.parse();
+
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String s = gson.toJson(data);
+
+					File file = new File(settings.outputFilename);
+					FileWriter fw;
+					fw = new FileWriter(file);
+					fw.write(s);
+					fw.close();
+
+					System.out.println("Created JSON file");
+
+				} catch (Exception e) {
+
+					InterfaceUtils.handleException(e, e.getMessage());
+					frame.setStatus("Exception occured.");
+					frame.setIdle();
+
+				} // END: try-catch
+
+				return null;
+			}// END: doInBackground
+
+			// Executed in event dispatch thread
+			public void done() {
+
+				frame.setStatus("Generated " + settings.outputFilename);
+				frame.setIdle();
+
+			}// END: done
+		};
+
+		worker.execute();
+
+	}// END: generateOutput
 	
 }// END: class

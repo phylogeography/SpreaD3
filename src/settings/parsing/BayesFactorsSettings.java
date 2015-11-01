@@ -17,16 +17,14 @@ public class BayesFactorsSettings implements DiscreteSpreadDataSettings {
 	//---OPTIONAL---//
 	
 	// path to json output file 
-	public String output = "output.json";
+	public String outputFilename = "output.json";
 
 	// burnin in %
 	public Double burninPercent = 10.0;
 
-	public double bfcutoff = 0.0;
-	
 	public boolean hasHeader = false;
 	
-	public String geojson = null;
+	public String geojsonFilename = null;
 	
 	//---GUI---//
 	

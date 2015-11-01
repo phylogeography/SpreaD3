@@ -24,27 +24,43 @@ public class BayesFactorSpreadDataParser {
 		this.settings = settings;
 	}// END: Constructor
 
-	public SpreadData parse() throws IOException,
-			AnalysisException {
+	public SpreadData parse() throws IOException, AnalysisException {
 
 		TimeLine timeLine = null;
 		AxisAttributes axis = null;
 		LinkedList<Attribute> mapAttributes = null;
 		LinkedList<Attribute> lineAttributes = null;
 		LinkedList<Attribute> pointAttributes = null;
-		LinkedList<Location> locationsList = null;
 		LinkedList<Layer> layersList = new LinkedList<Layer>();
 
 		// ---IMPORT---//
 
-		LogParser logParser = new LogParser(settings.logFilename, settings.burninPercent);
-		Double[][] indicators = logParser.parseIndicators();
+		Double[][] indicators;
+		if (settings.indicators != null) {
+
+			indicators = settings.indicators;
+
+		} else {
+
+			LogParser logParser = new LogParser(settings.logFilename, settings.burninPercent);
+			indicators = logParser.parseIndicators();
+
+		}
 
 		System.out.println("Imported log file");
 
-		DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(
-				settings.locationsFilename, settings.hasHeader);
-		locationsList = locationsParser.parseLocations();
+		LinkedList<Location> locationsList;
+		if (settings.locationsList != null) {
+
+			locationsList = settings.locationsList;
+
+		} else {
+
+			DiscreteLocationsParser locationsParser = new DiscreteLocationsParser(settings.locationsFilename,
+					settings.hasHeader);
+			locationsList = locationsParser.parseLocations();
+
+		}
 
 		System.out.println("Imported locations");
 
@@ -52,12 +68,12 @@ public class BayesFactorSpreadDataParser {
 
 		// ---GEOJSON LAYER---//
 
-		if (settings.geojson != null) {
+		if (settings.geojsonFilename != null) {
 
-			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
+			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojsonFilename);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
 
-			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			String geojsonLayerId = Utils.splitString(settings.geojsonFilename, "/");
 			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);
@@ -70,12 +86,11 @@ public class BayesFactorSpreadDataParser {
 
 			System.out.println("Parsed map attributes");
 
-		}// END: null check
+		} // END: null check
 
 		// ---DATA LAYER (LINES & POINTS WITH LOCATIONS)---//
 
-		BayesFactorParser bayesFactorParser = new BayesFactorParser(
-				locationsList, indicators);
+		BayesFactorParser bayesFactorParser = new BayesFactorParser(locationsList, indicators);
 		bayesFactorParser.parse();
 
 		LinkedList<Line> linesList = bayesFactorParser.getLinesList();

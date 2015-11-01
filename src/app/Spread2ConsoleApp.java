@@ -761,13 +761,13 @@ public class Spread2ConsoleApp {
 					} // END: option check
 
 					if (args2.hasOption(OUTPUT)) {
-						settings.bayesFactorsSettings.output = args2
+						settings.bayesFactorsSettings.outputFilename = args2
 								.getStringOption(OUTPUT);
 					} // END: option check
 
 					if (args2.hasOption(MAP)) {
 
-						settings.bayesFactorsSettings.geojson = args2
+						settings.bayesFactorsSettings.geojsonFilename = args2
 								.getStringOption(MAP);
 					}
 
@@ -803,7 +803,7 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.bayesFactorsSettings.output);
+					File file = new File(settings.bayesFactorsSettings.outputFilename);
 					FileWriter fw;
 
 					fw = new FileWriter(file);

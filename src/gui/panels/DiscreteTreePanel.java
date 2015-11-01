@@ -69,7 +69,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 		this.frame = frame;
 		populatePanel();
-		
+
 	}// END: Constructor
 
 	public void populatePanel() {
@@ -78,8 +78,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 		resetFlags();
 
 		if (!loadTreeCreated) {
-			loadTree = new JButton("Load",
-					InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+			loadTree = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
 			loadTree.addActionListener(new ListenLoadTree());
 			addComponentWithLabel("Load tree file:", loadTree);
 			loadTreeCreated = true;
@@ -109,12 +108,10 @@ public class DiscreteTreePanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading tree file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
-						"Tree files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -141,7 +138,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}// END: actionPerformed
 	}// END: ListenOpenTree
 
-	private void populateLocationAttributeCombobox( ) {
+	private void populateLocationAttributeCombobox() {
 
 		frame.setBusy();
 
@@ -151,57 +148,53 @@ public class DiscreteTreePanel extends OptionsPanel {
 			@SuppressWarnings("unchecked")
 			public Void doInBackground() {
 
-//				try {
+				// try {
 
-					try {
+				try {
 
-						RootedTree rootedTree = Utils
-								.importRootedTree(settings.treeFilename);
-						settings.rootedTree = rootedTree;
+					RootedTree rootedTree = Utils.importRootedTree(settings.treeFilename);
+					settings.rootedTree = rootedTree;
 
-					} catch (IOException e) {
+				} catch (IOException e) {
 
-						String message = "I/O Exception occured when importing tree. I suspect wrong or malformed tree file.";
-						InterfaceUtils.handleException(e, message);
+					String message = "I/O Exception occured when importing tree. I suspect wrong or malformed tree file.";
+					InterfaceUtils.handleException(e, message);
 
-					} catch (ImportException e) {
+				} catch (ImportException e) {
 
-						String message = "Import exception occured when importing tree. I suspect wrong or malformed tree file.";
-						InterfaceUtils.handleException(e, message);
+					String message = "Import exception occured when importing tree. I suspect wrong or malformed tree file.";
+					InterfaceUtils.handleException(e, message);
 
-					}
+				}
 
-					LinkedHashSet<String> uniqueAttributes = new LinkedHashSet<String>();
+				LinkedHashSet<String> uniqueAttributes = new LinkedHashSet<String>();
 
-					for (Node node : settings.rootedTree.getNodes()) {
-						if (!settings.rootedTree.isRoot(node)) {
+				for (Node node : settings.rootedTree.getNodes()) {
+					if (!settings.rootedTree.isRoot(node)) {
 
-							uniqueAttributes.addAll(node.getAttributeNames());
+						uniqueAttributes.addAll(node.getAttributeNames());
 
-						} // END: root check
-					} // END: nodeloop
+					} // END: root check
+				} // END: nodeloop
 
-					// re-initialise combobox
-					locationAttributeSelector = new JComboBox();
-					ComboBoxModel locationAttributeSelectorModel = new DefaultComboBoxModel(
-							uniqueAttributes.toArray(new String[0]));
-					locationAttributeSelector
-							.setModel(locationAttributeSelectorModel);
-					locationAttributeSelector
-							.addItemListener(new ListenLocationAttributeSelector());
+				// re-initialise combobox
+				locationAttributeSelector = new JComboBox();
+				ComboBoxModel locationAttributeSelectorModel = new DefaultComboBoxModel(
+						uniqueAttributes.toArray(new String[0]));
+				locationAttributeSelector.setModel(locationAttributeSelectorModel);
+				locationAttributeSelector.addItemListener(new ListenLocationAttributeSelector());
 
-					if (!locationAttributeSelectorCreated) {
-						addComponentWithLabel(
-								"Select location attribute",
-								locationAttributeSelector);
-						locationAttributeSelectorCreated = true;
-					}
+				if (!locationAttributeSelectorCreated) {
+					addComponentWithLabel("Select location attribute", locationAttributeSelector);
+					locationAttributeSelectorCreated = true;
+				}
 
-//				} catch (Exception e) {
-//					InterfaceUtils.handleException(e, e.getMessage());
-//					frame.setStatus("Exception occured when opening tree file " + settings.treeFilename);
-//					frame.setIdle();
-//				}// END: try-catch
+				// } catch (Exception e) {
+				// InterfaceUtils.handleException(e, e.getMessage());
+				// frame.setStatus("Exception occured when opening tree file " +
+				// settings.treeFilename);
+				// frame.setIdle();
+				// }// END: try-catch
 
 				return null;
 			}// END: doInBackground
@@ -229,24 +222,19 @@ public class DiscreteTreePanel extends OptionsPanel {
 				String locationAttribute = item.toString();
 
 				if (!setupLocationCoordinatesCreated) {
-					
+
 					setupLocationCoordinates = new JButton("Setup",
-							InterfaceUtils
-									.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
-					
-					setupLocationCoordinates
-							.addActionListener(new ListenOpenLocationCoordinatesEditor());
-					
-					addComponentWithLabel(
-							"Setup location attribute coordinates:",
-							setupLocationCoordinates);
-					
+							InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+
+					setupLocationCoordinates.addActionListener(new ListenOpenLocationCoordinatesEditor());
+
+					addComponentWithLabel("Setup location attribute coordinates:", setupLocationCoordinates);
+
 					setupLocationCoordinatesCreated = true;
 				}
 
 				settings.locationAttributeName = locationAttribute;
-				frame.setStatus("Location attribute '" + locationAttribute
-						+ "'" + " selected");
+				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
 
 			} // END: selected check
 		}// END: itemStateChanged
@@ -256,51 +244,38 @@ public class DiscreteTreePanel extends OptionsPanel {
 	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
-			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(
-					frame);
-//					, settings);
+			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame);
 			locationCoordinatesEditor.launch(settings);
 
 			if (locationCoordinatesEditor.isEdited()) {
 
 				if (!dateEditorCreated) {
 					dateEditor = new DateEditor();
-					addComponentWithLabel(
-							"Most recent sampling date:", dateEditor);
+					addComponentWithLabel("Most recent sampling date:", dateEditor);
 					dateEditorCreated = true;
 				}
 
 				if (!timescaleMultiplierCreated) {
-					timescaleMultiplier = new JTextField(
-							String.valueOf(settings.timescaleMultiplier), 10);
-					addComponentWithLabel("Time scale multiplier:",
-							timescaleMultiplier);
+					timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
+					addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
 					timescaleMultiplierCreated = true;
 				}
 
 				if (!loadGeojsonCreated) {
-					loadGeojson = new JButton(
-							"Load",
-							InterfaceUtils
-									.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+					loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 					loadGeojson.addActionListener(new ListenLoadGeojson());
-					addComponentWithLabel("Load GeoJSON file:",
-							loadGeojson);
+					addComponentWithLabel("Load GeoJSON file:", loadGeojson);
 					loadGeojsonCreated = true;
 				}
 
 				if (!intervalsCreated) {
-					intervals = new JTextField(
-							String.valueOf(settings.intervals), 10);
-					addComponentWithLabel("Number of intervals:",
-							intervals);
+					intervals = new JTextField(String.valueOf(settings.intervals), 10);
+					addComponentWithLabel("Number of intervals:", intervals);
 					intervalsCreated = true;
 				}
 
 				if (!outputCreated) {
-					output = new JButton("Output",
-							InterfaceUtils
-									.createImageIcon(InterfaceUtils.SAVE_ICON));
+					output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 					output.addActionListener(new ListenOutput());
 					addComponentWithLabel("Parse JSON:", output);
 					outputCreated = true;
@@ -321,12 +296,11 @@ public class DiscreteTreePanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading geoJSON file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(
-						geojsonFiles, "geoJSON files (*.json), *.geojson)"));
+				chooser.addChoosableFileFilter(
+						new SimpleFileFilter(geojsonFiles, "geoJSON files (*.json), *.geojson)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -360,8 +334,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 			chooser.setMultiSelectionEnabled(false);
 			chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-			int returnVal = chooser.showSaveDialog(InterfaceUtils
-					.getActiveFrame());
+			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				File file = chooser.getSelectedFile();
@@ -375,18 +348,17 @@ public class DiscreteTreePanel extends OptionsPanel {
 					frame.setWorkingDirectory(tmpDir);
 				}
 
-			}// END: approve check
+			} // END: approve check
 
 		}// END: actionPerformed
 	}// END: ListenOutput
 
 	private void collectSettings() {
 
-		// TODO: check if mandatory fields set, popup dialog if not
+		// TODO: move to listeners, set in settings
 
 		settings.intervals = Integer.valueOf(intervals.getText());
-		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
-				.getText());
+		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier.getText());
 		settings.mrsd = dateEditor.getValue();
 
 	}// END: collectSettings
@@ -402,9 +374,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 				try {
 
-					
-					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(
-							settings);
+					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(settings);
 					SpreadData data = parser.parse();
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -424,7 +394,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 					frame.setStatus("Exception occured.");
 					frame.setIdle();
 
-				}// END: try-catch
+				} // END: try-catch
 
 				return null;
 			}// END: doInBackground
