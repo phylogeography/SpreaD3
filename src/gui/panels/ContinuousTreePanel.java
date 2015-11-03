@@ -217,7 +217,7 @@ public class ContinuousTreePanel extends OptionsPanel {
 
 				settings.xCoordinate = locationAttribute;
 				xCoordinateEdited = true;
-				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
+				frame.setStatus("Location attribute '" + settings.xCoordinate + "'" + " selected");
 				populateOptionalSettings();
 
 			} // END: selected check
@@ -236,7 +236,7 @@ public class ContinuousTreePanel extends OptionsPanel {
 
 				settings.yCoordinate = locationAttribute;
 				yCoordinateEdited = true;
-				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
+				frame.setStatus("Location attribute '" + settings.yCoordinate + "'" + " selected");
 				populateOptionalSettings();
 
 			} // END: selected check

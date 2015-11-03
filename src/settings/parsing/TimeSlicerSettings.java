@@ -10,21 +10,27 @@ public class TimeSlicerSettings {
 	//---REQUIRED---//
 	
 	// path to tree file
-	public String tree = null;
+	public String treeFilename = null;
 	
 	// path to slice heights file
-	public String sliceHeights = null;
+	public String sliceHeightsFilename = null;
 	
 	// path to trees file
-	public String trees = null;
+	public String treesFilename = null;
 
-//	// location attribute name
-//	public String locationTrait = null;
-	
 	// 2D trait for contouring
 	public String trait;
 	
 	//---OPTIONAL---//
+	
+	// most recent sampling date yyy/mm/dd
+	public String mrsd = "0/0/0";
+
+	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
+	public double timescaleMultiplier = 1.0;
+	
+	// geojson 
+	public String geojsonFilename;
 	
 	// number of intervals to create the time line
 	public int intervals = 10;
@@ -34,19 +40,9 @@ public class TimeSlicerSettings {
 
 	// contouring hpd level
 	public double hpdLevel = 0.8;
-
-//	public String[] traits = null;
-	
-	// most recent sampling date yyy/mm/dd
-	public String mrsd = "0-0-0";
-
-	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
-	public double timescaleMultiplier = 1.0;
 	
 	// path to json output file 
 	public String output = "output.json";
 
-	// geojson 
-	public String geojson;
 
 }//END: class

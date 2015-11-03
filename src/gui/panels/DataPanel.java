@@ -151,13 +151,8 @@ public class DataPanel extends OptionsPanel {
 	private void populateTimeSlicerPanels() {
 
 		holderPanel.removeAll();
-
-		System.out.println("TODO");
-	}
-
-	// @Override
-	// public JComponent getExportableComponent() {
-	// return this;
-	// }// END: getExportableComponent
+		holderPanel.addComponent(new TimeSlicerPanel(frame));
+		
+	}//END: populateTimeSlicerPanels
 
 }// END: class

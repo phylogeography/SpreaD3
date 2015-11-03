@@ -23,7 +23,8 @@ public class InterfaceUtils {
 	public static final String JSON_ICON = "/gui/icons/json.png";
 	public static final String COLOR_WHEEL_ICON = "/gui/icons/colorwheel.png";
 	public static final String LOG_ICON = "/gui/icons/log.png";
-	
+	public static final String TIME_ICON = "/gui/icons/time.png";
+	public static final String TREES_ICON = "/gui/icons/trees.png";	
 	
 	
 	public static Image CreateImage(String path) {

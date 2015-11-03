@@ -932,12 +932,12 @@ public class Spread2ConsoleApp {
 
 					if (args4.hasOption(TREE)) {
 
-						settings.timeSlicerSettings.tree = args4
+						settings.timeSlicerSettings.treeFilename = args4
 								.getStringOption(TREE);
 
 					} else if (args4.hasOption(SLICE_HEIGHTS)) {
 
-						settings.timeSlicerSettings.sliceHeights = args4
+						settings.timeSlicerSettings.sliceHeightsFilename = args4
 								.getStringOption(SLICE_HEIGHTS);
 
 					} else if (args4.hasOption(TREE)
@@ -955,7 +955,7 @@ public class Spread2ConsoleApp {
 
 					if (args4.hasOption(TREES)) {
 
-						settings.timeSlicerSettings.trees = args4
+						settings.timeSlicerSettings.treesFilename = args4
 								.getStringOption(TREES);
 
 					} else {
@@ -1014,7 +1014,7 @@ public class Spread2ConsoleApp {
 
 					if (args4.hasOption(MAP)) {
 
-						settings.timeSlicerSettings.geojson = args4
+						settings.timeSlicerSettings.geojsonFilename = args4
 								.getStringOption(MAP);
 					}
 

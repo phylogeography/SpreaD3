@@ -62,6 +62,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 	// Text fields
 	private JTextField timescaleMultiplier;
 	private boolean timescaleMultiplierCreated = false;
+	// TODO: slider for intervals
 	private JTextField intervals;
 	private boolean intervalsCreated = false;
 

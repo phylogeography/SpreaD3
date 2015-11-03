@@ -46,14 +46,14 @@ public class TimeSlicerSpreadDataParser {
 
 		// import slice heights
 		double sliceHeights[] = null;
-		if (settings.sliceHeights != null) {
+		if (settings.sliceHeightsFilename != null) {
 
-			SliceHeightsParser sliceHeightsParser = new SliceHeightsParser(settings.sliceHeights);
+			SliceHeightsParser sliceHeightsParser = new SliceHeightsParser(settings.sliceHeightsFilename);
 			sliceHeights = sliceHeightsParser.parseSliceHeights();
 
-		} else if (settings.tree != null) {
+		} else if (settings.treeFilename != null) {
 
-			RootedTree rootedTree = Utils.importRootedTree(settings.tree);
+			RootedTree rootedTree = Utils.importRootedTree(settings.treeFilename);
 			sliceHeights = generateSliceHeights(rootedTree, settings.intervals);
 
 		} else {
@@ -69,7 +69,7 @@ public class TimeSlicerSpreadDataParser {
 		Utils.printArray(sliceHeights);
 
 		// import trees
-		NexusImporter treesImporter = new NexusImporter(new FileReader(settings.trees));
+		NexusImporter treesImporter = new NexusImporter(new FileReader(settings.treesFilename));
 
 		// ---PARSE AND FILL STRUCTURES---//
 
@@ -81,14 +81,14 @@ public class TimeSlicerSpreadDataParser {
 
 		// ---GEOJSON LAYER---//
 
-		if (settings.geojson != null) {
+		if (settings.geojsonFilename != null) {
 
-			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
+			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojsonFilename);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
 
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
 
-			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			String geojsonLayerId = Utils.splitString(settings.geojsonFilename, "/");
 			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);
@@ -101,7 +101,7 @@ public class TimeSlicerSpreadDataParser {
 
 		// ---DATA LAYER (CONTOURING AREAS)---//
 
-		int assumedTrees = getAssumedTrees(settings.trees);
+		int assumedTrees = getAssumedTrees(settings.treesFilename);
 		if (settings.burnIn >= assumedTrees) {
 			throw new AnalysisException("Trying to burn too many trees!");
 		}
@@ -119,7 +119,7 @@ public class TimeSlicerSpreadDataParser {
 
 		LinkedList<Area> areasList = parser.getAreasList();
 
-		String contoursLayerId = Utils.splitString(settings.trees, "/");
+		String contoursLayerId = Utils.splitString(settings.treesFilename, "/");
 		Layer contoursLayer = new Layer(contoursLayerId, //
 				"Contour visualisation", //
 				null, //

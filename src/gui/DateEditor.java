@@ -36,4 +36,4 @@ public class DateEditor extends JPanel {
 		return formatter.format(spinner.getValue());
 	}
 
-}
+}// END: class
