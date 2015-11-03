@@ -231,7 +231,7 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(Y_COORDINATE, "",
 								"y location trait name (longitude)"),
 
-						new Arguments.StringOption(HPD, "", "hpd level"),
+//						new Arguments.StringOption(HPD, "", "hpd level"),
 
 						new Arguments.StringOption(MRSD, "",
 								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
@@ -833,7 +833,7 @@ public class Spread2ConsoleApp {
 					args3.parseArguments(otherArgs);
 
 					if (args3.hasOption(TREE)) {
-						settings.continuousTreeSettings.tree = args3
+						settings.continuousTreeSettings.treeFilename = args3
 								.getStringOption(TREE);
 					}
 
@@ -847,10 +847,10 @@ public class Spread2ConsoleApp {
 								.getStringOption(Y_COORDINATE);
 					}
 
-					if (args3.hasOption(HPD)) {
-						settings.continuousTreeSettings.hpd = args3
-								.getStringOption(HPD);
-					}
+//					if (args3.hasOption(HPD)) {
+//						settings.continuousTreeSettings.hpd = args3
+//								.getStringOption(HPD);
+//					}
 
 					if (args3.hasOption(MRSD)) {
 						settings.continuousTreeSettings.mrsd = args3
@@ -864,12 +864,12 @@ public class Spread2ConsoleApp {
 
 					if (args3.hasOption(MAP)) {
 
-						settings.continuousTreeSettings.geojson = args3
+						settings.continuousTreeSettings.geojsonFilename = args3
 								.getStringOption(MAP);
 					}
 
 					if (args3.hasOption(OUTPUT)) {
-						settings.continuousTreeSettings.output = args3
+						settings.continuousTreeSettings.outputFilename = args3
 								.getStringOption(OUTPUT);
 					} // END: option check
 
@@ -891,7 +891,7 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.continuousTreeSettings.output);
+					File file = new File(settings.continuousTreeSettings.outputFilename);
 					FileWriter fw;
 
 					fw = new FileWriter(file);

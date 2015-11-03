@@ -25,7 +25,7 @@ public class ContinuousTreeParser {
 	private RootedTree rootedTree;
 	private String xCoordinate;
 	private String yCoordinate;
-	private String hpd;
+//	private String hpd;
 //	private String mrsd;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
@@ -40,7 +40,6 @@ public class ContinuousTreeParser {
 	public ContinuousTreeParser(RootedTree rootedTree, //
 			String xCoordinate, //
 			String yCoordinate, //
-			String hpd, //
 			TimeParser timeParser, //
 			double timescaleMultiplier //
 
@@ -49,7 +48,6 @@ public class ContinuousTreeParser {
 		this.rootedTree = rootedTree;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
-		this.hpd = hpd;
 		this.timeParser = timeParser;
 		this.timescaleMultiplier = timescaleMultiplier;
 
@@ -66,8 +64,14 @@ public class ContinuousTreeParser {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 		
-		// hack
+		// hack, remove digits to get name
 		String prefix = xCoordinate.replaceAll("\\d*$", "");
+		
+		String hpd = getHpdAttribute(rootedTree);
+		if(hpd == null) {
+			throw new AnalysisException("Tree is not annotated with an HPD attribute.");
+		}
+		
 		//TODO: parse HPD automagically
 		String modalityAttributeName = prefix.concat("_").concat(hpd) .concat("%").concat("HPD_modality");
 		
@@ -358,6 +362,26 @@ public class ContinuousTreeParser {
 		return point;
 	}// END: createPoint
 
+	private String getHpdAttribute(RootedTree tree) {
+
+		String hpdString = null;
+		for(Node node : tree.getNodes()) {
+			for(String attributeName : node.getAttributeNames()) {
+				
+				if (attributeName.contains("HPD_modality")) {
+
+					hpdString = attributeName.replaceAll("\\D+","");
+//					System.out.println(attributeName);
+					break;
+					
+				}//END: hpd check	
+			}//END: attributes loop
+			break;
+		}//END: nodes loop
+		
+		return hpdString;
+	}//END: getHpdAttribute
+	
 	public LinkedList<Line> getLinesList() {
 		return linesList;
 	}

@@ -1,22 +1,18 @@
 package settings.parsing;
 
+import jebl.evolution.trees.RootedTree;
+
 public class ContinuousTreeSettings {
 
 	// ---REQUIRED---//
 
 	// path to tree file
-	public String tree = null;
+	public String treeFilename = null;
 
-	// Continuous coordinate attribute names
+	// continuous coordinate attribute names
 	public String xCoordinate = null; // lat
 	public String yCoordinate = null; // long
 
-	// hpd  attribute 
-	public String hpd = null;
-	
-//	public String xCoordinateHpd = null; // lat hpd
-//	public String yCoordinateHpd = null; // long hpd
-	
 	// ---OPTIONAL---//
 
 	// most recent sampling date yyy/mm/dd
@@ -25,12 +21,13 @@ public class ContinuousTreeSettings {
 	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
 	public double timescaleMultiplier = 1.0;
 
-	// node trait attribute names
-//	public String[] traits = null;
-
 	// path to json output file
-	public String output = "output.json";
+	public String outputFilename = "output.json";
 
-	public String geojson = null;
+	public String geojsonFilename = null;
 
+	// ---GUI---//
+	
+	public RootedTree rootedTree = null;
+	
 }// END: class

@@ -39,12 +39,17 @@ public class ContinuousTreeSpreadDataParser {
 
 		// ---IMPORT---//
 
-		RootedTree rootedTree = Utils.importRootedTree(settings.tree);
-
+		// tree
+		RootedTree rootedTree;
+		if (settings.rootedTree != null) {
+			rootedTree = settings.rootedTree;
+		} else {
+			rootedTree = Utils.importRootedTree(settings.treeFilename);
+		}
+		
 		// ---PARSE AND FILL STRUCTURES---//
 
 		TimeParser timeParser = new TimeParser(settings.mrsd);
-		// timeParser.parseTime();
 		timeLine = timeParser.getTimeLine(rootedTree.getHeight(rootedTree.getRootNode()));
 
 		System.out.println("Parsed time line");
@@ -52,7 +57,6 @@ public class ContinuousTreeSpreadDataParser {
 		ContinuousTreeParser treeParser = new ContinuousTreeParser(rootedTree, //
 				settings.xCoordinate, //
 				settings.yCoordinate, //
-				settings.hpd, //
 				timeParser, //
 				settings.timescaleMultiplier);
 
@@ -65,14 +69,14 @@ public class ContinuousTreeSpreadDataParser {
 
 		// ---GEOJSON LAYER---//
 
-		if (settings.geojson != null) {
+		if (settings.geojsonFilename != null) {
 
-			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojson);
+			GeoJSONParser geojsonParser = new GeoJSONParser(settings.geojsonFilename);
 			GeoJsonData geojson = geojsonParser.parseGeoJSON();
 
 			mapAttributes = geojsonParser.getUniqueMapAttributes();
 
-			String geojsonLayerId = Utils.splitString(settings.geojson, "/");
+			String geojsonLayerId = Utils.splitString(settings.geojsonFilename, "/");
 			Layer geojsonLayer = new Layer(geojsonLayerId, //
 					"GeoJson layer", //
 					geojson);
@@ -89,7 +93,7 @@ public class ContinuousTreeSpreadDataParser {
 		LinkedList<Point> pointsList = treeParser.getPointsList();
 		LinkedList<Area> areasList = treeParser.getAreasList();
 
-		String treeLayerId = Utils.splitString(settings.tree, "/");
+		String treeLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer treeLayer = new Layer(treeLayerId, //
 				"Continuous tree visualisation", //
 				pointsList, //

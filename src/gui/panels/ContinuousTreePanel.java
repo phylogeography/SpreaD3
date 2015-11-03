@@ -1,12 +1,5 @@
 package gui.panels;
 
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.LocationCoordinatesEditor;
-import gui.MainFrame;
-import gui.SimpleFileFilter;
-import jam.panels.OptionsPanel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -24,36 +17,42 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import jebl.evolution.graphs.Node;
-import jebl.evolution.io.ImportException;
-import jebl.evolution.trees.RootedTree;
-import parsers.DiscreteTreeSpreadDataParser;
-import settings.parsing.DiscreteTreeSettings;
-import structure.data.SpreadData;
-import utils.Utils;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-@SuppressWarnings({ "rawtypes", "serial" })
-public class DiscreteTreePanel extends OptionsPanel {
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+import jam.panels.OptionsPanel;
+import jebl.evolution.graphs.Node;
+import jebl.evolution.io.ImportException;
+import jebl.evolution.trees.RootedTree;
+import parsers.ContinuousTreeSpreadDataParser;
+import settings.parsing.ContinuousTreeSettings;
+import structure.data.SpreadData;
+import utils.Utils;
+
+@SuppressWarnings("serial")
+public class ContinuousTreePanel extends OptionsPanel {
 
 	private MainFrame frame;
-	private DiscreteTreeSettings settings;
+	private ContinuousTreeSettings settings;
 
 	// Buttons
 	private JButton loadTree;
 	private boolean loadTreeCreated = false;
-	private JButton setupLocationCoordinates;
-	private boolean setupLocationCoordinatesCreated = false;
 	private JButton loadGeojson;
 	private boolean loadGeojsonCreated = false;
 	private JButton output;
 	private boolean outputCreated = false;
 
 	// Combo boxes
-	private JComboBox locationAttributeSelector;
-	private boolean locationAttributeSelectorCreated = false;
+	private JComboBox<Object> xCoordinate;
+	private boolean xCoordinateEdited = false;
+	private JComboBox<Object> yCoordinate;
+	private boolean yCoordinateEdited = false;
+	private boolean coordinateAttributeComboboxesCreated = false;
 
 	// Date editor
 	private DateEditor dateEditor;
@@ -62,19 +61,17 @@ public class DiscreteTreePanel extends OptionsPanel {
 	// Text fields
 	private JTextField timescaleMultiplier;
 	private boolean timescaleMultiplierCreated = false;
-	private JTextField intervals;
-	private boolean intervalsCreated = false;
 
-	public DiscreteTreePanel(MainFrame frame) {
+	public ContinuousTreePanel(MainFrame frame) {
 
 		this.frame = frame;
 		populatePanel();
 
 	}// END: Constructor
 
-	public void populatePanel() {
+	private void populatePanel() {
 
-		settings = new DiscreteTreeSettings();
+		this.settings = new ContinuousTreeSettings();
 		resetFlags();
 
 		if (!loadTreeCreated) {
@@ -84,19 +81,18 @@ public class DiscreteTreePanel extends OptionsPanel {
 			loadTreeCreated = true;
 		}
 
-	}// END: populateDiscreteTreePanels
+	}// END: populatePanel
 
 	private void resetFlags() {
 
 		loadTreeCreated = false;
-		locationAttributeSelectorCreated = false;
-		setupLocationCoordinatesCreated = false;
-		dateEditorCreated = false;
-		intervalsCreated = false;
+		coordinateAttributeComboboxesCreated = false;
+		xCoordinateEdited = false;
+		yCoordinateEdited = false;
 		loadGeojsonCreated = false;
 		outputCreated = false;
 
-	}// END: resetDiscreteTreeFlags
+	}// END: resetFlags
 
 	private class ListenLoadTree implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
@@ -125,7 +121,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 					settings.treeFilename = filename;
 					frame.setStatus(settings.treeFilename + " selected.");
-					populateLocationAttributeCombobox();
+					populateCoordinateAttributeComboboxes();
 
 				} else {
 					frame.setStatus("Could not Open! \n");
@@ -138,14 +134,13 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}// END: actionPerformed
 	}// END: ListenOpenTree
 
-	private void populateLocationAttributeCombobox() {
+	private void populateCoordinateAttributeComboboxes() {
 
 		frame.setBusy();
 
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
 			// Executed in background thread
-			@SuppressWarnings("unchecked")
 			public Void doInBackground() {
 
 				try {
@@ -175,18 +170,25 @@ public class DiscreteTreePanel extends OptionsPanel {
 					} // END: root check
 				} // END: nodeloop
 
-				// re-initialise combobox
-				if (!locationAttributeSelectorCreated) {
+				// re-initialise comboboxes
+				if (!coordinateAttributeComboboxesCreated) {
 
-					locationAttributeSelector = new JComboBox();
-					ComboBoxModel locationAttributeSelectorModel = new DefaultComboBoxModel(
+					xCoordinate = new JComboBox<Object>();
+					ComboBoxModel<Object> xCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
 							uniqueAttributes.toArray(new String[0]));
-					locationAttributeSelector.setModel(locationAttributeSelectorModel);
-					locationAttributeSelector.addItemListener(new ListenLocationAttributeSelector());
+					xCoordinate.setModel(xCoordinateSelectorModel);
+					xCoordinate.addItemListener(new ListenXCoordinate());
+					addComponentWithLabel("Select x coordinate attribute", xCoordinate);
 
-					addComponentWithLabel("Select location attribute", locationAttributeSelector);
-					locationAttributeSelectorCreated = true;
-				}
+					yCoordinate = new JComboBox<Object>();
+					ComboBoxModel<Object> yCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
+							uniqueAttributes.toArray(new String[0]));
+					yCoordinate.setModel(yCoordinateSelectorModel);
+					yCoordinate.addItemListener(new ListenYCoordinate());
+					addComponentWithLabel("Select y coordinate attribute", yCoordinate);
+
+					coordinateAttributeComboboxesCreated = true;
+				} // END: created check
 
 				return null;
 			}// END: doInBackground
@@ -202,9 +204,9 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 		worker.execute();
 
-	}// END: populateLocationAttributeCombobox
+	}// END; populateCoordinateAttributeComboboxes
 
-	private class ListenLocationAttributeSelector implements ItemListener {
+	private class ListenXCoordinate implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent event) {
@@ -213,74 +215,66 @@ public class DiscreteTreePanel extends OptionsPanel {
 				Object item = event.getItem();
 				String locationAttribute = item.toString();
 
-				if (!setupLocationCoordinatesCreated) {
-
-					setupLocationCoordinates = new JButton("Setup",
-							InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
-
-					setupLocationCoordinates.addActionListener(new ListenOpenLocationCoordinatesEditor());
-
-					addComponentWithLabel("Setup location attribute coordinates:", setupLocationCoordinates);
-
-					setupLocationCoordinatesCreated = true;
-				}
-
-				settings.locationAttributeName = locationAttribute;
+				settings.xCoordinate = locationAttribute;
+				xCoordinateEdited = true;
 				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
+				populateOptionalSettings();
 
 			} // END: selected check
 		}// END: itemStateChanged
 
-	}// END: ListenParserSelector
+	}// END: ListenXCoordinate
 
-	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
-		public void actionPerformed(ActionEvent ev) {
+	private class ListenYCoordinate implements ItemListener {
 
-			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame);
-			locationCoordinatesEditor.launch(settings);
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
 
-			if (locationCoordinatesEditor.isEdited()) {
+				Object item = event.getItem();
+				String locationAttribute = item.toString();
 
+				settings.yCoordinate = locationAttribute;
+				yCoordinateEdited = true;
+				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
 				populateOptionalSettings();
 
-			} // END: edited check
+			} // END: selected check
+		}// END: itemStateChanged
 
-		}// END: actionPerformed
-	}// END: ListenOpenLocations
+	}// END: ListenYCoordinate
 
 	private void populateOptionalSettings() {
 
-		if (!dateEditorCreated) {
-			dateEditor = new DateEditor();
-			addComponentWithLabel("Most recent sampling date:", dateEditor);
-			dateEditorCreated = true;
-		}
+		if (xCoordinateEdited && yCoordinateEdited) {
 
-		if (!timescaleMultiplierCreated) {
-			timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
-			addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
-			timescaleMultiplierCreated = true;
-		}
+			if (!dateEditorCreated) {
+				dateEditor = new DateEditor();
+				addComponentWithLabel("Most recent sampling date:", dateEditor);
+				dateEditorCreated = true;
+			}
 
-		if (!loadGeojsonCreated) {
-			loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
-			loadGeojson.addActionListener(new ListenLoadGeojson());
-			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
-			loadGeojsonCreated = true;
-		}
+			if (!timescaleMultiplierCreated) {
+				timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
+				addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
+				timescaleMultiplierCreated = true;
+			}
 
-		if (!intervalsCreated) {
-			intervals = new JTextField(String.valueOf(settings.intervals), 10);
-			addComponentWithLabel("Number of intervals:", intervals);
-			intervalsCreated = true;
-		}
+			if (!loadGeojsonCreated) {
+				loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+				loadGeojson.addActionListener(new ListenLoadGeojson());
+				addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+				loadGeojsonCreated = true;
+			}
 
-		if (!outputCreated) {
-			output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
-			output.addActionListener(new ListenOutput());
-			addComponentWithLabel("Parse JSON:", output);
-			outputCreated = true;
-		}
+			if (!outputCreated) {
+				output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+				output.addActionListener(new ListenOutput());
+				addComponentWithLabel("Parse JSON:", output);
+				outputCreated = true;
+			}
+
+		} // END: coord check
 
 	}// END: populateOptionalSettings
 
@@ -352,7 +346,6 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 	private void collectOptionalSettings() {
 
-		settings.intervals = Integer.valueOf(intervals.getText());
 		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier.getText());
 		settings.mrsd = dateEditor.getValue();
 
@@ -369,7 +362,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 				try {
 
-					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(settings);
+					ContinuousTreeSpreadDataParser parser = new ContinuousTreeSpreadDataParser(settings);
 					SpreadData data = parser.parse();
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();

@@ -17,7 +17,7 @@ import gui.ParserTypes;
 import jam.panels.OptionsPanel;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
-public class DataPanel extends OptionsPanel   {
+public class DataPanel extends OptionsPanel {
 
 	// Main frame
 	private MainFrame frame;
@@ -33,7 +33,6 @@ public class DataPanel extends OptionsPanel   {
 	// Combo boxes
 	private JComboBox parserSelector;
 	private ComboBoxModel parserSelectorModel;
-
 
 	public DataPanel(MainFrame frame) {
 
@@ -60,8 +59,7 @@ public class DataPanel extends OptionsPanel   {
 		gridBagConstraints.gridy = 0;
 		tmpPanel.add(optionPanel, gridBagConstraints);
 
-		scrollPane = new JScrollPane(tmpPanel,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		scrollPane = new JScrollPane(tmpPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.getViewport().setOpaque(false);
 		add(scrollPane, BorderLayout.CENTER);
@@ -118,22 +116,22 @@ public class DataPanel extends OptionsPanel   {
 	// /////////////////////
 
 	private void populateDiscreteTreePanels() {
-		
+
 		holderPanel.removeAll();
-		holderPanel.addComponent(new DiscreteTreePanel(frame ));
-		
-	}//END: populateDiscreteTreePanels
-	
+		holderPanel.addComponent(new DiscreteTreePanel(frame));
+
+	}// END: populateDiscreteTreePanels
+
 	// ////////////////////
 	// ---BAYES FACTOR---//
 	// ////////////////////
 
 	private void populateBayesFactorPanels() {
-		
+
 		holderPanel.removeAll();
-		holderPanel.addComponent(new BayesFactorsPanel(frame ));
-		
-	}//END: populateBayesFactorPanels
+		holderPanel.addComponent(new BayesFactorsPanel(frame));
+
+	}// END: populateBayesFactorPanels
 
 	// ///////////////////////
 	// ---CONTINUOUS TREE---//
@@ -142,9 +140,9 @@ public class DataPanel extends OptionsPanel   {
 	private void populateContinuousTreePanels() {
 
 		holderPanel.removeAll();
+		holderPanel.addComponent(new ContinuousTreePanel(frame));
 
-		System.out.println("TODO");
-	}
+	}// END: populateContinuousTreePanels
 
 	// ///////////////////
 	// ---TIME SLICER---//
@@ -157,9 +155,9 @@ public class DataPanel extends OptionsPanel   {
 		System.out.println("TODO");
 	}
 
-//	@Override
-//	public JComponent getExportableComponent() {
-//		return this;
-//	}// END: getExportableComponent
+	// @Override
+	// public JComponent getExportableComponent() {
+	// return this;
+	// }// END: getExportableComponent
 
 }// END: class

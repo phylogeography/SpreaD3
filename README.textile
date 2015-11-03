@@ -145,16 +145,16 @@ h3. CONTINUOUS TREE PARSER
 
 
 * antigenic coordinates example
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -hpd 80 -mrsd 2011.1 -output antigenic_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -output antigenic_test.json
 
 * antigenic coordinates example, antigenic coordinate vs time
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate height -yCoordinate antigenic1 -hpd 80 -mrsd 2011.1 -output antigenic_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate height -yCoordinate antigenic1 -mrsd 2011.1 -output antigenic_test.json
 
 * geographical coordinates example, world map
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
 
 * geographical coordinates example, clipped map
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -hpd 80 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -mrsd 2011/01/01 -map /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
 
 
 h3. CONTINUOUS TREE D3 RENDERER
