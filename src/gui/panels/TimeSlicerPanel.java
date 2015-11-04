@@ -426,23 +426,23 @@ public class TimeSlicerPanel extends OptionsPanel {
 		
 		if (!hpdLevelCreated) {
 			
-			hpdLevel = new JSlider(JSlider.HORIZONTAL, 0, 10, 8);
+			hpdLevel = new JSlider(JSlider.HORIZONTAL, 1, 10, 8);
 			
 			Hashtable labelTable = new Hashtable();
-			labelTable.put( new Integer( 0 ), new JLabel("0.0") );
 			labelTable.put( new Integer( 1 ), new JLabel("0.1") );
-			labelTable.put( new Integer( 2 ), new JLabel("0.2") );
+//			labelTable.put( new Integer( 2 ), new JLabel("0.2") );
 			labelTable.put( new Integer( 3 ), new JLabel("0.3") );
-			labelTable.put( new Integer( 4 ), new JLabel("0.4") );
+//			labelTable.put( new Integer( 4 ), new JLabel("0.4") );
 			labelTable.put( new Integer( 5 ), new JLabel("0.5") );
-			labelTable.put( new Integer( 6 ), new JLabel("0.6") );
+//			labelTable.put( new Integer( 6 ), new JLabel("0.6") );
 			labelTable.put( new Integer( 7 ), new JLabel("0.7") );
-			labelTable.put( new Integer( 8 ), new JLabel("0.8") );
+//			labelTable.put( new Integer( 8 ), new JLabel("0.8") );
 			labelTable.put( new Integer( 9 ), new JLabel("0.9") );
-			labelTable.put( new Integer( 10 ), new JLabel("1.0") );
+//			labelTable.put( new Integer( 10 ), new JLabel("1.0") );
 			
 			hpdLevel.setLabelTable( labelTable );
 			
+			hpdLevel.setMajorTickSpacing(1);
 			hpdLevel.setPaintTicks(true);
 			hpdLevel.setPaintLabels(true);
 			

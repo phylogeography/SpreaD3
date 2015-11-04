@@ -2,8 +2,6 @@
 
 function populateExportPanel() {
 
-	// TODO: make it work
-
 	saveSVGButton = document.getElementById("saveSVG");
 	d3
 			.select(saveSVGButton)

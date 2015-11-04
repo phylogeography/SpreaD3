@@ -76,7 +76,7 @@ public class Spread2ConsoleApp {
 
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
-	private static final String MAP = "map";
+	private static final String GEOJSON = "geojson";
 	private static final String OUTPUT = "output";
 	private static final String JSON = "json";
 	private static final String MRSD = "mrsd";
@@ -194,7 +194,7 @@ public class Spread2ConsoleApp {
 						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-						new Arguments.StringOption(MAP, "", "geojson file name"),
+						new Arguments.StringOption(GEOJSON, "", "geojson file name"),
 
 						// new Arguments.StringArrayOption(TRAITS, -1, "",
 						// "traits to be parsed from nodes"),
@@ -213,7 +213,7 @@ public class Spread2ConsoleApp {
 
 		new Arguments.RealOption(BURNIN, "log file burning in %"),
 
-		new Arguments.StringOption(MAP, "", "geojson file name"),
+		new Arguments.StringOption(GEOJSON, "", "geojson file name"),
 
 		new Arguments.StringOption(OUTPUT, "", "json output file name")
 
@@ -239,7 +239,7 @@ public class Spread2ConsoleApp {
 						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-						new Arguments.StringOption(MAP, "", "geojson file name"),
+						new Arguments.StringOption(GEOJSON, "", "geojson file name"),
 
 						new Arguments.StringOption(OUTPUT, "",
 								"json output file name"),
@@ -263,7 +263,7 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(TRAIT, "",
 								"2D trait used for contouring"),
 
-						new Arguments.StringOption(MAP, "", "geojson file name"),
+						new Arguments.StringOption(GEOJSON, "", "geojson file name"),
 
 						new Arguments.StringOption(MRSD, "",
 								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
@@ -671,10 +671,10 @@ public class Spread2ConsoleApp {
 								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
-					if (args1.hasOption(MAP)) {
+					if (args1.hasOption(GEOJSON)) {
 
 						settings.discreteTreeSettings.geojsonFilename = args1
-								.getStringOption(MAP);
+								.getStringOption(GEOJSON);
 					}
 
 					// if (args1.hasOption(TRAITS)) {
@@ -765,10 +765,10 @@ public class Spread2ConsoleApp {
 								.getStringOption(OUTPUT);
 					} // END: option check
 
-					if (args2.hasOption(MAP)) {
+					if (args2.hasOption(GEOJSON)) {
 
 						settings.bayesFactorsSettings.geojsonFilename = args2
-								.getStringOption(MAP);
+								.getStringOption(GEOJSON);
 					}
 
 					if (args2.hasOption(BURNIN)) {
@@ -862,10 +862,10 @@ public class Spread2ConsoleApp {
 								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
-					if (args3.hasOption(MAP)) {
+					if (args3.hasOption(GEOJSON)) {
 
 						settings.continuousTreeSettings.geojsonFilename = args3
-								.getStringOption(MAP);
+								.getStringOption(GEOJSON);
 					}
 
 					if (args3.hasOption(OUTPUT)) {
@@ -1012,10 +1012,10 @@ public class Spread2ConsoleApp {
 								.getRealOption(TIMESCALE_MULTIPLIER);
 					}
 
-					if (args4.hasOption(MAP)) {
+					if (args4.hasOption(GEOJSON)) {
 
 						settings.timeSlicerSettings.geojsonFilename = args4
-								.getStringOption(MAP);
+								.getStringOption(GEOJSON);
 					}
 
 					if (args4.hasOption(OUTPUT)) {
