@@ -1,31 +1,31 @@
 package gui.panels;
 
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.JSliderDouble;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+import jam.panels.OptionsPanel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.LinkedHashSet;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import gui.DateEditor;
-import gui.FloatSlider;
-import gui.InterfaceUtils;
-import gui.MainFrame;
-import gui.RendererTypes;
-import gui.SimpleFileFilter;
-import jam.panels.OptionsPanel;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -68,7 +68,7 @@ public class TimeSlicerPanel extends OptionsPanel {
 	private boolean timescaleMultiplierCreated = false;
 	
 	// Sliders
-	private FloatSlider hpdLevel;
+	private JSlider hpdLevel;
 	private boolean hpdLevelCreated = false;
 	
 
@@ -425,13 +425,43 @@ public class TimeSlicerPanel extends OptionsPanel {
 		
 		
 		if (!hpdLevelCreated) {
-			hpdLevel = new FloatSlider(FloatSlider.HORIZONTAL, 0.1, 99, settings.hpdLevel );
-//			hpdLevel.setMajorTickSpacing(20);
+			
+			hpdLevel = new JSlider(JSlider.HORIZONTAL, 0, 10, 8);
+			
+			Hashtable labelTable = new Hashtable();
+			labelTable.put( new Integer( 0 ), new JLabel("0.0") );
+			labelTable.put( new Integer( 1 ), new JLabel("0.1") );
+			labelTable.put( new Integer( 2 ), new JLabel("0.2") );
+			labelTable.put( new Integer( 3 ), new JLabel("0.3") );
+			labelTable.put( new Integer( 4 ), new JLabel("0.4") );
+			labelTable.put( new Integer( 5 ), new JLabel("0.5") );
+			labelTable.put( new Integer( 6 ), new JLabel("0.6") );
+			labelTable.put( new Integer( 7 ), new JLabel("0.7") );
+			labelTable.put( new Integer( 8 ), new JLabel("0.8") );
+			labelTable.put( new Integer( 9 ), new JLabel("0.9") );
+			labelTable.put( new Integer( 10 ), new JLabel("1.0") );
+			
+			hpdLevel.setLabelTable( labelTable );
+			
+			hpdLevel.setPaintTicks(true);
+			hpdLevel.setPaintLabels(true);
+			
+			
+			holderPanel.addComponentWithLabel("HPD level for contouring:", hpdLevel);
+			
+//			hpdLevel = new JSliderDouble(JSlider.HORIZONTAL, // orientation
+//					settings.hpdLevel, // current
+//					0.5, // min
+//					0.99,  // max
+//					50, // resolution
+//					false // logscale
+//					);
+//			hpdLevel.setMajorTickSpacing(10);
 //			hpdLevel.setPaintTicks(true);
 //			hpdLevel.setPaintLabels(true);
-//			hpdLevel.addChangeListener(new ListenHpdLevel());
+////			hpdLevel.addChangeListener(new ListenHpdLevel());
 //			holderPanel.addComponentWithLabel("HPD level for contouring:", hpdLevel);
-			hpdLevelCreated = true;
+//			hpdLevelCreated = true;
 		}
 		
 		

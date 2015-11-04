@@ -162,11 +162,11 @@ public class DiscreteTreeSpreadDataParser {
 
 		LinkedList<Attribute> coordinateRange = new LinkedList<Attribute>();
 
-		double[] xCoordinateRange = new double[2];
+		Double[] xCoordinateRange = new Double[2];
 		xCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
 		xCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
 
-		double[] yCoordinateRange = new double[2];
+		Double[] yCoordinateRange = new Double[2];
 		yCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
 		yCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
 

@@ -190,9 +190,9 @@ public class DiscreteTreeParser {
 		// create Points list with count attributes
 
 		index = 0;
-		double[] countRange = new double[2];
-		countRange[Attribute.MIN_INDEX] = Integer.MAX_VALUE;
-		countRange[Attribute.MAX_INDEX] = Integer.MIN_VALUE;
+		Double[] countRange = new Double[2];
+		countRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
+		countRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
 
 		for (int sliceIndex = 0; sliceIndex < locationCounts.length; sliceIndex++) {
 
@@ -201,7 +201,7 @@ public class DiscreteTreeParser {
 			
 			for (int locationIndex = 0; locationIndex < locationCounts[0].length; locationIndex++) {
 
-				int count = locationCounts[sliceIndex][locationIndex];
+				Double count = (double) locationCounts[sliceIndex][locationIndex];
 				if (count > 0) {
 
 					String id = "point_" + index;
@@ -270,9 +270,9 @@ public class DiscreteTreeParser {
 					Attribute attribute;
 					if (attributeValue instanceof Double) {
 
-						double[] range = new double[2];
-						range[Attribute.MIN_INDEX] = (double) attributeValue;
-						range[Attribute.MAX_INDEX] = (double) attributeValue;
+						Double[] range = new Double[2];
+						range[Attribute.MIN_INDEX] = (Double) attributeValue;
+						range[Attribute.MAX_INDEX] = (Double) attributeValue;
 
 						attribute = new Attribute(attributeId, range);
 
@@ -333,9 +333,9 @@ public class DiscreteTreeParser {
 					Attribute attribute;
 					if (attributeValue instanceof Double) {
 
-						double[] range = new double[2];
-						range[Attribute.MIN_INDEX] = (double) attributeValue;
-						range[Attribute.MAX_INDEX] = (double) attributeValue;
+						Double[] range = new Double[2];
+						range[Attribute.MIN_INDEX] = (Double) attributeValue;
+						range[Attribute.MAX_INDEX] = (Double) attributeValue;
 
 						attribute = new Attribute(attributeId, range);
 

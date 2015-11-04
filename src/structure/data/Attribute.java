@@ -11,10 +11,10 @@ public class Attribute {
 
 	private final String id;
 	private final String scale;
-	private double[] range;
+	private Double[] range;
 	private HashSet<Object> domain;
 
-	public Attribute(String id, double[] range) {
+	public Attribute(String id, Double[] range) {
 
 		this.id = id;
 		this.scale = LINEAR;
@@ -34,7 +34,7 @@ public class Attribute {
 		return scale;
 	}
 
-	public double[] getRange() {
+	public Double[] getRange() {
 		return range;
 	}
 

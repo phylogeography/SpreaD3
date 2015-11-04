@@ -244,9 +244,9 @@ public class ContinuousTreeParser {
 					Attribute attribute;
 					if (attributeValue instanceof Double) {
 
-						double[] range = new double[2];
-						range[Attribute.MIN_INDEX] = (double) attributeValue;
-						range[Attribute.MAX_INDEX] = (double) attributeValue;
+						Double[] range = new Double[2];
+						range[Attribute.MIN_INDEX] = (Double) attributeValue;
+						range[Attribute.MAX_INDEX] = (Double) attributeValue;
 
 						attribute = new Attribute(attributeId, range);
 
@@ -307,9 +307,9 @@ public class ContinuousTreeParser {
 					Attribute attribute;
 					if (attributeValue instanceof Double) {
 
-						double[] range = new double[2];
-						range[Attribute.MIN_INDEX] = (double) attributeValue;
-						range[Attribute.MAX_INDEX] = (double) attributeValue;
+						Double[] range = new Double[2];
+						range[Attribute.MIN_INDEX] = (Double) attributeValue;
+						range[Attribute.MAX_INDEX] = (Double) attributeValue;
 
 						attribute = new Attribute(attributeId, range);
 
