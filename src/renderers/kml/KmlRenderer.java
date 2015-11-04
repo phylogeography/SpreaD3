@@ -286,7 +286,7 @@ public class KmlRenderer implements Renderer {
 				if (colorAttribute.getScale().equalsIgnoreCase(LINEAR)) {
 
 					// value is value
-					double value = (double) colorAttributeValue;
+					double value = (Double) colorAttributeValue;
 					double minValue = colorAttribute.getRange()[0];
 					double maxValue = colorAttribute.getRange()[1];
 
@@ -345,7 +345,7 @@ public class KmlRenderer implements Renderer {
 				if (altitudeAttribute.getScale().equalsIgnoreCase(LINEAR)) {
 
 					// value is value
-					double value = (double) altitudeAttributeValue;
+					double value = (Double) altitudeAttributeValue;
 					double minValue = altitudeAttribute.getRange()[0];
 					double maxValue = altitudeAttribute.getRange()[1];
 
@@ -544,7 +544,7 @@ public class KmlRenderer implements Renderer {
 				if (areaAttribute.getScale().equalsIgnoreCase(LINEAR)) {
 
 					// value is value
-					double value = (double) areaAttributeValue;
+					double value = (Double) areaAttributeValue;
 					double minValue = areaAttribute.getRange()[0];
 					double maxValue = areaAttribute.getRange()[1];
 
@@ -606,7 +606,7 @@ public class KmlRenderer implements Renderer {
 				if (colorAttribute.getScale().equalsIgnoreCase(LINEAR)) {
 
 					// value is value
-					double value = (double) colorAttributeValue;
+					double value = (Double) colorAttributeValue;
 					double minValue = colorAttribute.getRange()[0];
 					double maxValue = colorAttribute.getRange()[1];
 

@@ -59,7 +59,7 @@ public class GeoJSONParser {
 					} else {
 
 						double value = Utils
-								.round((double) attributeValue, 100);
+								.round((Double) attributeValue, 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
