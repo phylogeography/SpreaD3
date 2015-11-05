@@ -14,13 +14,16 @@ public class JSliderDouble extends JSlider {
 	private int resolution;
 	private double currentValue;
 
+	private int labelEvery;
+
 	public JSliderDouble(double from, double to, double currentValue,
-			int resolution) {
+			int resolution, int labelEvery) {
 
 		this.from = from;
 		this.to = to;
 		this.resolution = resolution;
 		this.currentValue = currentValue;
+		this.labelEvery = labelEvery;
 
 		initSlider();
 
@@ -45,18 +48,24 @@ public class JSliderDouble extends JSlider {
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 		for (int i = 0; i < resolution; i++) {
 
-			double value = (from + i * delta);
-			int tick = (int) (value * resolution);
-			String label = df.format(value);
+			if (i % labelEvery == 0) {
 
-			labelTable.put(new Integer(tick), new JLabel(label));
+				double value = (from + i * delta);
+				int tick = (int) (value * resolution);
+				String label = df.format(value);
 
+				labelTable.put(new Integer(tick), new JLabel(label));
+			}
 		}
 
 		setLabelTable(labelTable);
 
 	}// END: initSlider
 
+//	public void setLabelEvery() {
+//		this.labelEvery = 
+//	}
+	
 	public double getDoubleValue() {
 		double value = (double) this.getValue() / (double) resolution;
 		return value;

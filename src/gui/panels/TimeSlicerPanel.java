@@ -441,8 +441,7 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 		if (!hpdLevelCreated) {
 
-			hpdLevel = new JSliderDouble(0.1, 1.0, 0.8, 10);
-
+			hpdLevel = new JSliderDouble(0.1, 1.0, 0.8, 10, 1);
 			hpdLevel.setMajorTickSpacing(1);
 			hpdLevel.setPaintTicks(true);
 			hpdLevel.setPaintLabels(true);
@@ -464,9 +463,8 @@ public class TimeSlicerPanel extends OptionsPanel {
 			if (!source.getValueIsAdjusting()) {
 
 				double value = source.getDoubleValue();
+				settings.hpdLevel = value;
 
-				//TODO
-				
 				frame.setStatus("HPD " + value + " selected.");
 
 			} // END: adjusting check

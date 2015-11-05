@@ -25,8 +25,8 @@ public class ContinuousTreeParser {
 	private RootedTree rootedTree;
 	private String xCoordinate;
 	private String yCoordinate;
-//	private String hpd;
-//	private String mrsd;
+	// private String hpd;
+	// private String mrsd;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
 
@@ -63,18 +63,18 @@ public class ContinuousTreeParser {
 	public void parseTree() throws AnalysisException {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
-		
+
 		// hack, remove digits to get name
 		String prefix = xCoordinate.replaceAll("\\d*$", "");
-		
+
+		// get gpd automagically
 		String hpd = getHpdAttribute(rootedTree);
-		if(hpd == null) {
+		if (hpd == null) {
 			throw new AnalysisException("Tree is not annotated with an HPD attribute.");
 		}
-		
-		//TODO: parse HPD automagically
-		String modalityAttributeName = prefix.concat("_").concat(hpd) .concat("%").concat("HPD_modality");
-		
+
+		String modalityAttributeName = prefix.concat("_").concat(hpd).concat("%").concat("HPD_modality");
+
 		int index = 0;
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
@@ -82,22 +82,17 @@ public class ContinuousTreeParser {
 				// node parsed first
 
 				Coordinate nodeCoordinate = null;
-				
+
 				try {
 
-					Double nodeCoordinateY = (Double) Utils
-							.getObjectNodeAttribute(node, yCoordinate);
-					Double nodeCoordinateX = (Double) Utils
-							.getObjectNodeAttribute(node, xCoordinate);
+					Double nodeCoordinateY = (Double) Utils.getObjectNodeAttribute(node, yCoordinate);
+					Double nodeCoordinateX = (Double) Utils.getObjectNodeAttribute(node, xCoordinate);
 
-					nodeCoordinate = new Coordinate(nodeCoordinateX,
-							nodeCoordinateY);
+					nodeCoordinate = new Coordinate(nodeCoordinateX, nodeCoordinateY);
 
 				} catch (AnalysisException e) {
 
-					String message = xCoordinate
-							+ " and/or "
-							+ yCoordinate
+					String message = xCoordinate + " and/or " + yCoordinate
 							+ " attribute could not be found in the tree. Resulting visualisation may be incomplete!";
 					System.out.println(message);
 					continue;
@@ -111,27 +106,23 @@ public class ContinuousTreeParser {
 					pointsMap.put(node, nodePoint);
 					index++;
 
-				}// END: null check
+				} // END: null check
 
 				// parent node parsed second
 				Node parentNode = rootedTree.getParent(node);
 
-				Double parentCoordinateX = (Double) Utils
-						.getObjectNodeAttribute(parentNode, xCoordinate);
-				Double parentCoordinateY = (Double) Utils
-						.getObjectNodeAttribute(parentNode, yCoordinate);
+				Double parentCoordinateX = (Double) Utils.getObjectNodeAttribute(parentNode, xCoordinate);
+				Double parentCoordinateY = (Double) Utils.getObjectNodeAttribute(parentNode, yCoordinate);
 
-				Coordinate parentCoordinate = new Coordinate(parentCoordinateX,
-						parentCoordinateY);
+				Coordinate parentCoordinate = new Coordinate(parentCoordinateX, parentCoordinateY);
 				Point parentPoint = pointsMap.get(parentNode);
 				if (parentPoint == null) {
 
-					parentPoint = createPoint(index, parentNode,
-							parentCoordinate);
+					parentPoint = createPoint(index, parentNode, parentCoordinate);
 					pointsMap.put(parentNode, parentPoint);
 					index++;
 
-				}// END: null check
+				} // END: null check
 
 				Line line = new Line(parentPoint.getId(), //
 						nodePoint.getId(), //
@@ -142,41 +133,58 @@ public class ContinuousTreeParser {
 
 				linesList.add(line);
 
-				// TODO: antigenic coordinates will have uncertainty on external too
+				// TODO: antigenic coordinates will have uncertainty on external
+				// too
 				if (!rootedTree.isExternal(node)) {
 
 					Integer modality = 0;
-					
+
 					try {
-					
-						 modality = (Integer) Utils.getObjectNodeAttribute(
-							node, modalityAttributeName);
-					
-					} catch(AnalysisException e) {
-						
+
+						modality = (Integer) Utils.getObjectNodeAttribute(node, modalityAttributeName);
+
+					} catch (AnalysisException e) {
+
 						String message = modalityAttributeName
 								+ " attribute could not be found in the tree. Resulting visualisation may be incomplete!";
 						System.out.println(message);
 						continue;
 					}
-					
+
 					for (int m = 1; m <= modality; m++) {
 
 						// trait1_80%HPD_1
-						String xCoordinateHPDName = xCoordinate.concat("_")
-								.concat(hpd).concat("%")
+						String xCoordinateHPDName = xCoordinate.concat("_").concat(hpd).concat("%")
 								.concat(Utils.HPD.toUpperCase() + "_" + m);
-						String yCoordinateHPDName = yCoordinate.concat("_")
-								.concat(hpd).concat("%")
+						String yCoordinateHPDName = yCoordinate.concat("_").concat(hpd).concat("%")
 								.concat(Utils.HPD.toUpperCase() + "_" + m);
 
-						Object[] xCoordinateHPD = Utils
-								.getObjectArrayNodeAttribute(node,
-										xCoordinateHPDName);
+						Object[] xCoordinateHPD = null;
+						Object[] yCoordinateHPD = null;
 
-						Object[] yCoordinateHPD = Utils
-								.getObjectArrayNodeAttribute(node,
-										yCoordinateHPDName);
+						try {
+
+							xCoordinateHPD = Utils.getObjectArrayNodeAttribute(node, xCoordinateHPDName);
+
+						} catch (AnalysisException e) {
+
+							String message = xCoordinateHPDName
+									+ " attribute could not be found in the tree. Resulting visualisation may be incomplete!";
+							System.out.println(message);
+							continue;
+						} // END: try-catch
+
+						try {
+
+							yCoordinateHPD = Utils.getObjectArrayNodeAttribute(node, yCoordinateHPDName);
+
+						} catch (AnalysisException e) {
+
+							String message = yCoordinateHPDName
+									+ " attribute could not be found in the tree. Resulting visualisation may be incomplete!";
+							System.out.println(message);
+							continue;
+						} // END: try-catch
 
 						List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 						for (int c = 0; c < xCoordinateHPD.length; c++) {
@@ -184,25 +192,23 @@ public class ContinuousTreeParser {
 							Double xCoordinate = (Double) xCoordinateHPD[c];
 							Double yCoordinate = (Double) yCoordinateHPD[c];
 
-							Coordinate coordinate = new Coordinate(xCoordinate,
-									yCoordinate);
+							Coordinate coordinate = new Coordinate(xCoordinate, yCoordinate);
 							coordinateList.add(coordinate);
 
-						}// END: c loop
+						} // END: c loop
 
 						Polygon polygon = new Polygon(coordinateList);
 
 						// TODO: attributes
-						Area area = new Area(polygon, nodePoint.getStartTime(),
-								null);
+						Area area = new Area(polygon, nodePoint.getStartTime(), null);
 						areasList.add(area);
 
-					}// END: modality loop
+					} // END: modality loop
 
-				}// external check
+				} // external check
 
-			}// END: root check
-		}// END: nodes loop
+			} // END: root check
+		} // END: nodes loop
 
 		pointsList.addAll(pointsMap.values());
 
@@ -226,8 +232,7 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round((Double) attributeValue, 100);
+						double value = Utils.round((Double) attributeValue, 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -289,8 +294,7 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round((Double) attributeValue, 100);
+						double value = Utils.round((Double) attributeValue, 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -328,7 +332,7 @@ public class ContinuousTreeParser {
 
 			} // END: attributes loop
 
-		}// END: points loop
+		} // END: points loop
 
 		uniqueNodeAttributes.addAll(branchAttributesMap.values());
 
@@ -337,8 +341,7 @@ public class ContinuousTreeParser {
 	private Point createPoint(int index, Node node, Coordinate coordinate) throws AnalysisException {
 
 		String id = "point_" + index;
-		Double height = Utils.getNodeHeight(rootedTree, node)
-				* timescaleMultiplier;
+		Double height = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);
 
 		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
@@ -347,11 +350,11 @@ public class ContinuousTreeParser {
 			Object nodeAttribute = node.getAttribute(attributeName);
 
 			if (!(nodeAttribute instanceof Object[])) {
-				
+
 				// remove invalid characters
 				attributeName = attributeName.replaceAll("%", "");
 				attributeName = attributeName.replaceAll("!", "");
-				
+
 				attributes.put(attributeName, nodeAttribute);
 			} // END: multivariate check
 
@@ -365,23 +368,23 @@ public class ContinuousTreeParser {
 	private String getHpdAttribute(RootedTree tree) {
 
 		String hpdString = null;
-		for(Node node : tree.getNodes()) {
-			for(String attributeName : node.getAttributeNames()) {
-				
+		for (Node node : tree.getNodes()) {
+			for (String attributeName : node.getAttributeNames()) {
+
 				if (attributeName.contains("HPD_modality")) {
 
-					hpdString = attributeName.replaceAll("\\D+","");
-//					System.out.println(attributeName);
+					hpdString = attributeName.replaceAll("\\D+", "");
+					// System.out.println(attributeName);
 					break;
-					
-				}//END: hpd check	
-			}//END: attributes loop
+
+				} // END: hpd check
+			} // END: attributes loop
 			break;
-		}//END: nodes loop
-		
+		} // END: nodes loop
+
 		return hpdString;
-	}//END: getHpdAttribute
-	
+	}// END: getHpdAttribute
+
 	public LinkedList<Line> getLinesList() {
 		return linesList;
 	}
