@@ -1019,7 +1019,7 @@ public class Spread2ConsoleApp {
 					}
 
 					if (args4.hasOption(OUTPUT)) {
-						settings.timeSlicerSettings.output = args4
+						settings.timeSlicerSettings.outputFilename = args4
 								.getStringOption(OUTPUT);
 					} // END: option check
 
@@ -1040,7 +1040,7 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.timeSlicerSettings.output);
+					File file = new File(settings.timeSlicerSettings.outputFilename);
 					FileWriter fw;
 
 					fw = new FileWriter(file);

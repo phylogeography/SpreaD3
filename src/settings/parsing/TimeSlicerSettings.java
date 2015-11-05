@@ -42,7 +42,14 @@ public class TimeSlicerSettings {
 	public double hpdLevel = 0.8;
 	
 	// path to json output file 
-	public String output = "output.json";
+	public String outputFilename = "output.json";
 
+	//---GUI---//
 
+	public Integer assumedTrees = null;
+	
+	
+	
+	
+	
 }//END: class

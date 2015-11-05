@@ -17,9 +17,9 @@ public class Spread2App {
 
 	public static final String SHORT_NAME = "SPREAD";
 	public static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
-	public static final String VERSION = "2.0.2";
+	public static final String VERSION = "2.1.0";
 	public static final String DATE_STRING = "2015";
-	public static final String CODENAME = "Classy & Fabulous.";
+	public static final String CODENAME = "Expressive & Expressive.";
 
 	public static final String FILIP_BIELEJEC = "Filip Bielejec";
 	public static final String GUY_BAELE = "Guy Baele";

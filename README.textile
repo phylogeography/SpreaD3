@@ -237,3 +237,6 @@ topoLayer.selectAll("path").style("visibility", "hidden");
 h5. Change points size:
 pointsLayer.selectAll("circle").attr("r", 1);
 
+h5. Change lines width:
+linesLayer.selectAll(".line").attr("stroke-width", 3 + "px")
+

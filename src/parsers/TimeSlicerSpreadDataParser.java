@@ -24,7 +24,7 @@ import utils.Utils;
 
 public class TimeSlicerSpreadDataParser {
 
-//	private static final int FIRST_SLICE_INDEX = 0;
+	// private static final int FIRST_SLICE_INDEX = 0;
 	private final TimeSlicerSettings settings;
 
 	public TimeSlicerSpreadDataParser(TimeSlicerSettings settings) {
@@ -34,7 +34,7 @@ public class TimeSlicerSpreadDataParser {
 	public SpreadData parse() throws IOException, ImportException, AnalysisException {
 
 		TimeLine timeLine = null;
-		// TODO: we need axis Att's
+		// TODO: we need those axis Att's
 		AxisAttributes axis = null;
 		LinkedList<Attribute> mapAttributes = null;
 		// LinkedList<Attribute> lineAttributes = null;
@@ -75,7 +75,7 @@ public class TimeSlicerSpreadDataParser {
 
 		TimeParser timeParser = new TimeParser(settings.mrsd);
 		// timeParser.parseTime();
-		timeLine = timeParser.getTimeLine(sliceHeights[sliceHeights.length-1]);
+		timeLine = timeParser.getTimeLine(sliceHeights[sliceHeights.length - 1]);
 
 		System.out.println("Parsed time line");
 
@@ -101,7 +101,13 @@ public class TimeSlicerSpreadDataParser {
 
 		// ---DATA LAYER (CONTOURING AREAS)---//
 
-		int assumedTrees = getAssumedTrees(settings.treesFilename);
+		int assumedTrees;
+		if (settings.assumedTrees != null) {
+			assumedTrees = settings.assumedTrees;
+		} else {
+			assumedTrees = getAssumedTrees(settings.treesFilename);
+		}
+
 		if (settings.burnIn >= assumedTrees) {
 			throw new AnalysisException("Trying to burn too many trees!");
 		}
@@ -112,7 +118,7 @@ public class TimeSlicerSpreadDataParser {
 				assumedTrees, //
 				settings.hpdLevel, //
 				settings.gridSize, //
-				settings.timescaleMultiplier,  //
+				settings.timescaleMultiplier, //
 				sliceHeights //
 		);
 		parser.parse();
@@ -151,7 +157,7 @@ public class TimeSlicerSpreadDataParser {
 		return timeSlices;
 	}// END: generateSliceHeights
 
-	private int getAssumedTrees(String file) throws IOException {
+	public static int getAssumedTrees(String file) throws IOException {
 		// this method is a hack
 
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
