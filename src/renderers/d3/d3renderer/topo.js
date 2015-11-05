@@ -2,6 +2,8 @@
 
 function generateTopoLayer(geojson) {
 
+    //console.log("generateTopoLayer");
+
 	var basicScale = (width / 2 / Math.PI);
 	
 	// first guess for the projection
@@ -84,11 +86,16 @@ function generateTopoLayer(geojson) {
 
 function generateEmptyLayer(pointAttributes, axisAttributes) {
 
+//    console.log("generateEmptyLayer");
+
 	var xlim = getObject(pointAttributes, "id", axisAttributes.xCoordinate).range;
 	var ylim = getObject(pointAttributes, "id", axisAttributes.yCoordinate).range;
 
-	// console.log(xlim);
-	// console.log(ylim);
+//    console.log("width: " + width);
+//    console.log("height: " + height);
+//
+//	console.log("xlim: " + xlim);
+//	console.log("ylim: " + ylim);
 
 	var bounds = [ xlim, ylim ];
 
@@ -98,12 +105,32 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
 	var hscale = scale * width / (bounds[0][1] - bounds[0][0]);
 	var vscale = scale * height / (bounds[1][1] - bounds[1][0]);
 
+//    console.log("hscale: " + hscale);
+//    console.log("vscale: " + vscale);
+
 	scale = (hscale < vscale) ? hscale : vscale;
 	// still need to correct the scaling, not too happy about this ...
-	scale = minScaleExtent * scale;
+    if (scale > 2*width) {
+        scale = 2*width;
+    }
+	//scale = minScaleExtent * scale;
 
-	var offset = [ width / 2 / (bounds[0][1] - bounds[0][0]),
-			(height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
+//    console.log("minScaleExtent: " + minScaleExtent);
+//
+//    console.log("scale: " + scale);
+
+    //var manualScale = 500.0;
+    //console.log("manually set scale: " + manualScale);
+    //scale = manualScale;
+
+	//var offset = [ width / 2 / (bounds[0][1] - bounds[0][0]),
+			//(height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
+
+    var offset = [ width/2 - (bounds[0][1] - bounds[0][0])/2 - scale*minScaleExtent, height/2 - (bounds[1][1] - bounds[1][0])/2 ];
+
+    //var offset = [ width/8 - 150*(bounds[0][1] - bounds[0][0]), height/2 + (bounds[1][1] - bounds[1][0]) ];
+
+//    console.log("offset: " + offset);
 
 	// projection
 	projection = d3.geo.mercator().scale(scale).translate(offset);

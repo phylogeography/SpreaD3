@@ -208,9 +208,9 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---POLYGONS---//
 
-	// ---select polygons yet to be displayed---//
+	// ---select areas yet to be displayed---//
 
-	areasLayer.selectAll(".polygon") //
+	areasLayer.selectAll(".area") //
 	.filter(function(d) {
 		var polygon = this;
 		var startDate = formDate(polygon.attributes.startTime.value).getTime();
@@ -225,7 +225,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---select polygons displayed now---//
 
-	areasLayer.selectAll(".polygon") //
+	areasLayer.selectAll(".area") //
 	.filter(function(d) {
 		var polygon = this;
 		var startDate = formDate(polygon.attributes.startTime.value).getTime();
@@ -405,12 +405,6 @@ var sliderStartValue;
 var sliderEndValue;
 
 d3.json("data/data.json", function ready(error, json) {
-//d3.json("data/slicing_test.json", function ready(error, json) {
-	// d3.json("data/test_bf.json", function ready(error, json) {
-	// d3.json("data/languages_worldmap.json", function ready(error, json) {
-//	 d3.json("data/ebov_discrete.json", function ready(error, json) {
-	// TODO: needs debugging
-	// d3.json("data/ebov_nomap.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
@@ -460,6 +454,7 @@ d3.json("data/data.json", function ready(error, json) {
 	var pointAttributes = json.pointAttributes;
 	if (typeof pointAttributes != 'undefined') {
 		populatePointPanels(pointAttributes);
+		populateAreaPanels(pointAttributes);
 	}
 
 	var mapAttributes = json.mapAttributes;
