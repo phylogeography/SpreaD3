@@ -200,7 +200,7 @@ public class ContinuousTreeParser {
 						Polygon polygon = new Polygon(coordinateList);
 
 						// TODO: attributes
-						Area area = new Area(polygon, nodePoint.getStartTime(), null);
+						Area area = new Area(polygon, nodePoint.getStartTime(), nodePoint.getAttributes());
 						areasList.add(area);
 
 					} // END: modality loop
