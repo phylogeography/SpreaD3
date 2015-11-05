@@ -55,6 +55,7 @@ function generatePoints(data) {
 	.attr("fill", "white") //
 	.attr("stroke", "black");
 
+	// dump attribute values into DOM
 	points[0].forEach(function(d, i) {
 
 		var thisPoint = d3.select(d);

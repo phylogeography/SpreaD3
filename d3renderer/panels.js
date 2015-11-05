@@ -223,6 +223,96 @@ function populateLocationPanels() {
 
 }// END: populateLabelPanels
 
+function populateAreaPanels(attributes) {
+	
+	// ---COLOR---//
+	
+	areaColorSelect = document.getElementById("areacolor");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		areaColorSelect.appendChild(element);
+
+	}// END: i loop
+	
+	// TODO
+	// area color listener
+	d3
+	.select(areaColorSelect)
+	.on(
+			'change',
+			function() {
+
+				var colorAttribute = areaColorSelect.options[areaColorSelect.selectedIndex].text;
+
+				var attribute = getObject(attributes, "id",
+						colorAttribute);
+
+				var data;
+				var scale;
+
+				$('#areasColorLegend').html('');
+
+				if (attribute.scale == ORDINAL) {
+
+					data = attribute.domain;
+					scale = d3.scale.category20().domain(data);
+
+					colorlegend("#areasColorLegend", scale, "ordinal",
+							{
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+				} else {
+
+					data = attribute.range;
+					scale = d3.scale.linear().domain(data).range(
+							[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
+
+					colorlegend("#areasColorLegend", scale, "linear",
+							{
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+				}
+
+				areasLayer.selectAll(".area").transition() //
+				.ease("linear") //
+				.attr("fill", function() {
+
+					var area = d3.select(this);
+					var attributeValue = area.attr(colorAttribute);
+					var color = scale(attributeValue);
+
+					return (color);
+				});
+
+			});
+
+	
+	
+	
+	
+	
+}// END: populateAreaPanels
+
+
 function populatePointPanels(attributes) {
 
 	// ---COLOR---//
@@ -367,7 +457,7 @@ function populatePointPanels(attributes) {
 						});
 					});
 
-}// END: populateNodePanels
+}// END: populatePointPanels
 
 function populateLinePanels(attributes) {
 
@@ -501,5 +591,5 @@ function populateLinePanels(attributes) {
 
 	});
 
-}// END: populateDataPanels
+}// END: populateLinePanels
 

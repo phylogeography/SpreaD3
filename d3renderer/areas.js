@@ -30,8 +30,9 @@ d3.kodama
 
 function generateAreas(data) {
 
-	areasLayer.selectAll("polygon").data(data).enter().append("polygon") //
-	.attr("class", "polygon") //
+	var areas = areasLayer.selectAll("area").data(data).enter().append(
+			"polygon") //
+	.attr("class", "area") //
 	.attr("startTime", function(d) {
 
 		return (d.startTime);
@@ -57,14 +58,14 @@ function generateAreas(data) {
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
-		var point = d3.select(this);
-		point.attr('stroke', '#000');
+		var area = d3.select(this);
+		area.attr('stroke', '#000');
 
 	}) //
 	.on('mouseout', function(d, i) {
 
-		var point = d3.select(this);
-		point.attr('stroke', '#fff');
+		var area = d3.select(this);
+		area.attr('stroke', '#fff');
 
 	}) //
 	.call(d3.kodama.tooltip().format(function(d, i) {
@@ -79,6 +80,21 @@ function generateAreas(data) {
 
 	}) //
 	.theme('countsTheme'));
+
+	// dump attribute values into DOM
+	areas[0].forEach(function(d, i) {
+
+		var thisArea = d3.select(d);
+
+		var properties = data[i].attributes;
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
+
+				thisArea.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
+	});
 
 }// END: generateAreas
 

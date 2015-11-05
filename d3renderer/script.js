@@ -208,9 +208,9 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---POLYGONS---//
 
-	// ---select polygons yet to be displayed---//
+	// ---select areas yet to be displayed---//
 
-	areasLayer.selectAll(".polygon") //
+	areasLayer.selectAll(".area") //
 	.filter(function(d) {
 		var polygon = this;
 		var startDate = formDate(polygon.attributes.startTime.value).getTime();
@@ -225,7 +225,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 	// ---select polygons displayed now---//
 
-	areasLayer.selectAll(".polygon") //
+	areasLayer.selectAll(".area") //
 	.filter(function(d) {
 		var polygon = this;
 		var startDate = formDate(polygon.attributes.startTime.value).getTime();
@@ -460,6 +460,7 @@ d3.json("data/antigenic_test.json", function ready(error, json) {
 	var pointAttributes = json.pointAttributes;
 	if (typeof pointAttributes != 'undefined') {
 		populatePointPanels(pointAttributes);
+		populateAreaPanels(pointAttributes);
 	}
 
 	var mapAttributes = json.mapAttributes;
