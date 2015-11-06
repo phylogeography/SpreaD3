@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -68,40 +67,6 @@ public class InterfaceUtils {
 		return result;
 	}// END: getActiveFrame
 
-	
-//	public void removeChildComponents(Component parentComponent, OptionsPanel panel) {
-//
-//		Component[] components = panel.getComponents();
-//		int parentIndex = 0;
-//		int componentIndex = 0;
-//		for (Component component : components) {
-//
-////			System.out.println(component.toString());
-//			if (component.equals(parentComponent)) {
-//
-//				parentIndex = componentIndex;
-//
-////				System.out.println("this is the parent component " + "index "
-////						+ parentIndex);
-//
-//				break;
-//			}// END: parent check
-//
-//			componentIndex++;
-//		}// END: components loop
-//
-//		componentIndex = 0;
-//		for (Component component : components) {
-//
-//			if (componentIndex > parentIndex) {
-//				panel.remove(component);
-//			}// END: parent index check
-//
-//			componentIndex++;
-//		}// END: components loop
-//
-//	}// END: removeChildComponents
-	
 	// ////////////////////////////////
 	// ---EXCEPTION HANDLING UTILS---//
 	// ////////////////////////////////

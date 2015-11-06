@@ -34,7 +34,7 @@ import structure.data.SpreadData;
 import utils.Utils;
 
 @SuppressWarnings("serial")
-public class ContinuousTreePanel extends OptionsPanel {
+public class ContinuousTreePanel extends SpreadPanel {
 
 	private MainFrame frame;
 	private ContinuousTreeSettings settings;
@@ -110,6 +110,10 @@ public class ContinuousTreePanel extends OptionsPanel {
 				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
+					// if tree reloaded reset components below
+					removeChildComponents(loadTree);
+					resetFlags();
+					
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 

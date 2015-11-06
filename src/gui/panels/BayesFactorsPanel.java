@@ -1,5 +1,11 @@
 package gui.panels;
 
+import exceptions.AnalysisException;
+import gui.InterfaceUtils;
+import gui.LocationCoordinatesEditor;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,22 +19,16 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import exceptions.AnalysisException;
-import gui.InterfaceUtils;
-import gui.LocationCoordinatesEditor;
-import gui.MainFrame;
-import gui.OptionsPanel;
-import gui.SimpleFileFilter;
 import parsers.BayesFactorSpreadDataParser;
 import parsers.LogParser;
 import settings.parsing.BayesFactorsSettings;
 import structure.data.SpreadData;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 @SuppressWarnings("serial")
-public class BayesFactorsPanel extends OptionsPanel {
+public class BayesFactorsPanel extends SpreadPanel {
 
 	private BayesFactorsSettings settings;
 	private MainFrame frame;
@@ -121,6 +121,10 @@ public class BayesFactorsPanel extends OptionsPanel {
 				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
+					// if log reloaded reset components below
+					removeChildComponents(loadLog);
+					resetFlags();
+					
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 

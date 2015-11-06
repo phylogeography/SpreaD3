@@ -1,6 +1,11 @@
 package gui.panels;
 
-import java.awt.Component;
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.LocationCoordinatesEditor;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -21,15 +26,6 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.LocationCoordinatesEditor;
-import gui.MainFrame;
-import gui.OptionsPanel;
-import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -38,8 +34,11 @@ import settings.parsing.DiscreteTreeSettings;
 import structure.data.SpreadData;
 import utils.Utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 @SuppressWarnings({ "rawtypes", "serial" })
-public class DiscreteTreePanel extends OptionsPanel {
+public class DiscreteTreePanel extends SpreadPanel {
 
 	private MainFrame frame;
 	private DiscreteTreeSettings settings;
@@ -104,47 +103,16 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 	}// END: resetDiscreteTreeFlags
 
-	private void removeChildComponents(Component parentComponent) {
+	private void resetUISettings() {
 
-		Component[] components = getComponents();
-		int parentIndex = 0;
-		int componentIndex = 0;
-		for (Component component : components) {
+		settings.locationsList = null;
 
-			// System.out.println(component.toString());
-			if (component.equals(parentComponent)) {
-
-				parentIndex = componentIndex;
-
-				// System.out.println("this is the parent component " + "index "
-				// + parentIndex);
-
-				break;
-			}// END: parent check
-
-			componentIndex++;
-		}// END: components loop
-
-		componentIndex = 0;
-		for (Component component : components) {
-
-			if (componentIndex > parentIndex) {
-				remove(component);
-			}// END: parent index check
-
-			componentIndex++;
-		}// END: components loop
-
-	}// END: removeChildComponents
+	}// END: resetUISettings
 
 	private class ListenLoadTree implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
 			try {
-
-				// if tree reloaded reset components below
-				removeChildComponents(loadTree);
-				resetFlags();
 
 				String[] treeFiles = new String[] { "tre", "tree", "trees" };
 
@@ -159,6 +127,10 @@ public class DiscreteTreePanel extends OptionsPanel {
 						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
+					// if tree reloaded reset components below
+					removeChildComponents(loadTree);
+					resetFlags();
+					
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 
@@ -270,7 +242,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 				if (!setupLocationCoordinatesCreated) {
 
 					// erase locationsList
-					settings.locationsList = null;
+					resetUISettings();
 
 					setupLocationCoordinates = new JButton(
 							"Setup",
@@ -338,7 +310,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 		if (!intervalsCreated) {
 			intervals = new JSlider(JSlider.HORIZONTAL, 1, 100,
 					settings.intervals);
-			//TODO: label table instead of spacing
+			// TODO: label table instead of spacing
 			intervals.setMajorTickSpacing(20);
 			intervals.setPaintTicks(true);
 			intervals.setPaintLabels(true);
@@ -364,11 +336,11 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 			JSlider source = (JSlider) ev.getSource();
 			if (!source.getValueIsAdjusting()) {
-				
+
 				int value = (int) source.getValue();
 				settings.intervals = value;
 				frame.setStatus("Selected " + value + " intervals.");
-				
+
 			} // END: adjusting check
 		}// END: stateChanged
 

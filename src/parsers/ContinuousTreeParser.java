@@ -70,7 +70,7 @@ public class ContinuousTreeParser {
 		// get gpd automagically
 		String hpd = getHpdAttribute(rootedTree);
 		if (hpd == null) {
-			throw new AnalysisException("Tree is not annotated with an HPD attribute.");
+			throw new AnalysisException("Tree is not annotated with an HPD attribute. I suspect this is not a continuously annotated tree.");
 		}
 
 		String modalityAttributeName = prefix.concat("_").concat(hpd).concat("%").concat("HPD_modality");
