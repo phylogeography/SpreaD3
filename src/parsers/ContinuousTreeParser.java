@@ -190,20 +190,20 @@ public class ContinuousTreeParser {
 				// too
 				// TODO: make this an option
 				boolean externalAnnotated = false;
-				boolean parse = true;
+				boolean parseNode = true;
 				if (rootedTree.isExternal(node)) {
 
-					parse = false;
+					parseNode = false;
 					if (externalAnnotated) {
-						parse = true;
+						parseNode = true;
 					}
 
 				} else {
-					parse = true;
+					parseNode = true;
 				}//END: parse logic
 				
 				
-				if (parse) {
+				if (parseNode) {
 
 					Integer modality = 0;
 
@@ -282,7 +282,7 @@ public class ContinuousTreeParser {
 
 					} // END: modality loop
 
-				} // external check
+				} // parse check
 
 			} // END: root check
 		} // END: nodes loop
