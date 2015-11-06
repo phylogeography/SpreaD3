@@ -166,7 +166,7 @@ public class LocationCoordinatesEditor {
 
 		try {
 
-			// get the locations form tree
+			// get the locations from tree
 			if (locationsList == null) {
 				locationsList = getUniqueLocations(settings.rootedTree, settings.locationAttributeName);
 			}

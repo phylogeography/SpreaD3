@@ -103,31 +103,41 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 	}// END: resetDiscreteTreeFlags
 
-	// TODO
 	private void removeChildComponents(Component parentComponent) {
 
-		Component[] components = getComponents();
+		// TODO: debug
 
-		int componentIndex = 0;
+		Component[] components = getComponents();
 		int parentIndex = 0;
+		int componentIndex = 0;
 		for (Component component : components) {
 
-//			System.out.println(component.toString());
+			System.out.println(component.toString());
 			if (component.equals(parentComponent)) {
 
 				parentIndex = componentIndex;
 
-//				System.out.println("this is the parent component " + "index "
-//						+ parentIndex);
+				System.out.println("this is the parent component " + "index "
+						+ parentIndex);
 
+				break;
 			}// END: parent check
+
+			// if (componentIndex > parentIndex) {
+			// remove(component);
+			// }
+
+			componentIndex++;
+		}// END: components loop
+
+		componentIndex = 0;
+		for (Component component : components) {
 
 			if (componentIndex > parentIndex) {
 				remove(component);
 			}
-
 			componentIndex++;
-		}// END: components loop
+		}
 
 	}// END: removeChildComponents
 
@@ -136,8 +146,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 			try {
 
-				// TODO: if tree reloaded reset components below
-
+				// if tree reloaded reset components below
 				removeChildComponents(loadTree);
 				resetFlags();
 
@@ -255,11 +264,18 @@ public class DiscreteTreePanel extends OptionsPanel {
 		public void itemStateChanged(ItemEvent event) {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
 
+				// if selection changed reparse everything below
+				removeChildComponents(locationAttributeSelector);
+				resetFlags();
+
 				Object item = event.getItem();
 				String locationAttribute = item.toString();
 
 				if (!setupLocationCoordinatesCreated) {
 
+					// erase locationsList
+					settings.locationsList = null;					
+					
 					setupLocationCoordinates = new JButton(
 							"Setup",
 							InterfaceUtils
