@@ -1,9 +1,5 @@
 package gui.panels;
 
-import gui.MainFrame;
-import gui.RendererTypes;
-import jam.panels.OptionsPanel;
-
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
@@ -15,6 +11,10 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+
+import gui.MainFrame;
+import gui.OptionsPanel;
+import gui.RendererTypes;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class RenderingPanel extends OptionsPanel {

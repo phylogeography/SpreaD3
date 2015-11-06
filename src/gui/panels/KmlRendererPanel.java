@@ -1,8 +1,6 @@
 package gui.panels;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,18 +14,13 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.LinkedList;
 
-import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
 
@@ -37,9 +30,8 @@ import com.google.gson.GsonBuilder;
 import colorpicker.swing.ColorPicker;
 import gui.InterfaceUtils;
 import gui.MainFrame;
+import gui.OptionsPanel;
 import gui.SimpleFileFilter;
-import gui.SpinningPanel;
-import jam.panels.OptionsPanel;
 import settings.rendering.KmlRendererSettings;
 import structure.data.Attribute;
 import structure.data.SpreadData;

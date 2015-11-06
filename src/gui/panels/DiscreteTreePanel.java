@@ -1,12 +1,6 @@
 package gui.panels;
 
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.LocationCoordinatesEditor;
-import gui.MainFrame;
-import gui.SimpleFileFilter;
-import jam.panels.OptionsPanel;
-
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -24,6 +18,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.LocationCoordinatesEditor;
+import gui.MainFrame;
+import gui.OptionsPanel;
+import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -31,9 +34,6 @@ import parsers.DiscreteTreeSpreadDataParser;
 import settings.parsing.DiscreteTreeSettings;
 import structure.data.SpreadData;
 import utils.Utils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @SuppressWarnings({ "rawtypes", "serial" })
 public class DiscreteTreePanel extends OptionsPanel {
@@ -66,6 +66,9 @@ public class DiscreteTreePanel extends OptionsPanel {
 	private JTextField intervals;
 	private boolean intervalsCreated = false;
 
+	// Panels
+	private OptionsPanel holderPanel;
+
 	public DiscreteTreePanel(MainFrame frame) {
 
 		this.frame = frame;
@@ -79,7 +82,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 		resetFlags();
 
 		if (!loadTreeCreated) {
-			loadTree = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+			loadTree = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
 			loadTree.addActionListener(new ListenLoadTree());
 			addComponentWithLabel("Load tree file:", loadTree);
 			loadTreeCreated = true;
@@ -99,20 +103,55 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 	}// END: resetDiscreteTreeFlags
 
+	// TODO
+	private void removeChildComponents(Component parentComponent) {
+
+		Component[] components = getComponents();
+
+		int componentIndex = 0;
+		int parentIndex = 0;
+		for (Component component : components) {
+
+//			System.out.println(component.toString());
+			if (component.equals(parentComponent)) {
+
+				parentIndex = componentIndex;
+
+//				System.out.println("this is the parent component " + "index "
+//						+ parentIndex);
+
+			}// END: parent check
+
+			if (componentIndex > parentIndex) {
+				remove(component);
+			}
+
+			componentIndex++;
+		}// END: components loop
+
+	}// END: removeChildComponents
+
 	private class ListenLoadTree implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
 			try {
+
+				// TODO: if tree reloaded reset components below
+
+				removeChildComponents(loadTree);
+				resetFlags();
 
 				String[] treeFiles = new String[] { "tre", "tree", "trees" };
 
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading tree file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
+						"Tree files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -126,6 +165,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 					settings.treeFilename = filename;
 					frame.setStatus(settings.treeFilename + " selected.");
+
 					populateLocationAttributeCombobox();
 
 				} else {
@@ -151,7 +191,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 				try {
 
-					RootedTree rootedTree = Utils.importRootedTree(settings.treeFilename);
+					RootedTree rootedTree = Utils
+							.importRootedTree(settings.treeFilename);
 					settings.rootedTree = rootedTree;
 
 				} catch (IOException e) {
@@ -182,10 +223,13 @@ public class DiscreteTreePanel extends OptionsPanel {
 					locationAttributeSelector = new JComboBox();
 					ComboBoxModel locationAttributeSelectorModel = new DefaultComboBoxModel(
 							uniqueAttributes.toArray(new String[0]));
-					locationAttributeSelector.setModel(locationAttributeSelectorModel);
-					locationAttributeSelector.addItemListener(new ListenLocationAttributeSelector());
+					locationAttributeSelector
+							.setModel(locationAttributeSelectorModel);
+					locationAttributeSelector
+							.addItemListener(new ListenLocationAttributeSelector());
 
-					addComponentWithLabel("Select location attribute", locationAttributeSelector);
+					addComponentWithLabel("Select location attribute",
+							locationAttributeSelector);
 					locationAttributeSelectorCreated = true;
 				}
 
@@ -216,18 +260,24 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 				if (!setupLocationCoordinatesCreated) {
 
-					setupLocationCoordinates = new JButton("Setup",
-							InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+					setupLocationCoordinates = new JButton(
+							"Setup",
+							InterfaceUtils
+									.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
 
-					setupLocationCoordinates.addActionListener(new ListenOpenLocationCoordinatesEditor());
+					setupLocationCoordinates
+							.addActionListener(new ListenOpenLocationCoordinatesEditor());
 
-					addComponentWithLabel("Setup location attribute coordinates:", setupLocationCoordinates);
+					addComponentWithLabel(
+							"Setup location attribute coordinates:",
+							setupLocationCoordinates);
 
 					setupLocationCoordinatesCreated = true;
 				}
 
 				settings.locationAttributeName = locationAttribute;
-				frame.setStatus("Location attribute '" + locationAttribute + "'" + " selected");
+				frame.setStatus("Location attribute '" + locationAttribute
+						+ "'" + " selected");
 
 			} // END: selected check
 		}// END: itemStateChanged
@@ -237,7 +287,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
-			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame);
+			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(
+					frame);
 			locationCoordinatesEditor.launch(settings);
 
 			if (locationCoordinatesEditor.isEdited()) {
@@ -258,13 +309,15 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}
 
 		if (!timescaleMultiplierCreated) {
-			timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
+			timescaleMultiplier = new JTextField(
+					String.valueOf(settings.timescaleMultiplier), 10);
 			addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
 			timescaleMultiplierCreated = true;
 		}
 
 		if (!loadGeojsonCreated) {
-			loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+			loadGeojson = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 			loadGeojson.addActionListener(new ListenLoadGeojson());
 			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
 			loadGeojsonCreated = true;
@@ -277,7 +330,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}
 
 		if (!outputCreated) {
-			output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+			output = new JButton("Output",
+					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			output.addActionListener(new ListenOutput());
 			addComponentWithLabel("Parse JSON:", output);
 			outputCreated = true;
@@ -295,11 +349,12 @@ public class DiscreteTreePanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading geoJSON file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(
-						new SimpleFileFilter(geojsonFiles, "geoJSON files (*.json), *.geojson)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(
+						geojsonFiles, "geoJSON files (*.json), *.geojson)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -332,7 +387,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 			chooser.setMultiSelectionEnabled(false);
 			chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
+			int returnVal = chooser.showSaveDialog(InterfaceUtils
+					.getActiveFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				File file = chooser.getSelectedFile();
@@ -354,7 +410,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 	private void collectOptionalSettings() {
 
 		settings.intervals = Integer.valueOf(intervals.getText());
-		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier.getText());
+		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
+				.getText());
 		settings.mrsd = dateEditor.getValue();
 
 	}// END: collectSettings
@@ -370,7 +427,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 				try {
 
-					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(settings);
+					DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(
+							settings);
 					SpreadData data = parser.parse();
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();

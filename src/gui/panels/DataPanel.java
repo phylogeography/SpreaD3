@@ -13,8 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import gui.MainFrame;
+import gui.OptionsPanel;
 import gui.ParserTypes;
-import jam.panels.OptionsPanel;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DataPanel extends OptionsPanel {

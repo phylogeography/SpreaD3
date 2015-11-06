@@ -1,12 +1,5 @@
 package gui.panels;
 
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.JSliderDouble;
-import gui.MainFrame;
-import gui.SimpleFileFilter;
-import jam.panels.OptionsPanel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -14,7 +7,6 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.LinkedHashSet;
 
 import javax.swing.ComboBoxModel;
@@ -22,7 +14,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
@@ -32,10 +23,15 @@ import javax.swing.event.ChangeListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.JSliderDouble;
+import gui.MainFrame;
+import gui.OptionsPanel;
+import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
-import parsers.ContinuousTreeSpreadDataParser;
 import parsers.TimeSlicerSpreadDataParser;
 import settings.parsing.TimeSlicerSettings;
 import structure.data.SpreadData;

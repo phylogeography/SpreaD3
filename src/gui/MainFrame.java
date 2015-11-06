@@ -1,9 +1,5 @@
 package gui;
 
-import gui.panels.DataPanel;
-import gui.panels.RenderingPanel;
-import jam.framework.DocumentFrame;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -19,8 +15,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.BorderUIResource;
 
+import gui.panels.DataPanel;
+import gui.panels.RenderingPanel;
+import jam.framework.DocumentFrame;
 import utils.FortuneCookies;
-import app.Spread2App;
 
 @SuppressWarnings("serial")
 public class MainFrame extends DocumentFrame implements FileMenuHandler {

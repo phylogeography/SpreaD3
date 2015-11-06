@@ -1,10 +1,5 @@
 package gui.panels;
 
-import gui.InterfaceUtils;
-import gui.MainFrame;
-import gui.SimpleFileFilter;
-import jam.panels.OptionsPanel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,6 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
 
+import gui.InterfaceUtils;
+import gui.MainFrame;
+import gui.OptionsPanel;
+import gui.SimpleFileFilter;
 import renderers.d3.D3Renderer;
 import settings.rendering.D3RendererSettings;
 

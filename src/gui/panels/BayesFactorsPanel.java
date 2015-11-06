@@ -5,12 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.LinkedHashSet;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JSlider;
 import javax.swing.SwingWorker;
@@ -23,17 +19,12 @@ import com.google.gson.GsonBuilder;
 import gui.InterfaceUtils;
 import gui.LocationCoordinatesEditor;
 import gui.MainFrame;
+import gui.OptionsPanel;
 import gui.SimpleFileFilter;
-import jam.panels.OptionsPanel;
-import jebl.evolution.graphs.Node;
-import jebl.evolution.io.ImportException;
-import jebl.evolution.trees.RootedTree;
 import parsers.BayesFactorSpreadDataParser;
-import parsers.DiscreteTreeSpreadDataParser;
 import parsers.LogParser;
 import settings.parsing.BayesFactorsSettings;
 import structure.data.SpreadData;
-import utils.Utils;
 
 @SuppressWarnings("serial")
 public class BayesFactorsPanel extends OptionsPanel {
