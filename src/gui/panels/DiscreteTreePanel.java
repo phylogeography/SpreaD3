@@ -15,8 +15,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -62,12 +65,10 @@ public class DiscreteTreePanel extends OptionsPanel {
 	// Text fields
 	private JTextField timescaleMultiplier;
 	private boolean timescaleMultiplierCreated = false;
-	// TODO: slider for intervals
-	private JTextField intervals;
-	private boolean intervalsCreated = false;
 
-	// Panels
-	private OptionsPanel holderPanel;
+	// Sliders
+	private JSlider intervals;
+	private boolean intervalsCreated = false;
 
 	public DiscreteTreePanel(MainFrame frame) {
 
@@ -105,27 +106,21 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 	private void removeChildComponents(Component parentComponent) {
 
-		// TODO: debug
-
 		Component[] components = getComponents();
 		int parentIndex = 0;
 		int componentIndex = 0;
 		for (Component component : components) {
 
-			System.out.println(component.toString());
+			// System.out.println(component.toString());
 			if (component.equals(parentComponent)) {
 
 				parentIndex = componentIndex;
 
-				System.out.println("this is the parent component " + "index "
-						+ parentIndex);
+				// System.out.println("this is the parent component " + "index "
+				// + parentIndex);
 
 				break;
 			}// END: parent check
-
-			// if (componentIndex > parentIndex) {
-			// remove(component);
-			// }
 
 			componentIndex++;
 		}// END: components loop
@@ -135,9 +130,10 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 			if (componentIndex > parentIndex) {
 				remove(component);
-			}
+			}// END: parent index check
+
 			componentIndex++;
-		}
+		}// END: components loop
 
 	}// END: removeChildComponents
 
@@ -274,8 +270,8 @@ public class DiscreteTreePanel extends OptionsPanel {
 				if (!setupLocationCoordinatesCreated) {
 
 					// erase locationsList
-					settings.locationsList = null;					
-					
+					settings.locationsList = null;
+
 					setupLocationCoordinates = new JButton(
 							"Setup",
 							InterfaceUtils
@@ -340,7 +336,13 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}
 
 		if (!intervalsCreated) {
-			intervals = new JTextField(String.valueOf(settings.intervals), 10);
+			intervals = new JSlider(JSlider.HORIZONTAL, 1, 100,
+					settings.intervals);
+			//TODO: label table instead of spacing
+			intervals.setMajorTickSpacing(20);
+			intervals.setPaintTicks(true);
+			intervals.setPaintLabels(true);
+			intervals.addChangeListener(new ListenIntervals());
 			addComponentWithLabel("Number of intervals:", intervals);
 			intervalsCreated = true;
 		}
@@ -354,6 +356,23 @@ public class DiscreteTreePanel extends OptionsPanel {
 		}
 
 	}// END: populateOptionalSettings
+
+	private class ListenIntervals implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent ev) {
+
+			JSlider source = (JSlider) ev.getSource();
+			if (!source.getValueIsAdjusting()) {
+				
+				int value = (int) source.getValue();
+				settings.intervals = value;
+				frame.setStatus("Selected " + value + " intervals.");
+				
+			} // END: adjusting check
+		}// END: stateChanged
+
+	}// END: ListenIntervals
 
 	private class ListenLoadGeojson implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
@@ -425,7 +444,7 @@ public class DiscreteTreePanel extends OptionsPanel {
 
 	private void collectOptionalSettings() {
 
-		settings.intervals = Integer.valueOf(intervals.getText());
+		// settings.intervals = Integer.valueOf(intervals.getText());
 		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
 				.getText());
 		settings.mrsd = dateEditor.getValue();

@@ -14,23 +14,24 @@ public class DiscreteLocationsParser {
 	private static final int LATITUDE_COLUMN = 1;
 	private static final int LONGITUDE_COLUMN = 2;
 
-	private String locations;
-	private LinkedList<Location> locationsList;
+	private String locationsFilename;
+	// private LinkedList<Location> locationsList;
 	private boolean header;
 
-	public DiscreteLocationsParser(String locations, boolean header) {
+	public DiscreteLocationsParser(String locationsFilename, boolean header) {
 
-		this.locations = locations;
+		this.locationsFilename = locationsFilename;
 		this.header = header;
 
 	}// END: Constructor
 
-	public LinkedList<Location> parseLocations() throws IOException, AnalysisException {
+	public LinkedList<Location> parseLocations() throws IOException,
+			AnalysisException {
 
-		this.locationsList = new LinkedList<Location>();
+		LinkedList<Location> locationsList = new LinkedList<Location>();
 
 		// create list from the coordinates file
-		String[] lines = Utils.readLines(locations, Utils.HASH_COMMENT);
+		String[] lines = Utils.readLines(locationsFilename, Utils.HASH_COMMENT);
 
 		if (header) {
 			lines = Arrays.copyOfRange(lines, 1, lines.length);
@@ -40,13 +41,20 @@ public class DiscreteLocationsParser {
 		for (int i = 0; i < nrow; i++) {
 
 			String[] line = lines[i].split("\t");
+
+			if (line.length != 3) {
+				throw new AnalysisException(
+						"Incorrect number of columns in locations file. Expecting 3, found "
+								+ line.length);
+			}
+
 			String locationName = line[0];
 
 			String illegalCharacter = "+";
 			if (locationName.contains(illegalCharacter)) {
 
-				throw new AnalysisException(
-						"Location " + locationName + " contains illegal character " + illegalCharacter);
+				throw new AnalysisException("Location " + locationName
+						+ " contains illegal character " + illegalCharacter);
 
 			}
 

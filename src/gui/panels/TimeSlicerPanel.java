@@ -592,7 +592,6 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 				double value = source.getDoubleValue();
 				settings.hpdLevel = value;
-
 				frame.setStatus("HPD " + value + " selected.");
 
 			} // END: adjusting check

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import exceptions.AnalysisException;
 import utils.Utils;
 
 public class LogParser {
@@ -25,12 +26,10 @@ public class LogParser {
 
 	}// END: Constructor
 
-	public Double[][] parseIndicators() throws IOException {
+	public Double[][] parseIndicators() throws IOException, AnalysisException {
 
 		String[] lines = Utils.readLines(logFilename, Utils.HASH_COMMENT);
 		columnNames = lines[HEADER_ROW].split("\t");
-
-		// Utils.printArray(columnNames);
 
 		int nrow = lines.length - 1;
 
@@ -48,6 +47,12 @@ public class LogParser {
 		} // END: column names loop
 
 		int ncol = columns.size();
+		// this should be enough when sth silly is parsed
+		if (ncol == 0) {
+			throw new AnalysisException("No " + Utils.INDICATORS
+					+ " columns found. I suspect wrong or malformed log file.");
+		}
+
 		int skip = (int) ((burnin / 100 * nrow));
 
 		// parse indicator columns
@@ -62,8 +67,10 @@ public class LogParser {
 				for (int col = 0; col < ncol; col++) {
 
 					if (columns.get(col) > line.length) {
-						System.out.println("Empty or malformed input at line " + (row + SKIPPED_LINES)
-								+ " inside log file. Resulting output may not be correct!");
+						System.out
+								.println("Empty or malformed input at line "
+										+ (row + SKIPPED_LINES)
+										+ " inside log file. Resulting output may not be correct!");
 
 						// copy array with one less row
 						indicators = cloneArray(indicators, i);
@@ -71,7 +78,8 @@ public class LogParser {
 
 					} else {
 
-						indicators[i][col] = Double.valueOf(line[columns.get(col)]);
+						indicators[i][col] = Double.valueOf(line[columns
+								.get(col)]);
 
 					}
 

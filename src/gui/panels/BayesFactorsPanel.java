@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import exceptions.AnalysisException;
 import gui.InterfaceUtils;
 import gui.LocationCoordinatesEditor;
 import gui.MainFrame;
@@ -85,7 +86,6 @@ public class BayesFactorsPanel extends OptionsPanel {
 		loadGeojsonCreated = false;
 		outputCreated = false;
 		
-		
 	}// END: resetFlags
 
 	private class ListenBurninPercent implements ChangeListener {
@@ -95,8 +95,11 @@ public class BayesFactorsPanel extends OptionsPanel {
 
 			JSlider source = (JSlider) ev.getSource();
 			if (!source.getValueIsAdjusting()) {
+				
 				int value = (int) source.getValue();
 				settings.burninPercent = (double) value;
+				frame.setStatus("Selected " + value + " as burn-in %.");
+				
 			} // END: adjusting check
 		}// END: stateChanged
 
@@ -129,7 +132,6 @@ public class BayesFactorsPanel extends OptionsPanel {
 
 					settings.logFilename = filename;
 					frame.setStatus(settings.logFilename + " selected.");
-
 					importIndicators();
 
 				} else {
@@ -160,10 +162,16 @@ public class BayesFactorsPanel extends OptionsPanel {
 					settings.indicators = indicators;
 
 				} catch (IOException e) {
+					
 					String message = "I/O Exception occured when importing log file " + settings.logFilename
 							+ ". I suspect wrong or malformed tree file.";
 					InterfaceUtils.handleException(e, message);
-				}
+				
+				} catch (AnalysisException e) {
+					
+					InterfaceUtils.handleException(e, e.getMessage());
+				
+				}//END: try-catch
 
 				if (!setupLocationCoordinatesCreated) {
 
