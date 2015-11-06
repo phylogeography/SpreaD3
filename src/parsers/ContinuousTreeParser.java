@@ -188,21 +188,22 @@ public class ContinuousTreeParser {
 
 				// TODO: antigenic coordinates will have uncertainty on external
 				// too
-//				boolean externalAnnotated = false;
-//				boolean parse = true;
-//				
-//				if(rootedTree.isExternal(node)) {
-//				
-//					if() {
-//					parse = true;
-//					}
-//					
-//				} else if() {
-//					
-//				}
+				// TODO: make this an option
+				boolean externalAnnotated = false;
+				boolean parse = true;
+				if (rootedTree.isExternal(node)) {
+
+					parse = false;
+					if (externalAnnotated) {
+						parse = true;
+					}
+
+				} else {
+					parse = true;
+				}//END: parse logic
 				
 				
-				if (!rootedTree.isExternal(node)) {
+				if (parse) {
 
 					Integer modality = 0;
 
