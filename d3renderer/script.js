@@ -404,8 +404,9 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-//d3.json("data/antigenic_time.json", function ready(error, json) {
-d3.json("data/antigenic_test.json", function ready(error, json) {
+//d3.json("data/H3N2output.json", function ready(error, json) {
+d3.json("data/antigenic_time.json", function ready(error, json) {
+//d3.json("data/antigenic_test.json", function ready(error, json) {
 //d3.json("data/slicing_test.json", function ready(error, json) {
 	// d3.json("data/test_bf.json", function ready(error, json) {
 //	 d3.json("data/languages_worldmap.json", function ready(error, json) {

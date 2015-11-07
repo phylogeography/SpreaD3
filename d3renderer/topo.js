@@ -86,18 +86,20 @@ function generateTopoLayer(geojson) {
 
 function generateEmptyLayer(pointAttributes, axisAttributes) {
 
-//    console.log("generateEmptyLayer");
+    console.log("generateEmptyLayer");
 
 	var xlim = getObject(pointAttributes, "id", axisAttributes.xCoordinate).range;
 	var ylim = getObject(pointAttributes, "id", axisAttributes.yCoordinate).range;
 
-//    console.log("width: " + width);
-//    console.log("height: " + height);
-//
-//	console.log("xlim: " + xlim);
-//	console.log("ylim: " + ylim);
+    console.log("width: " + width);
+    console.log("height: " + height);
+
+	console.log("xlim: " + xlim);
+	console.log("ylim: " + ylim);
 
 	var bounds = [ xlim, ylim ];
+
+    console.log("bounds: " + bounds);
 
 	// initial scale based on X-axis
 	scale = width / (bounds[0][1] - bounds[0][0]);
@@ -105,19 +107,18 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
 	var hscale = scale * width / (bounds[0][1] - bounds[0][0]);
 	var vscale = scale * height / (bounds[1][1] - bounds[1][0]);
 
-//    console.log("hscale: " + hscale);
-//    console.log("vscale: " + vscale);
+    console.log("hscale: " + hscale);
+    console.log("vscale: " + vscale);
 
 	scale = (hscale < vscale) ? hscale : vscale;
 	// still need to correct the scaling, not too happy about this ...
-    if (scale > 2*width) {
-        scale = 2*width;
-    }
+    //if (scale > 2*width) {
+    //    scale = 2*width;
+    //}
 	//scale = minScaleExtent * scale;
 
-//    console.log("minScaleExtent: " + minScaleExtent);
-//
-//    console.log("scale: " + scale);
+    console.log("minScaleExtent: " + minScaleExtent);
+    console.log("scale: " + scale);
 
     //var manualScale = 500.0;
     //console.log("manually set scale: " + manualScale);
@@ -126,21 +127,82 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
 	//var offset = [ width / 2 / (bounds[0][1] - bounds[0][0]),
 			//(height / 2) + (bounds[1][1] - bounds[1][0]) / 2 ];
 
-    var offset = [ width/2 - (bounds[0][1] - bounds[0][0])/2 - scale*minScaleExtent, height/2 - (bounds[1][1] - bounds[1][0])/2 ];
+    var offset = [ width/2 - (bounds[0][1] - bounds[0][0])/2, height/2 - (bounds[1][1] - bounds[1][0])/2 ];
 
     //var offset = [ width/8 - 150*(bounds[0][1] - bounds[0][0]), height/2 + (bounds[1][1] - bounds[1][0]) ];
 
-//    console.log("offset: " + offset);
+    console.log("offset: " + offset);
+
+    //define our own projection
+    var zeroProjection = d3.geo.projection(function(x,y) {
+       return [x,y];
+    });
+
+    //test projection
+    console.log("test projection [0,0]: " + zeroProjection([0,0]));
+    console.log("test projection [0,1]: " + zeroProjection([0,1]));
+    console.log("test projection [1,0]: " + zeroProjection([1,0]));
+    console.log("test projection [1,1]: " + zeroProjection([1,1]));
+
+    console.log("center: (" + (bounds[1][1] + bounds[1][0])/2 + " , " + (bounds[0][1] + bounds[0][0])/2 + ")");
+
+    var currentXDifference = zeroProjection([1,1])[0] - zeroProjection([0,0])[0];
+    var currentYDifference = zeroProjection([1,1])[1] - zeroProjection([0,0])[1];
+    console.log("current X difference: " + currentXDifference);
+    console.log("current Y difference: " + currentYDifference);
 
 	// projection
-	projection = d3.geo.mercator().scale(scale).translate(offset);
+	//projection = d3.geo.mercator().scale(scale).translate(offset);
+    //projection = zeroProjection.center([(bounds[0][1] + bounds[0][0])/2,(bounds[1][1] + bounds[1][0])/2]).scale(500);
 
-	// path
-	path = d3.geo.path().projection(projection);
+    //projection = zeroProjection.center([(bounds[1][1] + bounds[1][0])/2,(bounds[0][1] + bounds[0][0])/2]).scale(500);
 
-	// add graticule
-	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
-			path);
+    //projection = zeroProjection.translate([width/2,height/2 + 32.19*currentXDifference]).scale(150);
+    projection = zeroProjection.translate([width/2 + bounds[1][0]*currentYDifference,height/2 + bounds[0][0]*currentXDifference]).scale(150);
+
+    //test projection
+    console.log("test projection [0,0]: " + zeroProjection([0,0]));
+    console.log("test projection [0,1]: " + zeroProjection([0,1]));
+    console.log("test projection [1,0]: " + zeroProjection([1,0]));
+    console.log("test projection [1,1]: " + zeroProjection([1,1]));
+
+    //console.log("test projection [0,0]: " + zeroProjection([0,10.14]));
+
+/*
+    projection = zeroProjection.scale(500);
+
+    console.log("test projection [0,0]: " + zeroProjection([0,0]));
+    console.log("test projection [0,1]: " + zeroProjection([0,1]));
+    console.log("test projection [1,0]: " + zeroProjection([1,0]));
+    console.log("test projection [1,1]: " + zeroProjection([1,1]));
+
+    currentXDifference = zeroProjection([1,1])[0] - zeroProjection([0,0])[0];
+    currentYDifference = zeroProjection([1,1])[1] - zeroProjection([0,0])[1];
+    console.log("current X difference: " + currentXDifference);
+    console.log("current Y difference: " + currentYDifference);
+
+    projection = zeroProjection.translate([width/2,height/2 + 45.92 + 32.19*currentXDifference]).scale(500);
+
+    projection = zeroProjection.scale(1000);
+
+    currentXDifference = zeroProjection([1,1])[0] - zeroProjection([0,0])[0];
+    currentYDifference = zeroProjection([1,1])[1] - zeroProjection([0,0])[1];
+    console.log("current X difference: " + currentXDifference);
+    console.log("current Y difference: " + currentYDifference);
+
+    projection = zeroProjection.translate([width/2,height/2 + 45.92 + 32.19*currentXDifference]).scale(1000);
+*/
+
+
+
+    //projection = zeroProjection.translate([width/2,height/2 + 32.19*currentXDifference]).scale(500);
+
+	//no more need for a path
+	//path = d3.geo.path().projection(projection);
+
+	//and no more need to add graticule
+	//svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
+	//		path);
 
 }// END: generateEmptyLayer
 
