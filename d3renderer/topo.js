@@ -102,15 +102,16 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
     console.log("bounds: " + bounds);
 
 	// initial scale based on X-axis
-	scale = width / (bounds[0][1] - bounds[0][0]);
+	//scale = width / (bounds[0][1] - bounds[0][0]);
 
-	var hscale = scale * width / (bounds[0][1] - bounds[0][0]);
-	var vscale = scale * height / (bounds[1][1] - bounds[1][0]);
+	var hscale = height / (bounds[0][1] - bounds[0][0]);
+	var vscale = width / (bounds[1][1] - bounds[1][0]);
 
     console.log("hscale: " + hscale);
     console.log("vscale: " + vscale);
 
 	scale = (hscale < vscale) ? hscale : vscale;
+    scale = scale * 150;
 	// still need to correct the scaling, not too happy about this ...
     //if (scale > 2*width) {
     //    scale = 2*width;
@@ -146,14 +147,13 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
 
     //console.log("center: (" + (bounds[1][1] + bounds[1][0])/2 + " , " + (bounds[0][1] + bounds[0][0])/2 + ")");
 
-
-
     var currentXDifference = zeroProjection([1,1])[0] - zeroProjection([0,0])[0];
     var currentYDifference = zeroProjection([1,1])[1] - zeroProjection([0,0])[1];
     console.log("current X difference: " + currentXDifference);
     console.log("current Y difference: " + currentYDifference);
 
-
+    scale = minScaleExtent*scale/currentXDifference;
+    console.log("scale: " + scale);
 
 	// projection
 	//projection = d3.geo.mercator().scale(scale).translate(offset);
@@ -162,8 +162,6 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
     //projection = zeroProjection.center([(bounds[1][1] + bounds[1][0])/2,(bounds[0][1] + bounds[0][0])/2]).scale(500);
 
     //projection = zeroProjection.scale(150);
-
-
 
     /*projection = zeroProjection.translate([width/2 + (bounds[1][0]+bounds[1][1])/2*currentYDifference,height/2 + (bounds[0][0]+bounds[0][1])/2*currentXDifference]).scale(150);
 
@@ -188,14 +186,14 @@ function generateEmptyLayer(pointAttributes, axisAttributes) {
 
     projection = zeroProjection.translate([width/2 + (bounds[1][0]+bounds[1][1])/2*currentYDifference,height/2 + (bounds[0][0]+bounds[0][1])/2*currentXDifference]).scale(500);
 */
-    projection = zeroProjection.scale(2000);
+    projection = zeroProjection.scale(scale);
 
     currentXDifference = zeroProjection([1,1])[0] - zeroProjection([0,0])[0];
     currentYDifference = zeroProjection([1,1])[1] - zeroProjection([0,0])[1];
     console.log("current X difference: " + currentXDifference);
     console.log("current Y difference: " + currentYDifference);
 
-    projection = zeroProjection.translate([width/2 + (bounds[1][0]+bounds[1][1])/2*currentYDifference,height/2 + (bounds[0][0]+bounds[0][1])/2*currentXDifference]).scale(2000);
+    projection = zeroProjection.translate([width/2 + (bounds[1][0]+bounds[1][1])/2*currentYDifference,height/2 + (bounds[0][0]+bounds[0][1])/2*currentXDifference]).scale(scale);
     //console.log("translate: " + (width/2 + (bounds[1][0]+bounds[1][1])/2*currentYDifference) + " , " + (height/2 + (bounds[0][0]+bounds[0][1])/2*currentXDifference));
 
     //projection = zeroProjection.translate([width/2,height/2 + 32.19*currentXDifference]).scale(500);
