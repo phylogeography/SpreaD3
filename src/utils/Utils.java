@@ -54,6 +54,7 @@ public class Utils {
 	public static final int DAY_INDEX = 2;
 	public static final int X_INDEX = 0;
 	public static final int Y_INDEX = 1;
+	public static final String NEGATIVE_SIGN = "-";
 	
 	public static String splitString(String string, String c) {
 		 String[] id = string.split(c);

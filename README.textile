@@ -153,6 +153,9 @@ h3. CONTINUOUS TREE PARSER
 * geographical coordinates example, world map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
 
+* geographical coordinates example, world map, negative (BC) date in decimal format
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd -2000.5 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
+
 * geographical coordinates example, clipped map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
 

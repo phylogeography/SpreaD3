@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.GridBagConstraints;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,12 +13,13 @@ import javax.swing.SpinnerDateModel;
 @SuppressWarnings("serial")
 public class DateEditor extends JPanel {
 
-	// TODO : add decimal format
+	// TODO : add decimal format (can take negative dates)
 
 	private Date today;
 	private JSpinner spinner;
 	private SimpleDateFormat formatter;
-
+	private GridBagConstraints c;
+	
 	public DateEditor() {
 
 		formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);

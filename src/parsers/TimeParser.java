@@ -13,15 +13,16 @@ public class TimeParser {
 	private String mrsd;
 	private LocalDate endDate;
 
-	private DateTimeFormatter dateFormatter;// = new SimpleDateFormat("MM/dd/yyyy")
-	
+	private DateTimeFormatter dateFormatter;// = new
+											// SimpleDateFormat("MM/dd/yyyy")
+
 	public TimeParser(String mrsd) throws AnalysisException {
 
 		this.mrsd = mrsd;
-        this.dateFormatter =  DateTimeFormat.forPattern("yyyy/MM/dd");
-		
-        parseTime();
-        
+		this.dateFormatter = DateTimeFormat.forPattern("yyyy/MM/dd");
+
+		parseTime();
+
 	}// END: Constructor
 
 	private void parseTime() throws AnalysisException {
@@ -29,20 +30,30 @@ public class TimeParser {
 		Integer year = 0;
 		Integer month = 0;
 		Integer day = 0;
-		
+
 		String[] endDateFields;
-		if(mrsd.contains(".")) {
-			
-			endDateFields = convertToYearMonthDay(Double.valueOf(mrsd));			
-			
-			year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
+		if (mrsd.contains(".")) {
+
+			// negative dates
+			int decimalDateSign = 1;
+			if (mrsd.contains(Utils.NEGATIVE_SIGN)) {
+				decimalDateSign = -1;
+				mrsd = mrsd.split("-")[1];
+			}
+
+			endDateFields = convertToYearMonthDay(Double.valueOf(mrsd));
+
+			year = decimalDateSign
+					* Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
 			month = Integer.valueOf(endDateFields[Utils.MONTH_INDEX]);
 			day = Integer.valueOf(endDateFields[Utils.DAY_INDEX]);
 
-			System.out.println("MRSD in a decimal date format corresponds to yyyy/MM/dd format: " + year +"/" + month + "/" + day);
-			
-		} else if(mrsd.contains("/")) {
-			
+			System.out
+					.println("MRSD in a decimal date format corresponds to yyyy/MM/dd format: "
+							+ year + "/" + month + "/" + day);
+
+		} else if (mrsd.contains("/")) {
+
 			endDateFields = mrsd.split("/");
 			if (endDateFields.length == 3) {
 
@@ -60,24 +71,26 @@ public class TimeParser {
 				year = Integer.valueOf(endDateFields[Utils.YEAR_INDEX]);
 
 			} else {
-				throw new AnalysisException("Unrecognised date format " + this.mrsd);
+				throw new AnalysisException("Unrecognised date format "
+						+ this.mrsd);
 			}
-			
-			System.out.println("MRSD is in yyyy/MM/dd format : " + year +"/" + month + "/" + day);
-			
+
+			System.out.println("MRSD is in yyyy/MM/dd format : " + year + "/"
+					+ month + "/" + day);
+
 		} else {
-			
+
 			throw new AnalysisException("Unrecognised MRSD format " + this.mrsd);
-			
-		}//END: format check
-		
-		// joda monthOfYear must be [1,12] 
-		if(month == 0) {
+
+		}// END: format check
+
+		// joda monthOfYear must be [1,12]
+		if (month == 0) {
 			month = 1;
 		}
 
-		// joda dayOfMonth must be [1,31] 
-		if(day == 0) {
+		// joda dayOfMonth must be [1,31]
+		if (day == 0) {
 			day = 1;
 		}
 
@@ -85,16 +98,15 @@ public class TimeParser {
 	}// END: parseTime
 
 	public TimeLine getTimeLine(double rootNodeHeight) {
-		
+
 		String startDate = this.getNodeDate(rootNodeHeight);
-//		String endDate = this.endDate.toString();
 		String endDate = dateFormatter.print(this.endDate);
-		
+
 		TimeLine timeLine = new TimeLine(startDate, endDate);
-		
+
 		return timeLine;
-	}//END: getTimeLine
-	
+	}// END: getTimeLine
+
 	public String getNodeDate(double nodeHeight) {
 
 		String[] fields = convertToYearMonthDay(nodeHeight);
@@ -103,9 +115,8 @@ public class TimeParser {
 		Integer days = Integer.valueOf(fields[Utils.DAY_INDEX]);
 		LocalDate date = endDate.minusYears(years).minusMonths(months)
 				.minusDays(days);
-//		String stringDate = date.toString();
-String stringDate = dateFormatter.print(date );
-		
+		String stringDate = dateFormatter.print(date);
+
 		return stringDate;
 	}// END: getNodeDate
 
