@@ -110,7 +110,7 @@ public class Spread2ConsoleApp {
 	private static final String LINES_CUTOFF = "linesCutoff";
 	private static final String LINES_VALUE = "linesValue";
 
-	private static final String LINE_COLOR_MAPPING = "lineColormapping";
+	private static final String LINE_COLOR_MAPPING = "lineColorMapping";
 	private static final String LINE_COLORS = "lineColors";
 	private static final String LINE_COLOR = "lineColor";
 
@@ -129,7 +129,10 @@ public class Spread2ConsoleApp {
 	// private static final String AREA_CUTOFF = "linesCutoff";
 	// private static final String AREA_VALUE = "linesValue";
 
+	private static final String AREA_COLOR_MAPPING = "areaColorMapping";
+	private static final String AREA_COLORS = "areaColors";
 	private static final String AREA_COLOR = "areaColor";
+
 	private static final String AREA_ALPHA = "areaAlpha";
 
 	// ---COUNTS---//
@@ -194,7 +197,8 @@ public class Spread2ConsoleApp {
 						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-						new Arguments.StringOption(GEOJSON, "", "geojson file name"),
+						new Arguments.StringOption(GEOJSON, "",
+								"geojson file name"),
 
 						// new Arguments.StringArrayOption(TRAITS, -1, "",
 						// "traits to be parsed from nodes"),
@@ -231,7 +235,7 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(Y_COORDINATE, "",
 								"y location trait name (longitude)"),
 
-//						new Arguments.StringOption(HPD, "", "hpd level"),
+						// new Arguments.StringOption(HPD, "", "hpd level"),
 
 						new Arguments.StringOption(MRSD, "",
 								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
@@ -239,7 +243,8 @@ public class Spread2ConsoleApp {
 						new Arguments.RealOption(TIMESCALE_MULTIPLIER,
 								"multiplier for the tree branches time scale. By default 1 unit = 1 year."),
 
-						new Arguments.StringOption(GEOJSON, "", "geojson file name"),
+						new Arguments.StringOption(GEOJSON, "",
+								"geojson file name"),
 
 						new Arguments.StringOption(OUTPUT, "",
 								"json output file name"),
@@ -263,7 +268,8 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(TRAIT, "",
 								"2D trait used for contouring"),
 
-						new Arguments.StringOption(GEOJSON, "", "geojson file name"),
+						new Arguments.StringOption(GEOJSON, "",
+								"geojson file name"),
 
 						new Arguments.StringOption(MRSD, "",
 								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
@@ -361,11 +367,16 @@ public class Spread2ConsoleApp {
 
 						// ---AREA COLOR---//
 
-						// TODO: this should read RGB or RGBA
 						new Arguments.RealArrayOption(AREA_COLOR, 3,
 								"specify RGB value"),
 
-						// // ---AREA ALPHA---//
+						new Arguments.StringOption(AREA_COLOR_MAPPING, "",
+								"attribute to map RGB aesthetics"),
+
+						new Arguments.StringOption(AREA_COLORS, "",
+								"file with RGB(A) colors to map attribute values to."),
+
+						// ---AREA ALPHA---//
 
 						new Arguments.RealOption(
 								AREA_ALPHA,
@@ -406,7 +417,6 @@ public class Spread2ConsoleApp {
 
 						// ---LINE COLOR---//
 
-						// TODO: this should read RGB or RGBA
 						new Arguments.RealArrayOption(LINE_COLOR, 3,
 								"specify RGB value"),
 
@@ -429,7 +439,6 @@ public class Spread2ConsoleApp {
 						// ---COUNTS---//
 						// //////////////
 
-						// TODO: this should read RGB or RGBA
 						new Arguments.RealArrayOption(COUNT_COLOR, 3,
 								"specify RGB value"),
 
@@ -803,7 +812,8 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.bayesFactorsSettings.outputFilename);
+					File file = new File(
+							settings.bayesFactorsSettings.outputFilename);
 					FileWriter fw;
 
 					fw = new FileWriter(file);
@@ -847,10 +857,10 @@ public class Spread2ConsoleApp {
 								.getStringOption(Y_COORDINATE);
 					}
 
-//					if (args3.hasOption(HPD)) {
-//						settings.continuousTreeSettings.hpd = args3
-//								.getStringOption(HPD);
-//					}
+					// if (args3.hasOption(HPD)) {
+					// settings.continuousTreeSettings.hpd = args3
+					// .getStringOption(HPD);
+					// }
 
 					if (args3.hasOption(MRSD)) {
 						settings.continuousTreeSettings.mrsd = args3
@@ -891,7 +901,8 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.continuousTreeSettings.outputFilename);
+					File file = new File(
+							settings.continuousTreeSettings.outputFilename);
 					FileWriter fw;
 
 					fw = new FileWriter(file);
@@ -1040,7 +1051,8 @@ public class Spread2ConsoleApp {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String s = gson.toJson(data);
 
-					File file = new File(settings.timeSlicerSettings.outputFilename);
+					File file = new File(
+							settings.timeSlicerSettings.outputFilename);
 					FileWriter fw;
 
 					fw = new FileWriter(file);
@@ -1291,9 +1303,9 @@ public class Spread2ConsoleApp {
 
 					}
 
-					// //////////////
+					// /////////////
 					// ---AREAS---//
-					// //////////////
+					// /////////////
 
 					// ---AREA COLOR---//
 
@@ -1301,6 +1313,33 @@ public class Spread2ConsoleApp {
 
 						settings.kmlRendererSettings.areaColor = kmlRenderArguments
 								.getRealArrayOption(AREA_COLOR);
+
+					}
+
+					if (kmlRenderArguments.hasOption(AREA_COLOR_MAPPING)) {
+
+						settings.kmlRendererSettings.areaColorMapping = kmlRenderArguments
+								.getStringOption(AREA_COLOR_MAPPING);
+
+						if (kmlRenderArguments.hasOption(AREA_COLORS)) {
+							settings.kmlRendererSettings.areaColors = kmlRenderArguments
+									.getStringOption(AREA_COLORS);
+						}
+
+					} else if (kmlRenderArguments.hasOption(AREA_COLOR)) {
+
+						settings.kmlRendererSettings.areaColor = kmlRenderArguments
+								.getRealArrayOption(AREA_COLOR);
+
+					} else if (kmlRenderArguments.hasOption(AREA_COLOR_MAPPING)
+							&& kmlRenderArguments.hasOption(AREA_COLOR)) {
+
+						throw new ArgumentException(
+								"Can't both map and have a defined area color!");
+
+					} else {
+
+						// use defaults
 
 					}
 
@@ -1467,13 +1506,14 @@ public class Spread2ConsoleApp {
 
 				try {
 
-//					Reader reader = new FileReader(
-//							settings.kmlRendererSettings.jsonFilename);
-//					Gson gson = new GsonBuilder().create();
-//					SpreadData input = gson.fromJson(reader, SpreadData.class);
+					// Reader reader = new FileReader(
+					// settings.kmlRendererSettings.jsonFilename);
+					// Gson gson = new GsonBuilder().create();
+					// SpreadData input = gson.fromJson(reader,
+					// SpreadData.class);
 
 					KmlRenderer renderer = new KmlRenderer(
-//							input,
+					// input,
 							settings.kmlRendererSettings);
 					renderer.render();
 

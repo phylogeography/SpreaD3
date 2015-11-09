@@ -176,6 +176,14 @@ h5. Color
 * override default areas color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColor 150 50 50 -output test.kml
 
+* map areas color to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping height -output test.kml
+
+* map areas colors to a discrete attribute, use supplied color schemes
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping trait_80HPD_modality -output test.kml
+
+* map areas colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
+TODO: make example
 
 h3. TIME SLICING PARSER
 

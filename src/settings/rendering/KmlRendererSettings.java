@@ -9,9 +9,9 @@ public class KmlRendererSettings {
 	public String jsonFilename = null;
 	public String outputFilename = "output.kml";
 
-	////////////////
+	// //////////////
 	// ---POINTS---//
-	////////////////
+	// //////////////
 
 	// ---SUBSET---//
 	public String pointsSubset = null;
@@ -22,13 +22,13 @@ public class KmlRendererSettings {
 
 	// For continuous attributes
 	public String pointColorMapping = null;
-	
+
 	public Double minPointRed = 50.0;
 	public Double maxPointRed = 100.0;
-	
+
 	public Double minPointGreen = 100.0;
 	public Double maxPointGreen = 250.0;
-	
+
 	public Double minPointBlue = 50.0;
 	public Double maxPointBlue = 100.0;
 
@@ -64,9 +64,9 @@ public class KmlRendererSettings {
 	// Fixed
 	public Double pointArea = 1000.0;
 
-	///////////////
+	// /////////////
 	// ---LINES---//
-	///////////////
+	// /////////////
 
 	// ---SUBSETTING---//
 
@@ -125,9 +125,9 @@ public class KmlRendererSettings {
 	// Fixed
 	public Double lineWidth = 2.0;
 
-	///////////////
+	// /////////////
 	// ---AREAS---//
-	///////////////
+	// /////////////
 
 	// ---SUBSETTING---//
 
@@ -137,6 +137,18 @@ public class KmlRendererSettings {
 
 	// ---COLOR---//
 
+	// For continuous attributes
+	public String areaColorMapping = null;
+	public Double minAreaRed = 100.0;
+	public Double maxAreaRed = 250.0;
+	public Double minAreaGreen = 50.0;
+	public Double maxAreaGreen = 100.0;
+	public Double minAreaBlue = 50.0;
+	public Double maxAreaBlue = 100.0;
+
+	// For discrete attributes
+	public String areaColors = null;
+	
 	// Fixed
 	public double[] areaColor = new double[] { 50, // R,
 			50, // G
@@ -148,9 +160,9 @@ public class KmlRendererSettings {
 	// Fixed
 	public double areaAlpha = 100;
 
-	////////////////
+	// //////////////
 	// --COUNTS---//
-	////////////////
+	// //////////////
 
 	// ---AREA---//
 

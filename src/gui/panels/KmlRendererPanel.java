@@ -1,5 +1,10 @@
 package gui.panels;
 
+import gui.InterfaceUtils;
+import gui.JSliderDouble;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -23,20 +28,18 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import colorpicker.swing.ColorPicker;
-import gui.InterfaceUtils;
-import gui.MainFrame;
-import gui.OptionsPanel;
-import gui.SimpleFileFilter;
-import renderers.d3.D3Renderer;
 import renderers.kml.KmlRenderer;
 import settings.rendering.KmlRendererSettings;
 import structure.data.Attribute;
 import structure.data.SpreadData;
+import colorpicker.swing.ColorPicker;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 public class KmlRendererPanel extends SpreadPanel {
@@ -59,8 +62,6 @@ public class KmlRendererPanel extends SpreadPanel {
 	private JButton loadJson;
 	private boolean loadJsonCreated = false;
 	private JButton render;
-//	private boolean renderCreated = false;
-
 	private JButton pointColor;
 	private JButton lineColor;
 	private JButton areaColor;
@@ -71,6 +72,7 @@ public class KmlRendererPanel extends SpreadPanel {
 	private JComboBox pointAreaMapping;
 	private JComboBox lineColorMapping;
 	private JComboBox lineAltitudeMapping;
+	private JComboBox areaColorMapping;
 
 	// Sliders
 	private JSlider pointArea;
@@ -106,7 +108,7 @@ public class KmlRendererPanel extends SpreadPanel {
 	private void resetFlags() {
 		loadJsonCreated = false;
 		renderSettingsCreated = false;
-//		renderCreated = false;
+		// renderCreated = false;
 	}// END: resetFlags
 
 	private class ListenLoadJson implements ActionListener {
@@ -189,14 +191,15 @@ public class KmlRendererPanel extends SpreadPanel {
 							"File could not be found.");
 					frame.setStatus("Exception occured.");
 					frame.setIdle();
-				}
 
-				// } catch (Exception e) {
-				// InterfaceUtils.handleException(e,
-				// "Wrong or malformed JSON input file.");
-				// frame.setStatus("Exception occured.");
-				// frame.setIdle();
-				// }
+				} catch (JsonSyntaxException e) {
+
+					InterfaceUtils.handleException(e,
+							"Wrong or malformed JSON input file.");
+					frame.setStatus("Exception occured.");
+					frame.setIdle();
+
+				}
 
 				return null;
 			}// END: doInBackground
@@ -234,10 +237,10 @@ public class KmlRendererPanel extends SpreadPanel {
 					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			render.addActionListener(new ListenRender());
 			addComponentWithLabel("Render to KML:", render);
-//			renderCreated = true;
+			// renderCreated = true;
 
 			renderSettingsCreated = true;
-			
+
 		}
 
 	}// END: populateRender
@@ -296,16 +299,33 @@ public class KmlRendererPanel extends SpreadPanel {
 		pointArea = new JSlider(JSlider.HORIZONTAL,
 				settings.minPointArea.intValue(),
 				settings.maxPointArea.intValue(), settings.pointArea.intValue());
-		pointArea.setMajorTickSpacing(1000);
-		pointArea.setMinorTickSpacing(500);
+		pointArea.setMajorTickSpacing(2000);
 		pointArea.setPaintTicks(true);
 		pointArea.setPaintLabels(true);
+		pointArea.addChangeListener(new ListenPointArea());
 		tmpPanel.add(pointArea);
 		c.gridx = 0;
 		c.gridy = 3;
 		settingsHolder.add(tmpPanel, c);
 
 	}// END: populatePoints
+
+	private class ListenPointArea implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent ev) {
+
+			JSlider source = (JSlider) ev.getSource();
+			if (!source.getValueIsAdjusting()) {
+
+				int value = source.getValue();
+				settings.pointArea = (double) value;
+				frame.setStatus("Point area " + value + " selected.");
+
+			} // END: adjusting check
+		}// END: stateChanged
+
+	}// END: ListenBurninPercent
 
 	private class ListenPointAreaMapping implements ItemListener {
 
@@ -315,6 +335,8 @@ public class KmlRendererPanel extends SpreadPanel {
 
 				Object item = event.getItem();
 				String attribute = item.toString();
+
+				settings.pointAreaMapping = attribute;
 
 			} // END: selected check
 		}// END: itemStateChanged
@@ -330,6 +352,8 @@ public class KmlRendererPanel extends SpreadPanel {
 				Object item = event.getItem();
 				String attribute = item.toString();
 
+				settings.pointColorMapping = attribute;
+
 			} // END: selected check
 		}// END: itemStateChanged
 
@@ -341,14 +365,18 @@ public class KmlRendererPanel extends SpreadPanel {
 			Color defaultColor = new Color(
 					(int) settings.pointColor[KmlRendererSettings.R],
 					(int) settings.pointColor[KmlRendererSettings.G],
-					(int) settings.pointColor[KmlRendererSettings.B]);
+					(int) settings.pointColor[KmlRendererSettings.B],
+					(int) settings.pointAlpha);
 
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
+			if (c != null) {
+				settings.pointColor = new double[] { c.getRed(), c.getGreen(),
+						c.getBlue() };
+
+				settings.pointAlpha = c.getAlpha();
+			}
 
 		}// END: actionPerformed
 	}// END: ListenPointColor
@@ -408,9 +436,10 @@ public class KmlRendererPanel extends SpreadPanel {
 				settings.minLineAltitude.intValue(),
 				settings.maxLineAltitude.intValue(),
 				settings.lineAltitude.intValue());
-		lineAltitude.setMajorTickSpacing(100000);
+		lineAltitude.setMajorTickSpacing(200000);
 		lineAltitude.setPaintTicks(true);
 		lineAltitude.setPaintLabels(true);
+		lineAltitude.addChangeListener(new ListenLineAltitude());
 		tmpPanel.add(lineAltitude);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
@@ -427,12 +456,47 @@ public class KmlRendererPanel extends SpreadPanel {
 		lineWidth.setMajorTickSpacing(1);
 		lineWidth.setPaintTicks(true);
 		lineWidth.setPaintLabels(true);
+		lineWidth.addChangeListener(new ListenLineWidth());
 		tmpPanel.add(lineWidth);
 		c.gridx = 1;
 		c.gridy = 4;
 		settingsHolder.add(tmpPanel, c);
 
 	}// END: populateLines
+
+	private class ListenLineWidth implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent ev) {
+
+			JSlider source = (JSlider) ev.getSource();
+			if (!source.getValueIsAdjusting()) {
+
+				int value = source.getValue();
+				settings.lineWidth = (double) value;
+				frame.setStatus("Line width " + value + " selected.");
+
+			} // END: adjusting check
+		}// END: stateChanged
+
+	}// END: ListenLineAltitude
+
+	private class ListenLineAltitude implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent ev) {
+
+			JSlider source = (JSlider) ev.getSource();
+			if (!source.getValueIsAdjusting()) {
+
+				int value = source.getValue();
+				settings.lineAltitude = (double) value;
+				frame.setStatus("Line altitude " + value + " selected.");
+
+			} // END: adjusting check
+		}// END: stateChanged
+
+	}// END: ListenLineAltitude
 
 	private class ListenLineAltitudeMapping implements ItemListener {
 
@@ -442,6 +506,8 @@ public class KmlRendererPanel extends SpreadPanel {
 
 				Object item = event.getItem();
 				String attribute = item.toString();
+
+				settings.lineAlphaMapping = attribute;
 
 			} // END: selected check
 		}// END: itemStateChanged
@@ -457,6 +523,8 @@ public class KmlRendererPanel extends SpreadPanel {
 				Object item = event.getItem();
 				String attribute = item.toString();
 
+				settings.lineColorMapping = attribute;
+
 			} // END: selected check
 		}// END: itemStateChanged
 
@@ -468,14 +536,18 @@ public class KmlRendererPanel extends SpreadPanel {
 			Color defaultColor = new Color(
 					(int) settings.lineColor[KmlRendererSettings.R],
 					(int) settings.lineColor[KmlRendererSettings.G],
-					(int) settings.lineColor[KmlRendererSettings.B]);
+					(int) settings.lineColor[KmlRendererSettings.B],
+					(int) settings.lineAlpha);
 
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
+			if (c != null) {
+				settings.lineColor = new double[] { c.getRed(), c.getGreen(),
+						c.getBlue() };
+
+				settings.lineAlpha = c.getAlpha();
+			}
 
 		}// END: actionPerformed
 	}// END: ListenLineColor
@@ -488,7 +560,21 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		JPanel tmpPanel;
 
-		// color
+		// color mapping
+		tmpPanel = new JPanel();
+		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		tmpPanel.setBorder(new TitledBorder("Area color attribute:"));
+		areaColorMapping = new JComboBox();
+		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
+				pointAttributeNames.toArray());
+		areaColorMapping.setModel(comboBoxModel);
+		areaColorMapping.addItemListener(new ListenAreaColorMapping());
+		tmpPanel.add(areaColorMapping);
+		c.gridx = 2;
+		c.gridy = 0;
+		settingsHolder.add(tmpPanel, c);
+
+		// area color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Areas color:"));
@@ -497,7 +583,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		areaColor.addActionListener(new ListenAreaColor());
 		tmpPanel.add(areaColor);
 		c.gridx = 2;
-		c.gridy = 0;
+		c.gridy = 1;
 		settingsHolder.add(tmpPanel, c);
 
 	}// END: populateAreas
@@ -508,17 +594,37 @@ public class KmlRendererPanel extends SpreadPanel {
 			Color defaultColor = new Color(
 					(int) settings.areaColor[KmlRendererSettings.R],
 					(int) settings.areaColor[KmlRendererSettings.G],
-					(int) settings.areaColor[KmlRendererSettings.B]);
+					(int) settings.areaColor[KmlRendererSettings.B],
+					(int) settings.areaAlpha);
 
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
+			if (c != null) {
+				settings.areaColor = new double[] { c.getRed(), c.getGreen(),
+						c.getBlue() };
+
+				settings.areaAlpha = c.getAlpha();
+			}
 
 		}// END: actionPerformed
 	}// END: ListenAreaColor
+
+	private class ListenAreaColorMapping implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				Object item = event.getItem();
+				String attribute = item.toString();
+
+				settings.areaColorMapping = attribute;
+
+			} // END: selected check
+		}// END: itemStateChanged
+
+	}// END: ListenLineColorMapping
 
 	// //////////////
 	// ---COUNTS---//
@@ -548,19 +654,22 @@ public class KmlRendererPanel extends SpreadPanel {
 			Color defaultColor = new Color(
 					(int) settings.countColor[KmlRendererSettings.R],
 					(int) settings.countColor[KmlRendererSettings.G],
-					(int) settings.countColor[KmlRendererSettings.B]);
+					(int) settings.countColor[KmlRendererSettings.B],
+					(int) settings.countAlpha);
 
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
-			// if (c != null) {
-			// polygonsMinColor = c;
-			// }
+			if (c != null) {
+				settings.countColor = new double[] { c.getRed(), c.getGreen(),
+						c.getBlue() };
+
+				settings.countAlpha = c.getAlpha();
+			}
 
 		}// END: actionPerformed
 	}// END: ListenPointColor
 
-	
 	private class ListenRender implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -587,7 +696,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenRender
-	
+
 	private void render() {
 
 		frame.setBusy();
@@ -599,7 +708,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 				try {
 
-					KmlRenderer renderer = new KmlRenderer( settings);
+					KmlRenderer renderer = new KmlRenderer(settings);
 					renderer.render();
 
 				} catch (Exception e) {
@@ -625,5 +734,5 @@ public class KmlRendererPanel extends SpreadPanel {
 		worker.execute();
 
 	}// END: generateOutput
-	
+
 }// END: class

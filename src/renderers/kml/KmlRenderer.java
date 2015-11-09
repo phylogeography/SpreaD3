@@ -75,7 +75,7 @@ public class KmlRenderer implements Renderer {
 	// Double>();
 
 	// Areas: color
-	// TODO
+	private Map<Object, Color> areaColorMap = new LinkedHashMap<Object, Color>();
 	
 	// Cunts: area
 	private Map<Object, Double> countAreaMap = new LinkedHashMap<Object, Double>();
@@ -700,9 +700,22 @@ public class KmlRenderer implements Renderer {
 		Folder folder = new Folder();
 		folder.setName("areas");
 
+		// read the supplied colors and create map
+		if (settings.pointColors != null) {
+			DiscreteColorsParser colorsParser = new DiscreteColorsParser(
+					settings.pointColors);
+			pointColorMap = colorsParser.parseColors();
+		}
+		
+		Attribute colorAttribute = null;
+		if (this.settings.areaColorMapping != null) {
+			colorAttribute = getAttribute(data.getPointAttributes(),
+					settings.areaColorMapping);
+		}
+		
 		for (Area area : areas) {
 
-			Feature feature = generateArea(area);
+			Feature feature = generateArea(area, colorAttribute);
 			folder.addFeature(feature);
 
 		} // END: points loop
@@ -710,7 +723,7 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateAreas
 
-	private Feature generateArea(Area area) throws AnalysisException {
+	private Feature generateArea(Area area, Attribute colorAttribute) throws AnalysisException {
 
 		Placemark placemark = new Placemark();
 		LinearRing linearRing = new LinearRing();
@@ -739,6 +752,62 @@ public class KmlRenderer implements Renderer {
 
 		Color color = new Color(red, green, blue, alpha);
 
+		
+		if (colorAttribute != null) {
+
+			Object colorAttributeValue = area.getAttributes().get(
+					settings.pointColorMapping);
+
+			if (pointColorMap.containsKey(colorAttributeValue)) { // get
+
+				color = pointColorMap.get(colorAttributeValue);
+
+			} else { // map it
+
+				if (colorAttribute.getScale().equalsIgnoreCase(LINEAR)) {
+
+					// value is value
+					double value = (Double) colorAttributeValue;
+					double minValue = colorAttribute.getRange()[0];
+					double maxValue = colorAttribute.getRange()[1];
+
+					red = (int) map(value, minValue, maxValue,
+							settings.minAreaRed, settings.maxAreaRed);
+					green = (int) map(value, minValue, maxValue,
+							settings.minAreaGreen, settings.maxAreaGreen);
+					blue = (int) map(value, minValue, maxValue,
+							settings.minAreaBlue, settings.maxAreaBlue);
+
+				} else if (colorAttribute.getScale().equalsIgnoreCase(ORDINAL)) {
+
+					// value is index
+					double value = (double) getIndex(
+							colorAttribute.getDomain(), colorAttributeValue);
+					double minValue = 0;
+					double maxValue = colorAttribute.getDomain().size();
+
+					red = (int) map(value, minValue, maxValue,
+							settings.minAreaRed, settings.maxAreaRed);
+					green = (int) map(value, minValue, maxValue,
+							settings.minAreaGreen, settings.maxAreaGreen);
+					blue = (int) map(value, minValue, maxValue,
+							settings.minAreaBlue, settings.maxAreaBlue);
+
+				} else {
+					//
+				} // END: scale check
+
+				// store it for future reference
+				color = new Color(red, green, blue, alpha);
+				areaColorMap.put(colorAttributeValue, color);
+
+			} // END: key check
+
+			label += ", color[" + settings.areaColorMapping + "="
+					+ colorAttributeValue.toString() + "]";
+
+		} // END: mapping check
+		
 		KmlStyle style = new KmlStyle(color);
 		style.setId(style.toString());
 
