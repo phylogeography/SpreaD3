@@ -7,7 +7,7 @@ public class KmlRendererSettings {
 	public static final int B = 2;
 
 	public String jsonFilename = null;
-	public String output = "output.kml";
+	public String outputFilename = "output.kml";
 
 	////////////////
 	// ---POINTS---//

@@ -32,16 +32,18 @@ import gui.InterfaceUtils;
 import gui.MainFrame;
 import gui.OptionsPanel;
 import gui.SimpleFileFilter;
+import renderers.d3.D3Renderer;
+import renderers.kml.KmlRenderer;
 import settings.rendering.KmlRendererSettings;
 import structure.data.Attribute;
 import structure.data.SpreadData;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "serial" })
-public class KmlRendererPanel extends OptionsPanel {
+public class KmlRendererPanel extends SpreadPanel {
 
 	public static final int PANEL_HEIGHT = 100;
 	public static final int PANEL_WIDTH = 250;
-	
+
 	private MainFrame frame;
 
 	private KmlRendererSettings settings;
@@ -51,13 +53,14 @@ public class KmlRendererPanel extends OptionsPanel {
 
 	// Panels
 	private JPanel settingsHolder;
-
-	// Flags
-	private boolean loadJsonCreated = false;
 	private boolean renderSettingsCreated = false;
 
 	// Buttons
 	private JButton loadJson;
+	private boolean loadJsonCreated = false;
+	private JButton render;
+//	private boolean renderCreated = false;
+
 	private JButton pointColor;
 	private JButton lineColor;
 	private JButton areaColor;
@@ -100,6 +103,12 @@ public class KmlRendererPanel extends OptionsPanel {
 
 	}// END: populateHolderPanel
 
+	private void resetFlags() {
+		loadJsonCreated = false;
+		renderSettingsCreated = false;
+//		renderCreated = false;
+	}// END: resetFlags
+
 	private class ListenLoadJson implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -117,6 +126,10 @@ public class KmlRendererPanel extends OptionsPanel {
 				int returnVal = chooser.showOpenDialog(InterfaceUtils
 						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+					// if JSON reloaded reset all settings
+					removeChildComponents(loadJson);
+					resetFlags();
 
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
@@ -205,19 +218,26 @@ public class KmlRendererPanel extends OptionsPanel {
 		if (!renderSettingsCreated) {
 
 			c = new GridBagConstraints();
-			c.anchor = GridBagConstraints.NORTH; 
+			c.anchor = GridBagConstraints.NORTH;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			settingsHolder = new JPanel();
 			settingsHolder.setLayout(new GridBagLayout());
-			
+
 			populatePoints();
 			populateLines();
 			populateAreas();
 			populateCounts();
 
-			renderSettingsCreated = true;
 			addComponent(settingsHolder);
 
+			render = new JButton("Render",
+					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+			render.addActionListener(new ListenRender());
+			addComponentWithLabel("Render to KML:", render);
+//			renderCreated = true;
+
+			renderSettingsCreated = true;
+			
 		}
 
 	}// END: populateRender
@@ -229,11 +249,11 @@ public class KmlRendererPanel extends OptionsPanel {
 	private void populatePoints() {
 
 		JPanel tmpPanel;
-		
+
 		// color mapping
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Color attribute:"));
+		tmpPanel.setBorder(new TitledBorder("Points color attribute:"));
 		pointColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				pointAttributeNames.toArray());
@@ -247,7 +267,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Color:"));
+		tmpPanel.setBorder(new TitledBorder("Points color:"));
 		pointColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		pointColor.addActionListener(new ListenPointColor());
@@ -259,7 +279,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		// area mapping
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Area attribute:"));
+		tmpPanel.setBorder(new TitledBorder("Points area attribute:"));
 		pointAreaMapping = new JComboBox();
 		comboBoxModel = new DefaultComboBoxModel(pointAttributeNames.toArray());
 		pointAreaMapping.setModel(comboBoxModel);
@@ -272,7 +292,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		// area
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Area:"));
+		tmpPanel.setBorder(new TitledBorder("Points area:"));
 		pointArea = new JSlider(JSlider.HORIZONTAL,
 				settings.minPointArea.intValue(),
 				settings.maxPointArea.intValue(), settings.pointArea.intValue());
@@ -338,13 +358,13 @@ public class KmlRendererPanel extends OptionsPanel {
 	// /////////////
 
 	private void populateLines() {
-		
+
 		JPanel tmpPanel;
 
 		// color mapping
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Color attribute:"));
+		tmpPanel.setBorder(new TitledBorder("Lines color attribute:"));
 		lineColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				lineAttributeNames.toArray());
@@ -358,19 +378,19 @@ public class KmlRendererPanel extends OptionsPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Color:"));
+		tmpPanel.setBorder(new TitledBorder("Lines color:"));
 		lineColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		lineColor.addActionListener(new ListenLineColor());
 		tmpPanel.add(lineColor);
 		c.gridx = 1;
 		c.gridy = 1;
-		settingsHolder.add(tmpPanel,c);
+		settingsHolder.add(tmpPanel, c);
 
 		// altitude maping
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Altitude attribute:"));
+		tmpPanel.setBorder(new TitledBorder("Lines altitude attribute:"));
 		lineAltitudeMapping = new JComboBox();
 		comboBoxModel = new DefaultComboBoxModel(lineAttributeNames.toArray());
 		lineAltitudeMapping.setModel(comboBoxModel);
@@ -378,12 +398,12 @@ public class KmlRendererPanel extends OptionsPanel {
 		tmpPanel.add(lineAltitudeMapping);
 		c.gridx = 1;
 		c.gridy = 2;
-		settingsHolder.add(tmpPanel,c);
+		settingsHolder.add(tmpPanel, c);
 
 		// altitude
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Altitude:"));
+		tmpPanel.setBorder(new TitledBorder("Lines altitude:"));
 		lineAltitude = new JSlider(JSlider.HORIZONTAL,
 				settings.minLineAltitude.intValue(),
 				settings.maxLineAltitude.intValue(),
@@ -400,7 +420,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		// width
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Width:"));
+		tmpPanel.setBorder(new TitledBorder("Lines width:"));
 		lineWidth = new JSlider(JSlider.HORIZONTAL,
 				settings.minLineWidth.intValue(),
 				settings.maxLineWidth.intValue(), settings.lineWidth.intValue());
@@ -410,7 +430,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		tmpPanel.add(lineWidth);
 		c.gridx = 1;
 		c.gridy = 4;
-		settingsHolder.add(tmpPanel,c);
+		settingsHolder.add(tmpPanel, c);
 
 	}// END: populateLines
 
@@ -471,7 +491,7 @@ public class KmlRendererPanel extends OptionsPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Color:"));
+		tmpPanel.setBorder(new TitledBorder("Areas color:"));
 		areaColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		areaColor.addActionListener(new ListenAreaColor());
@@ -511,15 +531,14 @@ public class KmlRendererPanel extends OptionsPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Color:"));
+		tmpPanel.setBorder(new TitledBorder("Counts color:"));
 		countColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		countColor.addActionListener(new ListenCountColor());
 		tmpPanel.add(countColor);
 		c.gridx = 3;
 		c.gridy = 0;
-		settingsHolder.add(tmpPanel,c);
-
+		settingsHolder.add(tmpPanel, c);
 
 	}// END: populateCounts
 
@@ -541,9 +560,70 @@ public class KmlRendererPanel extends OptionsPanel {
 		}// END: actionPerformed
 	}// END: ListenPointColor
 
-	private void resetFlags() {
-		loadJsonCreated = false;
-		renderSettingsCreated = false;
-	}// END: resetFlags
+	
+	private class ListenRender implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
 
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Generate...");
+			chooser.setMultiSelectionEnabled(false);
+			chooser.setCurrentDirectory(frame.getWorkingDirectory());
+
+			int returnVal = chooser.showSaveDialog(InterfaceUtils
+					.getActiveFrame());
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+				File file = chooser.getSelectedFile();
+				settings.outputFilename = file.getAbsolutePath();
+
+				render();
+
+				File tmpDir = chooser.getCurrentDirectory();
+				if (tmpDir != null) {
+					frame.setWorkingDirectory(tmpDir);
+				}
+
+			}// END: approve check
+
+		}// END: actionPerformed
+	}// END: ListenRender
+	
+	private void render() {
+
+		frame.setBusy();
+
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+			// Executed in background thread
+			public Void doInBackground() {
+
+				try {
+
+					KmlRenderer renderer = new KmlRenderer( settings);
+					renderer.render();
+
+				} catch (Exception e) {
+
+					InterfaceUtils.handleException(e, e.getMessage());
+					frame.setStatus("Exception occured.");
+					frame.setIdle();
+
+				}// END: try-catch
+
+				return null;
+			}// END: doInBackground
+
+			// Executed in event dispatch thread
+			public void done() {
+
+				frame.setStatus("Generated " + settings.outputFilename);
+				frame.setIdle();
+
+			}// END: done
+		};
+
+		worker.execute();
+
+	}// END: generateOutput
+	
 }// END: class

@@ -2,8 +2,10 @@ package renderers.kml;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -31,6 +33,9 @@ import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import exceptions.AnalysisException;
 import parsers.DiscreteColorsParser;
@@ -69,14 +74,19 @@ public class KmlRenderer implements Renderer {
 	// private Map<Object, Double> lineWidthMap = new LinkedHashMap<Object,
 	// Double>();
 
+	// Areas: color
+	// TODO
+	
 	// Cunts: area
 	private Map<Object, Double> countAreaMap = new LinkedHashMap<Object, Double>();
 
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 
-	public KmlRenderer(SpreadData data, KmlRendererSettings settings) {
+	public KmlRenderer(
+	// SpreadData data,
+			KmlRendererSettings settings) {
 
-		this.data = data;
+		// this.data = data;
 		this.settings = settings;
 		this.formatter = DateTimeFormat.forPattern("yyyy/MM/dd");
 
@@ -84,7 +94,12 @@ public class KmlRenderer implements Renderer {
 
 	public void render() throws KmlException, IOException, AnalysisException {
 
-		PrintWriter writer = new PrintWriter(new File(settings.output));
+		Reader reader = new FileReader(settings.jsonFilename);
+		Gson gson = new GsonBuilder().create();
+		SpreadData data = gson.fromJson(reader, SpreadData.class);
+		this.data = data;
+
+		PrintWriter writer = new PrintWriter(new File(settings.outputFilename));
 
 		// create a new KML Document
 		Kml kml = new Kml();
@@ -120,7 +135,8 @@ public class KmlRenderer implements Renderer {
 	// ---LOCATIONS---//
 	// /////////////////
 
-	public Feature generateLocations(List<Location> locations) throws AnalysisException {
+	public Feature generateLocations(List<Location> locations)
+			throws AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("locations");
@@ -134,7 +150,8 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateLocations
 
-	private Placemark generateLocation(Location location) throws AnalysisException {
+	private Placemark generateLocation(Location location)
+			throws AnalysisException {
 
 		Placemark placemark = new Placemark();
 		placemark.setName(location.getId());
@@ -145,7 +162,8 @@ public class KmlRenderer implements Renderer {
 
 	// ---KML POINT---//
 
-	private kmlframework.kml.Point generatePoint(Coordinate coordinate) throws AnalysisException {
+	private kmlframework.kml.Point generatePoint(Coordinate coordinate)
+			throws AnalysisException {
 
 		kmlframework.kml.Point point = new kmlframework.kml.Point();
 		point.setAltitudeMode(AltitudeModeEnum.relativeToGround);
@@ -160,7 +178,8 @@ public class KmlRenderer implements Renderer {
 	// ---LAYERS---//
 	// //////////////
 
-	private Feature generateLayer(Layer layer) throws IOException, AnalysisException {
+	private Feature generateLayer(Layer layer) throws IOException,
+			AnalysisException {
 
 		Folder folder = new Folder();
 
@@ -258,10 +277,11 @@ public class KmlRenderer implements Renderer {
 		Point endPoint = getPoint(points, line.getEndPointId());
 		Coordinate endCoordinate = getCoordinate(endPoint);
 
-		if(startPoint.hasLocation() && endPoint.hasLocation()) {
-			 name += startPoint.getLocation().getId() + " to " + endPoint.getLocation().getId(); 
+		if (startPoint.hasLocation() && endPoint.hasLocation()) {
+			name += startPoint.getLocation().getId() + " to "
+					+ endPoint.getLocation().getId();
 		}
-		
+
 		// ---COLOR---//
 
 		int red = (int) settings.lineColor[KmlRendererSettings.R];
@@ -481,7 +501,8 @@ public class KmlRenderer implements Renderer {
 
 	// ---POINTS---//
 
-	private Feature generatePoints(List<Point> points) throws IOException, AnalysisException {
+	private Feature generatePoints(List<Point> points) throws IOException,
+			AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("points");
@@ -673,7 +694,8 @@ public class KmlRenderer implements Renderer {
 
 	// ---AREAS---//
 
-	public Feature generateAreas(List<Area> areas) throws IOException, AnalysisException {
+	public Feature generateAreas(List<Area> areas) throws IOException,
+			AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("areas");
@@ -743,7 +765,8 @@ public class KmlRenderer implements Renderer {
 
 	// ---COUNTS---//
 
-	private Feature generateCounts(List<Point> counts) throws IOException, AnalysisException {
+	private Feature generateCounts(List<Point> counts) throws IOException,
+			AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("counts");
@@ -761,7 +784,8 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateCounts
 
-	private Feature generateCount(Point count, Attribute countAttribute) throws AnalysisException {
+	private Feature generateCount(Point count, Attribute countAttribute)
+			throws AnalysisException {
 
 		int numPoints = 36;
 
@@ -817,11 +841,11 @@ public class KmlRenderer implements Renderer {
 
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
-//		DateTime startDate = formatter.parseDateTime(count.getStartTime());
-//		DateTime endDate = formatter.parseDateTime(count.getEndTime());
+		// DateTime startDate = formatter.parseDateTime(count.getStartTime());
+		// DateTime endDate = formatter.parseDateTime(count.getEndTime());
 		LocalDate startDate = formatter.parseLocalDate(count.getStartTime());
 		LocalDate endDate = formatter.parseLocalDate(count.getEndTime());
-		
+
 		timeSpan.setBegin(startDate.toString());
 		timeSpan.setEnd(endDate.toString());
 		placemark.setTimePrimitive(timeSpan);
@@ -948,7 +972,8 @@ public class KmlRenderer implements Renderer {
 	}// END: map
 
 	private LinkedList<Coordinate> getIntermediateCoords(
-			Coordinate startCoordinate, Coordinate endCoordinate, int sliceCount) throws AnalysisException {
+			Coordinate startCoordinate, Coordinate endCoordinate, int sliceCount)
+			throws AnalysisException {
 
 		LinkedList<Coordinate> coords = new LinkedList<Coordinate>();
 

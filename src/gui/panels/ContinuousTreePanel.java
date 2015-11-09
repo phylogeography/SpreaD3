@@ -1,5 +1,10 @@
 package gui.panels;
 
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -17,14 +22,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.MainFrame;
-import gui.OptionsPanel;
-import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -32,6 +29,9 @@ import parsers.ContinuousTreeSpreadDataParser;
 import settings.parsing.ContinuousTreeSettings;
 import structure.data.SpreadData;
 import utils.Utils;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @SuppressWarnings("serial")
 public class ContinuousTreePanel extends SpreadPanel {
@@ -274,7 +274,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 			if (!outputCreated) {
 				output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 				output.addActionListener(new ListenOutput());
-				addComponentWithLabel("Parse JSON:", output);
+				addComponentWithLabel("Generate JSON:", output);
 				outputCreated = true;
 			}
 

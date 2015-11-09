@@ -19,7 +19,6 @@ import structure.data.primitive.Coordinate;
 import structure.data.primitive.Polygon;
 import utils.Utils;
 import exceptions.AnalysisException;
-import gui.InterfaceUtils;
 
 public class ContinuousTreeParser {
 
@@ -128,8 +127,17 @@ public class ContinuousTreeParser {
 				} // END: null check
 
 				// parent node parsed second
+				
+				// TODO : this spills to the root node, resulting in exception if not anotated
+				// root node will be annotated with locations but not with e.g. rate (facepalm)
 				Node parentNode = rootedTree.getParent(node);
-
+				
+//				if(rootedTree.isRoot(parentNode)) {
+//				
+//					System.out.println("at root");
+//					
+//				}
+				
 				Double parentCoordinateX = null;
 				Double parentCoordinateY = null;
 				tryingCoordinate = 0;
@@ -146,12 +154,10 @@ public class ContinuousTreeParser {
 
 				} catch (AnalysisException e) {
 
-					// TODO : continue or kill it?
-					
 					String coordinateName = (tryingCoordinate == Utils.X_INDEX ? xCoordinateAttributeName
 							: yCoordinateAttributeName);
 
-					String nodeType = (rootedTree.isExternal(node) ? "external"
+					String nodeType = (rootedTree.isExternal(parentNode) ? "external"
 							: "internal");
 					
 					String message = coordinateName
@@ -186,8 +192,6 @@ public class ContinuousTreeParser {
 
 				// ---AREAS PARSED LAST DO NOT CHANGE ORDER---//
 
-				// TODO: antigenic coordinates will have uncertainty on external
-				// too
 				// TODO: make this an option
 				boolean externalAnnotated = false;
 				boolean parseNode = true;

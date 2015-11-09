@@ -62,6 +62,8 @@ public class ContinuousTreeSpreadDataParser {
 
 		treeParser.parseTree();
 
+		System.out.println("Parsed the tree");
+		
 		lineAttributes = treeParser.getLineAttributes();
 		pointAttributes = treeParser.getPointAttributes();
 

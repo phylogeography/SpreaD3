@@ -132,7 +132,7 @@ public class AboutDialog extends JDialog {
 
 		add(Box.createRigidArea(new Dimension(0, 10)));
 
-		label = new JLabel("Contact us:");
+		label = new JLabel("Need help with BEAST analysis? Contact us:");
 		label.setFont(new Font("Serif", Font.PLAIN, FONT_SIZE - 3));
 		label.setAlignmentX(0.5f);
 		add(label);

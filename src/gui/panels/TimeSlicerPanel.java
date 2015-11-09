@@ -38,7 +38,7 @@ import structure.data.SpreadData;
 import utils.Utils;
 
 @SuppressWarnings("serial")
-public class TimeSlicerPanel extends OptionsPanel {
+public class TimeSlicerPanel extends SpreadPanel {
 
 	private MainFrame frame;
 	private TimeSlicerSettings settings;
@@ -58,14 +58,13 @@ public class TimeSlicerPanel extends OptionsPanel {
 	private boolean loadGeojsonCreated = false;
 	private JButton output;
 	private boolean outputCreated = false;
-	
-	
+
 	// Combo boxes
 	private JComboBox<Object> trait;
 	private boolean traitCreated = false;
 
 	// Panels
-	private OptionsPanel holderPanel;
+	// private OptionsPanel holderPanel;
 
 	// Date editor
 	private DateEditor dateEditor;
@@ -90,6 +89,7 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 	private void resetFlags() {
 
+		analysisTypeCreated = false;
 		sliceHeightsCreated = false;
 		loadTreeCreated = false;
 		loadTreesCreated = false;
@@ -97,36 +97,39 @@ public class TimeSlicerPanel extends OptionsPanel {
 		dateEditorCreated = false;
 		timescaleMultiplierCreated = false;
 		loadGeojsonCreated = false;
-
+		hpdLevelCreated = false;
+		burnInCreated = false;
+		
 	}// END: resetFlags
 
-	private void resetAllFlags() {
-
-		analysisTypeCreated = false;
-		resetFlags();
-
-	}// END: resetFlags
+//	private void resetAllFlags() {
+//
+//		analysisTypeCreated = false;
+//		resetFlags();
+//
+//	}// END: resetFlags
 
 	private void populatePanel() {
 
 		this.settings = new TimeSlicerSettings();
-		resetAllFlags();
+		resetFlags();
 
 		if (!analysisTypeCreated) {
 
 			analysisType = new JComboBox<Object>();
-			ComboBoxModel<Object> analysisTypeSelectorModel = new DefaultComboBoxModel<Object>(AnalysisTypes.values());
+			ComboBoxModel<Object> analysisTypeSelectorModel = new DefaultComboBoxModel<Object>(
+					AnalysisTypes.values());
 			analysisType.setModel(analysisTypeSelectorModel);
 			analysisType.addItemListener(new ListenAnalysisType());
 			addComponentWithLabel("Time slices: ", analysisType);
-			// analysisTypeEdited = true;
 
 			// holder for components below analysis selector
-			holderPanel = new OptionsPanel();
-			addComponent(holderPanel);
+			// holderPanel = new OptionsPanel();
+			// addComponent(holderPanel);
 
 			// set to MCC tree
 			analysisType.setSelectedIndex(0);
+			 analysisTypeCreated = true;
 			populateTree();
 		}
 
@@ -138,6 +141,10 @@ public class TimeSlicerPanel extends OptionsPanel {
 		public void itemStateChanged(ItemEvent event) {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
 
+				// if analysis type changed reset components below
+				removeChildComponents(analysisType);
+				resetFlags();
+				
 				Object item = event.getItem();
 				AnalysisTypes type = (AnalysisTypes) item;
 				switch (type) {
@@ -166,12 +173,10 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 		if (!sliceHeightsCreated) {
 
-			holderPanel.removeAll();
-			resetFlags();
-
-			sliceHeights = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TIME_ICON));
+			sliceHeights = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.TIME_ICON));
 			sliceHeights.addActionListener(new ListenLoadSliceTimes());
-			holderPanel.addComponentWithLabel("Load slice heights:", sliceHeights);
+			addComponentWithLabel("Load slice heights:", sliceHeights);
 			sliceHeightsCreated = true;
 		}
 
@@ -181,12 +186,10 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 		if (!loadTreeCreated) {
 
-			holderPanel.removeAll();
-			resetFlags();
-
-			loadTree = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+			loadTree = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
 			loadTree.addActionListener(new ListenLoadTree());
-			holderPanel.addComponentWithLabel("Load tree file:", loadTree);
+			addComponentWithLabel("Load tree file:", loadTree);
 			loadTreeCreated = true;
 		}
 
@@ -202,10 +205,12 @@ public class TimeSlicerPanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading tree file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
+						"Tree files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -218,7 +223,8 @@ public class TimeSlicerPanel extends OptionsPanel {
 					}
 
 					settings.sliceHeightsFilename = filename;
-					frame.setStatus(settings.sliceHeightsFilename + " selected.");
+					frame.setStatus(settings.sliceHeightsFilename
+							+ " selected.");
 					populateTrees();
 
 				} else {
@@ -242,12 +248,18 @@ public class TimeSlicerPanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading tree file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
+						"Tree files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
+					// if analysis type changed reset components below
+					removeChildComponents(loadTree);
+					resetFlags();
+					
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 
@@ -275,9 +287,10 @@ public class TimeSlicerPanel extends OptionsPanel {
 	private void populateTrees() {
 
 		if (!loadTreesCreated) {
-			loadTrees = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREES_ICON));
+			loadTrees = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.TREES_ICON));
 			loadTrees.addActionListener(new ListenLoadTrees());
-			holderPanel.addComponentWithLabel("Load trees file:", loadTrees);
+			addComponentWithLabel("Load trees file:", loadTrees);
 			loadTreesCreated = true;
 		}
 
@@ -293,12 +306,18 @@ public class TimeSlicerPanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading trees file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Trees files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
+						"Trees files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
+					// if analysis type changed reset components below
+					removeChildComponents(loadTrees);
+					resetFlags();
+					
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 
@@ -373,13 +392,14 @@ public class TimeSlicerPanel extends OptionsPanel {
 							traitAttributes.toArray(new String[0]));
 					trait.setModel(traitSelectorModel);
 					trait.addItemListener(new ListenTrait());
-					holderPanel.addComponentWithLabel("Select 2D trait: ", trait);
+					addComponentWithLabel("Select 2D trait: ", trait);
 
 				}
 
 				try {
 
-					int assumedTrees = TimeSlicerSpreadDataParser.getAssumedTrees(settings.treesFilename);
+					int assumedTrees = TimeSlicerSpreadDataParser
+							.getAssumedTrees(settings.treesFilename);
 					settings.assumedTrees = assumedTrees;
 
 				} catch (IOException e) {
@@ -416,7 +436,8 @@ public class TimeSlicerPanel extends OptionsPanel {
 				String attribute = item.toString();
 
 				settings.trait = attribute;
-				frame.setStatus("2D trait '" + settings.trait + "'" + " selected");
+				frame.setStatus("2D trait '" + settings.trait + "'"
+						+ " selected");
 				populateOptionalSettings();
 
 			} // END: selected check
@@ -428,55 +449,61 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 		if (!dateEditorCreated) {
 			dateEditor = new DateEditor();
-			holderPanel.addComponentWithLabel("Most recent sampling date:", dateEditor);
+			addComponentWithLabel("Most recent sampling date:", dateEditor);
 			dateEditorCreated = true;
 		}
 
 		if (!timescaleMultiplierCreated) {
-			timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
-			holderPanel.addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
+			timescaleMultiplier = new JTextField(
+					String.valueOf(settings.timescaleMultiplier), 10);
+			addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
 			timescaleMultiplierCreated = true;
 		}
 
 		if (!hpdLevelCreated) {
-
 			hpdLevel = new JSliderDouble(0.1, 1.0, 0.8, 10, 1);
 			hpdLevel.setMajorTickSpacing(1);
 			hpdLevel.setPaintTicks(true);
 			hpdLevel.setPaintLabels(true);
 			hpdLevel.addChangeListener(new ListenHpdLevel());
-			holderPanel.addComponentWithLabel("HPD level for contouring:", hpdLevel);
+			addComponentWithLabel("HPD level for contouring:", hpdLevel);
 			hpdLevelCreated = true;
 		}
 
 		if (!burnInCreated) {
-
-			 burnIn = new JSlider(JSlider.HORIZONTAL, 0, settings.assumedTrees - 1, 1);
-			 burnIn.setMajorTickSpacing(1);
-			 burnIn.setPaintTicks(true);
-			 burnIn.setPaintLabels(true);
-			 burnIn.addChangeListener(new ListenBurnIn());
-			 holderPanel.addComponentWithLabel("Discard as burnin (in #trees):",
-					 burnIn);
-			 burnInCreated = true;
-
+			
+			int min = 0;
+			int max = settings.assumedTrees ;
+			int nIntervals = 5;
+			int spacing = (max - min) / nIntervals;
+			
+			burnIn = new JSlider(JSlider.HORIZONTAL, min,
+					max-1, spacing);
+			
+			burnIn.setMajorTickSpacing(spacing);
+			burnIn.setPaintTicks(true);
+			burnIn.setPaintLabels(true);
+			burnIn.addChangeListener(new ListenBurnIn());
+			addComponentWithLabel("Discard as burnin (in #trees):", burnIn);
+			burnInCreated = true;
 		}
 
 		if (!loadGeojsonCreated) {
-			loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+			loadGeojson = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 			loadGeojson.addActionListener(new ListenLoadGeojson());
-			holderPanel.addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
 			loadGeojsonCreated = true;
 		}
 
-		
 		if (!outputCreated) {
-			output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+			output = new JButton("Output",
+					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			output.addActionListener(new ListenOutput());
-			holderPanel.addComponentWithLabel("Parse JSON:", output);
+			addComponentWithLabel("Generate JSON:", output);
 			outputCreated = true;
 		}
-		
+
 	}// END: populateOptionalSettings
 
 	private class ListenOutput implements ActionListener {
@@ -487,7 +514,8 @@ public class TimeSlicerPanel extends OptionsPanel {
 			chooser.setMultiSelectionEnabled(false);
 			chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
+			int returnVal = chooser.showSaveDialog(InterfaceUtils
+					.getActiveFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				File file = chooser.getSelectedFile();
@@ -508,11 +536,12 @@ public class TimeSlicerPanel extends OptionsPanel {
 
 	private void collectOptionalSettings() {
 
-		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier.getText());
+		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
+				.getText());
 		settings.mrsd = dateEditor.getValue();
 
 	}// END: collectSettings
-	
+
 	private void generateOutput() {
 
 		frame.setBusy();
@@ -525,8 +554,9 @@ public class TimeSlicerPanel extends OptionsPanel {
 				try {
 
 					// TODO: see if we can get the progress displayed
-					
-					TimeSlicerSpreadDataParser parser = new TimeSlicerSpreadDataParser(settings);
+
+					TimeSlicerSpreadDataParser parser = new TimeSlicerSpreadDataParser(
+							settings);
 					SpreadData data = parser.parse();
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -563,13 +593,13 @@ public class TimeSlicerPanel extends OptionsPanel {
 		worker.execute();
 
 	}// END: generateOutput
-	
+
 	private class ListenBurnIn implements ChangeListener {
 
 		@Override
 		public void stateChanged(ChangeEvent ev) {
 
-			JSlider  source = (JSlider) ev.getSource();
+			JSlider source = (JSlider) ev.getSource();
 			if (!source.getValueIsAdjusting()) {
 
 				int value = source.getValue();
@@ -581,7 +611,7 @@ public class TimeSlicerPanel extends OptionsPanel {
 		}// END: stateChanged
 
 	}// END: ListenBurninPercent
-	
+
 	private class ListenHpdLevel implements ChangeListener {
 
 		@Override
@@ -609,11 +639,12 @@ public class TimeSlicerPanel extends OptionsPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading geoJSON file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(
-						new SimpleFileFilter(geojsonFiles, "geoJSON files (*.json), *.geojson)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(
+						geojsonFiles, "geoJSON files (*.json), *.geojson)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();

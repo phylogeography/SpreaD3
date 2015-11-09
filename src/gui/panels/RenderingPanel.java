@@ -112,7 +112,6 @@ public class RenderingPanel extends OptionsPanel {
 		holderPanel.removeAll();
 		holderPanel.add(new D3RenderPanel(frame));
 		
-		
 	}// END: populateD3Panels
 
 	// ///////////

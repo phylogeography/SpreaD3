@@ -99,7 +99,7 @@ public class D3RenderPanel extends OptionsPanel {
 			render = new JButton("Render",
 					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			render.addActionListener(new ListenRender());
-			addComponentWithLabel("Parse JSON:", render);
+			addComponentWithLabel("Render to D3:", render);
 			renderCreated = true;
 		}
 	}// END: populateRender

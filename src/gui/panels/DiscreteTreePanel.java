@@ -323,7 +323,7 @@ public class DiscreteTreePanel extends SpreadPanel {
 			output = new JButton("Output",
 					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			output.addActionListener(new ListenOutput());
-			addComponentWithLabel("Parse JSON:", output);
+			addComponentWithLabel("Generate JSON:", output);
 			outputCreated = true;
 		}
 

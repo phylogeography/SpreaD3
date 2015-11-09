@@ -1176,7 +1176,7 @@ public class Spread2ConsoleApp {
 
 					if (kmlRenderArguments.hasOption(OUTPUT)) {
 
-						settings.kmlRendererSettings.output = kmlRenderArguments
+						settings.kmlRendererSettings.outputFilename = kmlRenderArguments
 								.getStringOption(OUTPUT);
 
 					}
@@ -1467,12 +1467,13 @@ public class Spread2ConsoleApp {
 
 				try {
 
-					Reader reader = new FileReader(
-							settings.kmlRendererSettings.jsonFilename);
-					Gson gson = new GsonBuilder().create();
-					SpreadData input = gson.fromJson(reader, SpreadData.class);
+//					Reader reader = new FileReader(
+//							settings.kmlRendererSettings.jsonFilename);
+//					Gson gson = new GsonBuilder().create();
+//					SpreadData input = gson.fromJson(reader, SpreadData.class);
 
-					KmlRenderer renderer = new KmlRenderer(input,
+					KmlRenderer renderer = new KmlRenderer(
+//							input,
 							settings.kmlRendererSettings);
 					renderer.render();
 
