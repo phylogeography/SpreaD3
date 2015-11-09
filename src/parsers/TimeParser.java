@@ -12,9 +12,7 @@ public class TimeParser {
 
 	private String mrsd;
 	private LocalDate endDate;
-
-	private DateTimeFormatter dateFormatter;// = new
-											// SimpleDateFormat("MM/dd/yyyy")
+	private DateTimeFormatter dateFormatter;
 
 	public TimeParser(String mrsd) throws AnalysisException {
 

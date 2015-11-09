@@ -1,41 +1,166 @@
 package gui;
 
+import gui.panels.AnalysisTypes;
+
 import java.awt.GridBagConstraints;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+
+import org.joda.time.LocalDate;
 
 @SuppressWarnings("serial")
 public class DateEditor extends JPanel {
 
-	// TODO : add decimal format (can take negative dates)
+	// TODO : change to Joda's LocalDate
 
 	private Date today;
 	private JSpinner spinner;
 	private SimpleDateFormat formatter;
-	private GridBagConstraints c;
-	
+	private JComboBox<Object> dateFormat;
+	private boolean dateFormatCreated = false;
+
+	private JTextField decimalDate;
+	private boolean decimalFormatCreated = false;
+
+	// private GridBagConstraints c;
+
 	public DateEditor() {
 
-		formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+		dateFormat = new JComboBox<Object>();
+		ComboBoxModel<Object> dateFormatSelectorModel = new DefaultComboBoxModel<Object>(
+				DateFormats.values());
+		dateFormat.setModel(dateFormatSelectorModel);
+		dateFormat.addItemListener(new ListenDateFormat());
+		add(dateFormat);
+
 		today = new Date();
 
-		spinner = new JSpinner(new SpinnerDateModel(today, null, null, Calendar.MONTH));
+		// set to default
+		dateFormat.setSelectedIndex(0);
+		populateDateFormat();
 
-		spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy/MM/dd"));
-		spinner.setOpaque(false);
+	}// END: Constructor
 
-		add(spinner);
-		setOpaque(false);
-	}
+	private class ListenDateFormat implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				// if analysis type changed reset components below
+				// removeChildComponents(analysisType);
+				// resetFlags();
+
+				Object item = event.getItem();
+				DateFormats type = (DateFormats) item;
+				switch (type) {
+
+				case DATE_FORMAT:
+					populateDateFormat();
+					break;
+
+				case DECIMAL_FORMAT:
+					populateDecimalFormat();
+					break;
+
+				default:
+					break;
+
+				}// END: switch
+
+			} // END: selected check
+		}// END: itemStateChanged
+
+	}// END: ListenParserSelector
+
+	private void populateDateFormat() {
+
+
+		if (!dateFormatCreated) {
+			
+			// remove previous
+			if(decimalFormatCreated) {
+				remove(decimalDate);
+				decimalFormatCreated = false;
+			}
+			
+			formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+
+			spinner = new JSpinner(new SpinnerDateModel(today, null, null,
+					Calendar.MONTH));
+			spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy/MM/dd"));
+			add(spinner);
+
+			dateFormatCreated = true;
+		}
+
+	}// END: populateDateFormat
+
+	private void populateDecimalFormat() {
+
+		if (!decimalFormatCreated) {
+
+			// remove previous
+			if(dateFormatCreated) {
+				remove(spinner);
+				dateFormatCreated = false;
+			}
+			
+			decimalDate = new JTextField(convertToDecimalDate(today), 10);
+			add(decimalDate);
+			decimalFormatCreated = true;
+		}
+
+	}// END: populateDecimalFormat
 
 	public String getValue() {
-		return formatter.format(spinner.getValue());
-	}
+
+		String date = null;
+
+		if (dateFormatCreated) {
+
+			date = formatter.format(spinner.getValue());
+
+		} else if (decimalFormatCreated) {
+
+			date = decimalDate.getText();
+
+		} else {
+
+			System.err.println("Something went horribly wrong!");
+		}
+
+		return date;
+	}// END: getValue
+
+	private String convertToDecimalDate(Date date) {
+
+		LocalDate localDate = new LocalDate(date);
+
+		int year = localDate.getYear();
+		int month = localDate.getMonthOfYear();
+		int day = localDate.getDayOfMonth();
+		double decimalDate = year + (double) month / 12.0 + (double) day
+				/ 365.0;
+
+		DecimalFormat df = new DecimalFormat("#.##");
+		String decimalDateString = df.format(decimalDate);
+
+		return decimalDateString;
+	}// END: convertToDecimalDate
 
 }// END: class
