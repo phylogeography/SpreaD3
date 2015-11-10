@@ -55,6 +55,22 @@ public class DateEditor extends JPanel {
 
 	}// END: Constructor
 
+	private void resetEditor() {
+
+		// remove previous
+		if (decimalFormatCreated) {
+			remove(decimalDate);
+			decimalFormatCreated = false;
+		}
+
+		// remove previous
+		if (dateFormatCreated) {
+			remove(spinner);
+			dateFormatCreated = false;
+		}
+
+	}// END: resetEditor
+
 	private class ListenDateFormat implements ItemListener {
 
 		@Override
@@ -89,15 +105,10 @@ public class DateEditor extends JPanel {
 
 	private void populateDateFormat() {
 
-
 		if (!dateFormatCreated) {
-			
-			// remove previous
-			if(decimalFormatCreated) {
-				remove(decimalDate);
-				decimalFormatCreated = false;
-			}
-			
+
+			resetEditor();
+
 			formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
 
 			spinner = new JSpinner(new SpinnerDateModel(today, null, null,
@@ -114,12 +125,8 @@ public class DateEditor extends JPanel {
 
 		if (!decimalFormatCreated) {
 
-			// remove previous
-			if(dateFormatCreated) {
-				remove(spinner);
-				dateFormatCreated = false;
-			}
-			
+			resetEditor();
+
 			decimalDate = new JTextField(convertToDecimalDate(today), 10);
 			add(decimalDate);
 			decimalFormatCreated = true;

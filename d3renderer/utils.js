@@ -45,6 +45,23 @@ function isNumeric(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }// END: isNumeric
 
+function getSimpleColors(colors) {
+	var simpleColors = [];
+
+	var arrayLength = colors.length;
+	for (var i = 0; i < arrayLength; i++) {
+
+		var color = colors[i];
+		if (color.charAt(0) === '#') {
+			color = color.substr(1);
+			simpleColors[i] = color;
+		}
+
+	}
+
+	return simpleColors;
+}// END: getSimpleColors
+
 function printMap(map) {
 
 	for ( var x in map) {

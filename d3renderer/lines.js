@@ -1,6 +1,3 @@
-var MIN_BEND = 0.0;
-var MAX_BEND = 1.0;
-
 d3.kodama
 		.themeRegistry(
 				'linesTheme',
@@ -156,11 +153,11 @@ function generateLines(data, points) {
 			//
 			.attr("fill", "none")
 			//
-			.attr("stroke-width", 1 + "px")
+			.attr("stroke-width", lineWidth + "px")
 			//
 			.attr("stroke-linejoin", "round")
 			//
-			.attr("stroke", "black")
+			.attr("stroke", fixedColors[lineDefaultColorIndex])
 			//
 			.attr("startTime", function(d) {
 				return (d.startTime);

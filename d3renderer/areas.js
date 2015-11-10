@@ -1,4 +1,3 @@
-var POLYGON_OPACITY = 0.5;
 
 d3.kodama
 		.themeRegistry(
@@ -51,10 +50,10 @@ function generateAreas(data) {
 
 		}).join(" ");
 	}) //
-	.attr("fill", "brown") //
+	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", POLYGON_OPACITY) //
+	.attr("opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
@@ -146,10 +145,10 @@ function generateCounts(data, countAttribute) {
 		return (radius);
 
 	}) //
-	.attr("fill", "brown") //
+	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", POLYGON_OPACITY) //
+	.attr("opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 

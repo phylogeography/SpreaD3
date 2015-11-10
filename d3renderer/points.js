@@ -52,7 +52,7 @@ function generatePoints(data) {
 				return (cy);
 			}) //
 	.attr("r", "2px") //
-	.attr("fill", "white") //
+	.attr("fill", fixedColors[pointDefaultColorIndex]) //
 	.attr("stroke", "black");
 
 	// dump attribute values into DOM
