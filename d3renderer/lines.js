@@ -44,7 +44,7 @@ function generateLines(data, points) {
 	// bend values in [0,1]
 	// 0 gives straight lines, closer to 1 results in more bent lines
 	var scale = d3.scale.linear().domain([ sliderEndValue, sliderStartValue ])
-			.range([ MIN_BEND, MAX_BEND ]);
+			.range([ 0, 1 ]);
 
 	var lines = linesLayer
 			.selectAll("path")
@@ -103,7 +103,7 @@ function generateLines(data, points) {
 							curvature = scale(formDate(line.startTime));
 
 						} else {
-							curvature = MAX_BEND;
+							curvature = lineMaxCurvature;
 						}
 
 						var startLatitude = startCoordinate.xCoordinate;

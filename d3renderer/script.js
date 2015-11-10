@@ -15,8 +15,8 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
-//fixed colors
-//var mapFixedColors = colorbrewer.Dark2[8];
+// fixed colors
+// var mapFixedColors = colorbrewer.Dark2[8];
 
 //
 // ---DATA---//
@@ -32,31 +32,27 @@ var pairedSimpleColors = getSimpleColors(colorbrewer.Paired[12]);
 
 // defaults
 var lineDefaultColorIndex = 12;
-var lineStartColor = "#"+pairedSimpleColors[0];
-var lineEndColor = "#"+pairedSimpleColors[pairedSimpleColors.length - 1];
+var lineStartColor = "#" + pairedSimpleColors[0];
+var lineEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
-// TODO: rename
-var MIN_BEND = 0.0;
-var MAX_BEND = 1.0;
-
+var lineMaxCurvature = 1.0;
 var lineWidth = 1;
 
 var pointDefaultColorIndex = 6;
-var pointStartColor = "#"+pairedSimpleColors[0];
-var pointEndColor = "#"+pairedSimpleColors[pairedSimpleColors.length - 1];
+var pointStartColor = "#" + pairedSimpleColors[0];
+var pointEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var pointArea = 2;
 
 var areaDefaultColorIndex = 1;
-var areaStartColor = "#"+pairedSimpleColors[0];
-var areaEndColor = "#"+pairedSimpleColors[pairedSimpleColors.length - 1];
+var areaStartColor = "#" + pairedSimpleColors[0];
+var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var polygonOpacity = 0.5;
 
 var mapDefaultColorIndex = 6;
-var mapStartFill = "#"+pairedSimpleColors[0];
-var mapEndFill = "#"+pairedSimpleColors[pairedSimpleColors.length - 1];
-
-
-
+var mapStartFill = "#" + pairedSimpleColors[0];
+var mapEndFill = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -275,7 +271,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.ease("linear") //
 	.duration(1000) //
 	.attr("visibility", "visible") //
-	.attr("opacity", POLYGON_OPACITY);
+	.attr("opacity", polygonOpacity);
 
 	// ---COUNTS---//
 
@@ -309,7 +305,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.duration(100) //
 	.ease("linear") //
 	.attr("visibility", "visible") //
-	.attr("opacity", POLYGON_OPACITY);
+	.attr("opacity", polygonOpacity);
 
 }// END: update
 
@@ -443,12 +439,13 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 // d3.json("data/H3N2output.json", function ready(error, json) {
 // d3.json("data/antigenic_time.json", function ready(error, json) {
 // d3.json("data/antigenic_test.json", function ready(error, json) {
 // d3.json("data/slicing_test.json", function ready(error, json) {
 // d3.json("data/test_bf.json", function ready(error, json) {
-d3.json("data/languages_worldmap.json", function ready(error, json) {
+//d3.json("data/languages_worldmap.json", function ready(error, json) {
 	// TODO: needs debugging
 	// d3.json("data/ebov_nomap.json", function ready(error, json) {
 

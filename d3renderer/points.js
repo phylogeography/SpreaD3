@@ -51,7 +51,7 @@ function generatePoints(data) {
 				var cy = xy[1]; // long
 				return (cy);
 			}) //
-	.attr("r", "2px") //
+	.attr("r", pointArea) //
 	.attr("fill", fixedColors[pointDefaultColorIndex]) //
 	.attr("stroke", "black");
 

@@ -48,39 +48,37 @@ function populateLinePanels(attributes) {
 	// ---LINE COLOR ATTRIBUTE---//
 
 	// start color
-	$('.lineStartColor').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				displayColorCode : true,
-				colors : pairedSimpleColors,
+	$('.lineStartColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
 
-				onSelect : function(hex, element) {
+		onSelect : function(hex, element) {
 
-					lineStartColor = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
+			lineStartColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
 
-			});
+	});
 	$('.lineStartColor').setColor(lineStartColor);
 
 	// end color
-	$('.lineEndColor').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				colors : pairedSimpleColors,
-				displayColorCode : true,
-				onSelect : function(hex, element) {
+	$('.lineEndColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
 
-					lineEndColor = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
-			});
+			lineEndColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+	});
 	$('.lineEndColor').setColor(lineEndColor);
 
 	// attribute
@@ -157,16 +155,17 @@ function populateLinePanels(attributes) {
 	// ---LINE CURVATURE---//
 
 	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(
-			0.0).max(1.0).step(0.1).value(MAX_BEND);
+			0.0).max(1.0).step(0.1).value(lineMaxCurvature);
+
 	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
 
 	// line curvature listener
 	maxCurvatureSlider.on("slide", function(evt, value) {
 
-		MAX_BEND = value;
+		lineMaxCurvature = value;
 		var scale = d3.scale.linear().domain(
 				[ sliderStartValue, sliderEndValue ]).range(
-				[ MIN_BEND, MAX_BEND ]);
+				[ 0, lineMaxCurvature ]);
 
 		linesLayer.selectAll(".line").transition().ease("linear") //
 		.attr(
@@ -174,6 +173,9 @@ function populateLinePanels(attributes) {
 				function(d) {
 
 					var line = d;
+
+					// TODO: NaN when negative dates?
+					// console.log(Date.parse(line.startTime));
 
 					var curvature = scale(Date.parse(line.startTime));
 
@@ -215,7 +217,6 @@ function populateLinePanels(attributes) {
 
 	// ---LINE WIDTH---//
 
-	// TODO
 	var lineWidthSlider = d3.slider().axis(d3.svg.axis().orient("top"))
 			.min(0.5).max(5.0).step(0.5).value(lineWidth);
 
@@ -283,39 +284,37 @@ function populatePointPanels(attributes) {
 	// ---POINT COLOR ATTRIBUTE---//
 
 	// start color
-	$('.pointStartColor').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				displayColorCode : true,
-				colors : pairedSimpleColors,
+	$('.pointStartColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
 
-				onSelect : function(hex, element) {
+		onSelect : function(hex, element) {
 
-					pointStartColor = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
+			pointStartColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
 
-			});
+	});
 	$('.pointStartColor').setColor(pointStartColor);
 
 	// end color
-	$('.pointEndColor').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				colors : pairedSimpleColors,
-				displayColorCode : true,
-				onSelect : function(hex, element) {
+	$('.pointEndColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
 
-					pointEndColor = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
-			});
+			pointEndColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+	});
 	$('.pointEndColor').setColor(pointEndColor);
 
 	// attribute
@@ -395,9 +394,28 @@ function populatePointPanels(attributes) {
 
 					});
 
-	// ---AREA---//
+	// ---POINT FIXED AREA---//
 
-	pointAreaSelect = document.getElementById("pointarea");
+	var pointFixedAreaSlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(1.0).max(10.0).step(0.5).value(pointArea);
+
+	d3.select('#pointFixedAreaSlider').call(pointFixedAreaSlider);
+
+	// point fixed area listener
+	pointFixedAreaSlider.on("slide", function(evt, value) {
+
+		pointArea = value;
+
+		pointsLayer.selectAll(".point")//
+		.transition()//
+		.ease("linear") //
+		.attr("r", pointArea);
+
+	});
+
+	// ---POINT AREA ATTRIBUTE---//
+
+	pointAreaAttributeSelect = document.getElementById("pointAreaAttribute");
 
 	for (var i = 0; i < attributes.length; i++) {
 
@@ -411,13 +429,13 @@ function populatePointPanels(attributes) {
 		element.textContent = option;
 		element.value = option;
 
-		pointAreaSelect.appendChild(element);
+		pointAreaAttributeSelect.appendChild(element);
 
 	}// END: i loop
 
-	// point area listener
+	// point area attribute listener
 	d3
-			.select(pointAreaSelect)
+			.select(pointAreaAttributeSelect)
 			.on(
 					'change',
 					function() {
@@ -425,7 +443,7 @@ function populatePointPanels(attributes) {
 						var min_area = 10;
 						var max_area = 100;
 
-						var areaAttribute = pointAreaSelect.options[pointAreaSelect.selectedIndex].text;
+						var areaAttribute = pointAreaAttributeSelect.options[pointAreaAttributeSelect.selectedIndex].text;
 
 						var scale;
 						var attribute = getObject(attributes, "id",
@@ -449,13 +467,36 @@ function populatePointPanels(attributes) {
 
 							var attributeValue = d.attributes[areaAttribute];
 
-							// TODO: the null's (for the lulz :) )
 							var area = scale(attributeValue);
 							var radius = Math.sqrt(area / Math.PI);
 
 							return (radius);
 						});
 					});
+
+	// ---MULTIPLY POINT AREA---//
+
+	var pointAreaMultiplierSlider = d3.slider().axis(
+			d3.svg.axis().orient("top")).min(0.1).max(3.0).step(0.1).value(1.0);
+
+	d3.select('#pointAreaMultiplierSlider').call(pointAreaMultiplierSlider);
+
+	// point area multiplier listener
+	pointAreaMultiplierSlider.on("slide", function(evt, value) {
+
+		pointsLayer.selectAll(".point") //
+		.transition() //
+		.ease("linear") //
+		.attr("r", function(d) {
+
+			var point = d3.select(this);
+			var r = point.attr("r");
+			var radius = r * value;
+
+			return (radius);
+		});
+
+	});
 
 }// END: populatePointPanels
 
@@ -509,39 +550,35 @@ function populateAreaPanels(attributes) {
 	// ---AREA COLOR ATTRIBUTE---//
 
 	// start color
-	$('.areaStartColor').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				displayColorCode : true,
-				colors : pairedSimpleColors,
+	$('.areaStartColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
 
-				onSelect : function(hex, element) {
+		onSelect : function(hex, element) {
 
-					areaStartColor = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
+			areaStartColor = "#" + hex;
 
-			});
+		}
+
+	});
 	$('.areaStartColor').setColor(areaStartColor);
 
 	// end color
-	$('.areaEndColor').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				colors : pairedSimpleColors,
-				displayColorCode : true,
-				onSelect : function(hex, element) {
+	$('.areaEndColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
 
-					areaEndColor = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
-			});
+			areaEndColor = "#" + hex;
+
+		}
+	});
 	$('.areaEndColor').setColor(areaEndColor);
 
 	// attribute
@@ -717,39 +754,35 @@ function populateMapPanels(attributes) {
 	// ---MAP FILL ATTRIBUTE---//
 
 	// start color
-	$('.mapStartFill').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				displayColorCode : true,
-				colors : pairedSimpleColors,
+	$('.mapStartFill').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
+		onSelect : function(hex, element) {
 
-				onSelect : function(hex, element) {
+			mapStartFill = "#" + hex;
 
-					mapStartFill = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
+		}
 
-			});
+	});
 	$('.mapStartFill').setColor(mapStartFill);
 
 	// end color
-	$('.mapEndFill').simpleColor(
-			{
-				cellWidth : 13,
-				cellHeight : 13,
-				columns : 4,
-				colors : pairedSimpleColors,
-				displayColorCode : true,
-				onSelect : function(hex, element) {
+	$('.mapEndFill').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
 
-					mapEndFill = "#" + hex;
-					console.log(hex + " selected" + " for input "
-							+ element.attr('class'));
-				}
-			});
+			mapEndFill = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+	});
 	$('.mapEndFill').setColor(mapEndFill);
 
 	// attribute
@@ -852,8 +885,6 @@ function populateExportPanel() {
 								.select("body")
 								.append("div")
 								.attr("id", "download")
-								// .style("top", event.clientY+20+"px")
-								// .style("left", event.clientX+"px")
 								.html(
 										"Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
 								.append("img").attr(
@@ -870,12 +901,6 @@ function populateExportPanel() {
 									}
 								}).transition().duration(500).style("opacity",
 								1);
-
-						// var form = document.getElementById("svgform");
-						//						
-						// form['output_format'].value = "svg";
-						// form['data'].value = svg_xml ;
-						// form.submit();
 
 					});
 
