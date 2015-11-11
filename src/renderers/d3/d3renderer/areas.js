@@ -1,4 +1,3 @@
-var POLYGON_OPACITY = 0.5;
 
 d3.kodama
 		.themeRegistry(
@@ -51,10 +50,10 @@ function generateAreas(data) {
 
 		}).join(" ");
 	}) //
-	.attr("fill", "brown") //
+	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", POLYGON_OPACITY) //
+	.attr("opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
@@ -146,29 +145,21 @@ function generateCounts(data, countAttribute) {
 		return (radius);
 
 	}) //
-	.attr("fill", "brown") //
+	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", POLYGON_OPACITY) //
+	.attr("opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
 		var point = d3.select(this);
 		point.attr('stroke', '#000');
 
-		// var r = point.attr("r");
-		// point.transition().duration(200).attr("r", r * 2
-		// ).transition().duration(200).attr("r", r );
-		// .attr("r", point.attr("r") * 2 );
-
 	}) //
 	.on('mouseout', function(d, i) {
 
 		var point = d3.select(this);
 		point.attr('stroke', '#fff');
-
-		// point.transition().duration(500)
-		// .attr("r", point.attr("r") / 2 );
 
 	}) //
 	.call(d3.kodama.tooltip().format(function(d, i) {

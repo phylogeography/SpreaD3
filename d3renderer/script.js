@@ -48,6 +48,9 @@ var areaDefaultColorIndex = 1;
 var areaStartColor = "#" + pairedSimpleColors[0];
 var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
+var countDefaultColorIndex = 1;
+
+var mapFillOpacity = 0.5;
 var polygonOpacity = 0.5;
 
 var mapDefaultColorIndex = 6;
@@ -204,7 +207,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 				return (offset);
 			}) //
 	.style("visibility", "visible") //
-	.attr("opacity", 1);
+//	.attr("opacity", 1)
+	;
 
 	// ---select lines yet to be painted---//
 
@@ -224,7 +228,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 		return (totalLength);
 	}) //
 	.style("visibility", "hidden") //
-	.attr("opacity", 0);
+//	.attr("opacity", 0)
+	;
 
 	// ---select lines already painted---//
 
@@ -239,7 +244,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 			}) //
 	.attr("stroke-dashoffset", 0) //
 	.style("visibility", "visible") //
-	.attr("opacity", 1);
+//	.attr("opacity", 1)
+	;
 
 	// ---POLYGONS---//
 
@@ -256,7 +262,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.ease("linear") //
 	.duration(1000) //
 	.attr("visibility", "hidden") //
-	.attr("opacity", 0);
+//	.attr("opacity", 0)
+	;
 
 	// ---select polygons displayed now---//
 
@@ -271,13 +278,14 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.ease("linear") //
 	.duration(1000) //
 	.attr("visibility", "visible") //
-	.attr("opacity", polygonOpacity);
+//	.attr("opacity", polygonOpacity)
+	;
 
 	// ---COUNTS---//
 
 	// ---select counts yet to be displayed or already displayed---//
 
-	areasLayer.selectAll(".circle") //
+	areasLayer.selectAll(".count") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = formDate(point.attributes.startTime.value).getTime();
@@ -289,11 +297,12 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.ease("linear") //
 	.duration(1000) //
 	.attr("visibility", "hidden") //
-	.attr("opacity", 0);
+//	.attr("opacity", 0)
+	;
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".circle") //
+	areasLayer.selectAll(".count") //
 	.filter(function() {
 		var point = this;
 		var startDate = formDate(point.attributes.startTime.value).getTime();
@@ -305,7 +314,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.duration(100) //
 	.ease("linear") //
 	.attr("visibility", "visible") //
-	.attr("opacity", polygonOpacity);
+//	.attr("opacity", polygonOpacity)
+	;
 
 }// END: update
 

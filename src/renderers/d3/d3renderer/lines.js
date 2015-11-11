@@ -1,6 +1,3 @@
-var MIN_BEND = 0.0;
-var MAX_BEND = 1.0;
-
 d3.kodama
 		.themeRegistry(
 				'linesTheme',
@@ -47,7 +44,7 @@ function generateLines(data, points) {
 	// bend values in [0,1]
 	// 0 gives straight lines, closer to 1 results in more bent lines
 	var scale = d3.scale.linear().domain([ sliderEndValue, sliderStartValue ])
-			.range([ MIN_BEND, MAX_BEND ]);
+			.range([ 0, 1 ]);
 
 	var lines = linesLayer
 			.selectAll("path")
@@ -106,7 +103,7 @@ function generateLines(data, points) {
 							curvature = scale(formDate(line.startTime));
 
 						} else {
-							curvature = MAX_BEND;
+							curvature = lineMaxCurvature;
 						}
 
 						var startLatitude = startCoordinate.xCoordinate;
@@ -156,11 +153,11 @@ function generateLines(data, points) {
 			//
 			.attr("fill", "none")
 			//
-			.attr("stroke-width", 1 + "px")
+			.attr("stroke-width", lineWidth + "px")
 			//
 			.attr("stroke-linejoin", "round")
 			//
-			.attr("stroke", "black")
+			.attr("stroke", fixedColors[lineDefaultColorIndex])
 			//
 			.attr("startTime", function(d) {
 				return (d.startTime);

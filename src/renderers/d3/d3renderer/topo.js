@@ -60,7 +60,7 @@ function generateTopoLayer(geojson) {
 			.append("path") //
 			.attr("class", "topo") //
 			.attr('d', path) //
-			.attr("fill", "white") //
+			.attr("fill", fixedColors[mapDefaultColorIndex]) //
 			.attr("stroke", "black") //
 			.attr("fill-opacity", 0.5) //
 			.style("stroke-width", .5);

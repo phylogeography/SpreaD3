@@ -657,6 +657,51 @@ function populateAreaPanels(attributes) {
 
 					});
 
+	
+	//TODO
+	// ---COUNT FIXED COLOR---//
+
+	var countFixedColorSelect = document.getElementById("countFixedColor");
+	var scale = alternatingColorScale().domain(fixedColors).range(fixedColors);
+
+	for (var i = 0; i < fixedColors.length; i++) {
+
+		option = fixedColors[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		countFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	countFixedColorSelect.selectedIndex = countDefaultColorIndex;
+
+	colorlegend("#countFixedColorLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// count fixed color listener
+	d3
+			.select(countFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = countFixedColorSelect.options[countFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						areasLayer.selectAll(".count") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+					});
+	
 }// END: populateAreaPanels
 
 // ---MAP---//
@@ -857,6 +902,29 @@ function populateMapPanels(attributes) {
 
 					});
 
+	
+	// ---MAP FIXED OPACITY---//
+
+	var mapFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.0).max(1.0).step(0.1).value(polygonOpacity);
+
+	d3.select('#mapFixedOpacitySlider').call(mapFixedOpacitySlider);
+
+	// map fixed opacity listener
+	mapFixedOpacitySlider.on("slide", function(evt, value) {
+
+		mapFillOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		topoLayer.selectAll(".topo") //
+		.transition() //
+		.ease("linear") //
+		.attr("fill-opacity", mapFillOpacity);
+
+	});
+	
+	
+	
 }// END: populateMapPanels
 
 function populateExportPanel() {

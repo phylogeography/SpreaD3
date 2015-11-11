@@ -15,9 +15,44 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
+// fixed colors
+// var mapFixedColors = colorbrewer.Dark2[8];
+
 //
 // ---DATA---//
 //
+
+// fixed colors
+var fixedColors = colorbrewer.RdYlBu[11];
+fixedColors.splice(6, 0, "#ffffff");
+fixedColors.push("#000000");
+
+// colors for mappings (paired for better interpolating)
+var pairedSimpleColors = getSimpleColors(colorbrewer.Paired[12]);
+
+// defaults
+var lineDefaultColorIndex = 12;
+var lineStartColor = "#" + pairedSimpleColors[0];
+var lineEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var lineMaxCurvature = 1.0;
+var lineWidth = 1;
+
+var pointDefaultColorIndex = 6;
+var pointStartColor = "#" + pairedSimpleColors[0];
+var pointEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var pointArea = 2;
+
+var areaDefaultColorIndex = 1;
+var areaStartColor = "#" + pairedSimpleColors[0];
+var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var polygonOpacity = 0.5;
+
+var mapDefaultColorIndex = 6;
+var mapStartFill = "#" + pairedSimpleColors[0];
+var mapEndFill = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -53,7 +88,7 @@ function move() {
 
 	// fit the paths to the zoom level
 	d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-	d3.selectAll(".line").attr("stroke-width", 1.0 / s);
+	d3.selectAll(".line").attr("stroke-width", lineWidth / s);
 	d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 
 }// END: move
@@ -236,7 +271,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.ease("linear") //
 	.duration(1000) //
 	.attr("visibility", "visible") //
-	.attr("opacity", POLYGON_OPACITY);
+	.attr("opacity", polygonOpacity);
 
 	// ---COUNTS---//
 
@@ -270,7 +305,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.duration(100) //
 	.ease("linear") //
 	.attr("visibility", "visible") //
-	.attr("opacity", POLYGON_OPACITY);
+	.attr("opacity", polygonOpacity);
 
 }// END: update
 

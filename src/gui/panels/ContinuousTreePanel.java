@@ -309,7 +309,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 					}
 
 					settings.geojsonFilename = geojsonFilename;
-
+					frame.setStatus(settings.geojsonFilename + " selected.");
+					
 				} else {
 					frame.setStatus("Could not Open! \n");
 				}

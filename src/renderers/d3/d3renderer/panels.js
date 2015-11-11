@@ -1,59 +1,665 @@
-// ---POPULATE PANELS---//
+// ---LINES---//
 
-function populateExportPanel() {
+function populateLinePanels(attributes) {
 
-	saveSVGButton = document.getElementById("saveSVG");
+	// ---LINE FIXED COLOR---//
+
+	var lineFixedColorSelect = document.getElementById("lineFixedColor");
+	var scale = alternatingColorScale().domain(fixedColors).range(fixedColors);
+
+	for (var i = 0; i < fixedColors.length; i++) {
+
+		option = fixedColors[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	lineFixedColorSelect.selectedIndex = lineDefaultColorIndex;
+
+	colorlegend("#lineFixedColorLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// line fixed color listener
 	d3
-			.select(saveSVGButton)
+			.select(lineFixedColorSelect)
 			.on(
-					'click',
+					'change',
 					function() {
 
-						var tmp = document.getElementById("container");
-						var svg = tmp.getElementsByTagName("svg")[0];
+						var colorSelect = lineFixedColorSelect.options[lineFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
 
-						// Extract the data as SVG text string
-						var svg_xml = (new XMLSerializer)
-								.serializeToString(svg);
-
-						window.open().document.write(svg_xml);
-
-						var html = d3.select("svg").attr("title", "test2")
-								.attr("version", 1.1).attr("xmlns",
-										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
-
-						d3
-								.select("body")
-								.append("div")
-								.attr("id", "download")
-								// .style("top", event.clientY+20+"px")
-								// .style("left", event.clientX+"px")
-								.html(
-										"Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
-								.append("img").attr(
-										"src",
-										"data:image/svg+xml;base64,"
-												+ btoa(html));
-
-						d3.select("#download").on(
-								"click",
-								function() {
-									if (event.button == 0) {
-										d3.select(this).transition().style(
-												"opacity", 0).remove();
-									}
-								}).transition().duration(500).style("opacity",
-								1);
-
-						// var form = document.getElementById("svgform");
-						//						
-						// form['output_format'].value = "svg";
-						// form['data'].value = svg_xml ;
-						// form.submit();
+						linesLayer.selectAll(".line") //
+						.transition() //
+						.ease("linear") //
+						.attr("stroke", color);
 
 					});
 
-}// END: populateExportPanel
+	// ---LINE COLOR ATTRIBUTE---//
+
+	// start color
+	$('.lineStartColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
+
+		onSelect : function(hex, element) {
+
+			lineStartColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+
+	});
+	$('.lineStartColor').setColor(lineStartColor);
+
+	// end color
+	$('.lineEndColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
+
+			lineEndColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+	});
+	$('.lineEndColor').setColor(lineEndColor);
+
+	// attribute
+	lineColorAttributeSelect = document.getElementById("lineColorAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineColorAttributeSelect.appendChild(element);
+
+	}// END: i loop
+
+	// line color attribute listener
+	d3
+			.select(lineColorAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorAttribute = lineColorAttributeSelect.options[lineColorAttributeSelect.selectedIndex].text;
+						var attribute = getObject(attributes, "id",
+								colorAttribute);
+
+						var data;
+						var scale;
+
+						$('#lineColorLegend').html('');
+
+						if (attribute.scale == ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.category20().domain(data);
+
+							colorlegend("#lineColorLegend", scale, "ordinal", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+						} else {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ lineStartColor, lineEndColor ]);
+
+							colorlegend("#lineColorLegend", scale, "linear", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+						}
+
+						linesLayer.selectAll(".line") //
+						.transition() //
+						.ease("linear") //
+						.attr("stroke", function() {
+
+							var line = d3.select(this);
+							var attributeValue = line.attr(colorAttribute);
+							var color = scale(attributeValue);
+
+							return (color);
+						});
+
+					});
+
+	// ---LINE CURVATURE---//
+
+	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(
+			0.0).max(1.0).step(0.1).value(lineMaxCurvature);
+
+	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
+
+	// line curvature listener
+	maxCurvatureSlider.on("slide", function(evt, value) {
+
+		lineMaxCurvature = value;
+		var scale = d3.scale.linear().domain(
+				[ sliderStartValue, sliderEndValue ]).range(
+				[ 0, lineMaxCurvature ]);
+
+		linesLayer.selectAll(".line").transition().ease("linear") //
+		.attr(
+				"d",
+				function(d) {
+
+					var line = d;
+
+					// TODO: NaN when negative dates?
+					// console.log(Date.parse(line.startTime));
+
+					var curvature = scale(Date.parse(line.startTime));
+
+					var westofsource = line.westofsource;
+					var targetX = line.targetX;
+					var targetY = line.targetY;
+					var sourceX = line.sourceX;
+					var sourceY = line.sourceY;
+
+					var dx = targetX - sourceX;
+					var dy = targetY - sourceY;
+					var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
+
+					var bearing;
+					if (westofsource) {
+						bearing = "M" + targetX + "," + targetY + "A" + dr
+								+ "," + dr + " 0 0,1 " + sourceX + ","
+								+ sourceY;
+
+					} else {
+
+						bearing = "M" + sourceX + "," + sourceY + "A" + dr
+								+ "," + dr + " 0 0,1 " + targetX + ","
+								+ targetY;
+
+					}
+
+					return (bearing);
+
+				}) //
+		.attr("stroke-dasharray", function(d) {
+
+			var totalLength = d3.select(this).node().getTotalLength();
+			return (totalLength + " " + totalLength);
+
+		});
+
+	});
+
+	// ---LINE WIDTH---//
+
+	var lineWidthSlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.5).max(5.0).step(0.5).value(lineWidth);
+
+	d3.select('#lineWidthSlider').call(lineWidthSlider);
+
+	// line width listener
+	lineWidthSlider.on("slide", function(evt, value) {
+
+		lineWidth = value;
+
+		linesLayer.selectAll(".line").transition().ease("linear") //
+		.attr("stroke-width", lineWidth + "px");
+
+	});
+
+}// END: populateLinePanels
+
+// ---POINTS---//
+
+function populatePointPanels(attributes) {
+
+	// ---POINT FIXED COLOR---//
+
+	var pointFixedColorSelect = document.getElementById("pointFixedColor");
+	var scale = alternatingColorScale().domain(fixedColors).range(fixedColors);
+
+	for (var i = 0; i < fixedColors.length; i++) {
+
+		option = fixedColors[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	pointFixedColorSelect.selectedIndex = pointDefaultColorIndex;
+
+	colorlegend("#pointFixedColorLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// point fixed color listener
+	d3
+			.select(pointFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = pointFixedColorSelect.options[pointFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						pointsLayer.selectAll(".point") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+					});
+
+	// ---POINT COLOR ATTRIBUTE---//
+
+	// start color
+	$('.pointStartColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
+
+		onSelect : function(hex, element) {
+
+			pointStartColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+
+	});
+	$('.pointStartColor').setColor(pointStartColor);
+
+	// end color
+	$('.pointEndColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
+
+			pointEndColor = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+	});
+	$('.pointEndColor').setColor(pointEndColor);
+
+	// attribute
+	pointColorAttributeSelect = document.getElementById("pointColorAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointColorAttributeSelect.appendChild(element);
+
+	}// END: i loop
+
+	// point color attribute listener
+	d3
+			.select(pointColorAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorAttribute = pointColorAttributeSelect.options[pointColorAttributeSelect.selectedIndex].text;
+
+						var attribute = getObject(attributes, "id",
+								colorAttribute);
+
+						var data;
+						var scale;
+
+						$('#pointColorLegend').html('');
+
+						if (attribute.scale == ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.category20().domain(data);
+
+							colorlegend("#pointColorLegend", scale, "ordinal",
+									{
+										title : "",
+										boxHeight : 20,
+										boxWidth : 6,
+										vertical : true
+									});
+
+						} else {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ pointStartColor, pointEndColor ]);
+
+							colorlegend("#pointColorLegend", scale, "linear", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+						}
+
+						pointsLayer.selectAll(".point").transition() //
+						.ease("linear") //
+						.attr("fill", function() {
+
+							var point = d3.select(this);
+							var attributeValue = point.attr(colorAttribute);
+							var color = scale(attributeValue);
+
+							return (color);
+						});
+
+					});
+
+	// ---POINT FIXED AREA---//
+
+	var pointFixedAreaSlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(1.0).max(10.0).step(0.5).value(pointArea);
+
+	d3.select('#pointFixedAreaSlider').call(pointFixedAreaSlider);
+
+	// point fixed area listener
+	pointFixedAreaSlider.on("slide", function(evt, value) {
+
+		pointArea = value;
+
+		pointsLayer.selectAll(".point")//
+		.transition()//
+		.ease("linear") //
+		.attr("r", pointArea);
+
+	});
+
+	// ---POINT AREA ATTRIBUTE---//
+
+	pointAreaAttributeSelect = document.getElementById("pointAreaAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointAreaAttributeSelect.appendChild(element);
+
+	}// END: i loop
+
+	// point area attribute listener
+	d3
+			.select(pointAreaAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var min_area = 10;
+						var max_area = 100;
+
+						var areaAttribute = pointAreaAttributeSelect.options[pointAreaAttributeSelect.selectedIndex].text;
+
+						var scale;
+						var attribute = getObject(attributes, "id",
+								areaAttribute);
+						if (attribute.scale == ORDINAL) {
+
+							scale = d3.scale.category20().domain(
+									attribute.domain);
+
+						} else {
+
+							scale = d3.scale.linear().domain(attribute.range)
+									.range([ min_area, max_area ]);
+
+						}
+
+						pointsLayer.selectAll(".point") //
+						.transition() //
+						.ease("linear") //
+						.attr("r", function(d) {
+
+							var attributeValue = d.attributes[areaAttribute];
+
+							var area = scale(attributeValue);
+							var radius = Math.sqrt(area / Math.PI);
+
+							return (radius);
+						});
+					});
+
+	// ---MULTIPLY POINT AREA---//
+
+	var pointAreaMultiplierSlider = d3.slider().axis(
+			d3.svg.axis().orient("top")).min(0.1).max(3.0).step(0.1).value(1.0);
+
+	d3.select('#pointAreaMultiplierSlider').call(pointAreaMultiplierSlider);
+
+	// point area multiplier listener
+	pointAreaMultiplierSlider.on("slide", function(evt, value) {
+
+		pointsLayer.selectAll(".point") //
+		.transition() //
+		.ease("linear") //
+		.attr("r", function(d) {
+
+			var point = d3.select(this);
+			var r = point.attr("r");
+			var radius = r * value;
+
+			return (radius);
+		});
+
+	});
+
+}// END: populatePointPanels
+
+// ---AREAS---//
+
+function populateAreaPanels(attributes) {
+
+	// ---AREA FIXED COLOR---//
+
+	var areaFixedColorSelect = document.getElementById("areaFixedColor");
+	var scale = alternatingColorScale().domain(fixedColors).range(fixedColors);
+
+	for (var i = 0; i < fixedColors.length; i++) {
+
+		option = fixedColors[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		areaFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	areaFixedColorSelect.selectedIndex = areaDefaultColorIndex;
+
+	colorlegend("#areaFixedColorLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// area fixed color listener
+	d3
+			.select(areaFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = areaFixedColorSelect.options[areaFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						areasLayer.selectAll(".area") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+					});
+
+	// ---AREA COLOR ATTRIBUTE---//
+
+	// start color
+	$('.areaStartColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
+
+		onSelect : function(hex, element) {
+
+			areaStartColor = "#" + hex;
+
+		}
+
+	});
+	$('.areaStartColor').setColor(areaStartColor);
+
+	// end color
+	$('.areaEndColor').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
+
+			areaEndColor = "#" + hex;
+
+		}
+	});
+	$('.areaEndColor').setColor(areaEndColor);
+
+	// attribute
+	areaColorAttributeSelect = document.getElementById("areaColorAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		areaColorAttributeSelect.appendChild(element);
+
+	}// END: i loop
+
+	// area color listener
+	d3
+			.select(areaColorAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorAttribute = areaColorAttributeSelect.options[areaColorAttributeSelect.selectedIndex].text;
+
+						var attribute = getObject(attributes, "id",
+								colorAttribute);
+
+						var data;
+						var scale;
+
+						$('#areaColorLegend').html('');
+
+						if (attribute.scale == ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.category20().domain(data);
+
+							colorlegend("#areaColorLegend", scale, "ordinal", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+						} else {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ areaStartColor, areaEndColor ]);
+
+							colorlegend("#areaColorLegend", scale, "linear", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+						}
+
+						areasLayer.selectAll(".area").transition() //
+						.ease("linear") //
+						.attr("fill", function() {
+
+							var area = d3.select(this);
+							var attributeValue = area.attr(colorAttribute);
+							var color = scale(attributeValue);
+
+							return (color);
+						});
+
+					});
+
+}// END: populateAreaPanels
+
+// ---MAP---//
 
 function populateMapBackground() {
 
@@ -102,9 +708,86 @@ function populateMapPanels(attributes) {
 
 	populateMapBackground();
 
-	// --- MAP FILL---//
+	// --- MAP FIXED FILL---//
 
-	mapColorSelect = document.getElementById("mapcolor");
+	var mapFixedFillSelect = document.getElementById("mapFixedFill");
+	var scale = alternatingColorScale().domain(fixedColors).range(fixedColors);
+
+	for (var i = 0; i < fixedColors.length; i++) {
+
+		option = fixedColors[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		mapFixedFill.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	mapFixedFillSelect.selectedIndex = mapDefaultColorIndex;
+
+	colorlegend("#mapFixedFillLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// line fixed color listener
+	d3
+			.select(mapFixedFillSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = mapFixedFillSelect.options[mapFixedFillSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						d3.selectAll(".topo") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+					});
+
+	// ---MAP FILL ATTRIBUTE---//
+
+	// start color
+	$('.mapStartFill').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		displayColorCode : true,
+		colors : pairedSimpleColors,
+		onSelect : function(hex, element) {
+
+			mapStartFill = "#" + hex;
+
+		}
+
+	});
+	$('.mapStartFill').setColor(mapStartFill);
+
+	// end color
+	$('.mapEndFill').simpleColor({
+		cellWidth : 13,
+		cellHeight : 13,
+		columns : 4,
+		colors : pairedSimpleColors,
+		displayColorCode : true,
+		onSelect : function(hex, element) {
+
+			mapEndFill = "#" + hex;
+			// console.log(hex + " selected" + " for input "
+			// + element.attr('class'));
+		}
+	});
+	$('.mapEndFill').setColor(mapEndFill);
+
+	// attribute
+	mapFillAttributeSelect = document.getElementById("mapFillAttribute");
+
 	for (var i = 0; i < attributes.length; i++) {
 
 		option = attributes[i].id;
@@ -112,18 +795,18 @@ function populateMapPanels(attributes) {
 		element.textContent = option;
 		element.value = option;
 
-		mapColorSelect.appendChild(element);
+		mapFillAttributeSelect.appendChild(element);
 
 	}// END: i loop
 
 	// map color listener
 	d3
-			.select(mapColorSelect)
+			.select(mapFillAttributeSelect)
 			.on(
 					'change',
 					function() {
 
-						var colorAttribute = mapColorSelect.options[mapColorSelect.selectedIndex].text;
+						var colorAttribute = mapFillAttributeSelect.options[mapFillAttributeSelect.selectedIndex].text;
 
 						var attribute = getObject(attributes, "id",
 								colorAttribute);
@@ -131,14 +814,14 @@ function populateMapPanels(attributes) {
 						var data;
 						var scale;
 
-						$('#mapColorLegend').html('');
+						$('#mapFillLegend').html('');
 
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
 							scale = d3.scale.category20().domain(data);
 
-							colorlegend("#mapColorLegend", scale, "ordinal", {
+							colorlegend("#mapFillLegend", scale, "ordinal", {
 								title : "",
 								boxHeight : 20,
 								boxWidth : 6,
@@ -149,9 +832,9 @@ function populateMapPanels(attributes) {
 
 							data = attribute.range;
 							scale = d3.scale.linear().domain(data).range(
-									[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
+									[ mapStartFill, mapEndFill ]);
 
-							colorlegend("#mapColorLegend", scale, "linear", {
+							colorlegend("#mapFillLegend", scale, "linear", {
 								title : "",
 								boxHeight : 20,
 								boxWidth : 6,
@@ -175,6 +858,53 @@ function populateMapPanels(attributes) {
 					});
 
 }// END: populateMapPanels
+
+function populateExportPanel() {
+
+	saveSVGButton = document.getElementById("saveSVG");
+	d3
+			.select(saveSVGButton)
+			.on(
+					'click',
+					function() {
+
+						var tmp = document.getElementById("container");
+						var svg = tmp.getElementsByTagName("svg")[0];
+
+						// Extract the data as SVG text string
+						var svg_xml = (new XMLSerializer)
+								.serializeToString(svg);
+
+						window.open().document.write(svg_xml);
+
+						var html = d3.select("svg").attr("title", "test2")
+								.attr("version", 1.1).attr("xmlns",
+										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+
+						d3
+								.select("body")
+								.append("div")
+								.attr("id", "download")
+								.html(
+										"Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
+								.append("img").attr(
+										"src",
+										"data:image/svg+xml;base64,"
+												+ btoa(html));
+
+						d3.select("#download").on(
+								"click",
+								function() {
+									if (event.button == 0) {
+										d3.select(this).transition().style(
+												"opacity", 0).remove();
+									}
+								}).transition().duration(500).style("opacity",
+								1);
+
+					});
+
+}// END: populateExportPanel
 
 function populateLocationPanels() {
 
@@ -222,374 +952,4 @@ function populateLocationPanels() {
 					});
 
 }// END: populateLabelPanels
-
-function populateAreaPanels(attributes) {
-	
-	// ---COLOR---//
-	
-	areaColorSelect = document.getElementById("areacolor");
-
-	for (var i = 0; i < attributes.length; i++) {
-
-		option = attributes[i].id;
-		// skip points with count attribute
-		if (option == COUNT) {
-			continue;
-		}
-
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		areaColorSelect.appendChild(element);
-
-	}// END: i loop
-	
-	// TODO
-	// area color listener
-	d3
-	.select(areaColorSelect)
-	.on(
-			'change',
-			function() {
-
-				var colorAttribute = areaColorSelect.options[areaColorSelect.selectedIndex].text;
-
-				var attribute = getObject(attributes, "id",
-						colorAttribute);
-
-				var data;
-				var scale;
-
-				$('#areasColorLegend').html('');
-
-				if (attribute.scale == ORDINAL) {
-
-					data = attribute.domain;
-					scale = d3.scale.category20().domain(data);
-
-					colorlegend("#areasColorLegend", scale, "ordinal",
-							{
-								title : "",
-								boxHeight : 20,
-								boxWidth : 6,
-								vertical : true
-							});
-
-				} else {
-
-					data = attribute.range;
-					scale = d3.scale.linear().domain(data).range(
-							[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
-
-					colorlegend("#areasColorLegend", scale, "linear",
-							{
-								title : "",
-								boxHeight : 20,
-								boxWidth : 6,
-								vertical : true
-							});
-
-				}
-
-				areasLayer.selectAll(".area").transition() //
-				.ease("linear") //
-				.attr("fill", function() {
-
-					var area = d3.select(this);
-					var attributeValue = area.attr(colorAttribute);
-					var color = scale(attributeValue);
-
-					return (color);
-				});
-
-			});
-
-	
-	
-	
-	
-	
-}// END: populateAreaPanels
-
-
-function populatePointPanels(attributes) {
-
-	// ---COLOR---//
-
-	pointColorSelect = document.getElementById("pointcolor");
-
-	for (var i = 0; i < attributes.length; i++) {
-
-		option = attributes[i].id;
-		// skip points with count attribute
-		if (option == COUNT) {
-			continue;
-		}
-
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		pointColorSelect.appendChild(element);
-
-	}// END: i loop
-
-	// point color listener
-	d3
-			.select(pointColorSelect)
-			.on(
-					'change',
-					function() {
-
-						var colorAttribute = pointColorSelect.options[pointColorSelect.selectedIndex].text;
-
-						var attribute = getObject(attributes, "id",
-								colorAttribute);
-
-						var data;
-						var scale;
-
-						$('#pointsColorLegend').html('');
-
-						if (attribute.scale == ORDINAL) {
-
-							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
-
-							colorlegend("#pointsColorLegend", scale, "ordinal",
-									{
-										title : "",
-										boxHeight : 20,
-										boxWidth : 6,
-										vertical : true
-									});
-
-						} else {
-
-							data = attribute.range;
-							scale = d3.scale.linear().domain(data).range(
-									[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
-
-							colorlegend("#pointsColorLegend", scale, "linear",
-									{
-										title : "",
-										boxHeight : 20,
-										boxWidth : 6,
-										vertical : true
-									});
-
-						}
-
-						pointsLayer.selectAll(".point").transition() //
-						.ease("linear") //
-						.attr("fill", function() {
-
-							var point = d3.select(this);
-							var attributeValue = point.attr(colorAttribute);
-							var color = scale(attributeValue);
-
-							return (color);
-						});
-
-					});
-
-	// ---AREA---//
-
-	pointAreaSelect = document.getElementById("pointarea");
-
-	for (var i = 0; i < attributes.length; i++) {
-
-		option = attributes[i].id;
-		// skip points with count attribute
-		if (option == COUNT) {
-			continue;
-		}
-
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		pointAreaSelect.appendChild(element);
-
-	}// END: i loop
-
-	// point area listener
-	d3
-			.select(pointAreaSelect)
-			.on(
-					'change',
-					function() {
-
-						var min_area = 10;
-						var max_area = 100;
-
-						var areaAttribute = pointAreaSelect.options[pointAreaSelect.selectedIndex].text;
-
-						var scale;
-						var attribute = getObject(attributes, "id",
-								areaAttribute);
-						if (attribute.scale == ORDINAL) {
-
-							scale = d3.scale.category20().domain(
-									attribute.domain);
-
-						} else {
-
-							scale = d3.scale.linear().domain(attribute.range)
-									.range([ min_area, max_area ]);
-
-						}
-
-						pointsLayer.selectAll(".point") //
-						.transition() //
-						.ease("linear") //
-						.attr("r", function(d) {
-
-							var attributeValue = d.attributes[areaAttribute];
-
-							// TODO: the null's (for the lulz :) )
-
-							var area = scale(attributeValue);
-							var radius = Math.sqrt(area / Math.PI);
-
-							return (radius);
-						});
-					});
-
-}// END: populatePointPanels
-
-function populateLinePanels(attributes) {
-
-	lineColorSelect = document.getElementById("linecolor");
-
-	for (var i = 0; i < attributes.length; i++) {
-
-		option = attributes[i].id;
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
-
-		lineColorSelect.appendChild(element);
-
-	}// END: i loop
-
-	// line color listener
-	d3
-			.select(lineColorSelect)
-			.on(
-					'change',
-					function() {
-
-						var colorAttribute = lineColorSelect.options[lineColorSelect.selectedIndex].text;
-						var attribute = getObject(attributes, "id",
-								colorAttribute);
-
-						var data;
-						var scale;
-
-						$('#linesColorLegend').html('');
-
-						if (attribute.scale == ORDINAL) {
-
-							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
-
-							colorlegend("#linesColorLegend", scale, "ordinal",
-									{
-										title : "",
-										boxHeight : 20,
-										boxWidth : 6,
-										vertical : true
-									});
-
-						} else {
-
-							data = attribute.range;
-							scale = d3.scale.linear().domain(data).range(
-									[ "rgb(0, 0, 255)", "rgb( 255, 0, 0)" ]);
-
-							colorlegend("#linesColorLegend", scale, "linear", {
-								title : "",
-								boxHeight : 20,
-								boxWidth : 6,
-								vertical : true
-							});
-
-						}
-
-						linesLayer.selectAll(".line") //
-						.transition() //
-						.ease("linear") //
-						.attr("stroke", function() {
-
-							var line = d3.select(this);
-							var attributeValue = line.attr(colorAttribute);
-							var color = scale(attributeValue);
-
-							return (color);
-						});
-
-					});
-
-	// line bend listener
-
-	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(0.0)
-			.max(1.0).step(0.1).value(MAX_BEND);
-	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
-
-	maxCurvatureSlider.on("slide", function(evt, value) {
-
-		MAX_BEND = value;
-		var scale = d3.scale.linear().domain(
-				[ sliderStartValue, sliderEndValue ]).range(
-				[ MIN_BEND, MAX_BEND ]);
-
-		linesLayer.selectAll(".line").transition().ease("linear") //
-		.attr(
-				"d",
-				function(d) {
-
-					var line = d;
-
-					// line bend
-					var curvature = scale(Date.parse(line.startTime));
-
-					var westofsource = line.westofsource;
-					var targetX = line.targetX;
-					var targetY = line.targetY;
-					var sourceX = line.sourceX;
-					var sourceY = line.sourceY;
-
-					var dx = targetX - sourceX;
-					var dy = targetY - sourceY;
-					var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
-
-					var bearing;
-					if (westofsource) {
-						bearing = "M" + targetX + "," + targetY + "A" + dr
-								+ "," + dr + " 0 0,1 " + sourceX + ","
-								+ sourceY;
-
-					} else {
-
-						bearing = "M" + sourceX + "," + sourceY + "A" + dr
-								+ "," + dr + " 0 0,1 " + targetX + ","
-								+ targetY;
-
-					}
-
-					return (bearing);
-
-				}) //
-		.attr("stroke-dasharray", function(d) {
-
-			var totalLength = d3.select(this).node().getTotalLength();
-			return (totalLength + " " + totalLength);
-
-		});
-
-	});
-
-}// END: populateLinePanels
 
