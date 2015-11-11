@@ -657,8 +657,6 @@ function populateAreaPanels(attributes) {
 
 					});
 
-	
-	//TODO
 	// ---COUNT FIXED COLOR---//
 
 	var countFixedColorSelect = document.getElementById("countFixedColor");
@@ -701,7 +699,7 @@ function populateAreaPanels(attributes) {
 						.attr("fill", color);
 
 					});
-	
+
 }// END: populateAreaPanels
 
 // ---MAP---//
@@ -902,7 +900,6 @@ function populateMapPanels(attributes) {
 
 					});
 
-	
 	// ---MAP FIXED OPACITY---//
 
 	var mapFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
@@ -922,9 +919,7 @@ function populateMapPanels(attributes) {
 		.attr("fill-opacity", mapFillOpacity);
 
 	});
-	
-	
-	
+
 }// END: populateMapPanels
 
 function populateExportPanel() {
@@ -978,7 +973,7 @@ function populateLocationPanels() {
 
 	// --- LABEL COLOR---//
 
-	labelColorSelect = document.getElementById("labelcolor");
+	var labelColorSelect = document.getElementById("labelcolor");
 
 	var domain = [ "black", "white" ];
 	var scale = alternatingColorScale().domain(domain).range(
@@ -1021,3 +1016,75 @@ function populateLocationPanels() {
 
 }// END: populateLabelPanels
 
+function populateToggleLayers() {
+
+	// ---MAP VISIBILITY---//
+
+	var mapLayerCheckbox = document.getElementById("mapLayerCheckbox");
+	// default state is checked
+	mapLayerCheckbox.checked = true;
+
+	d3.select(mapLayerCheckbox).on("change", function() {
+
+		var visibility = this.checked ? "visible" : "hidden";
+		topoLayer.selectAll("path").style("visibility", visibility);
+
+	});
+
+	// ---POLYGONS VISIBILITY---//
+
+	var areasLayerCheckbox = document.getElementById("areasLayerCheckbox");
+	// default state is checked
+	areasLayerCheckbox.checked = true;
+
+	d3.select(areasLayerCheckbox).on("change", function() {
+
+		if (this.checked) {
+			// remove style, then visibility is driven by the time-based
+			// selections
+			areasLayer.selectAll("circle").style("visibility", null);
+			areasLayer.selectAll("area").style("visibility", null);
+		} else {
+			// style is superior to attribute, make them hidden
+			areasLayer.selectAll("circle").style("visibility", "hidden");
+			areasLayer.selectAll("area").style("visibility", "hidden");
+		}
+
+	});
+
+	// ---POINTS VISIBILITY---//
+
+	var pointsLayerCheckbox = document.getElementById("pointsLayerCheckbox");
+	// default state is checked
+	pointsLayerCheckbox.checked = true;
+
+	d3.select(pointsLayerCheckbox).on("change", function() {
+
+		var visibility = this.checked ? "visible" : "hidden";
+		pointsLayer.selectAll("circle").style("visibility", visibility);
+		locationsLayer.selectAll("circle").style("visibility", visibility);
+		labelsLayer.selectAll("text").style("visibility", visibility);
+
+	});
+
+	// ---LINES VISIBILITY---//
+
+	var linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
+	// default state is checked
+	linesLayerCheckbox.checked = true;
+
+	d3.select(linesLayerCheckbox).on("change", function() {
+
+		if (this.checked) {
+			// remove style, then visibility is driven by the time-based
+			// selections
+			linesLayer.selectAll("path").style("visibility", null);
+		} else {
+			// style is superior to attribute, make them hidden
+			linesLayer.selectAll("path").style("visibility", "hidden");
+			areasLayer.selectAll("area").style("visibility", "hidden");
+		}
+
+	});
+
+}// END: populateToggleLayers

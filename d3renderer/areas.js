@@ -104,7 +104,7 @@ function generateCounts(data, countAttribute) {
 	var scale = d3.scale.linear().domain(countAttribute.range).range(
 			[ min_area, max_area ]);
 
-	areasLayer.selectAll("circle").data(data).enter()//
+	areasLayer.selectAll("circle").data(data).enter() //
 	.append("circle") //
 	.attr("class", "count") //
 	.attr("startTime", function(d) {
