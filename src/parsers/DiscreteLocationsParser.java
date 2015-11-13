@@ -49,6 +49,8 @@ public class DiscreteLocationsParser {
 			}
 
 			String locationName = line[0];
+			// remove trailing spaces from
+			locationName = locationName.trim();
 
 			String illegalCharacter = "+";
 			if (locationName.contains(illegalCharacter)) {
