@@ -15,6 +15,7 @@ import parsers.BayesFactorSpreadDataParser;
 import parsers.ContinuousTreeSpreadDataParser;
 import parsers.DiscreteTreeSpreadDataParser;
 import parsers.TimeSlicerSpreadDataParser;
+import readers.JsonMerger;
 import renderers.d3.D3Renderer;
 import renderers.kml.KmlRenderer;
 import settings.Settings;
@@ -22,7 +23,7 @@ import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.parsing.TimeSlicerSettings;
-import settings.reading.JsonReaderSettings;
+import settings.reading.JsonMergerSettings;
 import settings.rendering.D3RendererSettings;
 import settings.rendering.KmlRendererSettings;
 import structure.data.SpreadData;
@@ -50,7 +51,7 @@ public class Spread2ConsoleApp {
 	// private Arguments d3RenderArguments;
 	private Arguments d3RenderArguments;
 
-	private Arguments jsonReaderArguments;;
+	private Arguments jsonMergerArguments;;
 
 	// ---HELP---//
 
@@ -140,11 +141,13 @@ public class Spread2ConsoleApp {
 	private static final String COUNT_COLOR = "countColor";
 	private static final String COUNT_ALPHA = "countAlpha";
 
-	// ---READING---//
-
-	private static final String READ = "read";
+	// ---MERGING---//
+	// TODO
+	private static final String MERGE = "merge";
+	private static final String POINTS = "points";
 	private static final String LINES = "lines";
-	private static final String POLYGONS = "polygons";
+	private static final String AREAS = "areas";
+	private static final String AXIS_ATTRIBUTES = "axisAttributes";
 
 	public Spread2ConsoleApp() {
 
@@ -158,15 +161,13 @@ public class Spread2ConsoleApp {
 
 		new Arguments.Option(HELP, "print this information and exit"),
 
-		new Arguments.Option(READ, "read existing JSON file"),
+		new Arguments.Option(MERGE, "merge multiple JSON files"),
 
 		new Arguments.Option(PARSE, "create JSON from input files"),
 
-				// new Arguments.Option(RENDER, "render from JSON file"),
-
-				new Arguments.StringOption(RENDER, new String[] { KML, //
-						D3 //
-						}, false, "render from JSON file"),
+		new Arguments.StringOption(RENDER, new String[] { KML, //
+				D3 //
+				}, false, "render from JSON file"),
 
 		});
 
@@ -459,20 +460,29 @@ public class Spread2ConsoleApp {
 
 		// ---READER---//
 
-		jsonReaderArguments = new Arguments(new Arguments.Option[] {
+		// TODO
+		jsonMergerArguments = new Arguments(
+				new Arguments.Option[] {
 
-				new Arguments.StringArrayOption(LOCATIONS, -1, "",
-						"json file names with locations to read"),
+						new Arguments.StringArrayOption(POINTS, -1, "",
+								"json file names with locations to read"),
 
-				new Arguments.StringArrayOption(LINES, -1, "",
-						"json file names with lines to read"),
+						new Arguments.StringArrayOption(LINES, -1, "",
+								"json file names with lines to read"),
 
-				new Arguments.StringArrayOption(POLYGONS, -1, "",
-						"json file names with polygons to read"),
+						new Arguments.StringArrayOption(AREAS, -1, "",
+								"json file names with polygons to read"),
 
-				new Arguments.StringOption(OUTPUT, "", "json output file name")
+						new Arguments.StringOption(AXIS_ATTRIBUTES, "",
+								"if no geojson layer, which JSON has valid axis attributes"),
 
-		});
+						new Arguments.StringArrayOption(GEOJSON, -1, "",
+								"json file names with map map layers to read to read"),
+
+						new Arguments.StringOption(OUTPUT, "",
+								"json output file name")
+
+				});
 
 	}// END: Constructor
 
@@ -532,10 +542,10 @@ public class Spread2ConsoleApp {
 			System.out.println("In parsing mode");
 			settings.parse = true;
 
-		} else if (modeArguments.hasOption(READ)) {
+		} else if (modeArguments.hasOption(MERGE)) {
 
 			System.out.println("In read mode");
-			settings.read = true;
+			settings.merge = true;
 
 		} else if (modeArguments.hasOption(RENDER)) {
 
@@ -1087,68 +1097,65 @@ public class Spread2ConsoleApp {
 				throw new RuntimeException("Should never get here!");
 			} // END: settings check
 
-		} else if (settings.read) {
+		} else if (settings.merge) {
 
-			settings.jsonReaderSettings = new JsonReaderSettings();
+			settings.jsonMergerSettings = new JsonMergerSettings();
 
 			// ---PARSE---//
-
+			// TODO
 			try {
 
-				jsonReaderArguments.parseArguments(otherArgs);
+				jsonMergerArguments.parseArguments(otherArgs);
 
-				if (jsonReaderArguments.hasOption(LOCATIONS)) {
-					settings.jsonReaderSettings.locations = jsonReaderArguments
-							.getStringArrayOption(LOCATIONS);
+				if (jsonMergerArguments.hasOption(POINTS)) {
+					settings.jsonMergerSettings.pointsFiles = jsonMergerArguments
+							.getStringArrayOption(POINTS);
 				}
 
-				if (jsonReaderArguments.hasOption(LINES)) {
-					settings.jsonReaderSettings.lines = jsonReaderArguments
+				if (jsonMergerArguments.hasOption(LINES)) {
+					settings.jsonMergerSettings.linesFiles = jsonMergerArguments
 							.getStringArrayOption(LINES);
 				}
 
-				if (jsonReaderArguments.hasOption(POLYGONS)) {
-					settings.jsonReaderSettings.polygons = jsonReaderArguments
-							.getStringArrayOption(POLYGONS);
+				if (jsonMergerArguments.hasOption(AREAS)) {
+					settings.jsonMergerSettings.areasFiles = jsonMergerArguments
+							.getStringArrayOption(AREAS);
 				}
 
-				if (settings.jsonReaderSettings.locations == null
-						&& settings.jsonReaderSettings.lines == null
-						&& settings.jsonReaderSettings.polygons == null) {
-					throw new ArgumentException("Must specify at least one of "
-							+ LOCATIONS + ", " + LINES + ", " + " or "
-							+ POLYGONS + " arguments.");
+				if (jsonMergerArguments.hasOption(AXIS_ATTRIBUTES)) {
+					settings.jsonMergerSettings.axisAttributesFile = jsonMergerArguments
+							.getStringOption(AXIS_ATTRIBUTES);
 				}
 
-				if (jsonReaderArguments.hasOption(OUTPUT)) {
+				if (jsonMergerArguments.hasOption(GEOJSON)) {
+					settings.jsonMergerSettings.geojsonFiles = jsonMergerArguments
+							.getStringArrayOption(GEOJSON);
+				}
+				
+				if (jsonMergerArguments.hasOption(OUTPUT)) {
 
-					settings.jsonReaderSettings.output = jsonReaderArguments
+					settings.jsonMergerSettings.outputFilename = jsonMergerArguments
 							.getStringOption(OUTPUT);
 
-				} else {
-
-					throw new ArgumentException("Required argument " + OUTPUT
-							+ " is missing.");
 				}
 
 			} catch (ArgumentException e) {
-				gracefullyExit(e.getMessage(), jsonReaderArguments, e);
+				gracefullyExit(e.getMessage(), jsonMergerArguments, e);
 			}
 
 			// ---RUN---//
 
 			try {
 
-				// JsonReader reader = new
-				// JsonReader(settings.jsonReaderSettings);
-				SpreadData data = null;// reader.read();
+				JsonMerger merger = new JsonMerger(settings.jsonMergerSettings);
+				SpreadData data = merger.merge();
 
 				// ---EXPORT TO JSON---//
 
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String s = gson.toJson(data);
 
-				File file = new File(settings.jsonReaderSettings.output);
+				File file = new File(settings.jsonMergerSettings.outputFilename);
 				FileWriter fw;
 
 				fw = new FileWriter(file);
@@ -1158,7 +1165,7 @@ public class Spread2ConsoleApp {
 				System.out.println("Created JSON file");
 
 			} catch (IOException e) {
-				gracefullyExit(e.getMessage(), jsonReaderArguments, e);
+				gracefullyExit(e.getMessage(), jsonMergerArguments, e);
 			}
 
 		} else if (settings.render) {

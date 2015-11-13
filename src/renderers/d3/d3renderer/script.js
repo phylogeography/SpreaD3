@@ -48,6 +48,9 @@ var areaDefaultColorIndex = 1;
 var areaStartColor = "#" + pairedSimpleColors[0];
 var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
+var countDefaultColorIndex = 1;
+
+var mapFillOpacity = 0.5;
 var polygonOpacity = 0.5;
 
 var mapDefaultColorIndex = 6;
@@ -203,8 +206,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 				return (offset);
 			}) //
-	.style("visibility", "visible") //
-	.attr("opacity", 1);
+	.attr("visibility", "visible");
 
 	// ---select lines yet to be painted---//
 
@@ -223,8 +225,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (totalLength);
 	}) //
-	.style("visibility", "hidden") //
-	.attr("opacity", 0);
+	.attr("visibility", "hidden");
 
 	// ---select lines already painted---//
 
@@ -238,8 +239,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 				return (lineEndDate < value);
 			}) //
 	.attr("stroke-dashoffset", 0) //
-	.style("visibility", "visible") //
-	.attr("opacity", 1);
+	.attr("visibility", "visible");
 
 	// ---POLYGONS---//
 
@@ -255,8 +255,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "hidden") //
-	.attr("opacity", 0);
+	.attr("visibility", "hidden");
 
 	// ---select polygons displayed now---//
 
@@ -270,14 +269,13 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "visible") //
-	.attr("opacity", polygonOpacity);
+	.attr("visibility", "visible");
 
 	// ---COUNTS---//
 
 	// ---select counts yet to be displayed or already displayed---//
 
-	areasLayer.selectAll(".circle") //
+	areasLayer.selectAll(".count") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = formDate(point.attributes.startTime.value).getTime();
@@ -288,12 +286,11 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "hidden") //
-	.attr("opacity", 0);
+	.attr("visibility", "hidden");
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".circle") //
+	areasLayer.selectAll(".count") //
 	.filter(function() {
 		var point = this;
 		var startDate = formDate(point.attributes.startTime.value).getTime();
@@ -304,8 +301,7 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.duration(100) //
 	.ease("linear") //
-	.attr("visibility", "visible") //
-	.attr("opacity", polygonOpacity);
+	.attr("visibility", "visible");
 
 }// END: update
 
@@ -529,6 +525,7 @@ d3.json("data/data.json", function ready(error, json) {
 		// ---TIME SLIDER---//
 
 		if (hasTime) {
+
 			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 					dateFormat);
 
@@ -537,7 +534,8 @@ d3.json("data/data.json", function ready(error, json) {
 
 			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
 					dateFormat);
-		}
+
+		}// END: hasTime check
 
 		// ---DATA LAYERS---//
 
@@ -552,42 +550,6 @@ d3.json("data/data.json", function ready(error, json) {
 			generateLabels(locations);
 
 		}// END: null check
-
-		// function readynow(error, world) {
-		//
-		// populateMapPanels(world.mapAttributes);
-		//
-		// generateWorldLayer(world);
-		// // mapRendered = true;
-		//
-		// // ---TIME SLIDER---//
-		//
-		// initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-		// dateFormat);
-		//
-		// // put slider at the end of timeLine, everything painted
-		// timeSlider.value(sliderEndValue);
-		//
-		// updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
-		// dateFormat);
-		//
-		// // ---DATA LAYERS---//
-		//
-		// initializeLayers(layers, pointAttributes, lineAttributes);
-		//
-		// // ---LOCATIONS---//
-		//
-		// var locations = json.locations;
-		// if (typeof(locations) != 'undefined') {
-		//
-		// generateLocations(locations);
-		// generateLabels(locations);
-		//
-		// }// END: null check
-		//
-		// }// END: readynow
-		//
-		// queue().defer(d3.json, "data/world.geojson").await(readynow);
 
 	} else {
 
@@ -625,6 +587,7 @@ d3.json("data/data.json", function ready(error, json) {
 	}// END: mapRendered check
 
 	populateExportPanel();
+	populateToggleLayers();
 
 } // END: function
 );

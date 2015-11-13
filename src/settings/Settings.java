@@ -4,7 +4,7 @@ import settings.parsing.BayesFactorsSettings;
 import settings.parsing.ContinuousTreeSettings;
 import settings.parsing.DiscreteTreeSettings;
 import settings.parsing.TimeSlicerSettings;
-import settings.reading.JsonReaderSettings;
+import settings.reading.JsonMergerSettings;
 import settings.rendering.D3RendererSettings;
 import settings.rendering.KmlRendererSettings;
 
@@ -13,7 +13,7 @@ public class Settings {
 	// ---MODES---//
 
 	public boolean parse = false;
-	public boolean read = false;
+	public boolean merge = false;
 	public boolean render = false;
 
 	// ---PARSERS---//
@@ -40,6 +40,6 @@ public class Settings {
 
 	// ---READERS---//
 
-	public JsonReaderSettings jsonReaderSettings = null;
+	public JsonMergerSettings jsonMergerSettings = null;
 
 }// END: class

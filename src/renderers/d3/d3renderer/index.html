@@ -204,6 +204,28 @@
 				</div>
 				<!-- END: panel-->
 
+
+				<div class="panel">
+					<h2>Toggle layer visibility</h2>
+					<div class="panelcontent">
+
+						<input type="checkbox" id="mapLayerCheckbox"> Map layer<br>
+						<!--  -->
+						<input type="checkbox" id="areasLayerCheckbox"> Polygons
+						layer<br>
+						<!--  -->
+						<input type="checkbox" id="pointsLayerCheckbox"> Points
+						layer<br>
+						<!--  -->
+						<input type="checkbox" id="linesLayerCheckbox"> Lines
+						layer<br>
+						<!--  -->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
 				<div class="panel">
 					<h2>Line color</h2>
 					<div class="panelcontent">
@@ -314,19 +336,18 @@
 				<!-- END: panel-->
 
 
-
 				<div class="panel">
 					<h2>Point area attribute</h2>
 					<div class="panelcontent">
 						<select id="pointAreaAttribute">
 						</select>
 						<!-- <div id="pointAreaLegend" class="legend"></div> -->
-						
+
 						<div class="wrapper">
-						<h4>Adjust</h4>
+							<h4>Adjust</h4>
 							<div id="pointAreaMultiplierSlider"></div>
 						</div>
-						
+
 					</div>
 				</div>
 				<!-- END: panel-->
@@ -341,6 +362,7 @@
 					</div>
 				</div>
 				<!-- END: panel-->
+
 
 				<div class="panel">
 					<h2>Polygon color attribute</h2>
@@ -366,15 +388,17 @@
 				</div>
 				<!-- END: panel-->
 
-				<!-- 				<div class="panel"> -->
-				<!-- 					<h2>Polygon color attribute</h2> -->
-				<!-- 					<div class="panelcontent"> -->
-				<!-- 						<select id="areacolor"> -->
-				<!-- 						</select> -->
-				<!-- 						<div id="areasColorLegend" class="legend"></div> -->
-				<!-- 					</div> -->
-				<!-- 				</div> -->
-				<!-- 				END: panel -->
+
+				<div class="panel">
+					<h2>Circular polygon color</h2>
+					<div class="panelcontent">
+						<select id="countFixedColor">
+						</select>
+						<div id="countFixedColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
 
 				<div class="panel">
 					<h2>Map fill</h2>
@@ -385,6 +409,7 @@
 					</div>
 				</div>
 				<!-- END: panel-->
+
 
 				<div class="panel">
 					<h2>Map fill attribute</h2>
@@ -412,6 +437,20 @@
 
 
 				<div class="panel">
+					<h2>Map fill opacity</h2>
+					<div class="panelcontent">
+
+						<div class="wrapper">
+							<div id="mapFixedOpacitySlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
 					<h2>Background color</h2>
 					<div class="panelcontent">
 						<select id="mapbackground">
@@ -420,6 +459,7 @@
 					</div>
 				</div>
 				<!-- END: panel-->
+
 
 				<div class="panel">
 					<h2>Label color</h2>
