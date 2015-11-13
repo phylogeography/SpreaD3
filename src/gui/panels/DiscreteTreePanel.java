@@ -253,7 +253,7 @@ public class DiscreteTreePanel extends SpreadPanel {
 							.addActionListener(new ListenOpenLocationCoordinatesEditor());
 
 					addComponentWithLabel(
-							"Setup location attribute coordinates:",
+							"Setup location coordinates:",
 							setupLocationCoordinates);
 
 					setupLocationCoordinatesCreated = true;
