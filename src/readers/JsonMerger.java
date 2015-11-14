@@ -14,6 +14,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import settings.reading.JsonMergerSettings;
 import structure.data.Attribute;
 import structure.data.AxisAttributes;
@@ -24,12 +27,8 @@ import structure.data.TimeLine;
 import structure.data.attributable.Area;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
-import structure.data.primitive.Polygon;
 import structure.geojson.GeoJsonData;
 import utils.Utils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class JsonMerger {
 
@@ -85,9 +84,9 @@ public class JsonMerger {
 		Set<Attribute> lineAttributes = null;
 		Set<Attribute> pointAttributes = null;
 		Set<Location> locations = null;
-		LinkedList<Layer> layers = null;
-
-		GeoJsonData geojson = null;
+		
+		LinkedList<Layer> layers = new LinkedList<Layer>();
+//		GeoJsonData geojson = null;
 		List<Point> counts = null;
 		List<Point> points = null;
 		List<Line> lines = null;
@@ -136,53 +135,52 @@ public class JsonMerger {
 			// --- MAP ATTRIBUTES---//
 
 			if (settings.pointsFiles != null) {
-			if (Arrays.asList(settings.geojsonFile).contains(file)) {
+				if (Arrays.asList(settings.geojsonFile).contains(file)) {
 
-				if (!mapAttributesCreated) {
+					if (!mapAttributesCreated) {
 
-					if (json.getMapAttributes() != null) {
+						if (json.getMapAttributes() != null) {
 
-						mapAttributes = new HashSet<Attribute>();
-						mapAttributes.addAll(json.getMapAttributes());
-						mapAttributesCreated = true;
-					}
+							mapAttributes = new HashSet<Attribute>();
+							mapAttributes.addAll(json.getMapAttributes());
+							mapAttributesCreated = true;
+						}
 
-				} else {
+					} else {
 
-					if (json.getMapAttributes() != null) {
-						mapAttributes.addAll(json.getMapAttributes());
-					}
+						if (json.getMapAttributes() != null) {
+							mapAttributes.addAll(json.getMapAttributes());
+						}
 
-				} // END: first check
+					} // END: first check
 
-			} // END: map check
-		}//END: null check
-			
+				} // END: map check
+			} // END: null check
+
 			// --- POINT ATTRIBUTES---//
 
 			if (settings.pointsFiles != null) {
-			if (Arrays.asList(settings.pointsFiles).contains(file)) {
+				if (Arrays.asList(settings.pointsFiles).contains(file)) {
 
-				if (!pointAttributesCreated) {
+					if (!pointAttributesCreated) {
 
-					if (json.getPointAttributes() != null) {
-						pointAttributes = new HashSet<Attribute>();
-						pointAttributes.addAll(json.getPointAttributes());
-						pointAttributesCreated = true;
-					}
+						if (json.getPointAttributes() != null) {
+							pointAttributes = new HashSet<Attribute>();
+							pointAttributes.addAll(json.getPointAttributes());
+							pointAttributesCreated = true;
+						}
 
-				} else {
+					} else {
 
-					if (json.getPointAttributes() != null) {
-						pointAttributes.addAll(json.getPointAttributes());
-					}
+						if (json.getPointAttributes() != null) {
+							pointAttributes.addAll(json.getPointAttributes());
+						}
 
-				} // END: first check
+					} // END: first check
 
-			} // END: get check
-		}//END: null check
-		
-		
+				} // END: get check
+			} // END: null check
+
 			// --- LINE ATTRIBUTES---//
 
 			if (settings.linesFiles != null) {
@@ -207,39 +205,22 @@ public class JsonMerger {
 				} // END: get map check
 			} // END: null check
 
-			//---GEOJSON---//
-			
+			// ---GEOJSON LAYER---//
+
 			if (settings.geojsonFile != null) {
-			if (Arrays.asList(settings.geojsonFile).contains(file)) {
+				if (Arrays.asList(settings.geojsonFile).contains(file)) {
 
-				for (Layer layer : json.getLayers()) {
-					if (layer.getType().equals(Layer.Type.map)) {
-						geojson = layer.getGeojson();
-					}
-				} // END: layers loop
-				
-//				geojson = json.getLayers().
-				
-//				if (!pointAttributesCreated) {
-//
-//					if (json.getPointAttributes() != null) {
-//						pointAttributes = new HashSet<Attribute>();
-//						pointAttributes.addAll(json.getPointAttributes());
-//						pointAttributesCreated = true;
-//					}
-//
-//				} else {
-//
-//					if (json.getPointAttributes() != null) {
-//						pointAttributes.addAll(json.getPointAttributes());
-//					}
-//
-//				} // END: first check
+					for (Layer layer : json.getLayers()) {
+						if (layer.getType().equalsIgnoreCase(Layer.Type.map.toString()) ) {
+							
+							layers.add(layer);
+							
+						}
+					} // END: layers loop
 
-			} // END: get check
-		}//END: null check
-			
-			
+				} // END: get check
+			} // END: null check
+
 			// --- LOCATIONS LIST---//
 
 			if (!locationsCreated) {
@@ -390,21 +371,19 @@ public class JsonMerger {
 
 		// ---LAYERS---//
 
-		layers = new LinkedList<Layer>();
 
-		String geojsonLayerId = Utils.splitString(settings.geojsonFile, "/");
-		Layer mapLayer = new Layer(geojsonLayerId, "GeoJson layer", geojson);
-		layers.add(mapLayer);
-		
+//		String geojsonLayerId = Utils.splitString(settings.geojsonFile, "/");
+//		Layer mapLayer = new Layer(geojsonLayerId, "GeoJson layer", geojson);
+//		layers.add(mapLayer);
+
 		Layer treeLayer = new Layer("id", "Tree Layer", points, lines, areas);
 		layers.add(treeLayer);
-		
-		Layer countsLayer = new Layer("id", "Counts layer", counts);
-		layers.add(countsLayer);
 
-		
-		
-		
+		if (counts != null) {
+			Layer countsLayer = new Layer("id", "Counts layer", counts);
+			layers.add(countsLayer);
+		}
+
 		// ---SPREAD DATA---//
 
 		LinkedList<Attribute> mapAttributesList = null;
