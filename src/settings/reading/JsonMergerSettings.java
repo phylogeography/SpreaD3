@@ -1,5 +1,9 @@
 package settings.reading;
 
+import java.util.LinkedList;
+
+import gui.JsonTableRecord;
+
 public class JsonMergerSettings {
 
 	public String[] pointsFiles = null;
@@ -17,4 +21,9 @@ public class JsonMergerSettings {
 
 	public String outputFilename = "output.json";
 
+	//---GUI---//
+	
+	public  LinkedList<JsonTableRecord> recordsList = new LinkedList<JsonTableRecord>();
+	
+	
 }// END: class

@@ -27,8 +27,6 @@ import structure.data.TimeLine;
 import structure.data.attributable.Area;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
-import structure.geojson.GeoJsonData;
-import utils.Utils;
 
 public class JsonMerger {
 
@@ -113,6 +111,7 @@ public class JsonMerger {
 			SpreadData json = gson.fromJson(reader, SpreadData.class);
 
 			// ---TIME LINE---//
+			
 			if (!timeLineCreated) {
 
 				timeLine = json.getTimeLine();
@@ -372,10 +371,7 @@ public class JsonMerger {
 		// ---LAYERS---//
 
 
-//		String geojsonLayerId = Utils.splitString(settings.geojsonFile, "/");
-//		Layer mapLayer = new Layer(geojsonLayerId, "GeoJson layer", geojson);
-//		layers.add(mapLayer);
-
+//		String id = Utils.splitString(settings.geojsonFile, "/");
 		Layer treeLayer = new Layer("id", "Tree Layer", points, lines, areas);
 		layers.add(treeLayer);
 

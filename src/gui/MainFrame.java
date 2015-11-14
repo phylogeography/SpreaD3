@@ -30,6 +30,9 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 	private DataPanel dataPanel;
 	private final String RENDERING_TAB_NAME = "Rendering";
 	private RenderingPanel renderingPanel;
+	private final String MERGE_TAB_NAME = "Merge";
+	private MergePanel mergePanel;
+	
 	
 	// labels
 	private JLabel statusLabel;
@@ -58,6 +61,9 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		
 		renderingPanel = new RenderingPanel(this);
 		tabbedPane.addTab(RENDERING_TAB_NAME, null, renderingPanel);
+		
+		mergePanel = new MergePanel(this);
+		tabbedPane.addTab(MERGE_TAB_NAME, null, mergePanel);
 		
 		statusLabel = new JLabel(FortuneCookies.nextCookie());
 
