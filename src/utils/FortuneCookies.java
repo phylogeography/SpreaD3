@@ -110,7 +110,12 @@ public class FortuneCookies {
 "Bruce Campbell Slays Deadites and Slings One-liners",
 "Alright you Primitive Screwheads, listen up! You see this? This... is my boomstick! The twelve-gauge double-barreled Remington. S-Mart's top of the line.",
 "Come get some.",
-"Name's Ash. [cocks rifle]. Housewares."
+"Name's Ash. [cocks rifle]. Housewares.",
+
+// ---DOC BROWN ---//
+
+"Great Scott!",
+
 
 	};
 
