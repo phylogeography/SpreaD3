@@ -8,7 +8,9 @@ public class JsonMergerSettings {
 
 	public String[] areasFiles = null;
 
-	public String[] geojsonFiles = null;
+	public String[] countsFiles = null;
+	
+	public String geojsonFile = null;
 	
 	// there can be only one
 	public String axisAttributesFile = null;

@@ -82,6 +82,10 @@ public class SpreadData {
 		return timeLine;
 	}
 
+	public boolean hasLocations() {
+		return locations != null ? true : false;
+	}
+	
 	public LinkedList<Location> getLocations() {
 		return locations;
 	}

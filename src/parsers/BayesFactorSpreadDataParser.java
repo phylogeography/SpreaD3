@@ -98,7 +98,7 @@ public class BayesFactorSpreadDataParser {
 
 		String bfLayerId = Utils.splitString(settings.logFilename, "/");
 		Layer bfLayer = new Layer(bfLayerId, //
-				"Bayes factors visualisation", //
+				"BF graph layer", // 
 				pointsList, //
 				linesList //
 		);

@@ -147,6 +147,7 @@ public class Spread2ConsoleApp {
 	private static final String POINTS = "points";
 	private static final String LINES = "lines";
 	private static final String AREAS = "areas";
+	private static final String COUNTS = "counts";
 	private static final String AXIS_ATTRIBUTES = "axisAttributes";
 
 	public Spread2ConsoleApp() {
@@ -476,8 +477,11 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(AXIS_ATTRIBUTES, "",
 								"if no geojson layer, which JSON has valid axis attributes"),
 
-						new Arguments.StringArrayOption(GEOJSON, -1, "",
-								"json file names with map map layers to read to read"),
+						new Arguments.StringOption(GEOJSON,  "",
+								"json file name with geojson map layer to read"),
+
+						new Arguments.StringArrayOption(COUNTS, -1, "",
+								"json file names with circular polygons layers to read"),
 
 						new Arguments.StringOption(OUTPUT, "",
 								"json output file name")
@@ -1122,16 +1126,21 @@ public class Spread2ConsoleApp {
 							.getStringArrayOption(AREAS);
 				}
 
+				if (jsonMergerArguments.hasOption(COUNTS)) {
+					settings.jsonMergerSettings.countsFiles = jsonMergerArguments
+							.getStringArrayOption(COUNTS);
+				}
+
 				if (jsonMergerArguments.hasOption(AXIS_ATTRIBUTES)) {
 					settings.jsonMergerSettings.axisAttributesFile = jsonMergerArguments
 							.getStringOption(AXIS_ATTRIBUTES);
 				}
 
 				if (jsonMergerArguments.hasOption(GEOJSON)) {
-					settings.jsonMergerSettings.geojsonFiles = jsonMergerArguments
-							.getStringArrayOption(GEOJSON);
+					settings.jsonMergerSettings.geojsonFile = jsonMergerArguments
+							.getStringOption(GEOJSON);
 				}
-				
+
 				if (jsonMergerArguments.hasOption(OUTPUT)) {
 
 					settings.jsonMergerSettings.outputFilename = jsonMergerArguments

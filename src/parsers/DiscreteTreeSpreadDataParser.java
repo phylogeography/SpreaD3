@@ -108,7 +108,7 @@ public class DiscreteTreeSpreadDataParser {
 
 		String countsLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer countsLayer = new Layer(countsLayerId, //
-				"Lineages holding the state", //
+				"Counts layer", //
 				countsList //
 		);
 
@@ -123,7 +123,7 @@ public class DiscreteTreeSpreadDataParser {
 
 		String treeLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer treeLayer = new Layer(treeLayerId, //
-				"Discrete tree visualisation", //
+				"Tre layer", //
 				pointsList, //
 				linesList //
 		);

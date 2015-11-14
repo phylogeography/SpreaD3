@@ -3,9 +3,11 @@ package readers;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.joda.time.LocalDate;
@@ -19,8 +21,11 @@ import structure.data.Layer;
 import structure.data.Location;
 import structure.data.SpreadData;
 import structure.data.TimeLine;
+import structure.data.attributable.Area;
 import structure.data.attributable.Line;
+import structure.data.attributable.Point;
 import structure.data.primitive.Polygon;
+import structure.geojson.GeoJsonData;
 import utils.Utils;
 
 import com.google.gson.Gson;
@@ -43,28 +48,36 @@ public class JsonMerger {
 		// compile a unique list of files
 		Set<String> jsonFiles = new HashSet<String>();
 
-		for (String file : settings.pointsFiles) {
-			jsonFiles.add(file);
-		}
+		if (settings.pointsFiles != null) {
+			for (String file : settings.pointsFiles) {
+				jsonFiles.add(file);
+			}
+		} // END: null check
 
-		for (String file : settings.linesFiles) {
-			jsonFiles.add(file);
-		}
+		if (settings.linesFiles != null) {
+			for (String file : settings.linesFiles) {
+				jsonFiles.add(file);
+			}
+		} // END: null check
 
-		for (String file : settings.areasFiles) {
-			jsonFiles.add(file);
-		}
+		if (settings.areasFiles != null) {
+			for (String file : settings.areasFiles) {
+				jsonFiles.add(file);
+			}
+		} // END: null check
 
-		for (String file : settings.geojsonFiles) {
-			jsonFiles.add(file);
-		}
+		if (settings.countsFiles != null) {
+			for (String file : settings.countsFiles) {
+				jsonFiles.add(file);
+			}
+		} // END: null check
 
+		jsonFiles.add(settings.geojsonFile);
 		jsonFiles.add(settings.axisAttributesFile);
 
 		// Utils.printArray(jsonFiles.toArray());
 
-		DateTimeFormatter dateFormatter = DateTimeFormat
-				.forPattern("yyyy/MM/dd");
+		DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("yyyy/MM/dd");
 
 		TimeLine timeLine = null;
 		AxisAttributes axisAttributes = null;
@@ -74,10 +87,25 @@ public class JsonMerger {
 		Set<Location> locations = null;
 		LinkedList<Layer> layers = null;
 
+		GeoJsonData geojson = null;
+		List<Point> counts = null;
+		List<Point> points = null;
+		List<Line> lines = null;
+		List<Area> areas = null;
+
+		// Layer: map
+		// Layer: tree
+		// Layer: counts
+
 		boolean timeLineCreated = false;
 		boolean mapAttributesCreated = false;
 		boolean pointAttributesCreated = false;
 		boolean lineAttributesCreated = false;
+		boolean locationsCreated = false;
+		boolean linesListCreated = false;
+		boolean pointsListCreated = false;
+		boolean areasListCreated = false;
+		boolean countsListCreated = false;
 
 		for (String file : jsonFiles) {
 
@@ -95,10 +123,9 @@ public class JsonMerger {
 
 			} else {
 
-				timeLine = compareTimeLines(timeLine, json.getTimeLine(),
-						dateFormatter);
+				timeLine = compareTimeLines(timeLine, json.getTimeLine(), dateFormatter);
 
-			}// END: first check
+			} // END: first check
 
 			// ---AXIS ATTRIBUTES---//
 
@@ -108,86 +135,276 @@ public class JsonMerger {
 
 			// --- MAP ATTRIBUTES---//
 
-			if (Arrays.asList(settings.geojsonFiles).contains(file)) {
+			if (settings.pointsFiles != null) {
+			if (Arrays.asList(settings.geojsonFile).contains(file)) {
 
 				if (!mapAttributesCreated) {
-					mapAttributes = new HashSet<Attribute>();
-					mapAttributes.addAll(json.getMapAttributes());
 
-					if (mapAttributes != null) {
+					if (json.getMapAttributes() != null) {
+
+						mapAttributes = new HashSet<Attribute>();
+						mapAttributes.addAll(json.getMapAttributes());
 						mapAttributesCreated = true;
 					}
 
 				} else {
-					mapAttributes.addAll(json.getMapAttributes());
-				}// END: first check
 
-			}// END: map check
+					if (json.getMapAttributes() != null) {
+						mapAttributes.addAll(json.getMapAttributes());
+					}
 
+				} // END: first check
+
+			} // END: map check
+		}//END: null check
+			
 			// --- POINT ATTRIBUTES---//
 
+			if (settings.pointsFiles != null) {
 			if (Arrays.asList(settings.pointsFiles).contains(file)) {
 
 				if (!pointAttributesCreated) {
 
-					pointAttributes = new HashSet<Attribute>();
-					pointAttributes.addAll(json.getPointAttributes());
-
-					if (pointAttributes != null) {
+					if (json.getPointAttributes() != null) {
+						pointAttributes = new HashSet<Attribute>();
+						pointAttributes.addAll(json.getPointAttributes());
 						pointAttributesCreated = true;
 					}
 
 				} else {
-					pointAttributes.addAll(json.getPointAttributes());
-				}// END: first check
 
-			}// END: map check
-
-			// --- LINE ATTRIBUTES---//
-
-			if (Arrays.asList(settings.linesFiles).contains(file)) {
-
-				if (!lineAttributesCreated) {
-
-					lineAttributes = new HashSet<Attribute>();
-					lineAttributes.addAll(json.getLineAttributes());
-
-					if (mapAttributes != null) {
-						lineAttributesCreated = true;
+					if (json.getPointAttributes() != null) {
+						pointAttributes.addAll(json.getPointAttributes());
 					}
 
-				} else {
-					lineAttributes.addAll(json.getLineAttributes());
-				}// END: first check
+				} // END: first check
 
-			}// END: map check
+			} // END: get check
+		}//END: null check
+		
+		
+			// --- LINE ATTRIBUTES---//
 
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		}// END: json loop
+			if (settings.linesFiles != null) {
+				if (Arrays.asList(settings.linesFiles).contains(file)) {
 
+					if (!lineAttributesCreated) {
+
+						if (json.getLineAttributes() != null) {
+							lineAttributes = new HashSet<Attribute>();
+							lineAttributes.addAll(json.getLineAttributes());
+							lineAttributesCreated = true;
+						}
+
+					} else {
+
+						if (json.getLineAttributes() != null) {
+							lineAttributes.addAll(json.getLineAttributes());
+						}
+
+					} // END: first check
+
+				} // END: get map check
+			} // END: null check
+
+			//---GEOJSON---//
+			
+			if (settings.geojsonFile != null) {
+			if (Arrays.asList(settings.geojsonFile).contains(file)) {
+
+				for (Layer layer : json.getLayers()) {
+					if (layer.getType().equals(Layer.Type.map)) {
+						geojson = layer.getGeojson();
+					}
+				} // END: layers loop
+				
+//				geojson = json.getLayers().
+				
+//				if (!pointAttributesCreated) {
+//
+//					if (json.getPointAttributes() != null) {
+//						pointAttributes = new HashSet<Attribute>();
+//						pointAttributes.addAll(json.getPointAttributes());
+//						pointAttributesCreated = true;
+//					}
+//
+//				} else {
+//
+//					if (json.getPointAttributes() != null) {
+//						pointAttributes.addAll(json.getPointAttributes());
+//					}
+//
+//				} // END: first check
+
+			} // END: get check
+		}//END: null check
+			
+			
+			// --- LOCATIONS LIST---//
+
+			if (!locationsCreated) {
+
+				if (json.hasLocations()) {
+					locations = new HashSet<Location>();
+					locations.addAll(json.getLocations());
+					locationsCreated = true;
+				}
+
+			} else {
+
+				if (json.getLocations() != null) {
+					locations.addAll(json.getLocations());
+				}
+
+			} // END: first check
+
+			// --- LINES LIST---//
+
+			if (settings.linesFiles != null) {
+				if (Arrays.asList(settings.linesFiles).contains(file)) {
+
+					if (!linesListCreated) {
+
+						lines = new ArrayList<Line>();
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.hasLines()) {
+								lines.addAll(layer.getLines());
+							}
+						} // END: layers loop
+
+						if (lines.size() != 0) {
+							linesListCreated = true;
+						}
+
+					} else {
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.hasLines()) {
+								lines.addAll(layer.getLines());
+							}
+						} // END: layers loop
+
+					} // END: first check
+
+				} // END: get lines check
+			} // END: null check
+
+			// --- POINTS LIST---//
+
+			if (settings.pointsFiles != null) {
+				if (Arrays.asList(settings.pointsFiles).contains(file)) {
+
+					if (!pointsListCreated) {
+
+						points = new ArrayList<Point>();
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.hasLines()) {
+								points.addAll(layer.getPoints());
+							}
+						} // END: layers loop
+
+						if (points.size() != 0) {
+							pointsListCreated = true;
+						}
+
+					} else {
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.hasPoints()) {
+								points.addAll(layer.getPoints());
+							}
+						} // END: layers loop
+
+					} // END: first check
+
+				} // END: get points check
+			} // END: null check
+
+			// --- AREAS LIST---//
+
+			if (settings.areasFiles != null) {
+				if (Arrays.asList(settings.areasFiles).contains(file)) {
+
+					if (!areasListCreated) {
+
+						areas = new ArrayList<Area>();
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.hasAreas()) {
+								areas.addAll(layer.getAreas());
+							}
+						} // END: layers loop
+
+						if (areas.size() != 0) {
+							areasListCreated = true;
+						}
+
+					} else {
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.hasAreas()) {
+								areas.addAll(layer.getAreas());
+							}
+						} // END: layers loop
+
+					} // END: first check
+
+				} // END: get areas check
+			} // END: null check
+
+			// --- COUNTS LIST---//
+
+			if (settings.countsFiles != null) {
+				if (Arrays.asList(settings.countsFiles).contains(file)) {
+
+					if (!countsListCreated) {
+
+						counts = new ArrayList<Point>();
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.getType().equals(Layer.Type.counts)) {
+								counts.addAll(layer.getPoints());
+							}
+						} // END: layers loop
+
+						if (counts.size() != 0) {
+							countsListCreated = true;
+						}
+
+					} else {
+
+						for (Layer layer : json.getLayers()) {
+							if (layer.getType().equals(Layer.Type.counts)) {
+								counts.addAll(layer.getPoints());
+							}
+						} // END: layers loop
+
+					} // END: first check
+
+				} // END: get counts check
+			} // END: null check
+
+		} // END: json loop
+
+		// ---LAYERS---//
+
+		layers = new LinkedList<Layer>();
+
+		String geojsonLayerId = Utils.splitString(settings.geojsonFile, "/");
+		Layer mapLayer = new Layer(geojsonLayerId, "GeoJson layer", geojson);
+		layers.add(mapLayer);
+		
+		Layer treeLayer = new Layer("id", "Tree Layer", points, lines, areas);
+		layers.add(treeLayer);
+		
+		Layer countsLayer = new Layer("id", "Counts layer", counts);
+		layers.add(countsLayer);
+
+		
+		
+		
 		// ---SPREAD DATA---//
 
 		LinkedList<Attribute> mapAttributesList = null;
@@ -221,25 +438,20 @@ public class JsonMerger {
 		return data;
 	}// END: merge
 
-	private TimeLine compareTimeLines(TimeLine current, TimeLine candidate,
-			DateTimeFormatter dateFormatter) {
+	private TimeLine compareTimeLines(TimeLine current, TimeLine candidate, DateTimeFormatter dateFormatter) {
 
 		TimeLine timeLine = null;
 
-		LocalDate currentStart = dateFormatter.parseLocalDate(current
-				.getStartTime());
-		LocalDate candidateStart = dateFormatter.parseLocalDate(candidate
-				.getStartTime());
+		LocalDate currentStart = dateFormatter.parseLocalDate(current.getStartTime());
+		LocalDate candidateStart = dateFormatter.parseLocalDate(candidate.getStartTime());
 
 		String newStartTime = dateFormatter.print(currentStart);
 		if (candidateStart.isBefore(currentStart)) {
 			newStartTime = dateFormatter.print(candidateStart);
 		}
 
-		LocalDate currentEnd = dateFormatter.parseLocalDate(current
-				.getEndTime());
-		LocalDate candidateEnd = dateFormatter.parseLocalDate(candidate
-				.getEndTime());
+		LocalDate currentEnd = dateFormatter.parseLocalDate(current.getEndTime());
+		LocalDate candidateEnd = dateFormatter.parseLocalDate(candidate.getEndTime());
 
 		String newEndTime = dateFormatter.print(currentEnd);
 		if (candidateEnd.isAfter(currentEnd)) {
@@ -250,96 +462,5 @@ public class JsonMerger {
 
 		return timeLine;
 	}// END: compareTimeLines
-
-	// public SpreadData merge() throws FileNotFoundException {
-	//
-	// TimeLine timeLine = null;
-	// LinkedList<Location> locationsList = null;
-	// LinkedList<Line> linesList = null;
-	// LinkedList<Polygon> polygonsList = null;
-	// String name = "";
-	//
-	// // ---TIME LINE---//
-	//
-	//
-	// // ---LOCATIONS---//
-	//
-	// if (settings.points != null) {
-	// locationsList = new LinkedList<Location>();
-	//
-	// System.out.println("Reading locations");
-	//
-	// for (int i = 0; i < settings.points.length; i++) {
-	//
-	// Reader reader = new FileReader(settings.points[i]);
-	// name += settings.points[i];
-	//
-	// Gson gson = new GsonBuilder().create();
-	// SpreadData input = gson.fromJson(reader, SpreadData.class);
-	//
-	// locationsList.addAll(input.getLocations());
-	//
-	// }
-	// }// END: null check
-	//
-	// // ---LINES---//
-	//
-	// if (settings.lines != null) {
-	// linesList = new LinkedList<Line>();
-	//
-	// System.out.println("Reading lines");
-	//
-	// for (int i = 0; i < settings.lines.length; i++) {
-	//
-	// Reader reader = new FileReader(settings.lines[i]);
-	// name += settings.lines[i];
-	//
-	// Gson gson = new GsonBuilder().create();
-	// SpreadData input = gson.fromJson(reader, SpreadData.class);
-	//
-	// for (Layer layer : input.getLayers()) {
-	//
-	// linesList.addAll(layer.getLines());
-	//
-	// }
-	//
-	// }
-	// }// END: null check
-	//
-	// // ---POLYGONS---//
-	//
-	// if (settings.areas != null) {
-	// polygonsList = new LinkedList<Polygon>();
-	//
-	// System.out.println("Reading polygons");
-	//
-	// for (int i = 0; i < settings.areas.length; i++) {
-	//
-	// Reader reader = new FileReader(settings.areas[i]);
-	// name += settings.areas[i];
-	//
-	// Gson gson = new GsonBuilder().create();
-	// SpreadData input = gson.fromJson(reader, SpreadData.class);
-	//
-	// for (Layer layer : input.getLayers()) {
-	//
-	// // polygonsList.addAll(layer.getPolygons());
-	//
-	// }
-	//
-	// }
-	// }// END: null check
-	//
-	// LinkedList<Layer> layersList = new LinkedList<Layer>();
-	//
-	// // Layer layer = new Layer(name, "merged visualisation", linesList,
-	// // polygonsList);
-	// // layersList.add(layer);
-	//
-	// SpreadData data=null;// = new SpreadData(timeLine, locationsList,
-	// layersList);
-	//
-	// return data;
-	// }// END: merge
 
 }// END: class

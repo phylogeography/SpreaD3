@@ -97,7 +97,7 @@ public class ContinuousTreeSpreadDataParser {
 
 		String treeLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer treeLayer = new Layer(treeLayerId, //
-				"Continuous tree visualisation", //
+				"Tree layer", //
 				pointsList, //
 				linesList, //
 				areasList);

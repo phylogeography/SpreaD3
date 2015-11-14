@@ -106,13 +106,13 @@ public class Layer {
 
 	public Layer(String id, //
 			String description, //
-			GeoJsonData map //
+			GeoJsonData geojson //
 	) {
 
 		this.type = Type.map;
 		this.id = id;
 		this.description = description;
-		this.geojson = map;
+		this.geojson = geojson;
 
 		this.points = null;
 		this.lines = null;

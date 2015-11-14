@@ -127,7 +127,7 @@ public class TimeSlicerSpreadDataParser {
 
 		String contoursLayerId = Utils.splitString(settings.treesFilename, "/");
 		Layer contoursLayer = new Layer(contoursLayerId, //
-				"Contour visualisation", //
+				"Density contour layer", //
 				null, //
 				null, //
 				areasList //
