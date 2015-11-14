@@ -9,7 +9,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import jam.framework.Exportable;
@@ -94,43 +93,32 @@ public class MergePanel extends JPanel implements Exportable {
 	private void setJSONColumn() {
 
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.JSON_INDEX);
-		// // pass dataList for labels on buttons
-		column.setCellRenderer(new JTableButtonCellRenderer(
-		// dataList, TreesTableModel.TAXA_SET_INDEX
-		));
-//		column.setCellEditor(new JTableButtonCellEditor());
+		column.setCellRenderer(new JTableButtonCellRenderer(this.settings.recordsList));
 
 	}// END: setJSONColumn
 
 	private void setPointsColumn() {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.POINTS_INDEX);
-//		column.setCellRenderer(new JTableCheckboxCellRenderer());
-		
 	}// END: setPointsColumn
 
 	private void setLinesColumn() {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.LINES_INDEX);
-//		column.setCellRenderer(new JTableCheckboxCellRenderer());
-		
 	}// END: setLinesColumn
 
 	private void setAreasColumn() {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.AREAS_INDEX);
-//		column.setCellRenderer(new JTableCheckboxCellRenderer());
 	}// END: setAreasColumn
 
 	private void setCountsColumn() {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.COUNTS_INDEX);
-//		column.setCellRenderer(new JTableCheckboxCellRenderer());
 	}// END: setCountsColumn
-	
+
 	private void setGeojsonColumn() {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.GEOJSON_INDEX);
-//		column.setCellRenderer(new JTableCheckboxCellRenderer());
 	}// END: setGeojsonColumn
 
 	private void adjustTable() {
-		
+
 		rowCount = settings.recordsList.size();
 		addJsonAction.setEnabled(true);
 		if (rowCount == 1) {

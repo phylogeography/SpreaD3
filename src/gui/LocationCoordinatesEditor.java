@@ -35,10 +35,13 @@ import structure.data.primitive.Coordinate;
 import utils.Utils;
 import exceptions.AnalysisException;
 
+/**
+ * @author Filip Bielejec
+ * @version $Id$
+ */
 public class LocationCoordinatesEditor {
 
 	private MainFrame frame;
-	// private DiscreteTreeSettings settings;
 
 	// Window
 	private JDialog window;
@@ -61,22 +64,14 @@ public class LocationCoordinatesEditor {
 	private LinkedList<Location> locationsList;
 	private boolean locationsEdited = false;
 
-	public LocationCoordinatesEditor(MainFrame frame
-	// DiscreteTreeSettings settings
-	) {
+	public LocationCoordinatesEditor(MainFrame frame) {
 
 		this.frame = frame;
-		// this.settings = settings;
 
 		// Setup Main Menu buttons
 		load = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
 		save = new JButton("Save", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 		done = new JButton("Done", InterfaceUtils.createImageIcon(InterfaceUtils.CHECK_ICON));
-
-		// // Add Main Menu buttons listeners
-		// load.addActionListener(new ListenLoad());
-		// save.addActionListener(new ListenSave());
-		// done.addActionListener(new ListenDone());
 
 		// Setup menu
 		menu = new JMenuBar();
