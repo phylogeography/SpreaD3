@@ -477,7 +477,7 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(AXIS_ATTRIBUTES, "",
 								"if no geojson layer, which JSON has valid axis attributes"),
 
-						new Arguments.StringOption(GEOJSON,  "",
+						new Arguments.StringArrayOption(GEOJSON, -1, "",
 								"json file name with geojson map layer to read"),
 
 						new Arguments.StringArrayOption(COUNTS, -1, "",
@@ -1137,8 +1137,8 @@ public class Spread2ConsoleApp {
 				}
 
 				if (jsonMergerArguments.hasOption(GEOJSON)) {
-					settings.jsonMergerSettings.geojsonFile = jsonMergerArguments
-							.getStringOption(GEOJSON);
+					settings.jsonMergerSettings.geojsonFiles = jsonMergerArguments
+							.getStringArrayOption(GEOJSON);
 				}
 
 				if (jsonMergerArguments.hasOption(OUTPUT)) {
