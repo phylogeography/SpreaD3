@@ -22,8 +22,9 @@ public class JsonTableModel extends AbstractTableModel {
 	public static final int COUNTS_INDEX = 4;
 	public static final int GEOJSON_INDEX = 5;
 	public static final int AXIS_INDEX = 6;
-	
-	public static String[] COLUMN_NAMES = { "JSON file", "Points", "Lines", "Areas", "Counts", "GeoJSON", "Axis attibutes" };
+
+	public static String[] COLUMN_NAMES = { "JSON file", "Points", "Lines", "Areas", "Counts", "GeoJSON",
+			"Axis attibutes" };
 
 	private static final Class<?>[] COLUMN_TYPES = new Class<?>[] { JButton.class, // Json
 			Boolean.class, // Points
@@ -72,9 +73,17 @@ public class JsonTableModel extends AbstractTableModel {
 			break;
 
 		case AXIS_INDEX:
+
+			// reset all rows
+			for (int r = 0; r < getRowCount(); r++) {
+				recordsList.get(r).setAxis(Boolean.FALSE);
+			}
+
+			// set this row
 			recordsList.get(row).setAxis((Boolean) value);
-			break;	
-			
+			fireTableDataChanged();
+			break;
+
 		default:
 			break;
 
@@ -108,8 +117,8 @@ public class JsonTableModel extends AbstractTableModel {
 			return recordsList.get(row).getGeojson();
 
 		case AXIS_INDEX:
-			return recordsList.get(row).getAxis();	
-			
+			return recordsList.get(row).getAxis();
+
 		default:
 			return "Error";
 		}
@@ -129,11 +138,8 @@ public class JsonTableModel extends AbstractTableModel {
 			return true;
 		case GEOJSON_INDEX:
 			return true;
-			
 		case AXIS_INDEX:
-			//TODO : editability
-			return true;	
-			
+			return true;
 		default:
 			return false;
 		}

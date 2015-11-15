@@ -1,45 +1,100 @@
 package test;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
-public class Test {
+/**
+ * @see http://stackoverflow.com/questions/7920068
+ * @see http://stackoverflow.com/questions/4526779
+ */
+public class Test extends JPanel {
 
-	public static void main(String[] args) {
+	private static final int CHECK_COL = 1;
+	private static final Object[][] DATA = { { "One", Boolean.FALSE }, { "Two", Boolean.FALSE },
+			{ "Three", Boolean.FALSE }, { "Four", Boolean.FALSE }, { "Five", Boolean.FALSE }, { "Six", Boolean.FALSE },
+			{ "Seven", Boolean.FALSE }, { "Eight", Boolean.FALSE }, { "Nine", Boolean.FALSE },
+			{ "Ten", Boolean.FALSE } };
+	private static final String[] COLUMNS = { "Number", "CheckBox" };
+	private DataModel dataModel = new DataModel(DATA, COLUMNS);
+	private JTable table = new JTable(dataModel);
+	private ControlPanel cp = new ControlPanel();
 
-		try {
+	public Test() {
+		super(new BorderLayout());
+		this.add(new JScrollPane(table));
+		this.add(cp, BorderLayout.SOUTH);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setPreferredScrollableViewportSize(new Dimension(250, 175));
+	}
 
-			int sliceCount = 10;
+	private class DataModel extends DefaultTableModel {
 
-			String startTime = "2010-01-01";
-			DateTime startDate = new DateTime(startTime);
-
-			String endTime = "2011-01-02";
-			DateTime endDate = new DateTime(endTime);
-
-			Interval interval = new Interval(startDate, endDate);
-			long millis = interval.toDurationMillis();
-			long segmentMillis = millis / (sliceCount - 1);
-			
-			System.out.println("startDate: " + new LocalDate(startDate).toString());
-			
-			for (int i = 0; i < sliceCount; i++) {
-
-				Duration duration = new Duration(segmentMillis * i );
-				System.out.println("\t" + new LocalDate(startDate.plus(duration)));
-				
-				
-			}
-
-			System.out.println("endDate: " + new LocalDate(endDate).toString());
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		public DataModel(Object[][] data, Object[] columnNames) {
+			super(data, columnNames);
 		}
 
-	}// END: main
+		@Override
+		public void setValueAt(Object aValue, int row, int col) {
+			if (col == CHECK_COL) {
+				for (int r = 0; r < getRowCount(); r++) {
+					super.setValueAt(false, r, CHECK_COL);
+				}
+			}
+			super.setValueAt(aValue, row, col);
+//			cp.button.setEnabled(any());
+		}
 
-}// END: class
+//		private boolean any() {
+//			boolean result = false;
+//			for (int r = 0; r < getRowCount(); r++) {
+//				Boolean b = (Boolean) getValueAt(r, CHECK_COL);
+//				result |= b;
+//			}
+//			return result;
+//		}
+
+		@Override
+		public Class<?> getColumnClass(int col) {
+			if (col == CHECK_COL) {
+				return getValueAt(0, CHECK_COL).getClass();
+			}
+			return super.getColumnClass(col);
+		}
+
+		@Override
+		public boolean isCellEditable(int row, int col) {
+			return col == CHECK_COL;
+		}
+	}
+
+	private class ControlPanel extends JPanel {
+
+//		JButton button = new JButton("Button");
+
+		public ControlPanel() {
+//			button.setEnabled(false);
+//			this.add(new JLabel("Selection:"));
+//			this.add(button);
+		}
+	}
+
+	private static void createAndShowUI() {
+		JFrame frame = new JFrame("CheckOne");
+		frame.add(new Test());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		java.awt.EventQueue.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				createAndShowUI();
+			}
+		});
+	}
+}
