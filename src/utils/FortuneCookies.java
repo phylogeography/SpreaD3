@@ -115,7 +115,7 @@ public class FortuneCookies {
 // ---DOC BROWN ---//
 
 "Great Scott!",
-
+"Please excuse the crudity of this model, I didn't have time to build it to scale or paint it",
 
 	};
 

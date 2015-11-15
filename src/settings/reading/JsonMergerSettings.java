@@ -23,7 +23,6 @@ public class JsonMergerSettings {
 
 	//---GUI---//
 	
-	public  LinkedList<JsonTableRecord> recordsList = new LinkedList<JsonTableRecord>();
-	
+	public LinkedList<JsonTableRecord> recordsList = new LinkedList<JsonTableRecord>();
 	
 }// END: class

@@ -69,14 +69,15 @@ public class JsonMerger {
 			}
 		} // END: null check
 
-		
 		if (settings.geojsonFiles != null) {
 			for (String file : settings.geojsonFiles) {
 				jsonFiles.add(file);
 			}
 		} // END: null check
-		
-		jsonFiles.add(settings.axisAttributesFile);
+
+		if (settings.axisAttributesFile != null) {
+			jsonFiles.add(settings.axisAttributesFile);
+		}
 
 		DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("yyyy/MM/dd");
 
@@ -86,13 +87,13 @@ public class JsonMerger {
 		Set<Attribute> lineAttributes = null;
 		Set<Attribute> pointAttributes = null;
 		Set<Location> locations = null;
-		
+
 		LinkedList<Layer> layers = new LinkedList<Layer>();
 		List<Point> counts = null;
 		List<Point> points = null;
 		List<Line> lines = null;
 		List<Area> areas = null;
-		
+
 		boolean timeLineCreated = false;
 		boolean mapAttributesCreated = false;
 		boolean pointAttributesCreated = false;
@@ -110,7 +111,7 @@ public class JsonMerger {
 			SpreadData json = gson.fromJson(reader, SpreadData.class);
 
 			// ---TIME LINE---//
-			
+
 			if (!timeLineCreated) {
 
 				timeLine = json.getTimeLine();
@@ -209,11 +210,11 @@ public class JsonMerger {
 				if (Arrays.asList(settings.geojsonFiles).contains(file)) {
 
 					for (Layer layer : json.getLayers()) {
-						if (layer.getType().equalsIgnoreCase(Layer.Type.map.toString()) ) {
-							
+						if (layer.getType().equalsIgnoreCase(Layer.Type.map.toString())) {
+
 							// add map layer
 							layers.add(layer);
-							
+
 						}
 					} // END: layers loop
 
@@ -370,8 +371,7 @@ public class JsonMerger {
 
 		// ---LAYERS---//
 
-
-//		String id = Utils.splitString(settings.geojsonFile, "/");
+		// String id = Utils.splitString(settings.geojsonFile, "/");
 		Layer treeLayer = new Layer("id", "Tree Layer", points, lines, areas);
 		layers.add(treeLayer);
 

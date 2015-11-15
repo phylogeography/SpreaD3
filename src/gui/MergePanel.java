@@ -2,6 +2,12 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -9,11 +15,22 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingWorker;
 import javax.swing.table.TableColumn;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
+import exceptions.AnalysisException;
+import gui.panels.AnalysisTypes;
 import jam.framework.Exportable;
 import jam.panels.ActionPanel;
+import parsers.ContinuousTreeSpreadDataParser;
+import readers.JsonMerger;
 import settings.reading.JsonMergerSettings;
+import structure.data.SpreadData;
+import utils.Utils;
 
 @SuppressWarnings("serial")
 public class MergePanel extends JPanel implements Exportable {
@@ -74,13 +91,14 @@ public class MergePanel extends JPanel implements Exportable {
 		scrollPane.getViewport().setOpaque(false);
 		add(scrollPane, BorderLayout.CENTER);
 
-		setJSONColumn();
+		setJsonColumn();
 		setPointsColumn();
 		setLinesColumn();
 		setAreasColumn();
 		setCountsColumn();
 		setGeojsonColumn();
-
+        setAxisAttributesColumn();
+		
 		ActionPanel actionPanel = new ActionPanel(false);
 		actionPanel.setAddAction(addJsonAction);
 		actionPanel.setRemoveAction(removeJsonAction);
@@ -90,11 +108,9 @@ public class MergePanel extends JPanel implements Exportable {
 
 	}// END: Constructor
 
-	private void setJSONColumn() {
-
+	private void setJsonColumn() {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.JSON_INDEX);
 		column.setCellRenderer(new JTableButtonCellRenderer(this.settings.recordsList));
-
 	}// END: setJSONColumn
 
 	private void setPointsColumn() {
@@ -117,6 +133,10 @@ public class MergePanel extends JPanel implements Exportable {
 		column = jsonTable.getColumnModel().getColumn(JsonTableModel.GEOJSON_INDEX);
 	}// END: setGeojsonColumn
 
+	private void setAxisAttributesColumn() {
+		column = jsonTable.getColumnModel().getColumn(JsonTableModel.AXIS_INDEX);
+	}// END: setGeojsonColumn
+	
 	private void adjustTable() {
 
 		rowCount = settings.recordsList.size();
@@ -129,6 +149,143 @@ public class MergePanel extends JPanel implements Exportable {
 
 		ColumnResizer.adjustColumnPreferredWidths(jsonTable);
 	}// END: adjustTable
+
+	public void generateOutput(final String outputFilename) {
+
+		frame.setBusy();
+
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+			// Executed in background thread
+			public Void doInBackground() {
+
+				try {
+
+					List<String> points = new ArrayList<String>();
+					List<String> lines = new ArrayList<String>();
+					List<String> areas = new ArrayList<String>();
+					List<String> counts = new ArrayList<String>();
+					List<String> geojsons = new ArrayList<String>();
+                    String axisFile = "";
+					
+					for (JsonTableRecord record : settings.recordsList) {
+
+						if (record.getPoints()) {
+							points.add(record.getJsonFileName());
+						}
+
+						if (record.getLines()) {
+							lines.add(record.getJsonFileName());
+						}
+
+						if (record.getAreas()) {
+							areas.add(record.getJsonFileName());
+						}
+
+						if (record.getCounts()) {
+							counts.add(record.getJsonFileName());
+						}
+
+						if (record.getGeojson()) {
+							geojsons.add(record.getJsonFileName());
+						}
+
+						if (record.getAxis()) {
+							axisFile = record.getJsonFileName();
+						}
+						
+					} // END: records loop
+
+					if (points.size() != 0) {
+						String[] pointsFiles = new String[points.size()];
+						for (int i = 0; i < points.size(); i++) {
+							pointsFiles[i] = points.get(i);
+						}
+						settings.pointsFiles = pointsFiles;
+					}
+
+					if (lines.size() != 0) {
+						String[] linesFiles = new String[lines.size()];
+						for (int i = 0; i < lines.size(); i++) {
+							linesFiles[i] = lines.get(i);
+						}
+						settings.linesFiles = linesFiles;
+					}
+
+					if (areas.size() != 0) {
+						String[] areasFiles = new String[areas.size()];
+						for (int i = 0; i < areas.size(); i++) {
+							areasFiles[i] = areas.get(i);
+						}
+						settings.areasFiles = areasFiles;
+					}
+
+					if (counts.size() != 0) {
+						String[] countsFiles = new String[counts.size()];
+						for (int i = 0; i < counts.size(); i++) {
+							countsFiles[i] = counts.get(i);
+						}
+						settings.countsFiles = countsFiles;
+					}
+
+					if (geojsons.size() != 0) {
+						String[] geojsonFiles = new String[geojsons.size()];
+						for (int i = 0; i < geojsons.size(); i++) {
+							geojsonFiles[i] = geojsons.get(i);
+						}
+						settings.geojsonFiles = geojsonFiles;
+					}
+
+					if(!axisFile.isEmpty()) {
+						settings.axisAttributesFile = axisFile;
+					}
+					
+					
+					settings.outputFilename = outputFilename;
+
+					JsonMerger merger = new JsonMerger(settings);
+					SpreadData data = merger.merge();
+
+					// ---EXPORT TO JSON---//
+
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String s = gson.toJson(data);
+
+					File file = new File(outputFilename);
+					FileWriter fw;
+
+					fw = new FileWriter(file);
+					fw.write(s);
+					fw.close();
+
+				} catch (Exception e) {
+
+					String message = "Unexpected exception occured when merging";
+					if (e instanceof AnalysisException) {
+						message += (": " + e.getMessage());
+					}
+
+					InterfaceUtils.handleException(e, message);
+					frame.setStatus("Exception occured.");
+					frame.setIdle();
+
+				}
+
+				return null;
+			}// END: doInBackground
+
+			// Executed in event dispatch thread
+			public void done() {
+
+				frame.setStatus("Generated " + settings.outputFilename);
+				frame.setIdle();
+
+			}// END: done
+		};
+
+		worker.execute();
+
+	}// END: generateOutput
 
 	@Override
 	public JComponent getExportableComponent() {

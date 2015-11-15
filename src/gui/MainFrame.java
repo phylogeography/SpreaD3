@@ -1,13 +1,17 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -18,12 +22,13 @@ import javax.swing.plaf.BorderUIResource;
 import gui.panels.DataPanel;
 import gui.panels.RenderingPanel;
 import jam.framework.DocumentFrame;
+import jam.framework.Exportable;
 import utils.FortuneCookies;
 
 @SuppressWarnings("serial")
 public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
-	// tabs, there shall be two
+	// tabs, there shall be three
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
 	private final String DATA_TAB_NAME = "Data";
@@ -32,8 +37,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 	private RenderingPanel renderingPanel;
 	private final String MERGE_TAB_NAME = "Merge";
 	private MergePanel mergePanel;
-	
-	
+
 	// labels
 	private JLabel statusLabel;
 	private JProgressBar progressBar;
@@ -58,13 +62,13 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 		dataPanel = new DataPanel(this);
 		tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
-		
+
 		renderingPanel = new RenderingPanel(this);
 		tabbedPane.addTab(RENDERING_TAB_NAME, null, renderingPanel);
-		
+
 		mergePanel = new MergePanel(this);
 		tabbedPane.addTab(MERGE_TAB_NAME, null, mergePanel);
-		
+
 		statusLabel = new JLabel(FortuneCookies.nextCookie());
 
 		JPanel progressPanel = new JPanel(new BorderLayout(0, 0));
@@ -74,14 +78,12 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 		JPanel statusPanel = new JPanel(new BorderLayout(0, 0));
 		statusPanel.add(statusLabel, BorderLayout.CENTER);
 		statusPanel.add(progressPanel, BorderLayout.EAST);
-		statusPanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
-				new Insets(0, 6, 0, 6)));
+		statusPanel.setBorder(new BorderUIResource.EmptyBorderUIResource(new Insets(0, 6, 0, 6)));
 
 		JPanel tabbedPanePanel = new JPanel(new BorderLayout(0, 0));
 		tabbedPanePanel.add(tabbedPane, BorderLayout.CENTER);
 		tabbedPanePanel.add(statusPanel, BorderLayout.SOUTH);
-		tabbedPanePanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
-				new Insets(12, 12, 12, 12)));
+		tabbedPanePanel.setBorder(new BorderUIResource.EmptyBorderUIResource(new Insets(12, 12, 12, 12)));
 
 		getContentPane().setLayout(new java.awt.BorderLayout(0, 0));
 		getContentPane().add(tabbedPanePanel, BorderLayout.CENTER);
@@ -109,7 +111,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 				}
 			});
-		}// END: edt check
+		} // END: edt check
 
 	}// END: setStatus
 
@@ -130,7 +132,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 				}
 			});
-		}// END: edt check
+		} // END: edt check
 
 	}// END: setBusy
 
@@ -151,7 +153,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 
 				}
 			});
-		}// END: edt check
+		} // END: edt check
 
 	}// END: setIdle
 
@@ -168,33 +170,63 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 	// /////////////////
 
 	@Override
-	public Action getLoadSettingsAction() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Action getSaveSettingsAction() {
-		// TODO Auto-generated method stub
+		return new AbstractAction("Merge...") {
+			public void actionPerformed(ActionEvent ae) {
+				
+				// shift focus to the merge pane
+				tabbedPane.setSelectedIndex(2);
+				
+				JFileChooser chooser = new JFileChooser();
+				chooser.setDialogTitle("Merge...");
+				chooser.setMultiSelectionEnabled(false);
+				chooser.setCurrentDirectory( getWorkingDirectory());
+
+				int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+					File file = chooser.getSelectedFile();
+					String outputFilename = file.getAbsolutePath();
+
+					mergePanel.generateOutput( outputFilename);
+
+					File tmpDir = chooser.getCurrentDirectory();
+					if (tmpDir != null) {
+						 setWorkingDirectory(tmpDir);
+					}
+
+				} // END: approve check
+			
+			}//END: actionPerformed
+		};
+	}// END: getSaveSettingsAction
+
+	@Override
+	public Action getLoadSettingsAction() {
 		return null;
 	}
 
-	@Override
 	public JComponent getExportableComponent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		JComponent exportable = null;
+		Component component = tabbedPane.getSelectedComponent();
+
+		if (component instanceof Exportable) {
+			exportable = ((Exportable) component).getExportableComponent();
+		} else if (component instanceof JComponent) {
+			exportable = (JComponent) component;
+		}
+
+		return exportable;
+	}// END: getExportableComponent
 
 	@Override
 	protected boolean readFromFile(File arg0) throws IOException {
-		// TODO Auto-generated method stub
 		return false;
-	}
+	}// END: readFromFile
 
 	@Override
 	protected boolean writeToFile(File arg0) throws IOException {
-		// TODO Auto-generated method stub
 		return false;
-	}
+	}// END: writeToFile
 
 }// END: class

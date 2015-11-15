@@ -8,7 +8,8 @@ public class JsonTableRecord {
 	private Boolean areas = false;
 	private Boolean counts = false;
 	private Boolean geojson = false;
-
+	private Boolean axis = false;
+	
 	public JsonTableRecord() {
 	}// END: Constructor
 
@@ -62,6 +63,14 @@ public class JsonTableRecord {
 
 	public void setCounts(Boolean counts) {
 		this.counts = counts;
+	}
+
+	public Boolean getAxis() {
+		return axis;
+	}
+
+	public void setAxis(Boolean axis) {
+		this.axis = axis;
 	}
 
 }// END: class
