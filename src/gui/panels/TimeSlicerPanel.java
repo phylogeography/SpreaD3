@@ -99,7 +99,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 		loadGeojsonCreated = false;
 		hpdLevelCreated = false;
 		burnInCreated = false;
-
+		outputCreated = false;
+		
 	}// END: resetFlags
 
 	private void populatePanel() {
@@ -226,7 +227,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 					int assumedTrees = TimeSlicerSpreadDataParser.getAssumedTrees(settings.treesFilename);
 					settings.assumedTrees = assumedTrees;
 
-					System.out.println(assumedTrees);
+//					System.out.println(assumedTrees);
 					
 				} catch (IOException e) {
 
@@ -460,7 +461,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 		}
 
 		if (!hpdLevelCreated) {
-			hpdLevel = new JSliderDouble(0.1, 1.0, 0.8, 10, 1);
+			hpdLevel = new JSliderDouble(0.1, 1.0, 0.8, 20, 2);
 			hpdLevel.setMajorTickSpacing(1);
 			hpdLevel.setPaintTicks(true);
 			hpdLevel.setPaintLabels(true);

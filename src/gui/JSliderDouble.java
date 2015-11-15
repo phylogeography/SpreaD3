@@ -50,7 +50,7 @@ public class JSliderDouble extends JSlider {
 
 			if (i % labelEvery == 0) {
 
-				double value = (from + i * delta);
+				double value = (from + (i+1) * delta);
 				int tick = (int) (value * resolution);
 				String label = df.format(value);
 
