@@ -99,203 +99,30 @@ public class TimeSlicerPanel extends SpreadPanel {
 		loadGeojsonCreated = false;
 		hpdLevelCreated = false;
 		burnInCreated = false;
-		
-	}// END: resetFlags
 
-//	private void resetAllFlags() {
-//
-//		analysisTypeCreated = false;
-//		resetFlags();
-//
-//	}// END: resetFlags
+	}// END: resetFlags
 
 	private void populatePanel() {
 
 		this.settings = new TimeSlicerSettings();
 		resetFlags();
 
-		if (!analysisTypeCreated) {
-
-			analysisType = new JComboBox<Object>();
-			ComboBoxModel<Object> analysisTypeSelectorModel = new DefaultComboBoxModel<Object>(
-					AnalysisTypes.values());
-			analysisType.setModel(analysisTypeSelectorModel);
-			analysisType.addItemListener(new ListenAnalysisType());
-			addComponentWithLabel("Time slices: ", analysisType);
-
-			// holder for components below analysis selector
-			// holderPanel = new OptionsPanel();
-			// addComponent(holderPanel);
-
-			// set to MCC tree
-			analysisType.setSelectedIndex(0);
-			 analysisTypeCreated = true;
-			populateTree();
-		}
-
+		populateTrees();
+		
 	}// END: populatePanel
-
-	private class ListenAnalysisType implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent event) {
-			if (event.getStateChange() == ItemEvent.SELECTED) {
-
-				// if analysis type changed reset components below
-				removeChildComponents(analysisType);
-				resetFlags();
-				
-				Object item = event.getItem();
-				AnalysisTypes type = (AnalysisTypes) item;
-				switch (type) {
-
-				case CUSTOM:
-					populateCustom();
-					break;
-
-				case MCC_TREE:
-					populateTree();
-					break;
-
-				default:
-					break;
-
-				}// END: switch
-
-				frame.setStatus(item.toString() + " selected");
-
-			} // END: selected check
-		}// END: itemStateChanged
-
-	}// END: ListenParserSelector
-
-	private void populateCustom() {
-
-		if (!sliceHeightsCreated) {
-
-			sliceHeights = new JButton("Load",
-					InterfaceUtils.createImageIcon(InterfaceUtils.TIME_ICON));
-			sliceHeights.addActionListener(new ListenLoadSliceTimes());
-			addComponentWithLabel("Load slice heights:", sliceHeights);
-			sliceHeightsCreated = true;
-		}
-
-	}// END: populateCustom
-
-	private void populateTree() {
-
-		if (!loadTreeCreated) {
-
-			loadTree = new JButton("Load",
-					InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
-			loadTree.addActionListener(new ListenLoadTree());
-			addComponentWithLabel("Load tree file:", loadTree);
-			loadTreeCreated = true;
-		}
-
-	}// END: populateTree
-
-	private class ListenLoadSliceTimes implements ActionListener {
-		public void actionPerformed(ActionEvent ev) {
-
-			try {
-
-				String[] treeFiles = new String[] { "tre", "tree", "trees" };
-
-				final JFileChooser chooser = new JFileChooser();
-				chooser.setDialogTitle("Loading tree file...");
-				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
-						"Tree files (*.tree(s), *.tre)"));
-				chooser.setCurrentDirectory(frame.getWorkingDirectory());
-
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-					File file = chooser.getSelectedFile();
-					String filename = file.getAbsolutePath();
-
-					File tmpDir = chooser.getCurrentDirectory();
-
-					if (tmpDir != null) {
-						frame.setWorkingDirectory(tmpDir);
-					}
-
-					settings.sliceHeightsFilename = filename;
-					frame.setStatus(settings.sliceHeightsFilename
-							+ " selected.");
-					populateTrees();
-
-				} else {
-					frame.setStatus("Could not Open! \n");
-				}
-
-			} catch (Exception e) {
-				InterfaceUtils.handleException(e, e.getMessage());
-			} // END: try-catch block
-
-		}// END: actionPerformed
-	}// END: ListenOpenTree
-
-	private class ListenLoadTree implements ActionListener {
-		public void actionPerformed(ActionEvent ev) {
-
-			try {
-
-				String[] treeFiles = new String[] { "tre", "tree", "trees" };
-
-				final JFileChooser chooser = new JFileChooser();
-				chooser.setDialogTitle("Loading tree file...");
-				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
-						"Tree files (*.tree(s), *.tre)"));
-				chooser.setCurrentDirectory(frame.getWorkingDirectory());
-
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-					// if analysis type changed reset components below
-					removeChildComponents(loadTree);
-					resetFlags();
-					
-					File file = chooser.getSelectedFile();
-					String filename = file.getAbsolutePath();
-
-					File tmpDir = chooser.getCurrentDirectory();
-
-					if (tmpDir != null) {
-						frame.setWorkingDirectory(tmpDir);
-					}
-
-					settings.treeFilename = filename;
-					frame.setStatus(settings.treeFilename + " selected.");
-					populateTrees();
-
-				} else {
-					frame.setStatus("Could not Open! \n");
-				}
-
-			} catch (Exception e) {
-				InterfaceUtils.handleException(e, e.getMessage());
-			} // END: try-catch block
-
-		}// END: actionPerformed
-	}// END: ListenLoadTree
-
+	
+	
 	private void populateTrees() {
 
 		if (!loadTreesCreated) {
-			loadTrees = new JButton("Load",
-					InterfaceUtils.createImageIcon(InterfaceUtils.TREES_ICON));
+			loadTrees = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREES_ICON));
 			loadTrees.addActionListener(new ListenLoadTrees());
 			addComponentWithLabel("Load trees file:", loadTrees);
 			loadTreesCreated = true;
 		}
 
 	}// END: populateTrees
-
+	
 	private class ListenLoadTrees implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -306,18 +133,16 @@ public class TimeSlicerPanel extends SpreadPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading trees file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
-						"Trees files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Trees files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					// if analysis type changed reset components below
 					removeChildComponents(loadTrees);
 					resetFlags();
-					
+
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 
@@ -341,8 +166,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 			} // END: try-catch block
 
 		}// END: actionPerformed
-	}// END: ListenLoadTree
-
+	}// END: ListenLoadTrees
+	
 	private void populateTraitCombobox() {
 
 		frame.setBusy();
@@ -398,10 +223,11 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 				try {
 
-					int assumedTrees = TimeSlicerSpreadDataParser
-							.getAssumedTrees(settings.treesFilename);
+					int assumedTrees = TimeSlicerSpreadDataParser.getAssumedTrees(settings.treesFilename);
 					settings.assumedTrees = assumedTrees;
 
+					System.out.println(assumedTrees);
+					
 				} catch (IOException e) {
 
 					String message = "I/O exception occured when guessing the size of posterior trees sample. I suspect wrong or malformed trees file.";
@@ -418,14 +244,14 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 				frame.setStatus("Opened " + settings.treeFilename + "\n");
 				frame.setIdle();
-
+				
 			}// END: done
 		};
 
 		worker.execute();
 
 	}// END: populateTraitSelector
-
+	
 	private class ListenTrait implements ItemListener {
 
 		@Override
@@ -436,14 +262,188 @@ public class TimeSlicerPanel extends SpreadPanel {
 				String attribute = item.toString();
 
 				settings.trait = attribute;
-				frame.setStatus("2D trait '" + settings.trait + "'"
-						+ " selected");
-				populateOptionalSettings();
+				frame.setStatus("2D trait '" + settings.trait + "'" + " selected");
+				
+				populateAnalysisType();
+				
+//				populateOptionalSettings();
 
 			} // END: selected check
 		}// END: itemStateChanged
 
 	}// END: ListenTrait
+	
+	
+	private void populateAnalysisType() {
+
+//		this.settings = new TimeSlicerSettings();
+//		resetFlags();
+
+		if (!analysisTypeCreated) {
+
+			analysisType = new JComboBox<Object>();
+			ComboBoxModel<Object> analysisTypeSelectorModel = new DefaultComboBoxModel<Object>(AnalysisTypes.values());
+			analysisType.setModel(analysisTypeSelectorModel);
+			analysisType.addItemListener(new ListenAnalysisType());
+			addComponentWithLabel("Time slices: ", analysisType);
+
+			// set to MCC tree
+			analysisType.setSelectedIndex(0);
+			analysisTypeCreated = true;
+			populateTree();
+		}
+
+	}// END: populatePanel
+
+	private class ListenAnalysisType implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				// if analysis type changed reset components below
+				removeChildComponents(analysisType);
+				resetFlags();
+
+				Object item = event.getItem();
+				AnalysisTypes type = (AnalysisTypes) item;
+				switch (type) {
+
+				case CUSTOM:
+					populateCustom();
+					break;
+
+				case MCC_TREE:
+					populateTree();
+					break;
+
+				default:
+					break;
+
+				}// END: switch
+
+				frame.setStatus(item.toString() + " selected");
+
+			} // END: selected check
+		}// END: itemStateChanged
+
+	}// END: ListenParserSelector
+
+	private void populateCustom() {
+
+		if (!sliceHeightsCreated) {
+
+			sliceHeights = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TIME_ICON));
+			sliceHeights.addActionListener(new ListenLoadSliceTimes());
+			addComponentWithLabel("Load slice heights:", sliceHeights);
+			sliceHeightsCreated = true;
+		}
+
+	}// END: populateCustom
+
+	private void populateTree() {
+
+		if (!loadTreeCreated) {
+
+			loadTree = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+			loadTree.addActionListener(new ListenLoadTree());
+			addComponentWithLabel("Load tree file:", loadTree);
+			loadTreeCreated = true;
+		}
+
+	}// END: populateTree
+
+	private class ListenLoadSliceTimes implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			try {
+
+				String[] treeFiles = new String[] { "tre", "tree", "trees" };
+
+				final JFileChooser chooser = new JFileChooser();
+				chooser.setDialogTitle("Loading tree file...");
+				chooser.setMultiSelectionEnabled(false);
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
+				chooser.setCurrentDirectory(frame.getWorkingDirectory());
+
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+					File file = chooser.getSelectedFile();
+					String filename = file.getAbsolutePath();
+
+					File tmpDir = chooser.getCurrentDirectory();
+
+					if (tmpDir != null) {
+						frame.setWorkingDirectory(tmpDir);
+					}
+
+					settings.sliceHeightsFilename = filename;
+					frame.setStatus(settings.sliceHeightsFilename + " selected.");
+//					populateTrees();
+					
+					populateOptionalSettings();
+
+				} else {
+					frame.setStatus("Could not Open! \n");
+				}
+
+			} catch (Exception e) {
+				InterfaceUtils.handleException(e, e.getMessage());
+			} // END: try-catch block
+
+		}// END: actionPerformed
+	}// END: ListenLoadSliceTimes
+
+	private class ListenLoadTree implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			try {
+
+				String[] treeFiles = new String[] { "tre", "tree", "trees" };
+
+				final JFileChooser chooser = new JFileChooser();
+				chooser.setDialogTitle("Loading tree file...");
+				chooser.setMultiSelectionEnabled(false);
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
+				chooser.setCurrentDirectory(frame.getWorkingDirectory());
+
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+					// if analysis type changed reset components below
+					removeChildComponents(loadTree);
+					resetFlags();
+
+					File file = chooser.getSelectedFile();
+					String filename = file.getAbsolutePath();
+
+					File tmpDir = chooser.getCurrentDirectory();
+
+					if (tmpDir != null) {
+						frame.setWorkingDirectory(tmpDir);
+					}
+
+					settings.treeFilename = filename;
+					frame.setStatus(settings.treeFilename + " selected.");
+//					populateTrees();
+					
+					populateOptionalSettings();
+
+				} else {
+					frame.setStatus("Could not Open! \n");
+				}
+
+			} catch (Exception e) {
+				InterfaceUtils.handleException(e, e.getMessage());
+			} // END: try-catch block
+
+		}// END: actionPerformed
+	}// END: ListenLoadTree
+
+
+
+
 
 	private void populateOptionalSettings() {
 
@@ -454,8 +454,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 		}
 
 		if (!timescaleMultiplierCreated) {
-			timescaleMultiplier = new JTextField(
-					String.valueOf(settings.timescaleMultiplier), 10);
+			timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
 			addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
 			timescaleMultiplierCreated = true;
 		}
@@ -471,15 +470,14 @@ public class TimeSlicerPanel extends SpreadPanel {
 		}
 
 		if (!burnInCreated) {
-			
+
 			int min = 0;
-			int max = settings.assumedTrees ;
+			int max = settings.assumedTrees;
 			int nIntervals = 5;
 			int spacing = (max - min) / nIntervals;
-			
-			burnIn = new JSlider(JSlider.HORIZONTAL, min,
-					max-1, spacing);
-			
+
+			burnIn = new JSlider(JSlider.HORIZONTAL, min, max - 1, spacing);
+
 			burnIn.setMajorTickSpacing(spacing);
 			burnIn.setPaintTicks(true);
 			burnIn.setPaintLabels(true);
@@ -489,16 +487,14 @@ public class TimeSlicerPanel extends SpreadPanel {
 		}
 
 		if (!loadGeojsonCreated) {
-			loadGeojson = new JButton("Load",
-					InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+			loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 			loadGeojson.addActionListener(new ListenLoadGeojson());
 			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
 			loadGeojsonCreated = true;
 		}
 
 		if (!outputCreated) {
-			output = new JButton("Output",
-					InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+			output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 			output.addActionListener(new ListenOutput());
 			addComponentWithLabel("Generate JSON:", output);
 			outputCreated = true;
@@ -514,8 +510,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 			chooser.setMultiSelectionEnabled(false);
 			chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-			int returnVal = chooser.showSaveDialog(InterfaceUtils
-					.getActiveFrame());
+			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				File file = chooser.getSelectedFile();
@@ -536,8 +531,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 	private void collectOptionalSettings() {
 
-		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
-				.getText());
+		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier.getText());
 		settings.mrsd = dateEditor.getValue();
 
 	}// END: collectSettings
@@ -555,8 +549,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 					// TODO: see if we can get the progress displayed
 
-					TimeSlicerSpreadDataParser parser = new TimeSlicerSpreadDataParser(
-							settings);
+					TimeSlicerSpreadDataParser parser = new TimeSlicerSpreadDataParser(settings);
 					SpreadData data = parser.parse();
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -639,12 +632,11 @@ public class TimeSlicerPanel extends SpreadPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading geoJSON file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(
-						geojsonFiles, "geoJSON files (*.json), *.geojson)"));
+				chooser.addChoosableFileFilter(
+						new SimpleFileFilter(geojsonFiles, "geoJSON files (*.json), *.geojson)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils
-						.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
