@@ -182,14 +182,14 @@ public class ContinuousTreePanel extends SpreadPanel {
 							uniqueAttributes.toArray(new String[0]));
 					xCoordinate.setModel(xCoordinateSelectorModel);
 					xCoordinate.addItemListener(new ListenXCoordinate());
-					addComponentWithLabel("Select x coordinate attribute", xCoordinate);
+					addComponentWithLabel("Select x coordinate (longitude)", xCoordinate);
 
 					yCoordinate = new JComboBox<Object>();
 					ComboBoxModel<Object> yCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
 							uniqueAttributes.toArray(new String[0]));
 					yCoordinate.setModel(yCoordinateSelectorModel);
 					yCoordinate.addItemListener(new ListenYCoordinate());
-					addComponentWithLabel("Select y coordinate attribute", yCoordinate);
+					addComponentWithLabel("Select y coordinate (latitude)", yCoordinate);
 
 					coordinateAttributeComboboxesCreated = true;
 				} // END: created check
