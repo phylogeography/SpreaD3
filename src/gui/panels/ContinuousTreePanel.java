@@ -197,6 +197,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 							uniqueAttributes.toArray(new String[0]));
 					xCoordinate.setModel(xCoordinateSelectorModel);
 					xCoordinate.addItemListener(new ListenXCoordinate());
+					yCoordinate.setToolTipText("Longitude");
 					addComponentWithLabel("Select x coordinate attribute",
 							xCoordinate);
 
@@ -205,6 +206,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 							uniqueAttributes.toArray(new String[0]));
 					yCoordinate.setModel(yCoordinateSelectorModel);
 					yCoordinate.addItemListener(new ListenYCoordinate());
+					yCoordinate.setToolTipText("Latitude");
 					addComponentWithLabel("Select y coordinate attribute",
 							yCoordinate);
 
