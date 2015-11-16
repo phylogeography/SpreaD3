@@ -27,7 +27,6 @@ import gui.DateEditor;
 import gui.InterfaceUtils;
 import gui.JSliderDouble;
 import gui.MainFrame;
-import gui.OptionsPanel;
 import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
@@ -100,7 +99,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 		hpdLevelCreated = false;
 		burnInCreated = false;
 		outputCreated = false;
-		
+
 	}// END: resetFlags
 
 	private void populatePanel() {
@@ -109,10 +108,9 @@ public class TimeSlicerPanel extends SpreadPanel {
 		resetFlags();
 
 		populateTrees();
-		
+
 	}// END: populatePanel
-	
-	
+
 	private void populateTrees() {
 
 		if (!loadTreesCreated) {
@@ -123,7 +121,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 		}
 
 	}// END: populateTrees
-	
+
 	private class ListenLoadTrees implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -168,7 +166,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenLoadTrees
-	
+
 	private void populateTraitCombobox() {
 
 		frame.setBusy();
@@ -227,8 +225,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 					int assumedTrees = TimeSlicerSpreadDataParser.getAssumedTrees(settings.treesFilename);
 					settings.assumedTrees = assumedTrees;
 
-//					System.out.println(assumedTrees);
-					
+					// System.out.println(assumedTrees);
+
 				} catch (IOException e) {
 
 					String message = "I/O exception occured when guessing the size of posterior trees sample. I suspect wrong or malformed trees file.";
@@ -245,14 +243,14 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 				frame.setStatus("Opened " + settings.treeFilename + "\n");
 				frame.setIdle();
-				
+
 			}// END: done
 		};
 
 		worker.execute();
 
 	}// END: populateTraitSelector
-	
+
 	private class ListenTrait implements ItemListener {
 
 		@Override
@@ -264,21 +262,20 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 				settings.trait = attribute;
 				frame.setStatus("2D trait '" + settings.trait + "'" + " selected");
-				
+
 				populateAnalysisType();
-				
-//				populateOptionalSettings();
+
+				// populateOptionalSettings();
 
 			} // END: selected check
 		}// END: itemStateChanged
 
 	}// END: ListenTrait
-	
-	
+
 	private void populateAnalysisType() {
 
-//		this.settings = new TimeSlicerSettings();
-//		resetFlags();
+		// this.settings = new TimeSlicerSettings();
+		// resetFlags();
 
 		if (!analysisTypeCreated) {
 
@@ -381,8 +378,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 					settings.sliceHeightsFilename = filename;
 					frame.setStatus(settings.sliceHeightsFilename + " selected.");
-//					populateTrees();
-					
+					// populateTrees();
+
 					populateOptionalSettings();
 
 				} else {
@@ -427,8 +424,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 					settings.treeFilename = filename;
 					frame.setStatus(settings.treeFilename + " selected.");
-//					populateTrees();
-					
+					// populateTrees();
+
 					populateOptionalSettings();
 
 				} else {
@@ -441,10 +438,6 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenLoadTree
-
-
-
-
 
 	private void populateOptionalSettings() {
 

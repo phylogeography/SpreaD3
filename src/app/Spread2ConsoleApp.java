@@ -2,13 +2,16 @@ package app;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import exceptions.AnalysisException;
+import exceptions.ArgumentException;
 import jebl.evolution.io.ImportException;
 import kmlframework.kml.KmlException;
 import parsers.BayesFactorSpreadDataParser;
@@ -29,12 +32,6 @@ import settings.rendering.KmlRendererSettings;
 import structure.data.SpreadData;
 import utils.Arguments;
 import utils.Utils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import exceptions.AnalysisException;
-import exceptions.ArgumentException;
 
 public class Spread2ConsoleApp {
 
@@ -142,7 +139,7 @@ public class Spread2ConsoleApp {
 	private static final String COUNT_ALPHA = "countAlpha";
 
 	// ---MERGING---//
-	// TODO
+
 	private static final String MERGE = "merge";
 	private static final String POINTS = "points";
 	private static final String LINES = "lines";
@@ -237,7 +234,7 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(Y_COORDINATE, "",
 								"y location trait name (longitude)"),
 
-						// new Arguments.StringOption(HPD, "", "hpd level"),
+						new Arguments.StringOption(HPD, "", "hpd level"),
 
 						new Arguments.StringOption(MRSD, "",
 								"most recent sampling date in [yyyy/mm/dd] or [XXXX.XX] format"),
@@ -461,7 +458,6 @@ public class Spread2ConsoleApp {
 
 		// ---READER---//
 
-		// TODO
 		jsonMergerArguments = new Arguments(
 				new Arguments.Option[] {
 
@@ -871,10 +867,10 @@ public class Spread2ConsoleApp {
 								.getStringOption(Y_COORDINATE);
 					}
 
-					// if (args3.hasOption(HPD)) {
-					// settings.continuousTreeSettings.hpd = args3
-					// .getStringOption(HPD);
-					// }
+					if (args3.hasOption(HPD)) {
+						settings.continuousTreeSettings.hpd = args3
+								.getStringOption(HPD);
+					}
 
 					if (args3.hasOption(MRSD)) {
 						settings.continuousTreeSettings.mrsd = args3
@@ -1106,7 +1102,7 @@ public class Spread2ConsoleApp {
 			settings.jsonMergerSettings = new JsonMergerSettings();
 
 			// ---PARSE---//
-			// TODO
+
 			try {
 
 				jsonMergerArguments.parseArguments(otherArgs);

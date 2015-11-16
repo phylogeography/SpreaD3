@@ -133,7 +133,7 @@ public class JsonMerger {
 
 			// --- MAP ATTRIBUTES---//
 
-			if (settings.pointsFiles != null) {
+			if (settings.geojsonFiles != null) {
 				if (Arrays.asList(settings.geojsonFiles).contains(file)) {
 
 					if (!mapAttributesCreated) {
@@ -158,6 +158,8 @@ public class JsonMerger {
 
 			// --- POINT ATTRIBUTES---//
 
+			// TODO: grow if neccessary
+			
 			if (settings.pointsFiles != null) {
 				if (Arrays.asList(settings.pointsFiles).contains(file)) {
 
@@ -172,7 +174,13 @@ public class JsonMerger {
 					} else {
 
 						if (json.getPointAttributes() != null) {
+							
 							pointAttributes.addAll(json.getPointAttributes());
+						
+							// TODO: grow if neccessary
+							
+							
+						
 						}
 
 					} // END: first check

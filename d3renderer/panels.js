@@ -1042,12 +1042,12 @@ function populateToggleLayers() {
 		if (this.checked) {
 			// remove style, then visibility is driven by the time-based
 			// selections
-			areasLayer.selectAll("circle").style("visibility", null);
-			areasLayer.selectAll("area").style("visibility", null);
+			areasLayer.selectAll(".count").style("visibility", null);
+			areasLayer.selectAll(".area").style("visibility", null);
 		} else {
 			// style is superior to attribute, make them hidden
-			areasLayer.selectAll("circle").style("visibility", "hidden");
-			areasLayer.selectAll("area").style("visibility", "hidden");
+			areasLayer.selectAll(".count").style("visibility", "hidden");
+			areasLayer.selectAll(".area").style("visibility", "hidden");
 		}
 
 	});

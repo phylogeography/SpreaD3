@@ -435,7 +435,8 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/ebov_discrete.json", function ready(error, json) {
+d3.json("data/antigenic_merged.json", function ready(error, json) {
+//d3.json("data/ebov_discrete.json", function ready(error, json) {
 	// d3.json("data/H3N2output.json", function ready(error, json) {
 	// d3.json("data/antigenic_time.json", function ready(error, json) {
 	// d3.json("data/antigenic_test.json", function ready(error, json) {

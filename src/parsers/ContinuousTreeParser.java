@@ -25,7 +25,7 @@ public class ContinuousTreeParser {
 	private RootedTree rootedTree;
 	private String xCoordinateAttributeName;
 	private String yCoordinateAttributeName;
-	// private String hpd;
+	 private String hpd;
 	// private String mrsd;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
@@ -40,6 +40,7 @@ public class ContinuousTreeParser {
 	public ContinuousTreeParser(RootedTree rootedTree, //
 			String xCoordinateAttributeName, //
 			String yCoordinateAttributeName, //
+			String hpd,
 			TimeParser timeParser, //
 			double timescaleMultiplier //
 
@@ -48,6 +49,7 @@ public class ContinuousTreeParser {
 		this.rootedTree = rootedTree;
 		this.xCoordinateAttributeName = xCoordinateAttributeName;
 		this.yCoordinateAttributeName = yCoordinateAttributeName;
+		this.hpd = hpd;
 		this.timeParser = timeParser;
 		this.timescaleMultiplier = timescaleMultiplier;
 
@@ -68,11 +70,11 @@ public class ContinuousTreeParser {
 		String prefix = xCoordinateAttributeName.replaceAll("\\d*$", "");
 
 		// get gpd automagically
-		String hpd = getHpdAttribute(rootedTree);
-		if (hpd == null) {
-			throw new AnalysisException(
-					"Tree is not annotated with an HPD attribute. I suspect this is not a continuously annotated tree.");
-		}
+//		String hpd = getHpdAttribute(rootedTree);
+//		if (hpd == null) {
+//			throw new AnalysisException(
+//					"Tree is not annotated with an HPD attribute. I suspect this is not a continuously annotated tree.");
+//		}
 
 		String modalityAttributeName = prefix.concat("_").concat(hpd)
 				.concat("%").concat("HPD_modality");
@@ -121,6 +123,9 @@ public class ContinuousTreeParser {
 				if (nodePoint == null) {
 
 					nodePoint = createPoint(index, node, nodeCoordinate);
+					// add HPD attribute
+					nodePoint.getAttributes().put(Utils.HPD.toUpperCase(), hpd);
+					
 					pointsMap.put(node, nodePoint);
 					index++;
 
@@ -281,7 +286,8 @@ public class ContinuousTreeParser {
 						Polygon polygon = new Polygon(coordinateList);
 
 						Area area = new Area(polygon, nodePoint.getStartTime(),
-								nodePoint.getAttributes());
+								nodePoint.getAttributes()
+								);
 						areasList.add(area);
 
 					} // END: modality loop
@@ -450,25 +456,25 @@ public class ContinuousTreeParser {
 		return point;
 	}// END: createPoint
 
-	private String getHpdAttribute(RootedTree tree) {
-
-		String hpdString = null;
-		for (Node node : tree.getNodes()) {
-			for (String attributeName : node.getAttributeNames()) {
-
-				if (attributeName.contains("HPD_modality")) {
-
-					hpdString = attributeName.replaceAll("\\D+", "");
-					// System.out.println(attributeName);
-					break;
-
-				} // END: hpd check
-			} // END: attributes loop
-			break;
-		} // END: nodes loop
-
-		return hpdString;
-	}// END: getHpdAttribute
+//	private String getHpdAttribute(RootedTree tree) {
+//
+//		String hpdString = null;
+//		for (Node node : tree.getNodes()) {
+//			for (String attributeName : node.getAttributeNames()) {
+//
+//				if (attributeName.contains("HPD_modality")) {
+//
+//					hpdString = attributeName.replaceAll("\\D+", "");
+//					// System.out.println(attributeName);
+//					break;
+//
+//				} // END: hpd check
+//			} // END: attributes loop
+//			break;
+//		} // END: nodes loop
+//
+//		return hpdString;
+//	}// END: getHpdAttribute
 
 	public LinkedList<Line> getLinesList() {
 		return linesList;

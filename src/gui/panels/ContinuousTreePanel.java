@@ -53,6 +53,12 @@ public class ContinuousTreePanel extends SpreadPanel {
 	private JComboBox<Object> yCoordinate;
 	private boolean yCoordinateEdited = false;
 	private boolean coordinateAttributeComboboxesCreated = false;
+	private JComboBox<Object> hpd;
+	private boolean hpdCreated = false;
+	// private boolean hpdEdited = false;
+
+	// attributes for comboboxes
+	LinkedHashSet<String> uniqueAttributes;
 
 	// Date editor
 	private DateEditor dateEditor;
@@ -75,7 +81,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 		resetFlags();
 
 		if (!loadTreeCreated) {
-			loadTree = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
+			loadTree = new JButton("Load",
+					InterfaceUtils.createImageIcon(InterfaceUtils.TREE_ICON));
 			loadTree.addActionListener(new ListenLoadTree());
 			addComponentWithLabel("Load tree file:", loadTree);
 			loadTreeCreated = true;
@@ -85,12 +92,17 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 	private void resetFlags() {
 
+		uniqueAttributes = new LinkedHashSet<String>();
+
 		loadTreeCreated = false;
 		coordinateAttributeComboboxesCreated = false;
 		xCoordinateEdited = false;
 		yCoordinateEdited = false;
 		loadGeojsonCreated = false;
 		outputCreated = false;
+		hpdCreated = false;
+		dateEditorCreated = false;
+		timescaleMultiplierCreated = false;
 
 	}// END: resetFlags
 
@@ -104,16 +116,18 @@ public class ContinuousTreePanel extends SpreadPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading tree file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles, "Tree files (*.tree(s), *.tre)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(treeFiles,
+						"Tree files (*.tree(s), *.tre)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					// if tree reloaded reset components below
 					removeChildComponents(loadTree);
 					resetFlags();
-					
+
 					File file = chooser.getSelectedFile();
 					String filename = file.getAbsolutePath();
 
@@ -149,7 +163,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 				try {
 
-					RootedTree rootedTree = Utils.importRootedTree(settings.treeFilename);
+					RootedTree rootedTree = Utils
+							.importRootedTree(settings.treeFilename);
 					settings.rootedTree = rootedTree;
 
 				} catch (IOException e) {
@@ -164,7 +179,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 				}
 
-				LinkedHashSet<String> uniqueAttributes = new LinkedHashSet<String>();
+				// uniqueAttributes = new LinkedHashSet<String>();
 
 				for (Node node : settings.rootedTree.getNodes()) {
 					if (!settings.rootedTree.isRoot(node)) {
@@ -182,14 +197,16 @@ public class ContinuousTreePanel extends SpreadPanel {
 							uniqueAttributes.toArray(new String[0]));
 					xCoordinate.setModel(xCoordinateSelectorModel);
 					xCoordinate.addItemListener(new ListenXCoordinate());
-					addComponentWithLabel("Select x coordinate attribute", xCoordinate);
+					addComponentWithLabel("Select x coordinate attribute",
+							xCoordinate);
 
 					yCoordinate = new JComboBox<Object>();
 					ComboBoxModel<Object> yCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
 							uniqueAttributes.toArray(new String[0]));
 					yCoordinate.setModel(yCoordinateSelectorModel);
 					yCoordinate.addItemListener(new ListenYCoordinate());
-					addComponentWithLabel("Select y coordinate attribute", yCoordinate);
+					addComponentWithLabel("Select y coordinate attribute",
+							yCoordinate);
 
 					coordinateAttributeComboboxesCreated = true;
 				} // END: created check
@@ -221,8 +238,11 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 				settings.xCoordinate = locationAttribute;
 				xCoordinateEdited = true;
-				frame.setStatus("Location attribute '" + settings.xCoordinate + "'" + " selected");
+				frame.setStatus("Location attribute '" + settings.xCoordinate
+						+ "'" + " selected");
 				populateOptionalSettings();
+
+				// populateHpdCombobox();
 
 			} // END: selected check
 		}// END: itemStateChanged
@@ -240,17 +260,116 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 				settings.yCoordinate = locationAttribute;
 				yCoordinateEdited = true;
-				frame.setStatus("Location attribute '" + settings.yCoordinate + "'" + " selected");
+				frame.setStatus("Location attribute '" + settings.yCoordinate
+						+ "'" + " selected");
 				populateOptionalSettings();
+
+				// populateHpdCombobox();
 
 			} // END: selected check
 		}// END: itemStateChanged
 
 	}// END: ListenYCoordinate
 
+	private void populateHpdCombobox() {
+
+		frame.setBusy();
+
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+			// Executed in background thread
+			public Void doInBackground() {
+
+				try {
+
+					if (!hpdCreated) {
+
+						hpd = new JComboBox<Object>();
+
+						LinkedHashSet<String> hpdAttributes = new LinkedHashSet<String>();
+						for (String attributeName : uniqueAttributes) {
+
+							if (attributeName.contains("HPD_modality")) {
+
+								String hpdString = attributeName.replaceAll(
+										"\\D+", "");
+								hpdAttributes.add(hpdString);
+
+							} // END: hpd check
+						}// END: attributes loop
+
+						// Utils.printArray(hpdAttributes.toArray());
+
+						ComboBoxModel<Object> hpdSelectorModel = new DefaultComboBoxModel<Object>(
+								hpdAttributes.toArray(new String[0]));
+
+						hpd.setModel(hpdSelectorModel);
+						hpd.addItemListener(new ListenHpd());
+
+						for (ItemListener a : hpd.getItemListeners()) {
+
+							a.itemStateChanged(new ItemEvent(hpd,
+									ActionEvent.ACTION_PERFORMED, 0,
+									ActionEvent.ACTION_PERFORMED));
+
+						}
+
+						addComponentWithLabel("Select HPD Level", hpd);
+
+						hpdCreated = true;
+					} // END: coord check
+
+				} catch (Exception e) {
+					InterfaceUtils.handleException(e, e.getMessage());
+					frame.setStatus("Exception occured.");
+					frame.setIdle();
+				}
+
+				return null;
+			}// END: doInBackground
+
+			// Executed in event dispatch thread
+			public void done() {
+
+				frame.setIdle();
+
+			}// END: done
+		};
+
+		worker.execute();
+
+	}// END: populateHpdCombobox
+
+	private class ListenHpd implements ItemListener {
+
+		public ListenHpd() {
+
+			// select first item
+			hpd.setSelectedIndex(0);
+			settings.hpd = String.valueOf(hpd.getModel().getSelectedItem());
+
+		}// END: Constructor
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				Object item = event.getItem();
+				String hpd = item.toString();
+
+				settings.hpd = hpd;
+				frame.setStatus("HPD '" + settings.hpd + "'" + " selected");
+
+			} // END: selected check
+		}// END: itemStateChanged
+
+	}// END: ListenXCoordinate
+
 	private void populateOptionalSettings() {
 
 		if (xCoordinateEdited && yCoordinateEdited) {
+
+			populateHpdCombobox();
 
 			if (!dateEditorCreated) {
 				dateEditor = new DateEditor();
@@ -259,20 +378,26 @@ public class ContinuousTreePanel extends SpreadPanel {
 			}
 
 			if (!timescaleMultiplierCreated) {
-				timescaleMultiplier = new JTextField(String.valueOf(settings.timescaleMultiplier), 10);
-				addComponentWithLabel("Time scale multiplier:", timescaleMultiplier);
+				timescaleMultiplier = new JTextField(
+						String.valueOf(settings.timescaleMultiplier), 10);
+				addComponentWithLabel("Time scale multiplier:",
+						timescaleMultiplier);
 				timescaleMultiplierCreated = true;
 			}
 
 			if (!loadGeojsonCreated) {
-				loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
+				loadGeojson = new JButton("Load",
+						InterfaceUtils
+								.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 				loadGeojson.addActionListener(new ListenLoadGeojson());
 				addComponentWithLabel("Load GeoJSON file:", loadGeojson);
 				loadGeojsonCreated = true;
 			}
 
 			if (!outputCreated) {
-				output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
+				output = new JButton("Output",
+						InterfaceUtils
+								.createImageIcon(InterfaceUtils.SAVE_ICON));
 				output.addActionListener(new ListenOutput());
 				addComponentWithLabel("Generate JSON:", output);
 				outputCreated = true;
@@ -292,11 +417,12 @@ public class ContinuousTreePanel extends SpreadPanel {
 				final JFileChooser chooser = new JFileChooser();
 				chooser.setDialogTitle("Loading geoJSON file...");
 				chooser.setMultiSelectionEnabled(false);
-				chooser.addChoosableFileFilter(
-						new SimpleFileFilter(geojsonFiles, "geoJSON files (*.json), *.geojson)"));
+				chooser.addChoosableFileFilter(new SimpleFileFilter(
+						geojsonFiles, "geoJSON files (*.json), *.geojson)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-				int returnVal = chooser.showOpenDialog(InterfaceUtils.getActiveFrame());
+				int returnVal = chooser.showOpenDialog(InterfaceUtils
+						.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					File file = chooser.getSelectedFile();
@@ -310,7 +436,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 					settings.geojsonFilename = geojsonFilename;
 					frame.setStatus(settings.geojsonFilename + " selected.");
-					
+
 				} else {
 					frame.setStatus("Could not Open! \n");
 				}
@@ -330,7 +456,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 			chooser.setMultiSelectionEnabled(false);
 			chooser.setCurrentDirectory(frame.getWorkingDirectory());
 
-			int returnVal = chooser.showSaveDialog(InterfaceUtils.getActiveFrame());
+			int returnVal = chooser.showSaveDialog(InterfaceUtils
+					.getActiveFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				File file = chooser.getSelectedFile();
@@ -351,7 +478,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 	private void collectOptionalSettings() {
 
-		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier.getText());
+		settings.timescaleMultiplier = Double.valueOf(timescaleMultiplier
+				.getText());
 		settings.mrsd = dateEditor.getValue();
 
 	}// END: collectSettings
@@ -367,7 +495,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 				try {
 
-					ContinuousTreeSpreadDataParser parser = new ContinuousTreeSpreadDataParser(settings);
+					ContinuousTreeSpreadDataParser parser = new ContinuousTreeSpreadDataParser(
+							settings);
 					SpreadData data = parser.parse();
 
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();

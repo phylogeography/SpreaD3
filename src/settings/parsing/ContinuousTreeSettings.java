@@ -13,6 +13,8 @@ public class ContinuousTreeSettings {
 	public String xCoordinate = null; // lat
 	public String yCoordinate = null; // long
 
+	public String hpd = "";
+	
 	// ---OPTIONAL---//
 
 	// most recent sampling date yyy/mm/dd
@@ -29,5 +31,6 @@ public class ContinuousTreeSettings {
 	// ---GUI---//
 	
 	public RootedTree rootedTree = null;
+
 	
 }// END: class
