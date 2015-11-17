@@ -147,9 +147,11 @@ public class DiscreteTreeSpreadDataParser {
 		System.out.println("Parsed tree attributes");
 
 		SpreadData data = new SpreadData(timeLine, //
-				axis, mapAttributes, //
+				axis, //
+				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //
+				null, // areaAttributes
 				locationsList, //
 				layersList //
 		);

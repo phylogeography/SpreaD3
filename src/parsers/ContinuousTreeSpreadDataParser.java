@@ -34,7 +34,8 @@ public class ContinuousTreeSpreadDataParser {
 		LinkedList<Attribute> mapAttributes = null;
 		LinkedList<Attribute> lineAttributes = null;
 		LinkedList<Attribute> pointAttributes = null;
-
+		LinkedList<Attribute> areaAttributes = null;
+		
 		LinkedList<Layer> layersList = new LinkedList<Layer>();
 
 		// ---IMPORT---//
@@ -67,7 +68,8 @@ public class ContinuousTreeSpreadDataParser {
 		
 		lineAttributes = treeParser.getLineAttributes();
 		pointAttributes = treeParser.getPointAttributes();
-
+		areaAttributes = treeParser.getAreaAttributes();
+		
 		System.out.println("Parsed tree attributes");
 
 		// ---GEOJSON LAYER---//
@@ -111,6 +113,8 @@ public class ContinuousTreeSpreadDataParser {
 				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //
+				areaAttributes,
+				null, // locations
 				layersList//
 		);
 	}// END: parse

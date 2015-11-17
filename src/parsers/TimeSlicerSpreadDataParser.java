@@ -39,7 +39,8 @@ public class TimeSlicerSpreadDataParser {
 		LinkedList<Attribute> mapAttributes = null;
 		// LinkedList<Attribute> lineAttributes = null;
 		// LinkedList<Attribute> pointAttributes = null;
-
+		LinkedList<Attribute> areaAttributes = null;
+		
 		LinkedList<Layer> layersList = new LinkedList<Layer>();
 
 		// ---IMPORT---//
@@ -114,7 +115,8 @@ public class TimeSlicerSpreadDataParser {
 
 		TimeSlicerParser parser = new TimeSlicerParser(settings.trait, //
 				treesImporter, //
-				timeParser, settings.burnIn, //
+				timeParser, //
+				settings.burnIn, //
 				assumedTrees, //
 				settings.hpdLevel, //
 				settings.gridSize, //
@@ -123,6 +125,8 @@ public class TimeSlicerSpreadDataParser {
 		);
 		parser.parse();
 
+		areaAttributes = parser.getAreaAttributes();
+		
 		LinkedList<Area> areasList = parser.getAreasList();
 
 		String contoursLayerId = Utils.splitString(settings.treesFilename, "/");
@@ -138,8 +142,10 @@ public class TimeSlicerSpreadDataParser {
 		return new SpreadData(timeLine, //
 				axis, //
 				mapAttributes, //
-				null, //
-				null, //
+				null, // lineAttributes
+				null, // pointAttributes
+				areaAttributes , // areaAttributes
+				null, // locationsList
 				layersList //
 		);
 	}// END: parse

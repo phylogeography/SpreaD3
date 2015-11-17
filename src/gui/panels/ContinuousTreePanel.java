@@ -181,6 +181,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 				// uniqueAttributes = new LinkedHashSet<String>();
 
+				try {
+				
 				for (Node node : settings.rootedTree.getNodes()) {
 					if (!settings.rootedTree.isRoot(node)) {
 
@@ -192,12 +194,14 @@ public class ContinuousTreePanel extends SpreadPanel {
 				// re-initialise comboboxes
 				if (!coordinateAttributeComboboxesCreated) {
 
+//					System.out.println("FUBAR");
+					
 					xCoordinate = new JComboBox<Object>();
 					ComboBoxModel<Object> xCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
 							uniqueAttributes.toArray(new String[0]));
 					xCoordinate.setModel(xCoordinateSelectorModel);
 					xCoordinate.addItemListener(new ListenXCoordinate());
-					yCoordinate.setToolTipText("Longitude");
+					xCoordinate.setToolTipText("Longitude");
 					addComponentWithLabel("Select x coordinate attribute",
 							xCoordinate);
 
@@ -210,9 +214,21 @@ public class ContinuousTreePanel extends SpreadPanel {
 					addComponentWithLabel("Select y coordinate attribute",
 							yCoordinate);
 
+
+//					Utils.printArray(uniqueAttributes.toArray());
+					
 					coordinateAttributeComboboxesCreated = true;
 				} // END: created check
-
+				
+				} catch(Exception e) {
+					
+					InterfaceUtils.handleException(e, e.getMessage());
+					frame.setStatus("Exception occured.");
+					frame.setIdle();
+					
+				}
+				
+				
 				return null;
 			}// END: doInBackground
 

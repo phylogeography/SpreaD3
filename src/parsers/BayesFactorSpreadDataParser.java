@@ -117,6 +117,7 @@ public class BayesFactorSpreadDataParser {
 				mapAttributes, //
 				lineAttributes, //
 				pointAttributes, //
+				null, // areaAttributes
 				locationsList, //
 				layersList //
 		);

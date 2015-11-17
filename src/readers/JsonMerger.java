@@ -83,10 +83,11 @@ public class JsonMerger {
 
 		TimeLine timeLine = null;
 		AxisAttributes axisAttributes = null;
-		Set<Attribute> mapAttributes = null;
-		Set<Attribute> lineAttributes = null;
-		Set<Attribute> pointAttributes = null;
-		Set<Location> locations = null;
+		LinkedList<Attribute> mapAttributes = null;
+		LinkedList<Attribute> lineAttributes = null;
+		LinkedList<Attribute> pointAttributes = null;
+		LinkedList<Attribute> areaAttributes = null;
+		LinkedList<Location> locations = null;
 
 		LinkedList<Layer> layers = new LinkedList<Layer>();
 		List<Point> counts = null;
@@ -98,6 +99,7 @@ public class JsonMerger {
 		boolean mapAttributesCreated = false;
 		boolean pointAttributesCreated = false;
 		boolean lineAttributesCreated = false;
+		boolean areaAttributesCreated = false;
 		boolean locationsCreated = false;
 		boolean linesListCreated = false;
 		boolean pointsListCreated = false;
@@ -140,7 +142,7 @@ public class JsonMerger {
 
 						if (json.getMapAttributes() != null) {
 
-							mapAttributes = new HashSet<Attribute>();
+							mapAttributes = new LinkedList<Attribute>();
 							mapAttributes.addAll(json.getMapAttributes());
 							mapAttributesCreated = true;
 						}
@@ -159,14 +161,15 @@ public class JsonMerger {
 			// --- POINT ATTRIBUTES---//
 
 			// TODO: grow if neccessary
-			
+
+			// for areas too
 			if (settings.pointsFiles != null) {
 				if (Arrays.asList(settings.pointsFiles).contains(file)) {
 
 					if (!pointAttributesCreated) {
 
 						if (json.getPointAttributes() != null) {
-							pointAttributes = new HashSet<Attribute>();
+							pointAttributes = new LinkedList<Attribute>();
 							pointAttributes.addAll(json.getPointAttributes());
 							pointAttributesCreated = true;
 						}
@@ -174,14 +177,12 @@ public class JsonMerger {
 					} else {
 
 						if (json.getPointAttributes() != null) {
-							
-							pointAttributes.addAll(json.getPointAttributes());
-						
-							// TODO: grow if neccessary
-							
-							
-						
-						}
+							for (Attribute attribute : json.getPointAttributes()) {
+
+								replaceAttribute(attribute, pointAttributes);
+
+							} // END: attributes loop
+						} // END: null check
 
 					} // END: first check
 
@@ -196,7 +197,7 @@ public class JsonMerger {
 					if (!lineAttributesCreated) {
 
 						if (json.getLineAttributes() != null) {
-							lineAttributes = new HashSet<Attribute>();
+							lineAttributes = new LinkedList<Attribute>();
 							lineAttributes.addAll(json.getLineAttributes());
 							lineAttributesCreated = true;
 						}
@@ -204,11 +205,46 @@ public class JsonMerger {
 					} else {
 
 						if (json.getLineAttributes() != null) {
-							lineAttributes.addAll(json.getLineAttributes());
-						}
+
+							for (Attribute attribute : json.getLineAttributes()) {
+
+								replaceAttribute(attribute, lineAttributes);
+
+							} // END: attributes loop
+
+						} // END: null check
 
 					} // END: first check
 
+				} // END: get map check
+			} // END: null check
+
+			// --- AREA ATTRIBUTES---//
+
+			if (settings.areasFiles != null) {
+				if (Arrays.asList(settings.areasFiles).contains(file)) {
+
+					if (!areaAttributesCreated) {
+
+						if (json.getLineAttributes() != null) {
+							areaAttributes = new LinkedList<Attribute>();
+							areaAttributes.addAll(json.getAreaAttributes());
+							areaAttributesCreated = true;
+						}
+
+					} else {
+
+						if (json.getAreaAttributes() != null) {
+
+							for (Attribute attribute : json.getAreaAttributes()) {
+
+								replaceAttribute(attribute, areaAttributes);
+
+							} // END: attributes loop
+
+						} // END: null check
+
+					} // END: first check
 				} // END: get map check
 			} // END: null check
 
@@ -234,7 +270,7 @@ public class JsonMerger {
 			if (!locationsCreated) {
 
 				if (json.hasLocations()) {
-					locations = new HashSet<Location>();
+					locations = new LinkedList<Location>();
 					locations.addAll(json.getLocations());
 					locationsCreated = true;
 				}
@@ -390,32 +426,38 @@ public class JsonMerger {
 
 		// ---SPREAD DATA---//
 
-		LinkedList<Attribute> mapAttributesList = null;
-		if (mapAttributes != null) {
-			mapAttributesList = new LinkedList<Attribute>(mapAttributes);
-		}
-
-		LinkedList<Attribute> lineAttributesList = null;
-		if (lineAttributes != null) {
-			lineAttributesList = new LinkedList<Attribute>(lineAttributes);
-		}
-
-		LinkedList<Attribute> pointAttributesList = null;
-		if (pointAttributes != null) {
-			pointAttributesList = new LinkedList<Attribute>(pointAttributes);
-		}
-
-		LinkedList<Location> locationsList = null;
-		if (locations != null) {
-			locationsList = new LinkedList<Location>(locations);
-		}
+		// LinkedList<Attribute> mapAttributesList = null;
+		// if (mapAttributes != null) {
+		// mapAttributesList = new LinkedList<Attribute>(mapAttributes);
+		// }
+		//
+		// LinkedList<Attribute> lineAttributesList = null;
+		// if (lineAttributes != null) {
+		// lineAttributesList = new LinkedList<Attribute>(lineAttributes);
+		// }
+		//
+		// LinkedList<Attribute> pointAttributesList = null;
+		// if (pointAttributes != null) {
+		// pointAttributesList = new LinkedList<Attribute>(pointAttributes);
+		// }
+		//
+		// LinkedList<Attribute> areaAttributesList = null;
+		// if (areaAttributes != null) {
+		// areaAttributesList = new LinkedList<Attribute>(areaAttributes);
+		// }
+		//
+		// LinkedList<Location> locationsList = null;
+		// if (locations != null) {
+		// locationsList = new LinkedList<Location>(locations);
+		// }
 
 		data = new SpreadData(timeLine, //
 				axisAttributes, //
-				mapAttributesList, //
-				lineAttributesList, //
-				pointAttributesList, //
-				locationsList, //
+				mapAttributes, //
+				lineAttributes, //
+				pointAttributes, //
+				areaAttributes, //
+				locations, //
 				layers);
 
 		return data;
@@ -445,5 +487,50 @@ public class JsonMerger {
 
 		return timeLine;
 	}// END: compareTimeLines
+
+	private void replaceAttribute(Attribute attribute, LinkedList<Attribute> areaAttributes) {
+
+		if (areaAttributes.contains(attribute)) {
+			if (attribute.getScale().equals(Attribute.ORDINAL)) {
+
+				int attributeIndex = getAttributeIndex(attribute, areaAttributes);
+				Attribute mergedAttribute = areaAttributes.get(attributeIndex);
+				mergedAttribute.getDomain().addAll(attribute.getDomain());
+				areaAttributes.set(attributeIndex, mergedAttribute);
+
+			} else {
+
+				int attributeIndex = getAttributeIndex(attribute, areaAttributes);
+				Attribute mergedAttribute = areaAttributes.get(attributeIndex);
+
+				double minValue = attribute.getRange()[Attribute.MIN_INDEX];
+				if (minValue < mergedAttribute.getRange()[Attribute.MIN_INDEX]) {
+					mergedAttribute.getRange()[Attribute.MIN_INDEX] = minValue;
+				} // END: min check
+
+				double maxValue = attribute.getRange()[Attribute.MAX_INDEX];
+				if (maxValue > mergedAttribute.getRange()[Attribute.MAX_INDEX]) {
+					mergedAttribute.getRange()[Attribute.MAX_INDEX] = maxValue;
+				} // END: max check
+
+				areaAttributes.set(attributeIndex, mergedAttribute);
+
+			} // END: domain check
+		} // END: contains check
+
+	}
+
+	private Integer getAttributeIndex(Attribute source, LinkedList<Attribute> attributes) {
+
+		Integer i = 0;
+		for (Attribute attribute : attributes) {
+			if (attribute.equals(source)) {
+				return i;
+			}
+			i++;
+		}
+
+		return null;
+	}
 
 }// END: class

@@ -2,8 +2,12 @@ package parsers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import contouring.ContourMaker;
@@ -13,6 +17,7 @@ import exceptions.AnalysisException;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NexusImporter;
 import jebl.evolution.trees.RootedTree;
+import structure.data.Attribute;
 import structure.data.attributable.Area;
 import structure.data.primitive.Coordinate;
 import structure.data.primitive.Polygon;
@@ -34,7 +39,8 @@ public class TimeSlicerParser {
 	private int gridSize;
 
 	private LinkedList<Area> areasList;
-
+	private LinkedList<Attribute> uniqueAreaAttributes;
+	
 	public TimeSlicerParser(String traitName, //
 			NexusImporter treesImporter, //
 			TimeParser timeParser, //
@@ -58,8 +64,9 @@ public class TimeSlicerParser {
 		this.gridSize = gridSize;
 		this.timescaleMultiplier = timescaleMultiplier;
 
+		this.uniqueAreaAttributes = new LinkedList<Attribute>();
 		this.areasList = new LinkedList<Area>();
-
+		
 	}// END: Constructor
 
 	public void parse() throws AnalysisException, IOException, ImportException {
@@ -168,19 +175,12 @@ public class TimeSlicerParser {
 
 				Polygon polygon = new Polygon(coordinateList);
 
-				// Map<String, Trait> attributes = new LinkedHashMap<String,
-				// Trait>();
-				//
-				// Trait hpdTrait = new Trait(hpdLevel);
-				// attributes.put(Utils.HPD, hpdTrait);
-				//
-				// Trait attributeName = new Trait(traitName);
-				// attributes.put(Utils.TRAIT, attributeName);
-
 				String startTime = timeParser.getNodeDate(sliceHeight * timescaleMultiplier);
 
-				// TODO: no attributes?
-				Area area = new Area(polygon, startTime, null);
+				HashMap<String, Object> areaAttributesMap = new HashMap<String, Object>();
+				areaAttributesMap.put(Utils.HPD.toUpperCase(), hpdLevel);
+				
+				Area area = new Area(polygon, startTime, areaAttributesMap);
 				areasList.add(area);
 
 			} // END: paths loop
@@ -191,6 +191,70 @@ public class TimeSlicerParser {
 
 		} // END: iterate
 
+		
+		// ---collect attributes from areas---//
+
+		Map<String, Attribute> areasAttributesMap = new HashMap<String, Attribute>();
+
+		for (Area area : areasList) {
+
+			for (Entry<String, Object> entry : area.getAttributes().entrySet()) {
+
+				String attributeId = entry.getKey();
+				Object attributeValue = entry.getValue();
+
+				if (areasAttributesMap.containsKey(attributeId)) {
+
+					Attribute attribute = areasAttributesMap.get(attributeId);
+
+					if (attribute.getScale().equals(Attribute.ORDINAL)) {
+
+						attribute.getDomain().add(attributeValue);
+
+					} else {
+
+						double value = Utils.round((Double) attributeValue, 100);
+
+						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
+							attribute.getRange()[Attribute.MIN_INDEX] = value;
+						} // END: min check
+
+						if (value > attribute.getRange()[Attribute.MAX_INDEX]) {
+							attribute.getRange()[Attribute.MAX_INDEX] = value;
+						} // END: max check
+
+					} // END: scale check
+
+				} else {
+
+					Attribute attribute;
+					if (attributeValue instanceof Double) {
+
+						Double[] range = new Double[2];
+						range[Attribute.MIN_INDEX] = (Double) attributeValue;
+						range[Attribute.MAX_INDEX] = (Double) attributeValue;
+
+						attribute = new Attribute(attributeId, range);
+
+					} else {
+
+						HashSet<Object> domain = new HashSet<Object>();
+						domain.add(attributeValue);
+
+						attribute = new Attribute(attributeId, domain);
+
+					} // END: isNumeric check
+
+					areasAttributesMap.put(attributeId, attribute);
+
+				} // END: key check
+
+			} // END: attributes loop
+
+		} // END: points loop
+
+		uniqueAreaAttributes.addAll(areasAttributesMap.values());
+		
 		progressBar.showCompleted();
 		progressBar.setShowProgress(false);
 		System.out.print("\n");
@@ -201,4 +265,8 @@ public class TimeSlicerParser {
 		return areasList;
 	}// END: getAreas
 
+	public LinkedList<Attribute> getAreaAttributes() {
+		return uniqueAreaAttributes;
+	}
+	
 }// END: class
