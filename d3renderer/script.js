@@ -435,9 +435,10 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/antigenic_merged.json", function ready(error, json) {
+d3.json("data/bahl.json", function ready(error, json) {
+//d3.json("data/antigenic_merged.json", function ready(error, json) {
 //d3.json("data/ebov_discrete.json", function ready(error, json) {
-	// d3.json("data/H3N2output.json", function ready(error, json) {
+	// d3.json("data/antigenic_50hpd.json", function ready(error, json) {
 	// d3.json("data/antigenic_time.json", function ready(error, json) {
 	// d3.json("data/antigenic_test.json", function ready(error, json) {
 	// d3.json("data/slicing_test.json", function ready(error, json) {
@@ -497,9 +498,12 @@ d3.json("data/antigenic_merged.json", function ready(error, json) {
 	}
 
 	var areaAttributes = json.areaAttributes;
-	if (typeof pointAttributes != 'undefined') {
+	if (typeof areaAttributes != 'undefined') {
 		populateAreaPanels(areaAttributes);
 	}
+	
+	// circular polygons
+	populateCountPanels();
 	
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {

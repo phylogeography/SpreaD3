@@ -657,6 +657,33 @@ function populateAreaPanels(attributes) {
 
 					});
 
+	
+	// ---AREA FIXED OPACITY---//
+
+	var areaFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.0).max(1.0).step(0.1).value(polygonOpacity);
+
+	d3.select('#areaFixedOpacitySlider').call(areaFixedOpacitySlider);
+
+	// map fixed opacity listener
+	areaFixedOpacitySlider.on("slide", function(evt, value) {
+
+		areaOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		areasLayer.selectAll(".area") //
+		.transition() //
+		.ease("linear") //
+		.attr("fill-opacity", areaOpacity);
+
+	});
+	
+	
+}// END: populateAreaPanels
+
+function populateCountPanels() {
+	
+	
 	// ---COUNT FIXED COLOR---//
 
 	var countFixedColorSelect = document.getElementById("countFixedColor");
@@ -700,7 +727,28 @@ function populateAreaPanels(attributes) {
 
 					});
 
-}// END: populateAreaPanels
+	// ---COUNT FIXED OPACITY---//
+
+	var countFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.0).max(1.0).step(0.1).value(polygonOpacity);
+
+	d3.select('#countFixedOpacitySlider').call(countFixedOpacitySlider);
+
+	// map fixed opacity listener
+	countFixedOpacitySlider.on("slide", function(evt, value) {
+
+		countOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		areasLayer.selectAll(".count") //
+		.transition() //
+		.ease("linear") //
+		.attr("fill-opacity", countOpacity);
+
+	});
+	
+	
+}
 
 // ---MAP---//
 

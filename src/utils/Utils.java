@@ -178,6 +178,11 @@ public class Utils {
 		return lines.toArray(new String[lines.size()]);
 	}// END: readLines
 
+	public static String[] splitTies(String state) {
+		String[] tiedStates = state.split("\\+");
+		return tiedStates;
+	}// END: breakTiesRandomly
+	
 	public static String breakTiesRandomly(String tiedState) {
 
 		String[] array = tiedState.split("\\+");

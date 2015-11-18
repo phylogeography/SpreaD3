@@ -485,9 +485,13 @@ d3.json("data/data.json", function ready(error, json) {
 	var pointAttributes = json.pointAttributes;
 	if (typeof pointAttributes != 'undefined') {
 		populatePointPanels(pointAttributes);
-		populateAreaPanels(pointAttributes);
 	}
 
+	var areaAttributes = json.areaAttributes;
+	if (typeof pointAttributes != 'undefined') {
+		populateAreaPanels(areaAttributes);
+	}
+	
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {
 		populateMapPanels(mapAttributes);

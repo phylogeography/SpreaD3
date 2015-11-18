@@ -53,7 +53,7 @@ function generateAreas(data) {
 	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", polygonOpacity) //
+	.attr("fill-opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
@@ -149,7 +149,7 @@ function generateCounts(data, countAttribute) {
 	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", polygonOpacity) //
+	.attr("fill-opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 

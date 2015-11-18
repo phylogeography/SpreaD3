@@ -239,10 +239,27 @@ public class LocationCoordinatesEditor {
 					throw new AnalysisException(message);
 				}
 
-				dummy = new Location(nodeState);
-				if (!locationsList.contains(dummy)) {
-					locationsList.add(dummy);
-				}
+				// TODO: break ties
+				if (nodeState.contains("+")) {
+					String[] tiedStates = Utils.splitTies(nodeState);
+
+					for (int i = 0; i < tiedStates.length; i++) {
+
+						dummy = new Location(tiedStates[i]);
+						if (!locationsList.contains(dummy)) {
+							locationsList.add(dummy);
+						} // END: contains check
+
+					} // END: ties loop
+
+				} else {
+
+					dummy = new Location(nodeState);
+					if (!locationsList.contains(dummy)) {
+						locationsList.add(dummy);
+					} // END: contains check
+
+				} // END: tie check
 
 			} // END: root check
 		} // END: nodeloop
