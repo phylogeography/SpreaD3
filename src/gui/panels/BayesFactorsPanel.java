@@ -208,7 +208,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 	private class ListenOpenLocationCoordinatesEditor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
-			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame);
+			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(frame, true);
 			locationCoordinatesEditor.launch(settings);
 
 			if (locationCoordinatesEditor.isEdited()) {
@@ -225,7 +225,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 				if (!outputCreated) {
 					output = new JButton("Output", InterfaceUtils.createImageIcon(InterfaceUtils.SAVE_ICON));
 					output.addActionListener(new ListenOutput());
-					addComponentWithLabel("Generate JSON:", output);
+					addComponentWithLabel("Generate output:", output);
 					outputCreated = true;
 				}
 				

@@ -47,6 +47,10 @@ public class Location {
 		return polygon;
 	}
 
+	public boolean hasCoordinate()  {
+		return coordinate == null ? false : true;
+	}//END: getCoordinate
+	
 	public Coordinate getCoordinate()  {
 		return coordinate;
 	}//END: getCoordinate

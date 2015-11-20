@@ -122,9 +122,17 @@ public class BayesFactorSpreadDataParser {
 				layersList //
 		);
 
+		// TODO: write or print
+		
+		
 		System.out.println("Bayes factors table: ");
 		bayesFactorParser.printBfTable();
 
+		String bfFilename = settings.outputFilename + ".txt";
+		bayesFactorParser.writeBfTable(bfFilename);;
+	
+		System.out.println("Bayes factors table written to " + bfFilename);
+		
 		return data;
 	}// END: parse
 

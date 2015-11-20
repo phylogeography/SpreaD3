@@ -72,6 +72,7 @@ public class Spread2ConsoleApp {
 	private static final String X_COORDINATE = "xCoordinate";
 	private static final String Y_COORDINATE = "yCoordinate";
 	private static final String EXTERNAL_ANNOTATIONS = "externalAnnotations";
+//	private static final String GENERATE_JSON = "generateJson";
 	
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
@@ -217,6 +218,10 @@ public class Spread2ConsoleApp {
 
 		new Arguments.RealOption(BURNIN, "log file burning in %"),
 
+//		new Arguments.StringOption(GENERATE_JSON, new String[] { TRUE, //
+//				FALSE //
+//				}, false, "generate JSON output for renderers?"),		
+		
 		new Arguments.StringOption(GEOJSON, "", "geojson file name"),
 
 		new Arguments.StringOption(OUTPUT, "", "json output file name")
@@ -789,6 +794,18 @@ public class Spread2ConsoleApp {
 								.getStringOption(OUTPUT);
 					} // END: option check
 
+//					if (args2.hasOption(GENERATE_JSON)) {
+//
+//						String option = args2.getStringOption(GENERATE_JSON);
+//						if (option.equalsIgnoreCase(FALSE)) {
+//							settings.bayesFactorsSettings.generateJson = false;
+//						} else {
+//							settings.bayesFactorsSettings.generateJson = false;
+//						}
+//
+//					} // END: option check
+					
+					
 					if (args2.hasOption(GEOJSON)) {
 
 						settings.bayesFactorsSettings.geojsonFilename = args2
@@ -872,17 +889,13 @@ public class Spread2ConsoleApp {
 								.getStringOption(Y_COORDINATE);
 					}
 
-					//TODO
-//					if (args3.hasOption(Y_COORDINATE)) {
-//						settings.continuousTreeSettings.yCoordinate = args3
-//								.getStringOption(Y_COORDINATE);
-//					}
-					
 					if (args3.hasOption(EXTERNAL_ANNOTATIONS)) {
 
 						String option = args3.getStringOption(EXTERNAL_ANNOTATIONS);
 						if (option.equalsIgnoreCase(TRUE)) {
 							settings.continuousTreeSettings.externalAnnotations = true;
+						} else {
+							settings.continuousTreeSettings.externalAnnotations = false;
 						}
 
 					} // END: option check

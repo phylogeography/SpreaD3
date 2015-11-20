@@ -106,7 +106,7 @@ h3. BAYES FACTORS PARSER
 
 
 * with world map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output test_bf.json
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output /home/filip/test_bf.json
 
 * with map
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/locations.txt -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/FMDV_Ecuador.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output fmdv_bf.json
@@ -253,4 +253,6 @@ h1. BUGS
 
 
 h1. TIPS & TRICKS
+
+* If you're interested in getting raw (no visualisation) Bayes Factors you can use the coordinates editor filled with dummy locations filling 0's as their coordinate values.
 

@@ -24,13 +24,15 @@ public class BayesFactorsSettings implements DiscreteSpreadDataSettings {
 
 	public boolean hasHeader = false;
 	
+//	public boolean generateJson = true;
+
 	public String geojsonFilename = null;
 	
 	//---GUI---//
 	
 	public Double[][] indicators = null;
 	public LinkedList<Location> locationsList = null;
-	
+
 	@Override
 	public String getLocationsFilename() {
 		return locationsFilename;

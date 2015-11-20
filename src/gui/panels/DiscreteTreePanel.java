@@ -272,7 +272,7 @@ public class DiscreteTreePanel extends SpreadPanel {
 		public void actionPerformed(ActionEvent ev) {
 
 			LocationCoordinatesEditor locationCoordinatesEditor = new LocationCoordinatesEditor(
-					frame);
+					frame, false);
 			locationCoordinatesEditor.launch(settings);
 
 			if (locationCoordinatesEditor.isEdited()) {

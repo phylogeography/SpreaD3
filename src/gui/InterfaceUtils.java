@@ -25,6 +25,8 @@ public class InterfaceUtils {
 	public static final String LOG_ICON = "/gui/icons/log.png";
 	public static final String TIME_ICON = "/gui/icons/time.png";
 	public static final String TREES_ICON = "/gui/icons/trees.png";	
+	public static final String GENERATE_ICON = "/gui/icons/generate.png";	
+	
 	public static final String CHOOSE_FILE = "Choose file...";
 	
 	

@@ -1,5 +1,8 @@
 package parsers;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -41,7 +44,7 @@ public class BayesFactorParser {
 		this.linesList = new LinkedList<Line>();
 		this.pointsList = new LinkedList<Point>();
 		this.uniqueLineAttributes = new LinkedList<Attribute>();
-		
+
 	}// END: Constructor
 
 	public void parse() throws AnalysisException {
@@ -170,9 +173,10 @@ public class BayesFactorParser {
 			if (locationsList.contains(dummy)) {
 				toLocationIndex = locationsList.indexOf(dummy);
 			} else {
-				
-				String message =  "Parent location " + dummy.getId() + " could not be found in the locations file.";
-				throw new  AnalysisException(message);
+
+				String message = "Parent location " + dummy.getId()
+						+ " could not be found in the locations file.";
+				throw new AnalysisException(message);
 			}
 
 			Location toLocation = locationsList.get(toLocationIndex);
@@ -194,6 +198,24 @@ public class BayesFactorParser {
 			Double posteriorProbability = posteriorProbabilities.get(i);
 			attributes.put(POSTERIOR_PROBABILITY, posteriorProbability);
 
+			if(!fromLocation.hasCoordinate()) {
+				
+				String message = "Coordinate values could not be found for the location " + fromLocation.getId()
+						+ " Resulting visualisation may be incomplete!";
+
+				System.out.println(message);
+				continue;
+			}
+			
+			if(!toLocation.hasCoordinate()) {
+				
+				String message = "Coordinate values could not be found for the location " + toLocation.getId()
+						+ " Resulting visualisation may be incomplete!";
+
+				System.out.println(message);
+				continue;
+			}
+			
 			Double distance = Utils.rhumbDistance(fromLocation.getCoordinate(),
 					toLocation.getCoordinate());
 			attributes.put(Utils.DISTANCE, distance);
@@ -334,6 +356,26 @@ public class BayesFactorParser {
 		}// END: i loop
 
 	}// END: print
+
+	public void writeBfTable(String filename) throws FileNotFoundException,
+			UnsupportedEncodingException {
+
+		PrintWriter writer = new PrintWriter(filename, "UTF-8");
+
+		writer.println("FROM" + Utils.TAB + "TO" + Utils.TAB + "BAYES_FACTOR"
+				+ Utils.TAB + "POSTERIOR PROBABILITY");
+
+		for (int i = 0; i < bayesFactors.size(); i++) {
+
+			writer.print(from.get(i) + Utils.TAB);
+			writer.print(to.get(i) + Utils.TAB);
+			writer.print(bayesFactors.get(i) + Utils.TAB);
+			writer.println(posteriorProbabilities.get(i));
+
+		}// END: i loop
+
+		writer.close();
+	}// END: writeBfTable
 
 	public LinkedList<Line> getLinesList() {
 		return linesList;
