@@ -14,3 +14,7 @@ d3renderer/data/country-capitals.csv
 d3renderer/.settings
 d3renderer/data/.goutputstream-P4D70X
 
+tutorial/*.log
+tutorial/*.pdf
+tutorial/*.gz
+tutorial/*.toc
