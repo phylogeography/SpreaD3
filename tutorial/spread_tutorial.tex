@@ -1,0 +1,131 @@
+\documentclass[english]{paper}
+
+
+%%%%%%%%%%%%%%%%
+%---PACKAGES---%
+%%%%%%%%%%%%%%%%
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=2cm,rmargin=2cm,headheight=2cm,headsep=2cm,footskip=2cm}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{babel}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%---USER SPECIFIED LaTeX COMMANDS---%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+
+\newenvironment{lyxcode}
+{\par\begin{list}{}{
+\setlength{\rightmargin}{\leftmargin}
+\setlength{\listparindent}{0pt}% needed for AMS classes
+\raggedright
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\normalfont\ttfamily}%
+ \item[]}
+{\end{list}}
+
+\graphicspath{{figures/}}
+
+% or sth else
+\def \spreadname {SpreaD3}
+
+\makeatother
+
+%%%%%%%%%%%%%%%%
+%---DOCUMENT---%
+%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title{{\spreadname}: Spatial Phylogenetic Reconstruction of Evolutionary Dynamics 3}
+\maketitle
+
+\begin{flushleft}
+\textbf{Authors}
+\par\end{flushleft}
+
+\noindent
+Filip Bielejec (\url{filip.bielejec(sorry_spybots)rega.kuleuven.be}) \\
+Philippe Lemey (\url{philippe.lemey(sorry_spybots)rega.kuleuven.be}) \\
+Andrew Rambaut (\url{a.rambaut(sorry_spybots)ed.ac.uk}) \\
+Marc Suchard (\url{msuchard(sorry_spybots)ucla.edu})\\
+
+%---TOC---%
+\pagebreak{}
+\tableofcontents{}
+\pagebreak{}
+
+
+
+
+% 1. Intro
+% - 
+% - Spread is 2-step analysis now 
+% - we use JSON as a medium for the pipeline
+% - a word of explanation what is JSON notation, how it can be read by
+%   any O-O language (python, JS)
+% - D3 (what it is etc), what is GEOJSON, how we use it as canvas for our
+%   vis, where to get it from, maybe a couple of tips on manipulating
+%   GeoJSON files (there are tools to merge, split etc).
+% - software requirements 
+
+% - still some support for KML and GE
+% 
+% 2. Examples of usage. Whese should show not just how but also why, what
+% can we learn by visualising these processes.
+% 
+% 
+% 2.1 MCC tree with discrete traits.
+%  - Here we could use the EBOV as a case for study. All the steps Parse
+% -> render -> manipulate the visualisation, screenshots etc   
+% 
+% 2.2 BF calculation and visualisation
+%  - there seems to be a lot of confusion among folks as to what this
+% actually does. I've seen them do calculations on binary coefficients
+% other than indicators, or dismiss it thinking we do HME to get the BF
+% we could use this to mitigate some of that confusion, so write what
+% (and how) do we actually calculate these. I suppose a table in a text
+% file is of main use but we also show the (graph) visualisation. H5N1 as
+% an example?
+% 
+% - in location coordinates editor there's now 'generate button that will uniformly spread locations over a circle. Show an example of ho wthis can be used to generate a vis (doesn't need a map layer, so no geojson needed)
+%
+% 2.3 MCC tree with Continuous traits
+%  - languages example would look really nice here overlayed on a whole
+% world map
+% 
+% 2.4 time-slicing 
+% - West Nile Virus as an example?
+% - show how one can use MCC tree to generate the slices or define
+% his/her own slice heights
+% - merge continuous tree with JSON file resulting form time slicing a
+% posterior distribution for a joint visualisation.
+% 
+% 
+% Tips & Tricks
+%  - we should show the antigenic coordinates example here, where the
+% coordinates are other than lat/long and there's no underlying map. I
+% also have the multiple HPD's example, on which we can sho whow the
+% merging works. W parse 3 JSONs for all HPD levels, merg ethem and
+% jointly visualise, coloring polygons by HPD levels.
+% 
+% - nodes/ branches of a given tree can be anotated in Figtree, these
+%   values can then be used as a basis for mapping
+% 
+% - Some examples of KML rendering, using previously generated JSON files,
+%   just to show that we still support it.
+
+
+
+
+
+
+\end{document}
