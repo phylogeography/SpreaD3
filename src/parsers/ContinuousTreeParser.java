@@ -25,11 +25,13 @@ public class ContinuousTreeParser {
 	private RootedTree rootedTree;
 	private String xCoordinateAttributeName;
 	private String yCoordinateAttributeName;
+	private boolean externalAnnotations;
 	private String hpd;
 	// private String mrsd;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
 
+	
 	private LinkedList<Attribute> uniqueBranchAttributes;
 	private LinkedList<Attribute> uniqueNodeAttributes;
 	private LinkedList<Attribute> uniqueAreaAttributes;
@@ -41,6 +43,7 @@ public class ContinuousTreeParser {
 	public ContinuousTreeParser(RootedTree rootedTree, //
 			String xCoordinateAttributeName, //
 			String yCoordinateAttributeName, //
+			boolean externalAnnotations, //
 			String hpd, TimeParser timeParser, //
 			double timescaleMultiplier //
 
@@ -49,6 +52,7 @@ public class ContinuousTreeParser {
 		this.rootedTree = rootedTree;
 		this.xCoordinateAttributeName = xCoordinateAttributeName;
 		this.yCoordinateAttributeName = yCoordinateAttributeName;
+		this.externalAnnotations = externalAnnotations;
 		this.hpd = hpd;
 		this.timeParser = timeParser;
 		this.timescaleMultiplier = timescaleMultiplier;
@@ -190,13 +194,11 @@ public class ContinuousTreeParser {
 
 				// ---AREAS PARSED LAST DO NOT CHANGE ORDER---//
 
-				// TODO: make this an option
-				boolean externalAnnotated = false;
 				boolean parseNode = true;
 				if (rootedTree.isExternal(node)) {
 
 					parseNode = false;
-					if (externalAnnotated) {
+					if (externalAnnotations) {
 						parseNode = true;
 					}
 

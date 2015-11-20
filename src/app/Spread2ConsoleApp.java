@@ -71,7 +71,8 @@ public class Spread2ConsoleApp {
 	private static final String LOCATION_TRAIT = "locationTrait";
 	private static final String X_COORDINATE = "xCoordinate";
 	private static final String Y_COORDINATE = "yCoordinate";
-
+	private static final String EXTERNAL_ANNOTATIONS = "externalAnnotations";
+	
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
 	private static final String GEOJSON = "geojson";
@@ -234,6 +235,10 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(Y_COORDINATE, "",
 								"y location trait name (longitude)"),
 
+						new Arguments.StringOption(EXTERNAL_ANNOTATIONS, new String[] { TRUE, //
+										FALSE //
+										}, false, "Are the external (tip) nodes annotated?"),
+								
 						new Arguments.StringOption(HPD, "", "hpd level"),
 
 						new Arguments.StringOption(MRSD, "",
@@ -867,6 +872,22 @@ public class Spread2ConsoleApp {
 								.getStringOption(Y_COORDINATE);
 					}
 
+					//TODO
+//					if (args3.hasOption(Y_COORDINATE)) {
+//						settings.continuousTreeSettings.yCoordinate = args3
+//								.getStringOption(Y_COORDINATE);
+//					}
+					
+					if (args3.hasOption(EXTERNAL_ANNOTATIONS)) {
+
+						String option = args3.getStringOption(EXTERNAL_ANNOTATIONS);
+						if (option.equalsIgnoreCase(TRUE)) {
+							settings.continuousTreeSettings.externalAnnotations = true;
+						}
+
+					} // END: option check
+					
+					
 					if (args3.hasOption(HPD)) {
 						settings.continuousTreeSettings.hpd = args3
 								.getStringOption(HPD);

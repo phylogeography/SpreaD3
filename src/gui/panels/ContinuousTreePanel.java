@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -58,12 +59,16 @@ public class ContinuousTreePanel extends SpreadPanel {
 	// private boolean hpdEdited = false;
 
 	// attributes for comboboxes
-	LinkedHashSet<String> uniqueAttributes;
+	private LinkedHashSet<String> uniqueAttributes;
 
 	// Date editor
 	private DateEditor dateEditor;
 	private boolean dateEditorCreated = false;
 
+	// Checkboxes
+	private JCheckBox externalAnnotations;
+	private boolean externalAnnotationsCreated = false;
+	
 	// Text fields
 	private JTextField timescaleMultiplier;
 	private boolean timescaleMultiplierCreated = false;
@@ -103,7 +108,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 		hpdCreated = false;
 		dateEditorCreated = false;
 		timescaleMultiplierCreated = false;
-
+		externalAnnotationsCreated = false;
+		
 	}// END: resetFlags
 
 	private class ListenLoadTree implements ActionListener {
@@ -389,6 +395,16 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 			populateHpdCombobox();
 
+			
+			//TODO
+			if(!externalAnnotationsCreated) {
+				externalAnnotations  = new JCheckBox( );
+				externalAnnotations.addItemListener(new ListenExternalAnnotations());
+				addComponentWithLabel("External annotations:",
+						externalAnnotations);
+				externalAnnotationsCreated = true;
+			}
+			
 			if (!dateEditorCreated) {
 				dateEditor = new DateEditor();
 				addComponentWithLabel("Most recent sampling date:", dateEditor);
@@ -425,6 +441,23 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 	}// END: populateOptionalSettings
 
+	private class ListenExternalAnnotations implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			if(externalAnnotations.isSelected()) {
+				settings.externalAnnotations = true;
+			} else {
+				settings.externalAnnotations = false;
+			}
+			
+			frame.setStatus("External annotations '" + (settings.externalAnnotations ? " will " : " will not ")
+				+ " be parsed");
+			
+		}//END: itemStateChanged
+	}//END: ListenExternalAnnotations
+	
 	private class ListenLoadGeojson implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 

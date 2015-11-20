@@ -28,9 +28,10 @@ public class ContinuousTreeSettings {
 
 	public String geojsonFilename = null;
 
+	public boolean externalAnnotations = false;
+	
 	// ---GUI---//
 	
 	public RootedTree rootedTree = null;
 
-	
 }// END: class

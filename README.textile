@@ -145,10 +145,10 @@ h3. CONTINUOUS TREE PARSER
 
 
 * antigenic coordinates example
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -output antigenic_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/multipleHPD/H3N2_mds.MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -HPD 50 -externalAnnotations true -mrsd 2011.1 -output antigenic_test.json
 
 * antigenic coordinates example, antigenic coordinate vs time
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/H3N2_mds_MCC.tre -xCoordinate height -yCoordinate antigenic1 -mrsd 2011.1 -output antigenic_test.json
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/multipleHPD/H3N2_mds.MCC.tre -xCoordinate height -yCoordinate antigenic1 -externalAnnotations true -HPD 90 -mrsd 2011.1 -output antigenic_test.json
 
 * geographical coordinates example, world map
 -parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json

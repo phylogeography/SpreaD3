@@ -58,6 +58,7 @@ public class ContinuousTreeSpreadDataParser {
 		ContinuousTreeParser treeParser = new ContinuousTreeParser(rootedTree, //
 				settings.xCoordinate, //
 				settings.yCoordinate, //
+				settings.externalAnnotations, //
 				settings.hpd,
 				timeParser, //
 				settings.timescaleMultiplier);
