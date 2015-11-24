@@ -14,7 +14,8 @@
 \usepackage{hyperref}
 \usepackage{babel}
 \usepackage{natbib}
-
+\usepackage{booktabs}
+\usepackage{multirow}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %---USER SPECIFIED LaTeX COMMANDS---%
@@ -71,7 +72,11 @@ Filip Bielejec (filip.bielejec@rega.kuleuven.be)
 \textbf{Download}
 \par\end{flushleft}
 SpreaD3 and its source code are freely available from \url{https: //github.com/phylogeography/SPREAD2}.
-You can also clone the project with Git by running: \$ git clone https://github.com/phylogeography/SPREAD2. (UPDATE NAME?)
+You can also clone the project with Git by running: 
+\\\$ git clone https://github.com/phylogeography/SPREAD2. (UPDATE NAME?)
+\\
+cd into the base dir and compile SpreaD3 by running 
+\\\$ ant jar
 
 %---TOC---%
 \pagebreak{}
@@ -134,6 +139,15 @@ A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found 
 % 2. Examples of usage. Whese should show not just how but also why, what
 % can we learn by visualising these processes.
 % 
+For the command line examples throughout this tutorial we assume the following alias has been added to your .bash\_profile:
+\\
+alias spread=`java -jar <absolute path to spread.jar>' 
+\\
+The alias will become active when you open another session in Terminal, or it can be used in the current session after executing
+\\
+\$ source $\sim$/.bash\_profile
+\\
+in the current session  [\#assuming your bash\_profile resides at \$HOME]. 
 
 \subsection{Visualizing a MCC tree annotated with discrete traits}
 % 
@@ -141,11 +155,122 @@ A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found 
 %  - Here we could use the EBOV as a case for study. All the steps Parse
 % -> render -> manipulate the visualisation, screenshots etc. Place live links to data (hosted at github)   
 % 
-what is this EBOV datasets exactly => pretty needed to claim that the vis leads to additional insights? 
+%what is this EBOV datasets exactly => pretty needed to claim that the vis leads to additional insights? 
+%\\
+
+%H5N1 dataset 
+%most recent date: why not automatically set to half of the uncertainty when only known up to year or month? Now manually set to yyyy/06/15?
+%$ spread -parse -locations locationCoordinates_H5N1 -tree H5N1_HA_discrete_MCC.tre -locationtrait states -intervals 1 -output parse_states.json -mrsd 2005/06/15
+%I would change the name of 'locationtrait' to 'trait'
+%in automatic message 'Imported locations' -> the 'locations' should be set to whatever the user has used as trait name
+%$ spread -render kml -json parse_states.json -output rendered_states.kml
+
+In this example we use data from the 2014-2015 Ebola virus (EBOV) outbreak in West-Africa. 
+To create a JSON data file compatible with KML-based rendering, we parse the MCC tree without passing the corresponding geoJSON map as an argument:
 \\
-In this example we use data from the 2015-2016 Ebola virus (EBOV) outbreak in West-Africa. 
+\$ spread -parse -locations locations.txt -tree ebov\_mcc.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov\_discrete\_noMap.json
+Note that the number of intervals is set to 10, meaning that xxx.
+Also note that when nodes are annotated with two or more trait states, SpreaD3 will randomly pick one of these.  
+To create the ready-to-use KML file with the default settings, run
+\\
+\$ spread -render kml -json ebov\_discrete\_noMap.json -output ebov\_discrete\_noMap.kml
+\par
+meaning of options?
+\\-intervals
+\\-header T/F
+\\
+To project annotated trees on a
 
+Brams-MacBook-Pro:EBOV brammie$ spread -render d3 -json ebov_discrete_withMap.json -output ebov_discrete_withMap 
 
+       SPREAD version 2.1.2 (2015) -- Rough & Ready.
+Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics
+Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard and Philippe 'The Wise' Lemey
+                Thanks to: Stephan Nylinder 
+
+                      The end is near
+
+In rendering mode
+java.io.FileNotFoundException: spread2_0.0.1.jar (No such file or directory)
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:220)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:150)
+	at java.util.jar.JarFile.<init>(JarFile.java:166)
+	at java.util.jar.JarFile.<init>(JarFile.java:103)
+	at renderers.d3.D3Renderer.render(Unknown Source)
+	at app.Spread2ConsoleApp.run(Unknown Source)
+	at app.Spread2App.main(Unknown Source)
+spread2_0.0.1.jar (No such file or directory)
+
+ 
+\par
+We provide an over view of the options that the user can specify to fine-tune the appearance of the basic elements used for representing the phylogeny, its associated traits and their corresponding uncertainty, namely \textit{points}, \textit{lines} and \textit{counts} in Table \ref{tab:options}.
+\\are these available for the KML AND D3 rendering?
+
+%TABLE 1
+\vspace{0.5cm}
+\begin{table}[!ht]
+\centering
+\caption[Overview of the available options]{\footnotesize{\textbf{Overview of the available options}}}
+\begin{tabular}{ll}
+\\
+\toprule
+			\multicolumn{2}{c}{points}			\\
+\midrule	
+								&						\\
+\textit{color}:					&						\\
+								&						\\
+override default points color			& -pointColor 0 255 255										\\
+map point colors to a continuous attribute 	& -pointColor 0 255 255 -pointColorMapping height					\\
+%we should provide an overview of the possible attributes.
+map point colors to a discrete attribute:	& 					 									\\
+	-same color for all states			&-pointColor 0 255 255 -pointColorMapping location					\\
+	-state-specific colors: via color sheet$\dagger$&-pointcolors traitColors.txt -pointColorMapping location		\\
+								&						\\
+\textit{area}: 					&						\\
+								&						\\
+map point areas to a continuous attribute	& -pointAreaMapping height									\\
+map point areas to a discrete attribute	& -pointAreaMapping location									\\
+\midrule
+			\multicolumn{2}{c}{lines}			\\
+\midrule
+								&						\\
+\textit{color}:					&						\\
+								&						\\
+override default lines color				&	-lineColor 250 0 0		\\
+map line colors to a continuous attribute	&	-lineColor 250 0 0 -lineColorMapping length				\\
+map line colors to a discrete attribute:	&						\\
+	-same color for all states			&	-lineColor 250 0 0 -lineColorMapping location				\\
+	-state-specific colors: via color sheet$\dagger$&-linecolors traitColors.txt -lineColorMapping location		\\
+								&						\\
+\textit{width}:					&						\\
+								&						\\
+	override default lines width		&-lineWidth \textit{number}	\\
+								&						\\
+								&						\\
+\textit{altitude}:				&						\\
+								&						\\
+override default lines (maximum?) altitude	&-lineAltitude  \textit{number}	\\
+map line altitude to a continuous attribute	&-lineAltitude  \textit{number} -lineAltitudeMapping height	\\
+map line altitude to a discrete attribute	&-lineAltitude  \textit{number} -lineAltitudeMapping country\\
+								&						\\
+\midrule
+			\multicolumn{2}{c}{counts}				\\
+\midrule
+								&						\\
+\textit{color}:					&						\\
+								&						\\
+override default count color			&	-countColor 0 0 250		\\
+								&						\\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+{\footnotesize 
+$\dagger$: a file with per line only the trait state name and its color code, separated by a tab. The colors should be supplied in RGB or RGBA values.
+} 
+\end{flushleft}
+\label{tab:options}
+ \end{table}
 
 
 \subsection{Visualising a MCC tree annotated with continuous traits}
