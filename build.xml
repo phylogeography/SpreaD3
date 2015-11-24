@@ -36,7 +36,7 @@
       <mkdir dir="${dist}" />
       
       <!-- TODO: parse version from main and append here -->
-      <jar jarfile="${dist}/spread2_0.0.1.jar">
+      <jar jarfile="${dist}/spread_v2.1.2rc.jar">
 
          <manifest>
             <attribute name="Built-By" value="${user.name}" />
@@ -46,7 +46,9 @@
 
          <fileset dir="${buildDir}" />
          <zipgroupfileset dir="${lib}" includes="colt.jar" />
+         <zipgroupfileset dir="${lib}" includes="commons-io-2.4.jar" />
          <zipgroupfileset dir="${lib}" includes="gson-2.3.1.jar" />
+         <zipgroupfileset dir="${lib}" includes="jam.jar" />
          <zipgroupfileset dir="${lib}" includes="jebl.jar" />
          <zipgroupfileset dir="${lib}" includes="joda-time-2.7.jar" />
 
