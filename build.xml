@@ -68,7 +68,7 @@
       <javac source="1.6" target="1.6" srcdir="${src}" destdir="classes" classpathref="classpath" />
 
       <!--copy resources -->
-      <copy todir="${buildDir}/icons">
+      <copy todir="${buildDir}/gui/icons">
          <fileset dir="${src}/gui/icons">
             <include name="**/*.png" />
          </fileset>
