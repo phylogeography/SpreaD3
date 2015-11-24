@@ -36,7 +36,7 @@
       <mkdir dir="${dist}" />
       
       <!-- TODO: parse version from main and append here -->
-      <jar jarfile="${dist}/spread2_0.0.1.jar">
+      <jar jarfile="${dist}/spread_v2.1.2rc.jar">
 
          <manifest>
             <attribute name="Built-By" value="${user.name}" />
@@ -45,8 +45,15 @@
          </manifest>
 
          <fileset dir="${buildDir}" />
+<!-- Yes, but let's keep it tidy. Moved to resources 
+         <fileset dir="${src}">
+             <include name="gui/icons/*.png"/>
+         </fileset>
+-->
          <zipgroupfileset dir="${lib}" includes="colt.jar" />
+         <zipgroupfileset dir="${lib}" includes="commons-io-2.4.jar" />
          <zipgroupfileset dir="${lib}" includes="gson-2.3.1.jar" />
+         <zipgroupfileset dir="${lib}" includes="jam.jar" />
          <zipgroupfileset dir="${lib}" includes="jebl.jar" />
          <zipgroupfileset dir="${lib}" includes="joda-time-2.7.jar" />
 
@@ -55,15 +62,14 @@
 
    <target name="compile">
       <mkdir dir="${buildDir}" />
-<!--
       <mkdir dir="${buildDir}/icons" />
       <mkdir dir="${buildDir}/colorpicker/swing/resources" />
--->
+      <mkdir dir="${buildDir}/renderers/d3/d3renderer" />
       <javac source="1.6" target="1.6" srcdir="${src}" destdir="classes" classpathref="classpath" />
 
-      <!--copy resources 
-      <copy todir="${buildDir}/icons">
-         <fileset dir="${src}/icons">
+      <!--copy resources -->
+      <copy todir="${buildDir}/gui/icons">
+         <fileset dir="${src}/gui/icons">
             <include name="**/*.png" />
          </fileset>
       </copy>
@@ -74,8 +80,10 @@
          </fileset>
       </copy>
 
-      <copy file="${src}/templates/world_map.png" todir="classes/templates" />
--->
+  <!--copy D3 scripts -->
+     <copy todir="${buildDir}/renderers/d3/d3renderer">
+         <fileset dir="${src}/renderers/d3/d3renderer" includes="**"/>  
+      </copy>
 
    </target>
 

@@ -23,7 +23,7 @@ h3. DISCRETE TREE PARSER
 * with map
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/combined.geojson -output ebov_discrete.json
 
-* no map [BUG, SHIFTED IN JSON]
+* no map
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
 
 h3. DISCRETE TREE D3 RENDERER
@@ -246,7 +246,6 @@ h1. TODO
   - parsing BEAST2 and MrBayes output [separate parsers]
 * Write tests    
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
-* Uncaught exception handler (for bug reports).
 * Processing large tree distributions on GPUs. Write small library and JNI to it.  
 
 h1. BUGS
