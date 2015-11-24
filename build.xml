@@ -45,6 +45,9 @@
          </manifest>
 
          <fileset dir="${buildDir}" />
+         <fileset dir="${src}">
+             <include name="gui/icons/*.png"/>
+         </fileset>
          <zipgroupfileset dir="${lib}" includes="colt.jar" />
          <zipgroupfileset dir="${lib}" includes="commons-io-2.4.jar" />
          <zipgroupfileset dir="${lib}" includes="gson-2.3.1.jar" />
