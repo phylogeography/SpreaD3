@@ -118,6 +118,8 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 
 		} else if (type == COUNTS) {
 
+//			populateCountPanels();
+			
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
 			var counts = layer.points;
 			generateCounts(counts, countAttribute);
@@ -488,7 +490,10 @@ var sliderEndValue;
 	var pointAttributes = json.pointAttributes;
 	if (typeof pointAttributes != 'undefined') {
 		populatePointPanels(pointAttributes);
+		
+		// we could check if areas / counts panels are needed
 		populateAreaPanels(pointAttributes);
+		populateCountPanels();
 	}
 
 	var mapAttributes = json.mapAttributes;
