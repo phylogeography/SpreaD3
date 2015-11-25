@@ -15,14 +15,10 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
-// fixed colors
-// var mapFixedColors = colorbrewer.Dark2[8];
-
 //
 // ---DATA---//
 //
-
-// fixed colors
+//fixed colors
 var fixedColors = colorbrewer.RdYlBu[11];
 fixedColors.splice(6, 0, "#ffffff");
 fixedColors.push("#000000");
@@ -91,7 +87,7 @@ function move() {
 
 	// fit the paths to the zoom level
 	d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-	d3.selectAll(".line").attr("stroke-width", lineWidth / s);
+	d3.selectAll(".line").attr("stroke-width", 1.0 / s);
 	d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 
 }// END: move
@@ -122,6 +118,8 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 
 		} else if (type == COUNTS) {
 
+//			populateCountPanels();
+			
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
 			var counts = layer.points;
 			generateCounts(counts, countAttribute);
@@ -206,7 +204,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 				return (offset);
 			}) //
-	.attr("visibility", "visible");
+	.style("visibility", "visible") //
+	.attr("opacity", 1);
 
 	// ---select lines yet to be painted---//
 
@@ -225,7 +224,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (totalLength);
 	}) //
-	.attr("visibility", "hidden");
+	.style("visibility", "hidden") //
+	.attr("opacity", 0);
 
 	// ---select lines already painted---//
 
@@ -239,7 +239,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 				return (lineEndDate < value);
 			}) //
 	.attr("stroke-dashoffset", 0) //
-	.attr("visibility", "visible");
+	.style("visibility", "visible") //
+	.attr("opacity", 1);
 
 	// ---POLYGONS---//
 
@@ -255,7 +256,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "hidden");
+	.attr("visibility", "hidden") //
+	.attr("opacity", 0);
 
 	// ---select polygons displayed now---//
 
@@ -269,13 +271,14 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "visible");
+	.attr("visibility", "visible") //
+	.attr("opacity", POLYGON_OPACITY);
 
 	// ---COUNTS---//
 
 	// ---select counts yet to be displayed or already displayed---//
 
-	areasLayer.selectAll(".count") //
+	areasLayer.selectAll(".circle") //
 	.filter(function(d) {
 		var point = this;
 		var startDate = formDate(point.attributes.startTime.value).getTime();
@@ -286,11 +289,12 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "hidden");
+	.attr("visibility", "hidden") //
+	.attr("opacity", 0);
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".count") //
+	areasLayer.selectAll(".circle") //
 	.filter(function() {
 		var point = this;
 		var startDate = formDate(point.attributes.startTime.value).getTime();
@@ -301,7 +305,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.transition() //
 	.duration(100) //
 	.ease("linear") //
-	.attr("visibility", "visible");
+	.attr("visibility", "visible") //
+	.attr("opacity", POLYGON_OPACITY);
 
 }// END: update
 
@@ -435,7 +440,7 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/data.json", function ready(error, json) {
+ d3.json("data/data.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
@@ -485,13 +490,12 @@ d3.json("data/data.json", function ready(error, json) {
 	var pointAttributes = json.pointAttributes;
 	if (typeof pointAttributes != 'undefined') {
 		populatePointPanels(pointAttributes);
+		
+		// we could check if areas / counts panels are needed
+		populateAreaPanels(pointAttributes);
+		populateCountPanels();
 	}
 
-	var areaAttributes = json.areaAttributes;
-	if (typeof pointAttributes != 'undefined') {
-		populateAreaPanels(areaAttributes);
-	}
-	
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {
 		populateMapPanels(mapAttributes);
@@ -529,7 +533,6 @@ d3.json("data/data.json", function ready(error, json) {
 		// ---TIME SLIDER---//
 
 		if (hasTime) {
-
 			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
 					dateFormat);
 
@@ -538,8 +541,7 @@ d3.json("data/data.json", function ready(error, json) {
 
 			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
 					dateFormat);
-
-		}// END: hasTime check
+		}
 
 		// ---DATA LAYERS---//
 
@@ -554,6 +556,42 @@ d3.json("data/data.json", function ready(error, json) {
 			generateLabels(locations);
 
 		}// END: null check
+
+		// function readynow(error, world) {
+		//
+		// populateMapPanels(world.mapAttributes);
+		//
+		// generateWorldLayer(world);
+		// // mapRendered = true;
+		//
+		// // ---TIME SLIDER---//
+		//
+		// initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+		// dateFormat);
+		//
+		// // put slider at the end of timeLine, everything painted
+		// timeSlider.value(sliderEndValue);
+		//
+		// updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+		// dateFormat);
+		//
+		// // ---DATA LAYERS---//
+		//
+		// initializeLayers(layers, pointAttributes, lineAttributes);
+		//
+		// // ---LOCATIONS---//
+		//
+		// var locations = json.locations;
+		// if (typeof(locations) != 'undefined') {
+		//
+		// generateLocations(locations);
+		// generateLabels(locations);
+		//
+		// }// END: null check
+		//
+		// }// END: readynow
+		//
+		// queue().defer(d3.json, "data/world.geojson").await(readynow);
 
 	} else {
 
@@ -591,7 +629,6 @@ d3.json("data/data.json", function ready(error, json) {
 	}// END: mapRendered check
 
 	populateExportPanel();
-	populateToggleLayers();
 
 } // END: function
 );
