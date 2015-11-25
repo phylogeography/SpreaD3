@@ -77,6 +77,8 @@ You can also clone the project with Git by running:
 \\
 cd into the base dir and compile SpreaD3 by running 
 \\\$ ant jar
+\\
+This builds a executable jar-file in the directory ./dist, which can be run by double-clicking it.
 
 %---TOC---%
 \pagebreak{}
@@ -122,7 +124,6 @@ A third advantage of the layered approach to image building is the ease with whi
 \par
 Alongside enhancing the flexibility in creating the visualisations, the other prime objective of SpreaD3 is to drastically facilitate the on-line publishing of interactive visualisations.
 This is achieved by rendering the figures using the Data Driven Documents JavaScript libraries (D3, see \url{www.d3js.org} and \citet{Bostock:2011aa}) to project the annotated phylogenies on a map in geoJSON data structure format (\url{www.geojson.org}).
-There are a number of easy-to-use utilities for creating geoJSON maps, such as (
 %how can a longitude/latitude globe reference easily be converted to the corresponding coordinates on a geoJSON map? 
 %how can the latter easily be constructed (geojson.io? https://google-developers.appspot.com/maps/documentation/utils/geojson/?)
 For reasons of consistency with the previous version, and as an illustration of the branching to other renderers enabled by the versatile JSON data format as a go-between, SpreaD3 also supports re-interpreting parsed input data in the Keyhole Markup Language (KLM) for visualisations in virtual globe software like Google Earth (\url{www.google.com/earth/}). 
@@ -131,6 +132,12 @@ In this tutorial we give a detailed description of program functionalities by pr
 The data files used in the example can be found at \url{http://www.phylogeography.org/}.
 The user is assumed to know how to build a Maximum Clade Credibility (MCC) tree. 
 A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found at \url{???}.
+\par
+There are a number of easy-to-use utilities for creating geoJSON maps, such as EXAMPLES. %geoJSON github repository?, our own website?
+A handy feature is that in geoJSON the latitude and longitude are treated as absolute values.
+Like this, the coordinates for a location (e.g. Leuven) remain valid when providing a more focused map (e.g. western Europoe instead of the entire world).
+If no geoJSON map is provided, a bounding box based on the provided coordinates will be created automatically.
+
 
 \section{Software requirements}
 
@@ -142,7 +149,7 @@ A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found 
 % 
 For the command line examples throughout this tutorial we assume the following alias has been added to your .bash\_profile:
 \\
-alias spread=`java -jar <absolute path to spread.jar>' 
+alias spread=`java -jar <absolute path to SpreaD3.jar>' 
 \\
 The alias will become active when you open another session in Terminal, or it can be used in the current session after executing
 \\
@@ -166,7 +173,81 @@ in the current session  [\#assuming your bash\_profile resides at \$HOME].
 %in automatic message 'Imported locations' -> the 'locations' should be set to whatever the user has used as trait name
 %$ spread -render kml -json parse_states.json -output rendered_states.kml
 
-In this example we use data from the 2014-2015 Ebola virus (EBOV) outbreak in West-Africa. 
+In this example we use data of the highly pathogenic avian influenza virus (HPAIV) H5N1 that have been used to shed light on the large-scale H5N1 transmission patterns and disentangle the contributions of different avian hosts on the tempo and mode of HPAIV H5N1 dispersal \citep{Trovao:2015aa}.
+The sequence data are from the HA gene and were sampled between 1996 and 2011 from two avian families, \textit{Anatidae} and \textit{Phasianidae} %, and the \textit{Neoaves} avian superorder
+ throughout Russia and Asia.
+The MCC tree used in this example is annotated with the avian family to which the host species belongs and with the sampling location.
+The MCC tree, location coordinates and geoJSON file are available from \url{}.
+%We will visualise the host jumps and the geographical dispersal using a newly created geoJSON file.
+
+%\subsection{Creating an appropriate geoJSON map}
+%Go to \url{http://geojson.io}, and follow the instructions there to obtain a map that covers the part of the world covered by H5N1, as can be seen Figure 2 \citep{}.
+%Save this file 
+
+\subsection{Parsing the data}
+The Graphical User Interface (GUI) opens in the `Data' tab.
+Select the option `MCC tree with DISCRETE traits', and browse to where you saved the example MCC tree to load it.
+
+\begin{figure}[!H]
+\centering
+\includegraphics[width=1\textwidth]{./figures/fig1_GUI_loadDiscreteTree.pdf} %[scale=0.22]
+%\caption{
+%\footnotesize{\textbf{Illustration of both dimensions of sequence upscaling.} 
+%The rectangle marks an area in the HIV-1 genome alignment, for which the aligned reads and the coverage they achieve are presented in more detail. Results were obtained from a pilot GS20 run.
+%}}
+\label{fig:loadData}
+\end{figure}
+
+SpreaD3 will now set the working directory to the one containing your file. 
+This means that all output generated by SpreaD3 will be saved in this directory.
+To view the MCC tree in it's geographic context, we have to associate each location with a particular latitude and longitude. 
+To do this, indicate under which name the location trait is known (`Select location attribute') and associate the appropriate coordinates with each location.
+You can either use the editor supplied with SpreaD3 and generate the input file or load previously prepared tab-delimited file including each location, its latitude and longitude. 
+
+\begin{figure}[!H]
+\centering
+\includegraphics[width=1\textwidth]{./figures/fig2_setupLocations.pdf} %[scale=0.22]
+%\caption{
+%\footnotesize{\textbf{Illustration of both dimensions of sequence upscaling.} 
+%The rectangle marks an area in the HIV-1 genome alignment, for which the aligned reads and the coverage they achieve are presented in more detail. Results were obtained from a pilot GS20 run.
+%}}
+\label{fig:loadData}
+\end{figure}
+
+SpreaD3 sets the most recent sampling date to the date of the most recent tip, but this can also be specified manually.
+Leave the `Time scale multiplier' to its default value of 1 \footnote{This option is useful when the time units should be rescaled,  e.g. in molecular archeological work}. 
+Next, browse to the location where you saved the geoJSON file and load it.
+The number of intervals equals the number of periods in which the history is partitioned. %correct?
+At each change point, all branches of the tree are virtually `cut', and the intersected branches over which no trait state transition has occurred (e.g. no change in location between the branch's parent and child node) contribute to the Markov reward count for that trait state at that time slice.
+%The reward counts at slice $n$ are plotted in the animation starting from period $n$.
+Save the file as `output.json'.
+
+\subsection{Rendering and specifying the visualisation options}
+
+The `Rendering' tab in the GUI by default opens the D3 renderer.
+Here, you can load `output.json' and save the files rendered with D3 as `rendered\_D3'. %adjust name in GUI: not 'to' but 'with'
+
+\begin{figure}[!H]
+\centering
+\includegraphics[width=1\textwidth]{./figures/fig3_renderD3.pdf} %[scale=0.22]
+%\caption{
+%\footnotesize{\textbf{Illustration of both dimensions of sequence upscaling.} 
+%The rectangle marks an area in the HIV-1 genome alignment, for which the aligned reads and the coverage they achieve are presented in more detail. Results were obtained from a pilot GS20 run.
+%}}
+\label{fig:loadData}
+\end{figure}
+
+This created a folder `rendered\_D3' with several files.
+The most important one is 'index.html', which can be opened with any modern internet browser by double-clicking. 
+Doing so opens a web-page in which all visualisation options can be set.
+In this example we want to lay focus on the host jumps.
+To do so, give the hosts
+
+
+\section{}
+
+
+
 To create a JSON data file compatible with KML-based rendering, we parse the MCC tree without passing the corresponding geoJSON map as an argument:
 \\
 \$ spread -parse -locations locations.txt -tree ebov\_mcc.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov\_discrete\_noMap.json
