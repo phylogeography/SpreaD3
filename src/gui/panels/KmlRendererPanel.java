@@ -45,6 +45,7 @@ import com.google.gson.JsonSyntaxException;
 public class KmlRendererPanel extends SpreadPanel {
 
 	public static final int PANEL_HEIGHT = 100;
+	public static final int PANEL_SUPER_HEIGHT = 160;
 	public static final int PANEL_WIDTH = 250;
 
 	private MainFrame frame;
@@ -62,9 +63,15 @@ public class KmlRendererPanel extends SpreadPanel {
 	private JButton loadJson;
 	private boolean loadJsonCreated = false;
 	private JButton render;
+	private JButton pointStartColor;
+	private JButton pointEndColor;
 	private JButton pointColor;
 	private JButton lineColor;
+	private JButton lineStartColor;
+	private JButton lineEndColor;
 	private JButton areaColor;
+	private JButton areaStartColor;
+	private JButton areaEndColor;
 	private JButton countColor;
 
 	// Combo boxes
@@ -255,13 +262,16 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		// color mapping
 		tmpPanel = new JPanel();
-		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_SUPER_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Points color attribute:"));
-		
-		
-		//TODO color chooser min/max
-		
-		
+		pointStartColor = new  JButton("Start color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		pointStartColor.addActionListener(new ListenPointStartColor());
+		tmpPanel.add(pointStartColor);
+		pointEndColor = new  JButton("End color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		pointEndColor.addActionListener(new ListenPointEndColor());
+		tmpPanel.add(pointEndColor);
 		pointColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				pointAttributeNames.toArray());
@@ -275,7 +285,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Points color:"));
+		tmpPanel.setBorder(new TitledBorder("Points fixed color:"));
 		pointColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		pointColor.addActionListener(new ListenPointColor());
@@ -300,7 +310,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// area
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Points area:"));
+		tmpPanel.setBorder(new TitledBorder("Points fixed area:"));
 		pointArea = new JSlider(JSlider.HORIZONTAL,
 				settings.minPointArea.intValue(),
 				settings.maxPointArea.intValue(), settings.pointArea.intValue());
@@ -364,6 +374,52 @@ public class KmlRendererPanel extends SpreadPanel {
 
 	}// END: ListenPointColorSelector
 
+	private class ListenPointStartColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color( //
+					settings.minPointRed.intValue(), //
+					settings.minPointGreen.intValue(), //
+					settings.minPointBlue.intValue(), //
+					settings.minPointAlpha.intValue() //
+			);
+			
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			if (c != null) {
+				settings.minPointRed = Double.valueOf(c.getRed());
+				settings.minPointGreen = Double.valueOf(c.getGreen());
+				settings.minPointBlue = Double.valueOf(c.getBlue());
+				settings.minPointAlpha = Double.valueOf(c.getAlpha());
+			}
+
+		}// END: actionPerformed
+	}// END: ListenPointStartColor
+	
+	private class ListenPointEndColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color( //
+					settings.maxPointRed.intValue(), //
+					settings.maxPointGreen.intValue(), //
+					settings.maxPointBlue.intValue(), //
+					settings.maxPointAlpha.intValue() //
+			);
+			
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			if (c != null) {
+				settings.maxPointRed = (double) c.getRed();
+				settings.maxPointGreen = (double) c.getGreen();
+				settings.maxPointBlue = (double) c.getBlue();
+				settings.maxPointAlpha = (double) c.getAlpha();
+			}
+
+		}// END: actionPerformed
+	}// END: ListenPointEndColor
+	
 	private class ListenPointColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -396,8 +452,18 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		// color mapping
 		tmpPanel = new JPanel();
-		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_SUPER_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Lines color attribute:"));
+		
+		lineStartColor = new  JButton("Start color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		lineStartColor.addActionListener(new ListenLineStartColor());
+		tmpPanel.add(lineStartColor);
+		lineEndColor = new  JButton("End color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		lineEndColor.addActionListener(new ListenLineEndColor());
+		tmpPanel.add(lineEndColor);
+		
 		lineColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				lineAttributeNames.toArray());
@@ -411,7 +477,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Lines color:"));
+		tmpPanel.setBorder(new TitledBorder("Lines fixed color:"));
 		lineColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		lineColor.addActionListener(new ListenLineColor());
@@ -436,7 +502,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// altitude
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Lines altitude:"));
+		tmpPanel.setBorder(new TitledBorder("Lines fixed altitude:"));
 		lineAltitude = new JSlider(JSlider.HORIZONTAL,
 				settings.minLineAltitude.intValue(),
 				settings.maxLineAltitude.intValue(),
@@ -454,7 +520,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// width
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Lines width:"));
+		tmpPanel.setBorder(new TitledBorder("Lines fixed width:"));
 		lineWidth = new JSlider(JSlider.HORIZONTAL,
 				settings.minLineWidth.intValue(),
 				settings.maxLineWidth.intValue(), settings.lineWidth.intValue());
@@ -535,6 +601,54 @@ public class KmlRendererPanel extends SpreadPanel {
 
 	}// END: ListenLineColorMapping
 
+	
+	private class ListenLineStartColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color( //
+					settings.minLineRed.intValue(), //
+					settings.minLineGreen.intValue(), //
+					settings.minLineBlue.intValue(), //
+					settings.minLineAlpha.intValue() //
+			);
+			
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			if (c != null) {
+				settings.minLineRed = Double.valueOf(c.getRed());
+				settings.minLineGreen = Double.valueOf(c.getGreen());
+				settings.minLineBlue = Double.valueOf(c.getBlue());
+				settings.minLineAlpha = Double.valueOf(c.getAlpha());
+			}
+
+		}// END: actionPerformed
+	}// END: ListenLineStartColor
+	
+	private class ListenLineEndColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color( //
+					settings.maxLineRed.intValue(), //
+					settings.maxLineGreen.intValue(), //
+					settings.maxLineBlue.intValue(), //
+					settings.maxLineAlpha.intValue() //
+			);
+			
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			if (c != null) {
+				settings.maxLineRed = (double) c.getRed();
+				settings.maxLineGreen = (double) c.getGreen();
+				settings.maxLineBlue = (double) c.getBlue();
+				settings.maxLineAlpha = (double) c.getAlpha();
+			}
+
+		}// END: actionPerformed
+	}// END: ListenLineEndColor
+	
+	
 	private class ListenLineColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -567,8 +681,18 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		// color mapping
 		tmpPanel = new JPanel();
-		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_SUPER_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Area color attribute:"));
+		
+		areaStartColor = new  JButton("Start color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		areaStartColor.addActionListener(new ListenAreaStartColor());
+		tmpPanel.add(areaStartColor);
+		areaEndColor = new  JButton("End color",
+				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
+		areaEndColor.addActionListener(new ListenAreaEndColor());
+		tmpPanel.add(areaEndColor);
+		
 		areaColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				pointAttributeNames.toArray());
@@ -582,7 +706,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// area color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Areas color:"));
+		tmpPanel.setBorder(new TitledBorder("Areas fixed color:"));
 		areaColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		areaColor.addActionListener(new ListenAreaColor());
@@ -631,6 +755,57 @@ public class KmlRendererPanel extends SpreadPanel {
 
 	}// END: ListenLineColorMapping
 
+	
+	private class ListenAreaStartColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color( //
+					settings.minAreaRed.intValue(), //
+					settings.minAreaGreen.intValue(), //
+					settings.minAreaBlue.intValue(), //
+					settings.minAreaAlpha.intValue() //
+			);
+			
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			if (c != null) {
+				settings.minAreaRed = Double.valueOf(c.getRed());
+				settings.minAreaGreen = Double.valueOf(c.getGreen());
+				settings.minAreaBlue = Double.valueOf(c.getBlue());
+				settings.minAreaAlpha = Double.valueOf(c.getAlpha());
+			}
+
+		}// END: actionPerformed
+	}// END: ListenPointStartColor
+	
+	private class ListenAreaEndColor implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			Color defaultColor = new Color( //
+					settings.maxAreaRed.intValue(), //
+					settings.maxAreaGreen.intValue(), //
+					settings.maxAreaBlue.intValue(), //
+					settings.maxAreaAlpha.intValue() //
+			);
+			
+			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
+					"Choose color...", defaultColor, true);
+
+			if (c != null) {
+				settings.maxAreaRed = (double) c.getRed();
+				settings.maxAreaGreen = (double) c.getGreen();
+				settings.maxAreaBlue = (double) c.getBlue();
+				settings.maxAreaAlpha = (double) c.getAlpha();
+			}
+
+		}// END: actionPerformed
+	}// END: ListenPointEndColor
+	
+	
+	
+	
+	
 	// //////////////
 	// ---COUNTS---//
 	// //////////////
@@ -642,7 +817,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		// color
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		tmpPanel.setBorder(new TitledBorder("Counts color:"));
+		tmpPanel.setBorder(new TitledBorder("Counts fixed color:"));
 		countColor = new JButton("Color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		countColor.addActionListener(new ListenCountColor());

@@ -159,6 +159,12 @@ public class KmlRendererSettings {
 
 	// ---ALPHA---//
 
+	// For continuous attributes
+	public String areaAlphaMapping = null;
+	public Double minAreaAlpha = 100.0;
+	public Double maxAreaAlpha = 150.0;
+	public boolean areaAlphaChanged = false;
+	
 	// Fixed
 	public double areaAlpha = 100;
 

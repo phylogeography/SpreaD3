@@ -57,8 +57,8 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 	@Override
 	protected void initializeComponents() {
 
-		setSize(new Dimension(1300, 600));
-		setMinimumSize(new Dimension(260, 100));
+		setSize(new Dimension(1400,700));
+		setMinimumSize(new Dimension(300, 200));
 
 		dataPanel = new DataPanel(this);
 		tabbedPane.addTab(DATA_TAB_NAME, null, dataPanel);
