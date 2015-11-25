@@ -139,11 +139,13 @@ public class KmlRendererSettings {
 
 	// For continuous attributes
 	public String areaColorMapping = null;
+	
 	public Double minAreaRed = 100.0;
-	public Double maxAreaRed = 250.0;
-	public Double minAreaGreen = 50.0;
-	public Double maxAreaGreen = 100.0;
+	public Double minAreaGreen = 50.0;	
 	public Double minAreaBlue = 50.0;
+	
+	public Double maxAreaRed = 250.0;
+	public Double maxAreaGreen = 100.0;
 	public Double maxAreaBlue = 100.0;
 
 	// For discrete attributes

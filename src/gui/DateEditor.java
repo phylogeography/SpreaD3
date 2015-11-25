@@ -19,6 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SwingUtilities;
 
 import org.joda.time.LocalDate;
 
@@ -78,19 +79,39 @@ public class DateEditor extends JPanel {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
 
 				// if analysis type changed reset components below
-				// removeChildComponents(analysisType);
-				// resetFlags();
-
+				
+				
 				Object item = event.getItem();
 				DateFormats type = (DateFormats) item;
 				switch (type) {
 
 				case DATE_FORMAT:
-					populateDateFormat();
+//					populateDateFormat();
+					
+					if (SwingUtilities.isEventDispatchThread()) {
+						populateDateFormat();
+					} else {
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								populateDateFormat();
+							}
+						});
+					}// END: edt check
+					
 					break;
 
 				case DECIMAL_FORMAT:
-					populateDecimalFormat();
+					if (SwingUtilities.isEventDispatchThread()) {
+						populateDecimalFormat();
+						
+					} else {
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								populateDecimalFormat();
+							}
+						});
+					}// END: edt check
+//					populateDecimalFormat();
 					break;
 
 				default:
@@ -117,6 +138,7 @@ public class DateEditor extends JPanel {
 			add(spinner);
 
 			dateFormatCreated = true;
+			callRepaint();
 		}
 
 	}// END: populateDateFormat
@@ -130,6 +152,7 @@ public class DateEditor extends JPanel {
 			decimalDate = new JTextField(convertToDecimalDate(today), 10);
 			add(decimalDate);
 			decimalFormatCreated = true;
+			callRepaint();
 		}
 
 	}// END: populateDecimalFormat
@@ -170,4 +193,8 @@ public class DateEditor extends JPanel {
 		return decimalDateString;
 	}// END: convertToDecimalDate
 
+	private void callRepaint() {
+		this.repaint();
+	}//END: callRepaint
+	
 }// END: class

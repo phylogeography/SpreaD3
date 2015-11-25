@@ -48,6 +48,9 @@ h5. Color
 * map point colors to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping height -output test.kml
 
+* map point colors to a continuous attribute, override default start-end colors
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping height -pointStartColor 250 0 0 -pointEndColor 0 0 150  -output test.kml
+
 * map point colors to a discrete attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping location -output test.kml
 
@@ -57,6 +60,9 @@ h5. Color
 h5.  Area 
 
 * map point areas to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
+
+* map point areas to a continuous attribute, select start and end colors
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
 
 * map point areas to a discrete attribute
@@ -241,13 +247,13 @@ h1. LICENSE
    "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
 h1. TODO
-* Make main frame larger
-* start/end colors for KML
-* rename color chooser to "fixed color" (kml renderer panel)
-* change -intervals to -slices (both in discrete tree and in time slicer)
-* defaults on top of selectors in kml
 
-
+* KML
+  - start/end colors for KML
+  - Make main frame larger
+  - rename color chooser to "fixed color" (kml renderer panel)
+  - change -intervals to -slices (both in discrete tree and in time slicer)
+  - defaults on top of selectors in kml
 
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]
