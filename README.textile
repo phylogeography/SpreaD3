@@ -243,7 +243,7 @@ h1. LICENSE
 h1. TODO
 * Make main frame larger
 * start/end colors for KML
-* rename color chooser to fixed color (kml renderer panel)
+* rename color chooser to "fixed color" (kml renderer panel)
 * change -intervals to -slices (both in discrete tree and in time slicer)
 * defaults on top of selectors in kml
 

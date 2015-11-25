@@ -353,9 +353,6 @@ public class KmlRenderer implements Renderer {
 
 		if (altitudeAttribute != null) {
 
-			//TODO
-			System.out.println("FUBAR");
-			
 			Object altitudeAttributeValue = line.getAttributes().get(
 					settings.lineAltitudeMapping);
 
@@ -561,7 +558,7 @@ public class KmlRenderer implements Renderer {
 			Object areaAttributeValue = point.getAttributes().get(
 					settings.pointAreaMapping);
 
-			//TODO
+			//TODO: null pointers
 			System.out.println(areaAttributeValue);
 			
 			
