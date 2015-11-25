@@ -62,7 +62,7 @@ h5.  Area
 * map point areas to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
 
-* map point areas to a continuous attribute, select start and end colors
+* map point areas to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
 
 * map point areas to a discrete attribute
@@ -72,11 +72,14 @@ h4. LINES
 
 h5. Color
 
-* override default lines color
+* override default fixed lines color
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColor 250 0 0 -output test.kml
 
 * map line colors to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping length -output test.kml
+
+* map line colors to a continuous attribute, override default start-end colors
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping length -lineStartColor 250 0 0 -lineEndColor 0 0 150 -output test.kml
 
 * map line colors to a discrete attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping country -output test.kml
@@ -188,6 +191,9 @@ h5. Color
 * map areas color to a continuous attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping height -output test.kml
 
+* map areas color to a continuous attribute, override default start-end colors
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping height -areaStartColor 250 0 0 -areaEndColor 0 250 0  -output test.kml
+
 * map areas colors to a discrete attribute, use supplied color schemes
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping trait_80HPD_modality -output test.kml
 
@@ -249,11 +255,14 @@ h1. LICENSE
 h1. TODO
 
 * KML
-  - start/end colors for KML
+  - start/end colors for KML in UI
   - Make main frame larger
   - rename color chooser to "fixed color" (kml renderer panel)
   - change -intervals to -slices (both in discrete tree and in time slicer)
   - defaults on top of selectors in kml
+
+* D3
+  - simlify d3 rendered folder structure
 
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]

@@ -72,8 +72,8 @@ public class Spread2ConsoleApp {
 	private static final String X_COORDINATE = "xCoordinate";
 	private static final String Y_COORDINATE = "yCoordinate";
 	private static final String EXTERNAL_ANNOTATIONS = "externalAnnotations";
-//	private static final String GENERATE_JSON = "generateJson";
-	
+	// private static final String GENERATE_JSON = "generateJson";
+
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
 	private static final String GEOJSON = "geojson";
@@ -102,7 +102,7 @@ public class Spread2ConsoleApp {
 	private static final String POINT_START_COLOR = "pointStartColor";
 	private static final String POINT_END_COLOR = "pointEndColor";
 	private static final String POINT_COLORS = "pointColors";
-	
+
 	private static final String POINT_ALPHA = "pointAlpha";
 	private static final String POINT_ALPHA_MAPPING = "pointAlphaMapping";
 
@@ -113,6 +113,8 @@ public class Spread2ConsoleApp {
 	private static final String LINES_VALUE = "linesValue";
 
 	private static final String LINE_COLOR_MAPPING = "lineColorMapping";
+	private static final String LINE_START_COLOR = "lineStartColor";
+	private static final String LINE_END_COLOR = "lineEndColor";
 	private static final String LINE_COLORS = "lineColors";
 	private static final String LINE_COLOR = "lineColor";
 
@@ -132,6 +134,8 @@ public class Spread2ConsoleApp {
 	// private static final String AREA_VALUE = "linesValue";
 
 	private static final String AREA_COLOR_MAPPING = "areaColorMapping";
+	private static final String AREA_START_COLOR = "areaStartColor";
+	private static final String AREA_END_COLOR = "areaEndColor";
 	private static final String AREA_COLORS = "areaColors";
 	private static final String AREA_COLOR = "areaColor";
 
@@ -220,13 +224,14 @@ public class Spread2ConsoleApp {
 
 		new Arguments.RealOption(BURNIN, "log file burning in %"),
 
-//		new Arguments.StringOption(GENERATE_JSON, new String[] { TRUE, //
-//				FALSE //
-//				}, false, "generate JSON output for renderers?"),		
-		
-		new Arguments.StringOption(GEOJSON, "", "geojson file name"),
+				// new Arguments.StringOption(GENERATE_JSON, new String[] {
+				// TRUE, //
+				// FALSE //
+				// }, false, "generate JSON output for renderers?"),
 
-		new Arguments.StringOption(OUTPUT, "", "json output file name")
+				new Arguments.StringOption(GEOJSON, "", "geojson file name"),
+
+				new Arguments.StringOption(OUTPUT, "", "json output file name")
 
 		});
 
@@ -242,10 +247,13 @@ public class Spread2ConsoleApp {
 						new Arguments.StringOption(Y_COORDINATE, "",
 								"y location trait name (longitude)"),
 
-						new Arguments.StringOption(EXTERNAL_ANNOTATIONS, new String[] { TRUE, //
+						new Arguments.StringOption(
+								EXTERNAL_ANNOTATIONS,
+								new String[] { TRUE, //
 										FALSE //
-										}, false, "Are the external (tip) nodes annotated?"),
-								
+								}, false,
+								"Are the external (tip) nodes annotated?"),
+
 						new Arguments.StringOption(HPD, "", "hpd level"),
 
 						new Arguments.StringOption(MRSD, "",
@@ -333,7 +341,6 @@ public class Spread2ConsoleApp {
 						new Arguments.RealArrayOption(POINT_COLOR, 3,
 								"specify RGB value"),
 
-								
 						new Arguments.StringOption(POINT_COLOR_MAPPING, "",
 								"attribute to map RGB aesthetics"),
 
@@ -342,7 +349,7 @@ public class Spread2ConsoleApp {
 
 						new Arguments.RealArrayOption(POINT_END_COLOR, 3,
 								"specify RGB value"),
-								
+
 						new Arguments.StringOption(POINT_COLORS, "",
 								"file with RGB(A) colors to map attribute values to."),
 
@@ -390,6 +397,12 @@ public class Spread2ConsoleApp {
 
 						new Arguments.StringOption(AREA_COLOR_MAPPING, "",
 								"attribute to map RGB aesthetics"),
+
+						new Arguments.RealArrayOption(AREA_START_COLOR, 3,
+								"specify RGB value"),
+
+						new Arguments.RealArrayOption(AREA_END_COLOR, 3,
+								"specify RGB value"),
 
 						new Arguments.StringOption(AREA_COLORS, "",
 								"file with RGB(A) colors to map attribute values to."),
@@ -440,6 +453,15 @@ public class Spread2ConsoleApp {
 
 						new Arguments.StringOption(LINE_COLOR_MAPPING, "",
 								"attribute to map RGB aesthetics"),
+
+						new Arguments.StringOption(AREA_COLOR_MAPPING, "",
+								"attribute to map RGB aesthetics"),
+
+						new Arguments.RealArrayOption(LINE_START_COLOR, 3,
+								"specify RGB value"),
+
+						new Arguments.RealArrayOption(LINE_END_COLOR, 3,
+								"specify RGB value"),
 
 						new Arguments.StringOption(LINE_COLORS, "",
 								"file with RGB(A) colors to map attribute values."),
@@ -803,18 +825,17 @@ public class Spread2ConsoleApp {
 								.getStringOption(OUTPUT);
 					} // END: option check
 
-//					if (args2.hasOption(GENERATE_JSON)) {
-//
-//						String option = args2.getStringOption(GENERATE_JSON);
-//						if (option.equalsIgnoreCase(FALSE)) {
-//							settings.bayesFactorsSettings.generateJson = false;
-//						} else {
-//							settings.bayesFactorsSettings.generateJson = false;
-//						}
-//
-//					} // END: option check
-					
-					
+					// if (args2.hasOption(GENERATE_JSON)) {
+					//
+					// String option = args2.getStringOption(GENERATE_JSON);
+					// if (option.equalsIgnoreCase(FALSE)) {
+					// settings.bayesFactorsSettings.generateJson = false;
+					// } else {
+					// settings.bayesFactorsSettings.generateJson = false;
+					// }
+					//
+					// } // END: option check
+
 					if (args2.hasOption(GEOJSON)) {
 
 						settings.bayesFactorsSettings.geojsonFilename = args2
@@ -900,7 +921,8 @@ public class Spread2ConsoleApp {
 
 					if (args3.hasOption(EXTERNAL_ANNOTATIONS)) {
 
-						String option = args3.getStringOption(EXTERNAL_ANNOTATIONS);
+						String option = args3
+								.getStringOption(EXTERNAL_ANNOTATIONS);
 						if (option.equalsIgnoreCase(TRUE)) {
 							settings.continuousTreeSettings.externalAnnotations = true;
 						} else {
@@ -908,8 +930,7 @@ public class Spread2ConsoleApp {
 						}
 
 					} // END: option check
-					
-					
+
 					if (args3.hasOption(HPD)) {
 						settings.continuousTreeSettings.hpd = args3
 								.getStringOption(HPD);
@@ -1289,27 +1310,27 @@ public class Spread2ConsoleApp {
 							settings.kmlRendererSettings.pointColors = kmlRenderArguments
 									.getStringOption(POINT_COLORS);
 						}
-						
-						if(kmlRenderArguments.hasOption(POINT_START_COLOR)) {
-							
+
+						if (kmlRenderArguments.hasOption(POINT_START_COLOR)) {
+
 							double[] color = kmlRenderArguments
-							.getRealArrayOption(POINT_START_COLOR);
-							
+									.getRealArrayOption(POINT_START_COLOR);
+
 							settings.kmlRendererSettings.minPointRed = color[KmlRendererSettings.R];
 							settings.kmlRendererSettings.minPointGreen = color[KmlRendererSettings.G];
 							settings.kmlRendererSettings.minPointBlue = color[KmlRendererSettings.B];
-							
+
 						}
-						
-						if(kmlRenderArguments.hasOption(POINT_END_COLOR)) {
-							
+
+						if (kmlRenderArguments.hasOption(POINT_END_COLOR)) {
+
 							double[] color = kmlRenderArguments
-							.getRealArrayOption(POINT_END_COLOR);
-							
+									.getRealArrayOption(POINT_END_COLOR);
+
 							settings.kmlRendererSettings.maxPointRed = color[KmlRendererSettings.R];
 							settings.kmlRendererSettings.maxPointGreen = color[KmlRendererSettings.G];
 							settings.kmlRendererSettings.maxPointBlue = color[KmlRendererSettings.B];
-							
+
 						}
 
 					} else if (kmlRenderArguments.hasOption(POINT_COLOR)) {
@@ -1320,7 +1341,8 @@ public class Spread2ConsoleApp {
 					} else {
 
 						// use defaults
-						System.out.println("Using default point color settings");
+						System.out
+								.println("Using default point color settings");
 
 					}
 
@@ -1337,17 +1359,19 @@ public class Spread2ConsoleApp {
 								.getRealOption(POINT_ALPHA);
 						settings.kmlRendererSettings.pointAlphaChanged = true;
 
-					} else if (kmlRenderArguments
-							.hasOption(POINT_ALPHA_MAPPING)
-							&& kmlRenderArguments.hasOption(POINT_ALPHA)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined point alpha!");
+//					} else if (kmlRenderArguments
+//							.hasOption(POINT_ALPHA_MAPPING)
+//							&& kmlRenderArguments.hasOption(POINT_ALPHA)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined point alpha!");
 
 					} else {
 
 						// use defaults
-
+						System.out
+						.println("Using default point alpha settings.");
+						
 					}
 
 					// ---POINT AREA---//
@@ -1362,15 +1386,17 @@ public class Spread2ConsoleApp {
 						settings.kmlRendererSettings.pointArea = kmlRenderArguments
 								.getRealOption(POINT_AREA);
 
-					} else if (kmlRenderArguments.hasOption(POINT_AREA_MAPPING)
-							&& kmlRenderArguments.hasOption(POINT_AREA)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined point area!");
+//					} else if (kmlRenderArguments.hasOption(POINT_AREA_MAPPING)
+//							&& kmlRenderArguments.hasOption(POINT_AREA)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined point area!");
 
 					} else {
 
 						// use defaults
+						System.out
+						.println("Using default point area settings.");
 
 					}
 
@@ -1396,21 +1422,46 @@ public class Spread2ConsoleApp {
 							settings.kmlRendererSettings.areaColors = kmlRenderArguments
 									.getStringOption(AREA_COLORS);
 						}
+						
+						if (kmlRenderArguments.hasOption(AREA_START_COLOR)) {
 
+							double[] color = kmlRenderArguments
+									.getRealArrayOption(AREA_START_COLOR);
+
+							settings.kmlRendererSettings.minAreaRed = color[KmlRendererSettings.R];
+							settings.kmlRendererSettings.minAreaGreen = color[KmlRendererSettings.G];
+							settings.kmlRendererSettings.minAreaBlue = color[KmlRendererSettings.B];
+
+						}
+
+						if (kmlRenderArguments.hasOption(AREA_END_COLOR)) {
+
+							double[] color = kmlRenderArguments
+									.getRealArrayOption(AREA_END_COLOR);
+
+							settings.kmlRendererSettings.maxAreaRed = color[KmlRendererSettings.R];
+							settings.kmlRendererSettings.maxAreaGreen = color[KmlRendererSettings.G];
+							settings.kmlRendererSettings.maxAreaBlue = color[KmlRendererSettings.B];
+
+						}
+						
+						
 					} else if (kmlRenderArguments.hasOption(AREA_COLOR)) {
 
 						settings.kmlRendererSettings.areaColor = kmlRenderArguments
 								.getRealArrayOption(AREA_COLOR);
 
-					} else if (kmlRenderArguments.hasOption(AREA_COLOR_MAPPING)
-							&& kmlRenderArguments.hasOption(AREA_COLOR)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined area color!");
+//					} else if (kmlRenderArguments.hasOption(AREA_COLOR_MAPPING)
+//							&& kmlRenderArguments.hasOption(AREA_COLOR)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined area color!");
 
 					} else {
 
 						// use defaults
+						System.out
+								.println("Using default area color settings");
 
 					}
 
@@ -1420,6 +1471,12 @@ public class Spread2ConsoleApp {
 
 						settings.kmlRendererSettings.areaAlpha = kmlRenderArguments
 								.getRealOption(AREA_ALPHA);
+
+					} else {
+
+						// use defaults
+						System.out
+								.println("Using default area alpha settings");
 
 					}
 
@@ -1483,16 +1540,17 @@ public class Spread2ConsoleApp {
 						settings.kmlRendererSettings.lineColor = kmlRenderArguments
 								.getRealArrayOption(LINE_COLOR);
 
-					} else if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)
-							&& kmlRenderArguments.hasOption(LINE_COLOR)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined line color!");
+//					} else if (kmlRenderArguments.hasOption(LINE_COLOR_MAPPING)
+//							&& kmlRenderArguments.hasOption(LINE_COLOR)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined line color!");
 
 					} else {
 
 						// use defaults
-
+						System.out
+						.println("Using default line color settings.");
 					}
 
 					// ---LINE ALPHA---//
@@ -1508,15 +1566,17 @@ public class Spread2ConsoleApp {
 								.getRealOption(LINE_ALPHA);
 						settings.kmlRendererSettings.lineAlphaChanged = true;
 
-					} else if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)
-							&& kmlRenderArguments.hasOption(LINE_ALPHA)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined line alpha!");
+//					} else if (kmlRenderArguments.hasOption(LINE_ALPHA_MAPPING)
+//							&& kmlRenderArguments.hasOption(LINE_ALPHA)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined line alpha!");
 
 					} else {
 
 						// use defaults
+						System.out
+						.println("Using default line alpha settings.");
 
 					}
 
@@ -1532,15 +1592,17 @@ public class Spread2ConsoleApp {
 						settings.kmlRendererSettings.lineWidth = kmlRenderArguments
 								.getRealOption(LINE_WIDTH);
 
-					} else if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)
-							&& kmlRenderArguments.hasOption(LINE_WIDTH)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined line altitude!");
+//					} else if (kmlRenderArguments.hasOption(LINE_WIDTH_MAPPING)
+//							&& kmlRenderArguments.hasOption(LINE_WIDTH)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined line altitude!");
 
 					} else {
 
 						// use defaults
+						System.out
+						.println("Using default line width settings.");
 
 					}
 
@@ -1556,16 +1618,18 @@ public class Spread2ConsoleApp {
 						settings.kmlRendererSettings.lineAltitude = kmlRenderArguments
 								.getRealOption(LINE_ALTITUDE);
 
-					} else if (kmlRenderArguments
-							.hasOption(LINE_ALTITUDE_MAPPING)
-							&& kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined line altitude!");
+//					} else if (kmlRenderArguments
+//							.hasOption(LINE_ALTITUDE_MAPPING)
+//							&& kmlRenderArguments.hasOption(LINE_ALTITUDE)) {
+//
+//						throw new ArgumentException(
+//								"Can't both map and have a defined line altitude!");
 
 					} else {
 
 						// use defaults
+						System.out
+						.println("Using default line altitude settings.");
 
 					}
 

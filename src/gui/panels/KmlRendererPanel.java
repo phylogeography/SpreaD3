@@ -257,6 +257,11 @@ public class KmlRendererPanel extends SpreadPanel {
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Points color attribute:"));
+		
+		
+		//TODO color chooser min/max
+		
+		
 		pointColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				pointAttributeNames.toArray());
