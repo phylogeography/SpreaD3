@@ -241,6 +241,13 @@ h1. LICENSE
    "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
 h1. TODO
+* Make main frame larger
+* start/end colors for KML
+* rename color chooser to fixed color (kml renderer panel)
+* change -intervals to -slices (both in discrete tree and in time slicer)
+* defaults on top of selectors in kml
+
+
 
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]

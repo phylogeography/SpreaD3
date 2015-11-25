@@ -507,7 +507,7 @@ public class KmlRendererPanel extends SpreadPanel {
 				Object item = event.getItem();
 				String attribute = item.toString();
 
-				settings.lineAlphaMapping = attribute;
+				settings.lineAltitudeMapping = attribute;
 
 			} // END: selected check
 		}// END: itemStateChanged

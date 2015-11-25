@@ -353,12 +353,15 @@ public class KmlRenderer implements Renderer {
 
 		if (altitudeAttribute != null) {
 
+			//TODO
+			System.out.println("FUBAR");
+			
 			Object altitudeAttributeValue = line.getAttributes().get(
 					settings.lineAltitudeMapping);
 
 			if (lineAltitudeMap.containsKey(altitudeAttributeValue)) { // get it
 
-				altitude = pointAreaMap.get(altitudeAttributeValue);
+				altitude = lineAltitudeMap.get(altitudeAttributeValue);
 
 			} else { // map it
 
@@ -390,7 +393,7 @@ public class KmlRenderer implements Renderer {
 				} // END: scale check
 
 				// store for future reference
-				pointAreaMap.put(altitudeAttributeValue, altitude);
+				lineAltitudeMap.put(altitudeAttributeValue, altitude);
 
 			} // END: key check
 
@@ -553,9 +556,15 @@ public class KmlRenderer implements Renderer {
 		Double area = settings.pointArea;
 		if (areaAttribute != null) {
 
+			
+			
 			Object areaAttributeValue = point.getAttributes().get(
 					settings.pointAreaMapping);
 
+			//TODO
+			System.out.println(areaAttributeValue);
+			
+			
 			if (pointAreaMap.containsKey(areaAttributeValue)) { // get
 
 				area = pointAreaMap.get(areaAttributeValue);
