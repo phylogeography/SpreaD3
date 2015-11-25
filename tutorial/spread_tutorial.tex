@@ -122,9 +122,10 @@ A third advantage of the layered approach to image building is the ease with whi
 \par
 Alongside enhancing the flexibility in creating the visualisations, the other prime objective of SpreaD3 is to drastically facilitate the on-line publishing of interactive visualisations.
 This is achieved by rendering the figures using the Data Driven Documents JavaScript libraries (D3, see \url{www.d3js.org} and \citet{Bostock:2011aa}) to project the annotated phylogenies on a map in geoJSON data structure format (\url{www.geojson.org}).
+There are a number of easy-to-use utilities for creating geoJSON maps, such as (
+%how can a longitude/latitude globe reference easily be converted to the corresponding coordinates on a geoJSON map? 
+%how can the latter easily be constructed (geojson.io? https://google-developers.appspot.com/maps/documentation/utils/geojson/?)
 For reasons of consistency with the previous version, and as an illustration of the branching to other renderers enabled by the versatile JSON data format as a go-between, SpreaD3 also supports re-interpreting parsed input data in the Keyhole Markup Language (KLM) for visualisations in virtual globe software like Google Earth (\url{www.google.com/earth/}). 
-
-
 \par
 In this tutorial we give a detailed description of program functionalities by presenting an example for the main genres of possible analyses and give general guidelines on running SpreaD3. 
 The data files used in the example can be found at \url{http://www.phylogeography.org/}.
@@ -181,30 +182,11 @@ meaning of options?
 \\
 To project annotated trees on a
 
-Brams-MacBook-Pro:EBOV brammie$ spread -render d3 -json ebov_discrete_withMap.json -output ebov_discrete_withMap 
-
-       SPREAD version 2.1.2 (2015) -- Rough & Ready.
-Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics
-Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard and Philippe 'The Wise' Lemey
-                Thanks to: Stephan Nylinder 
-
-                      The end is near
-
-In rendering mode
-java.io.FileNotFoundException: spread2_0.0.1.jar (No such file or directory)
-	at java.util.zip.ZipFile.open(Native Method)
-	at java.util.zip.ZipFile.<init>(ZipFile.java:220)
-	at java.util.zip.ZipFile.<init>(ZipFile.java:150)
-	at java.util.jar.JarFile.<init>(JarFile.java:166)
-	at java.util.jar.JarFile.<init>(JarFile.java:103)
-	at renderers.d3.D3Renderer.render(Unknown Source)
-	at app.Spread2ConsoleApp.run(Unknown Source)
-	at app.Spread2App.main(Unknown Source)
-spread2_0.0.1.jar (No such file or directory)
-
+intervals = time slices; chops the tree in n time intervals => used to calculate for example the counts of a particular transition between states
  
 \par
-We provide an over view of the options that the user can specify to fine-tune the appearance of the basic elements used for representing the phylogeny, its associated traits and their corresponding uncertainty, namely \textit{points}, \textit{lines} and \textit{counts} in Table \ref{tab:options}.
+%We provide an over view of the options that the user can specify to fine-tune the appearance of the elements representing the phylogeny, its associated traits and their corresponding uncertainty, namely \textit{points}, \textit{lines} and \textit{counts} in Table \ref{tab:options}.
+We provide an over view of the options that the user can specify to fine-tune the appearance of the elements used to represent all facets of the phylogeny and its associated traits, namely \textit{points}, \textit{lines} and \textit{counts} in Table \ref{tab:options}.
 \\are these available for the KML AND D3 rendering?
 
 %TABLE 1
@@ -221,27 +203,32 @@ We provide an over view of the options that the user can specify to fine-tune th
 \textit{color}:					&						\\
 								&						\\
 override default points color			& -pointColor 0 255 255										\\
-map point colors to a continuous attribute 	& -pointColor 0 255 255 -pointColorMapping height					\\
-%we should provide an overview of the possible attributes.
+map point colors to a continuous attribute 	& -pointColor 0 255 255 -pointColorMapping location$^\ddagger$\\
+%differnentiate point attribute using colors 
 map point colors to a discrete attribute:	& 					 									\\
 	-same color for all states			&-pointColor 0 255 255 -pointColorMapping location					\\
 	-state-specific colors: via color sheet$\dagger$&-pointcolors traitColors.txt -pointColorMapping location		\\
 								&						\\
 \textit{area}: 					&						\\
 								&						\\
+%no value to be set?
+override default points area			& -pointArea 2000	\\						
 map point areas to a continuous attribute	& -pointAreaMapping height									\\
 map point areas to a discrete attribute	& -pointAreaMapping location									\\
+%resizes point area proportional to max of selected trait values
 \midrule
 			\multicolumn{2}{c}{lines}			\\
 \midrule
 								&						\\
 \textit{color}:					&						\\
+%color lines by destination of discrete trait
 								&						\\
 override default lines color				&	-lineColor 250 0 0		\\
 map line colors to a continuous attribute	&	-lineColor 250 0 0 -lineColorMapping length				\\
 map line colors to a discrete attribute:	&						\\
 	-same color for all states			&	-lineColor 250 0 0 -lineColorMapping location				\\
 	-state-specific colors: via color sheet$\dagger$&-linecolors traitColors.txt -lineColorMapping location		\\
+%start color and end color: color changes between these - similar setup for discrte and continuous traits
 								&						\\
 \textit{width}:					&						\\
 								&						\\
@@ -249,8 +236,10 @@ map line colors to a discrete attribute:	&						\\
 								&						\\
 								&						\\
 \textit{altitude}:				&						\\
+%max altitude uniformly applied to all?
 								&						\\
-override default lines (maximum?) altitude	&-lineAltitude  \textit{number}	\\
+override default lines altitude			&-lineAltitude  \textit{number}	\\
+%no differentiation in altitude by trait value? 
 map line altitude to a continuous attribute	&-lineAltitude  \textit{number} -lineAltitudeMapping height	\\
 map line altitude to a discrete attribute	&-lineAltitude  \textit{number} -lineAltitudeMapping country\\
 								&						\\
@@ -267,12 +256,24 @@ override default count color			&	-countColor 0 0 250		\\
 \begin{flushleft}
 {\footnotesize 
 $\dagger$: a file with per line only the trait state name and its color code, separated by a tab. The colors should be supplied in RGB or RGBA values.
+\\
+$\ddagger$: while here the trait of interest in a standard pylogeographical analysis  typically would be location trait, this can be any discrete trait of choice.
 } 
 \end{flushleft}
 \label{tab:options}
  \end{table}
 
 
+%in GUI-mode: when rendering, the boxes too large to be visualised in 1 screen - for ease of use I strongly suggest these fit 1 screen. 
+%in GUI-mode: default is that tweaking options are not set, I would add this option to the choice list
+%GUI: when rendering EBOV, parsed with 'location attribute', selecting point colors 'country', point color 'blue' -> points are still shades of green???
+%GUI: when selecting both points color and area coording to Country, there is a Liberia location in the middle of Sierra Leone plus another one near the border. Also one Liberia and several Sierra Leone locations in Guinee??? Artefact of negative branch lengths in MCC tree?
+%GUI: lines color is not the selected one??
+%GUI line width: seems OK
+%GUI area color: not selected choice 
+%GUI counts color: seems OK. But I wonder: what makes an area suddenly pop up? Is this the number of intervals -> yep?
+
+LINE COLOR = GET CHILD NODE COLOR
 \subsection{Visualising a MCC tree annotated with continuous traits}
 % 2.3 MCC tree with Continuous traits
 %  - languages example would look really nice here overlayed on a whole
