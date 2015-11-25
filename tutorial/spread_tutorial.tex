@@ -14,7 +14,8 @@
 \usepackage{hyperref}
 \usepackage{babel}
 \usepackage{natbib}
-
+\usepackage{booktabs}
+\usepackage{multirow}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %---USER SPECIFIED LaTeX COMMANDS---%
@@ -71,7 +72,11 @@ Filip Bielejec (filip.bielejec@rega.kuleuven.be)
 \textbf{Download}
 \par\end{flushleft}
 SpreaD3 and its source code are freely available from \url{https: //github.com/phylogeography/SPREAD2}.
-You can also clone the project with Git by running: \$ git clone https://github.com/phylogeography/SPREAD2. (UPDATE NAME?)
+You can also clone the project with Git by running: 
+\\\$ git clone https://github.com/phylogeography/SPREAD2. (UPDATE NAME?)
+\\
+cd into the base dir and compile SpreaD3 by running 
+\\\$ ant jar
 
 %---TOC---%
 \pagebreak{}
@@ -117,9 +122,10 @@ A third advantage of the layered approach to image building is the ease with whi
 \par
 Alongside enhancing the flexibility in creating the visualisations, the other prime objective of SpreaD3 is to drastically facilitate the on-line publishing of interactive visualisations.
 This is achieved by rendering the figures using the Data Driven Documents JavaScript libraries (D3, see \url{www.d3js.org} and \citet{Bostock:2011aa}) to project the annotated phylogenies on a map in geoJSON data structure format (\url{www.geojson.org}).
+There are a number of easy-to-use utilities for creating geoJSON maps, such as (
+%how can a longitude/latitude globe reference easily be converted to the corresponding coordinates on a geoJSON map? 
+%how can the latter easily be constructed (geojson.io? https://google-developers.appspot.com/maps/documentation/utils/geojson/?)
 For reasons of consistency with the previous version, and as an illustration of the branching to other renderers enabled by the versatile JSON data format as a go-between, SpreaD3 also supports re-interpreting parsed input data in the Keyhole Markup Language (KLM) for visualisations in virtual globe software like Google Earth (\url{www.google.com/earth/}). 
-
-
 \par
 In this tutorial we give a detailed description of program functionalities by presenting an example for the main genres of possible analyses and give general guidelines on running SpreaD3. 
 The data files used in the example can be found at \url{http://www.phylogeography.org/}.
@@ -134,6 +140,15 @@ A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found 
 % 2. Examples of usage. Whese should show not just how but also why, what
 % can we learn by visualising these processes.
 % 
+For the command line examples throughout this tutorial we assume the following alias has been added to your .bash\_profile:
+\\
+alias spread=`java -jar <absolute path to spread.jar>' 
+\\
+The alias will become active when you open another session in Terminal, or it can be used in the current session after executing
+\\
+\$ source $\sim$/.bash\_profile
+\\
+in the current session  [\#assuming your bash\_profile resides at \$HOME]. 
 
 \subsection{Visualizing a MCC tree annotated with discrete traits}
 % 
@@ -141,13 +156,124 @@ A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found 
 %  - Here we could use the EBOV as a case for study. All the steps Parse
 % -> render -> manipulate the visualisation, screenshots etc. Place live links to data (hosted at github)   
 % 
-what is this EBOV datasets exactly => pretty needed to claim that the vis leads to additional insights? 
+%what is this EBOV datasets exactly => pretty needed to claim that the vis leads to additional insights? 
+%\\
+
+%H5N1 dataset 
+%most recent date: why not automatically set to half of the uncertainty when only known up to year or month? Now manually set to yyyy/06/15?
+%$ spread -parse -locations locationCoordinates_H5N1 -tree H5N1_HA_discrete_MCC.tre -locationtrait states -intervals 1 -output parse_states.json -mrsd 2005/06/15
+%I would change the name of 'locationtrait' to 'trait'
+%in automatic message 'Imported locations' -> the 'locations' should be set to whatever the user has used as trait name
+%$ spread -render kml -json parse_states.json -output rendered_states.kml
+
+In this example we use data from the 2014-2015 Ebola virus (EBOV) outbreak in West-Africa. 
+To create a JSON data file compatible with KML-based rendering, we parse the MCC tree without passing the corresponding geoJSON map as an argument:
 \\
-In this example we use data from the 2015-2016 Ebola virus (EBOV) outbreak in West-Africa. 
+\$ spread -parse -locations locations.txt -tree ebov\_mcc.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov\_discrete\_noMap.json
+Note that the number of intervals is set to 10, meaning that xxx.
+Also note that when nodes are annotated with two or more trait states, SpreaD3 will randomly pick one of these.  
+To create the ready-to-use KML file with the default settings, run
+\\
+\$ spread -render kml -json ebov\_discrete\_noMap.json -output ebov\_discrete\_noMap.kml
+\par
+meaning of options?
+\\-intervals
+\\-header T/F
+\\
+To project annotated trees on a
+
+intervals = time slices; chops the tree in n time intervals => used to calculate for example the counts of a particular transition between states
+ 
+\par
+%We provide an over view of the options that the user can specify to fine-tune the appearance of the elements representing the phylogeny, its associated traits and their corresponding uncertainty, namely \textit{points}, \textit{lines} and \textit{counts} in Table \ref{tab:options}.
+We provide an over view of the options that the user can specify to fine-tune the appearance of the elements used to represent all facets of the phylogeny and its associated traits, namely \textit{points}, \textit{lines} and \textit{counts} in Table \ref{tab:options}.
+\\are these available for the KML AND D3 rendering?
+
+%TABLE 1
+\vspace{0.5cm}
+\begin{table}[!ht]
+\centering
+\caption[Overview of the available options]{\footnotesize{\textbf{Overview of the available options}}}
+\begin{tabular}{ll}
+\\
+\toprule
+			\multicolumn{2}{c}{points}			\\
+\midrule	
+								&						\\
+\textit{color}:					&						\\
+								&						\\
+override default points color			& -pointColor 0 255 255										\\
+map point colors to a continuous attribute 	& -pointColor 0 255 255 -pointColorMapping location$^\ddagger$\\
+%differnentiate point attribute using colors 
+map point colors to a discrete attribute:	& 					 									\\
+	-same color for all states			&-pointColor 0 255 255 -pointColorMapping location					\\
+	-state-specific colors: via color sheet$\dagger$&-pointcolors traitColors.txt -pointColorMapping location		\\
+								&						\\
+\textit{area}: 					&						\\
+								&						\\
+%no value to be set?
+override default points area			& -pointArea 2000	\\						
+map point areas to a continuous attribute	& -pointAreaMapping height									\\
+map point areas to a discrete attribute	& -pointAreaMapping location									\\
+%resizes point area proportional to max of selected trait values
+\midrule
+			\multicolumn{2}{c}{lines}			\\
+\midrule
+								&						\\
+\textit{color}:					&						\\
+%color lines by destination of discrete trait
+								&						\\
+override default lines color				&	-lineColor 250 0 0		\\
+map line colors to a continuous attribute	&	-lineColor 250 0 0 -lineColorMapping length				\\
+map line colors to a discrete attribute:	&						\\
+	-same color for all states			&	-lineColor 250 0 0 -lineColorMapping location				\\
+	-state-specific colors: via color sheet$\dagger$&-linecolors traitColors.txt -lineColorMapping location		\\
+%start color and end color: color changes between these - similar setup for discrte and continuous traits
+								&						\\
+\textit{width}:					&						\\
+								&						\\
+	override default lines width		&-lineWidth \textit{number}	\\
+								&						\\
+								&						\\
+\textit{altitude}:				&						\\
+%max altitude uniformly applied to all?
+								&						\\
+override default lines altitude			&-lineAltitude  \textit{number}	\\
+%no differentiation in altitude by trait value? 
+map line altitude to a continuous attribute	&-lineAltitude  \textit{number} -lineAltitudeMapping height	\\
+map line altitude to a discrete attribute	&-lineAltitude  \textit{number} -lineAltitudeMapping country\\
+								&						\\
+\midrule
+			\multicolumn{2}{c}{counts}				\\
+\midrule
+								&						\\
+\textit{color}:					&						\\
+								&						\\
+override default count color			&	-countColor 0 0 250		\\
+								&						\\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+{\footnotesize 
+$\dagger$: a file with per line only the trait state name and its color code, separated by a tab. The colors should be supplied in RGB or RGBA values.
+\\
+$\ddagger$: while here the trait of interest in a standard pylogeographical analysis  typically would be location trait, this can be any discrete trait of choice.
+} 
+\end{flushleft}
+\label{tab:options}
+ \end{table}
 
 
+%in GUI-mode: when rendering, the boxes too large to be visualised in 1 screen - for ease of use I strongly suggest these fit 1 screen. 
+%in GUI-mode: default is that tweaking options are not set, I would add this option to the choice list
+%GUI: when rendering EBOV, parsed with 'location attribute', selecting point colors 'country', point color 'blue' -> points are still shades of green???
+%GUI: when selecting both points color and area coording to Country, there is a Liberia location in the middle of Sierra Leone plus another one near the border. Also one Liberia and several Sierra Leone locations in Guinee??? Artefact of negative branch lengths in MCC tree?
+%GUI: lines color is not the selected one??
+%GUI line width: seems OK
+%GUI area color: not selected choice 
+%GUI counts color: seems OK. But I wonder: what makes an area suddenly pop up? Is this the number of intervals -> yep?
 
-
+LINE COLOR = GET CHILD NODE COLOR
 \subsection{Visualising a MCC tree annotated with continuous traits}
 % 2.3 MCC tree with Continuous traits
 %  - languages example would look really nice here overlayed on a whole
