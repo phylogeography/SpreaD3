@@ -336,6 +336,10 @@ public class KmlRenderer implements Renderer {
 					//
 				} // END: scale check
 
+				red = (int) limitValue(red, 0, 255);
+				green = (int) limitValue(green, 0, 255);
+				blue = (int) limitValue(blue, 0, 255);
+				
 				// store it for future reference
 				color = new Color(red, green, blue, alpha);
 				lineColorMap.put(colorAttributeValue, color);
@@ -663,6 +667,10 @@ public class KmlRenderer implements Renderer {
 					//
 				} // END: scale check
 
+				red = (int) limitValue(red, 0, 255);
+				green = (int) limitValue(green, 0, 255);
+				blue = (int) limitValue(blue, 0, 255);
+				
 				// store it for future reference
 				color = new Color(red, green, blue, alpha);
 				pointColorMap.put(colorAttributeValue, color);
@@ -803,6 +811,10 @@ public class KmlRenderer implements Renderer {
 					//
 				} // END: scale check
 
+				red = (int) limitValue(red, 0, 255);
+				green = (int) limitValue(green, 0, 255);
+				blue = (int) limitValue(blue, 0, 255);
+				
 				// store it for future reference
 				color = new Color(red, green, blue, alpha);
 				areaColorMap.put(colorAttributeValue, color);
@@ -1137,4 +1149,20 @@ public class KmlRenderer implements Renderer {
 		return Math.toRadians((Math.toDegrees(brng) + 360) % 360);
 	}// END: rhumbBearing
 
+	private double limitValue(double value, double lower, double upper) {
+
+		Double limitedValue = value;
+
+		if (value <= lower) {
+			limitedValue = 0.0;
+		}
+
+		if (value >= upper) {
+			limitedValue = upper;
+
+		}
+
+		return limitedValue;
+	}// END: limitValue
+	
 }// END: class

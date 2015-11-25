@@ -99,8 +99,10 @@ public class Spread2ConsoleApp {
 
 	private static final String POINT_COLOR = "pointColor";
 	private static final String POINT_COLOR_MAPPING = "pointColorMapping";
+	private static final String POINT_START_COLOR = "pointStartColor";
+	private static final String POINT_END_COLOR = "pointEndColor";
 	private static final String POINT_COLORS = "pointColors";
-
+	
 	private static final String POINT_ALPHA = "pointAlpha";
 	private static final String POINT_ALPHA_MAPPING = "pointAlphaMapping";
 
@@ -331,9 +333,16 @@ public class Spread2ConsoleApp {
 						new Arguments.RealArrayOption(POINT_COLOR, 3,
 								"specify RGB value"),
 
+								
 						new Arguments.StringOption(POINT_COLOR_MAPPING, "",
 								"attribute to map RGB aesthetics"),
 
+						new Arguments.RealArrayOption(POINT_START_COLOR, 3,
+								"specify RGB value"),
+
+						new Arguments.RealArrayOption(POINT_END_COLOR, 3,
+								"specify RGB value"),
+								
 						new Arguments.StringOption(POINT_COLORS, "",
 								"file with RGB(A) colors to map attribute values to."),
 
@@ -1280,22 +1289,38 @@ public class Spread2ConsoleApp {
 							settings.kmlRendererSettings.pointColors = kmlRenderArguments
 									.getStringOption(POINT_COLORS);
 						}
+						
+						if(kmlRenderArguments.hasOption(POINT_START_COLOR)) {
+							
+							double[] color = kmlRenderArguments
+							.getRealArrayOption(POINT_START_COLOR);
+							
+							settings.kmlRendererSettings.minPointRed = color[KmlRendererSettings.R];
+							settings.kmlRendererSettings.minPointGreen = color[KmlRendererSettings.G];
+							settings.kmlRendererSettings.minPointBlue = color[KmlRendererSettings.B];
+							
+						}
+						
+						if(kmlRenderArguments.hasOption(POINT_END_COLOR)) {
+							
+							double[] color = kmlRenderArguments
+							.getRealArrayOption(POINT_END_COLOR);
+							
+							settings.kmlRendererSettings.maxPointRed = color[KmlRendererSettings.R];
+							settings.kmlRendererSettings.maxPointGreen = color[KmlRendererSettings.G];
+							settings.kmlRendererSettings.maxPointBlue = color[KmlRendererSettings.B];
+							
+						}
 
 					} else if (kmlRenderArguments.hasOption(POINT_COLOR)) {
 
 						settings.kmlRendererSettings.pointColor = kmlRenderArguments
 								.getRealArrayOption(POINT_COLOR);
 
-					} else if (kmlRenderArguments
-							.hasOption(POINT_COLOR_MAPPING)
-							&& kmlRenderArguments.hasOption(POINT_COLOR)) {
-
-						throw new ArgumentException(
-								"Can't both map and have a defined point color!");
-
 					} else {
 
 						// use defaults
+						System.out.println("Using default point color settings");
 
 					}
 
