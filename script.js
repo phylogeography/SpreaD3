@@ -435,7 +435,7 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/languages.json", function ready(error, json) {
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
