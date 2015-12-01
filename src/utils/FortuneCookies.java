@@ -95,6 +95,7 @@ public class FortuneCookies {
 "Feels like a brick dunny",
 "Dry as a dead dingo's donger",
 "I'm not gonna write home to my mother about it",
+"Follow the Yellow Brick Road, over the rainbow",
 
 // --- Bruce Campbell --- //
 
