@@ -13,8 +13,10 @@
 <script type="text/javascript" src="lib/colorlegend/colorlegend.js"></script>
 <script type="text/javascript" src="lib/queue/queue.v1.min.js"></script>
 <script type="text/javascript" src="lib/kodama/kodama.js"></script>
+<script type="text/javascript" src="lib/colorbrewer/colorbrewer.js"></script>
 
-<!-- <script type="text/javascript" src="../lib/colorbrewer/colorbrewer.js"></script> -->
+<script type="text/javascript" src="lib/jquery-simple-color/jquery.simple-color.js"></script>
+
 
 <!-- sources -->
 <script type="text/javascript" src="utils.js"></script>
@@ -200,12 +202,58 @@
 				</div>
 				<!-- END: panel-->
 
+
+				<div class="panel">
+					<h2>Toggle layer visibility</h2>
+					<div class="panelcontent">
+
+						<input type="checkbox" id="mapLayerCheckbox"> Map layer<br>
+						<!--  -->
+						<input type="checkbox" id="areasLayerCheckbox"> Polygons
+						layer<br>
+						<!--  -->
+						<input type="checkbox" id="pointsLayerCheckbox"> Points
+						layer<br>
+						<!--  -->
+						<input type="checkbox" id="linesLayerCheckbox"> Lines
+						layer<br>
+						<!--  -->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Line color</h2>
+					<div class="panelcontent">
+						<select id="lineFixedColor">
+						</select>
+						<div id="lineFixedColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
 				<div class="panel">
 					<h2>Line color attribute</h2>
 					<div class="panelcontent">
-						<select id="linecolor">
+
+						<div>
+							<h4>Start color</h4>
+							<input class='lineStartColor' />
+						</div>
+
+						<div>
+							<h4>End color</h4>
+							<input class='lineEndColor' />
+						</div>
+
+						<h4>Attribute</h4>
+						<select id="lineColorAttribute">
 						</select>
-						<div id="linesColorLegend" class="legend"></div>
+
+						<div id="lineColorLegend" class="legend"></div>
+
 					</div>
 				</div>
 				<!-- END: panel-->
@@ -215,10 +263,6 @@
 					<div class="panelcontent">
 
 						<div class="wrapper">
-<!-- 							<h6>Min bend</h6> -->
-<!-- 							<div id="minBendSlider"></div> -->
-
-							<h6>Max curvature</h6>
 							<div id="maxCurvatureSlider"></div>
 						</div>
 						<!-- END: wrapper-->
@@ -228,31 +272,202 @@
 				<!-- END: panel-->
 
 				<div class="panel">
-					<h2>Point color attribute</h2>
+					<h2>Line width</h2>
 					<div class="panelcontent">
-						<select id="pointcolor">
-						</select>
-						<div id="pointsColorLegend" class="legend"></div>
+
+						<div class="wrapper">
+							<div id="lineWidthSlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
 					</div>
 				</div>
 				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Point color</h2>
+					<div class="panelcontent">
+						<select id="pointFixedColor">
+						</select>
+						<div id="pointFixedColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Point color attribute</h2>
+					<div class="panelcontent">
+
+						<div>
+							<h4>Start color</h4>
+							<input class='pointStartColor' />
+						</div>
+
+						<div>
+							<h4>End color</h4>
+							<input class='pointEndColor' />
+						</div>
+
+						<h4>Attribute</h4>
+						<select id="pointColorAttribute">
+						</select>
+
+						<div id="pointColorLegend" class="legend"></div>
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Point area</h2>
+					<div class="panelcontent">
+
+						<div class="wrapper">
+							<div id="pointFixedAreaSlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
 
 				<div class="panel">
 					<h2>Point area attribute</h2>
 					<div class="panelcontent">
-						<select id="pointarea">
+						<select id="pointAreaAttribute">
 						</select>
-						<!--                         <div id="pointsAreaLegend" class="legend"></div> -->
+						<!-- <div id="pointAreaLegend" class="legend"></div> -->
+
+						<div class="wrapper">
+							<h4>Adjust</h4>
+							<div id="pointAreaMultiplierSlider"></div>
+						</div>
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Polygon color</h2>
+					<div class="panelcontent">
+						<select id="areaFixedColor">
+						</select>
+						<div id="areaFixedColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Polygon color attribute</h2>
+					<div class="panelcontent">
+
+						<div>
+							<h4>Start color</h4>
+							<input class='areaStartColor' />
+						</div>
+
+						<div>
+							<h4>End color</h4>
+							<input class='areaEndColor' />
+						</div>
+
+						<h4>Attribute</h4>
+						<select id="areaColorAttribute">
+						</select>
+
+						<div id="areaColorLegend" class="legend"></div>
+
 					</div>
 				</div>
 				<!-- END: panel-->
 
 				<div class="panel">
+					<h2>Polygon opacity</h2>
+					<div class="panelcontent">
+
+						<div class="wrapper">
+							<div id="areaFixedOpacitySlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Circular polygon color</h2>
+					<div class="panelcontent">
+						<select id="countFixedColor">
+						</select>
+						<div id="countFixedColorLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Circular polygon opacity</h2>
+					<div class="panelcontent">
+
+						<div class="wrapper">
+							<div id="countFixedOpacitySlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+				<div class="panel">
+					<h2>Map fill</h2>
+					<div class="panelcontent">
+						<select id="mapFixedFill">
+						</select>
+						<div id="mapFixedFillLegend" class="legend"></div>
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
 					<h2>Map fill attribute</h2>
 					<div class="panelcontent">
-						<select id="mapcolor">
+
+						<div>
+							<h4>Start color</h4>
+							<input class='mapStartFill' />
+						</div>
+
+						<div>
+							<h4>End color</h4>
+							<input class='mapEndFill' />
+						</div>
+
+						<h4>Attribute</h4>
+						<select id="mapFillAttribute">
 						</select>
-						<div id="mapColorLegend" class="legend"></div>
+
+						<div id="mapFillLegend" class="legend"></div>
+
+					</div>
+				</div>
+				<!-- END: panel-->
+
+
+				<div class="panel">
+					<h2>Map fill opacity</h2>
+					<div class="panelcontent">
+
+						<div class="wrapper">
+							<div id="mapFixedOpacitySlider"></div>
+						</div>
+						<!-- END: wrapper-->
+
 					</div>
 				</div>
 				<!-- END: panel-->
@@ -267,6 +482,7 @@
 					</div>
 				</div>
 				<!-- END: panel-->
+
 
 				<div class="panel">
 					<h2>Label color</h2>

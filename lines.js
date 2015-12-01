@@ -1,6 +1,3 @@
-var MIN_BEND = 0.0;
-var MAX_BEND = 1.0;
-
 d3.kodama
 		.themeRegistry(
 				'linesTheme',
@@ -46,8 +43,8 @@ function generateLines(data, points) {
 
 	// bend values in [0,1]
 	// 0 gives straight lines, closer to 1 results in more bent lines
-	var scale = d3.scale.linear().domain([ sliderStartValue, sliderEndValue ])
-			.range([ MIN_BEND, MAX_BEND ]);
+	var scale = d3.scale.linear().domain([ sliderEndValue, sliderStartValue ])
+			.range([ 0, 1 ]);
 
 	var lines = linesLayer
 			.selectAll("path")
@@ -63,8 +60,8 @@ function generateLines(data, points) {
 
 						var line = d;
 
-						var startNodeId = line.startNodeId;
-						var startPoint = getObject(points, "id", startNodeId);
+						var startPointId = line.startPointId;
+						var startPoint = getObject(points, "id", startPointId);
 						line['startPoint'] = startPoint;
 
 						var startCoordinate;
@@ -80,8 +77,8 @@ function generateLines(data, points) {
 						}
 						// line['startCoordinate'] = startCoordinate;
 
-						var endNodeId = line.endNodeId;
-						var endPoint = getObject(points, "id", endNodeId);
+						var endPointId = line.endPointId;
+						var endPoint = getObject(points, "id", endPointId);
 						line['endPoint'] = endPoint;
 
 						var endCoordinate;
@@ -98,7 +95,16 @@ function generateLines(data, points) {
 						// line['endCoordinate'] = endCoordinate;
 
 						// line bend
-						var curvature = scale(Date.parse(line.startTime));
+
+						var curvature;
+						var startTime = line.startTime;
+						if (typeof startTime != "undefined") {
+
+							curvature = scale(formDate(line.startTime));
+
+						} else {
+							curvature = lineMaxCurvature;
+						}
 
 						var startLatitude = startCoordinate.xCoordinate;
 						var startLongitude = startCoordinate.yCoordinate;
@@ -147,11 +153,11 @@ function generateLines(data, points) {
 			//
 			.attr("fill", "none")
 			//
-			.attr("stroke-width", 1 + "px")
+			.attr("stroke-width", lineWidth + "px")
 			//
 			.attr("stroke-linejoin", "round")
 			//
-			.attr("stroke", "black")
+			.attr("stroke", fixedColors[lineDefaultColorIndex])
 			//
 			.attr("startTime", function(d) {
 				return (d.startTime);

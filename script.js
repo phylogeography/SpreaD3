@@ -15,9 +15,47 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
+// fixed colors
+// var mapFixedColors = colorbrewer.Dark2[8];
+
 //
 // ---DATA---//
 //
+
+// fixed colors
+var fixedColors = colorbrewer.RdYlBu[11];
+fixedColors.splice(6, 0, "#ffffff");
+fixedColors.push("#000000");
+
+// colors for mappings (paired for better interpolating)
+var pairedSimpleColors = getSimpleColors(colorbrewer.Paired[12]);
+
+// defaults
+var lineDefaultColorIndex = 12;
+var lineStartColor = "#" + pairedSimpleColors[0];
+var lineEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var lineMaxCurvature = 1.0;
+var lineWidth = 1;
+
+var pointDefaultColorIndex = 6;
+var pointStartColor = "#" + pairedSimpleColors[0];
+var pointEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var pointArea = 2;
+
+var areaDefaultColorIndex = 1;
+var areaStartColor = "#" + pairedSimpleColors[0];
+var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+
+var countDefaultColorIndex = 1;
+
+var mapFillOpacity = 0.5;
+var polygonOpacity = 0.5;
+
+var mapDefaultColorIndex = 6;
+var mapStartFill = "#" + pairedSimpleColors[0];
+var mapEndFill = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -31,7 +69,7 @@ function formDate(dateString) {
 	var day = dateFields[2];
 
 	var date = new Date(year, month, day);
-// var date = Date.UTC(year, month, day);
+	// var date = Date.UTC(year, month, day);
 
 	return (date);
 }// END: formDate
@@ -53,7 +91,7 @@ function move() {
 
 	// fit the paths to the zoom level
 	d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-	d3.selectAll(".line").attr("stroke-width", 1.0 / s);
+	d3.selectAll(".line").attr("stroke-width", lineWidth / s);
 	d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 
 }// END: move
@@ -68,10 +106,14 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 		if (type == TREE) {
 
 			var points = layer.points;
-			generatePoints(points);
+			if (typeof points != 'undefined') {
+				generatePoints(points);
+			}
 
 			var lines = layer.lines;
-			generateLines(lines, points);
+			if (typeof lines != 'undefined') {
+				generateLines(lines, points);
+			}
 
 			var areas = layer.areas;
 			if (typeof areas != 'undefined') {
@@ -114,10 +156,10 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 			function(d) {
 
 				var linePath = this;
-				var lineStartDate = formDate(linePath.attributes.startTime.value).getTime();
-// dateFormat .parse(linePath.attributes.startTime.value);
-				var lineEndDate = formDate(linePath.attributes.endTime.value).getTime();
-// dateFormat .parse(linePath.attributes.endTime.value);
+				var lineStartDate = formDate(
+						linePath.attributes.startTime.value).getTime();
+				var lineEndDate = formDate(linePath.attributes.endTime.value)
+						.getTime();
 
 				return (lineStartDate <= value && value <= lineEndDate);
 			}) //
@@ -130,36 +172,18 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 				var linePath = this;
 				var totalLength = linePath.getTotalLength();
 
-				var lineStartDate = formDate(linePath.attributes.startTime.value).getTime();
-				var lineEndDate = formDate(linePath.attributes.endTime.value).getTime();
+				var lineStartDate = formDate(
+						linePath.attributes.startTime.value).getTime();
+				var lineEndDate = formDate(linePath.attributes.endTime.value)
+						.getTime();
 				var duration = lineEndDate - lineStartDate;
 				var timePassed = value - lineStartDate;
 
-				
-				// TODO
-				console.log("currentTime");
-				console.log(dateFormat(new Date(value)));
-//			
-				console.log("lineStartDate");
-//				console.log(linePath.attributes.startTime.value);
-				console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
-				
-// console.log("timePassed");
-// console.log(timePassed);
-				
-				
-// console.log("startTime");
-// console.log(linePath.attributes.startTime.value);
-//
-// console.log("endTime");
-// console.log(linePath.attributes.endTime.value);
-// console.log("lineEndDate");
-// console.log(lineEndDate);
-//				
-//				
-// console.log("duration");
-// console.log(duration);
-				
+				// TODO one month difference, why?
+				// console.log("lineStartDate");
+				// console.log(linePath.attributes.startTime.value);
+				// console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
+
 				var offset = totalLength;
 				if (duration == 0) {
 
@@ -180,16 +204,9 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 				}// END: instantaneous line check
 
-				 console.log("totalLength");
-				 console.log(totalLength);
-				
- console.log("offset");
- console.log(offset);
-				
 				return (offset);
 			}) //
-	.style("visibility", "visible") //
-	.attr("opacity", 1);
+	.attr("visibility", "visible");
 
 	// ---select lines yet to be painted---//
 
@@ -197,8 +214,8 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 	.filter(
 			function(d) {
 				var linePath = this;
-				var lineStartDate = formDate(linePath.attributes.startTime.value).getTime(); 
-// dateFormat .parse(linePath.attributes.startTime.value);
+				var lineStartDate = formDate(
+						linePath.attributes.startTime.value).getTime();
 
 				return (lineStartDate > value);
 			}) //
@@ -208,106 +225,88 @@ function update(value, timeScale, currentDateDisplay, dateFormat) {
 
 		return (totalLength);
 	}) //
-	.style("visibility", "hidden") //
-	.attr("opacity", 0);
+	.attr("visibility", "hidden");
 
 	// ---select lines already painted---//
 
 	linesLayer.selectAll("path.line") //
-	.filter(function(d) {
-		var linePath = this;
-		var lineEndDate = formDate(linePath.attributes.endTime.value).getTime(); 
-// dateFormat.parse(linePath.attributes.endTime.value);
+	.filter(
+			function(d) {
+				var linePath = this;
+				var lineEndDate = formDate(linePath.attributes.endTime.value)
+						.getTime();
 
-		return (lineEndDate < value);
-	}) //
+				return (lineEndDate < value);
+			}) //
 	.attr("stroke-dashoffset", 0) //
-	.style("visibility", "visible") //
-	.attr("opacity", 1);
+	.attr("visibility", "visible");
 
 	// ---POLYGONS---//
 
-	// ---select polygons yet to be displayed---//
+	// ---select areas yet to be displayed---//
 
-	areasLayer.selectAll(".polygon") //
+	areasLayer.selectAll(".area") //
 	.filter(function(d) {
 		var polygon = this;
-		var startDate = formDate(polygon.attributes.startTime.value).getTime(); 
-// dateFormat.parse(polygon.attributes.startTime.value);
+		var startDate = formDate(polygon.attributes.startTime.value).getTime();
 
 		return (value < startDate);
 	}) //
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "hidden") //
-	.attr("opacity", 0);
+	.attr("visibility", "hidden");
 
 	// ---select polygons displayed now---//
 
-	areasLayer.selectAll(".polygon") //
+	areasLayer.selectAll(".area") //
 	.filter(function(d) {
 		var polygon = this;
-		var startDate = formDate(polygon.attributes.startTime.value).getTime(); 
-// dateFormat.parse(polygon.attributes.startTime.value);
+		var startDate = formDate(polygon.attributes.startTime.value).getTime();
 
-		
-// console.log("currentTime");
-// console.log(dateFormat(new Date(value)));
-//	
-// console.log("polygonStartDate");
-// console.log(polygon.attributes.startTime.value);
-// console.log(formDate(polygon.attributes.startTime.value));
-		
 		return (value >= startDate);
 	}) //
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "visible") //
-	.attr("opacity", POLYGON_OPACITY);
+	.attr("visibility", "visible");
 
 	// ---COUNTS---//
 
 	// ---select counts yet to be displayed or already displayed---//
 
-	areasLayer.selectAll(".circle") //
+	areasLayer.selectAll(".count") //
 	.filter(function(d) {
 		var point = this;
-		var startDate = formDate(point.attributes.startTime.value).getTime(); 
-// dateFormat.parse(point.attributes.startTime.value);
-		var endDate = formDate(point.attributes.endTime.value).getTime(); 
-// dateFormat.parse(point.attributes.endTime.value);
+		var startDate = formDate(point.attributes.startTime.value).getTime();
+		var endDate = formDate(point.attributes.endTime.value).getTime();
 
 		return (value < startDate || value > endDate);
 	}) //
 	.transition() //
 	.ease("linear") //
 	.duration(1000) //
-	.attr("visibility", "hidden") //
-	.attr("opacity", 0);
+	.attr("visibility", "hidden");
 
 	// ---select counts displayed now---//
 
-	areasLayer.selectAll(".circle") //
+	areasLayer.selectAll(".count") //
 	.filter(function() {
 		var point = this;
-		var startDate = formDate(point.attributes.startTime.value).getTime(); 
-// dateFormat.parse(point.attributes.startTime.value);
-		var endDate = formDate(point.attributes.endTime.value).getTime(); 
-			// dateFormat.parse(point.attributes.endTime.value);
+		var startDate = formDate(point.attributes.startTime.value).getTime();
+		var endDate = formDate(point.attributes.endTime.value).getTime();
 
 		return (value > startDate && value < endDate);
 	}) //
 	.transition() //
 	.duration(100) //
 	.ease("linear") //
-	.attr("visibility", "visible") //
-	.attr("opacity", POLYGON_OPACITY);
+	.attr("visibility", "visible");
 
 }// END: update
 
-function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFormat) {
+function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+		dateFormat) {
 
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
@@ -341,7 +340,8 @@ function initializeTimeSlider(timeSlider, timeScale, currentDateDisplay, dateFor
 								}
 
 								timeSlider.value(sliderValue);
-								update(sliderValue, timeScale, currentDateDisplay, dateFormat);
+								update(sliderValue, timeScale,
+										currentDateDisplay, dateFormat);
 
 								currentSliderValue = sliderValue;
 
@@ -435,47 +435,66 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
- d3.json("data/languages_worldmap.json", function ready(error, json) {
-// d3.json("data/ebov_discrete.json", function ready(error, json) {
-	// TODO: needs debugging
-	// d3.json("data/ebov_nomap.json", function ready(error, json) {
+d3.json("data/languages.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
+	var hasTime = false;
+	var timeSlider = null;
+	var timeScale = null;
+	var currentDateDisplay = null;
+	var dateFormat = null;
 
-	var dateFormat = d3.time.format("%Y/%m/%d");
 	var timeLine = json.timeLine;
-	
-	var startDate = formDate(timeLine.startTime);
-	sliderStartValue = startDate.getTime();
+	if (typeof timeLine != 'undefined') {
 
-	var endDate = formDate(timeLine.endTime);
-	sliderEndValue = endDate.getTime();
+		dateFormat = d3.time.format("%Y/%m/%d");
 
-	currentSliderValue = sliderStartValue;
+		var startDate = formDate(timeLine.startTime);
+		sliderStartValue = startDate.getTime();
 
-	var sliderSpeed = 100;
-	var duration = sliderEndValue - sliderStartValue;
-	sliderInterval = duration / sliderSpeed;
+		var endDate = formDate(timeLine.endTime);
+		sliderEndValue = endDate.getTime();
 
-	// initial value
-	var currentDateDisplay = d3.select('#currentDate').text(
-			dateFormat(startDate));
+		currentSliderValue = sliderStartValue;
 
-	var timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-			[ 0, 1 ]);
-	var timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-	d3.select('#timeSlider').call(timeSlider);
+		var sliderSpeed = 100;
+		var duration = sliderEndValue - sliderStartValue;
+		sliderInterval = duration / sliderSpeed;
+
+		// initial value
+		currentDateDisplay = d3.select('#currentDate').text(
+				dateFormat(startDate));
+
+		timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
+				[ 0, 1 ]);
+		timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+		d3.select('#timeSlider').call(timeSlider);
+
+		hasTime = true;
+	}// END: null check
 
 	// ---ATTRIBUTES---//
 
 	populateLocationPanels();
 
 	var lineAttributes = json.lineAttributes;
-	populateLinePanels(lineAttributes);
+	if (typeof lineAttributes != 'undefined') {
+		populateLinePanels(lineAttributes);
+	}
 
 	var pointAttributes = json.pointAttributes;
-	populatePointPanels(pointAttributes);
+	if (typeof pointAttributes != 'undefined') {
+		populatePointPanels(pointAttributes);
+	}
 
+	var areaAttributes = json.areaAttributes;
+	if (typeof areaAttributes != 'undefined') {
+		populateAreaPanels(areaAttributes);
+	}
+	
+	// circular polygons
+	populateCountPanels();
+	
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {
 		populateMapPanels(mapAttributes);
@@ -512,14 +531,18 @@ var sliderEndValue;
 
 		// ---TIME SLIDER---//
 
-		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-				dateFormat);
+		if (hasTime) {
 
-		// put slider at the end of timeLine, everything painted
-		timeSlider.value(sliderEndValue);
+			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+					dateFormat);
 
-		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
-				dateFormat);
+			// put slider at the end of timeLine, everything painted
+			timeSlider.value(sliderEndValue);
+
+			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+					dateFormat);
+
+		}// END: hasTime check
 
 		// ---DATA LAYERS---//
 
@@ -535,54 +558,22 @@ var sliderEndValue;
 
 		}// END: null check
 
-		// function readynow(error, world) {
-		//
-		// populateMapPanels(world.mapAttributes);
-		//
-		// generateWorldLayer(world);
-		// // mapRendered = true;
-		//
-		// // ---TIME SLIDER---//
-		//
-		// initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-		// dateFormat);
-		//
-		// // put slider at the end of timeLine, everything painted
-		// timeSlider.value(sliderEndValue);
-		//
-		// updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
-		// dateFormat);
-		//
-		// // ---DATA LAYERS---//
-		//
-		// initializeLayers(layers, pointAttributes, lineAttributes);
-		//
-		// // ---LOCATIONS---//
-		//
-		// var locations = json.locations;
-		// if (typeof(locations) != 'undefined') {
-		//
-		// generateLocations(locations);
-		// generateLabels(locations);
-		//
-		// }// END: null check
-		//
-		// }// END: readynow
-		//
-		// queue().defer(d3.json, "data/world.geojson").await(readynow);
-
 	} else {
 
 		// ---TIME SLIDER---//
 
-		initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-				dateFormat);
+		if (hasTime) {
 
-		// put slider at the end of timeLine, everything painted
-		timeSlider.value(sliderEndValue);
+			initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+					dateFormat);
 
-		updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
-				dateFormat);
+			// put slider at the end of timeLine, everything painted
+			timeSlider.value(sliderEndValue);
+
+			updateDateDisplay(sliderEndValue, timeScale, currentDateDisplay,
+					dateFormat);
+
+		}// END: time check
 
 		// ---DATA LAYERS---//
 
@@ -603,6 +594,7 @@ var sliderEndValue;
 	}// END: mapRendered check
 
 	populateExportPanel();
+	populateToggleLayers();
 
 } // END: function
 );

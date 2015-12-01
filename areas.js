@@ -1,4 +1,3 @@
-var POLYGON_OPACITY = 0.5;
 
 d3.kodama
 		.themeRegistry(
@@ -28,14 +27,11 @@ d3.kodama
 					}
 				});
 
-// https://gist.github.com/arunkjn/5042953
-// https://stackoverflow.com/questions/13204562/proper-format-for-drawing-polygon-data-in-d3
 function generateAreas(data) {
 
-	// console.log(data);
-
-	areasLayer.selectAll("polygon").data(data).enter().append("polygon") //
-	.attr("class", "polygon") //
+	var areas = areasLayer.selectAll("area").data(data).enter().append(
+			"polygon") //
+	.attr("class", "area") //
 	.attr("startTime", function(d) {
 
 		return (d.startTime);
@@ -54,21 +50,21 @@ function generateAreas(data) {
 
 		}).join(" ");
 	}) //
-	.attr("fill", "brown") //
+	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", POLYGON_OPACITY) //
+	.attr("fill-opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
-		var point = d3.select(this);
-		point.attr('stroke', '#000');
+		var area = d3.select(this);
+		area.attr('stroke', '#000');
 
 	}) //
 	.on('mouseout', function(d, i) {
 
-		var point = d3.select(this);
-		point.attr('stroke', '#fff');
+		var area = d3.select(this);
+		area.attr('stroke', '#fff');
 
 	}) //
 	.call(d3.kodama.tooltip().format(function(d, i) {
@@ -84,9 +80,21 @@ function generateAreas(data) {
 	}) //
 	.theme('countsTheme'));
 
-	
-	//TODO: dump attributes, color mapping
-	
+	// dump attribute values into DOM
+	areas[0].forEach(function(d, i) {
+
+		var thisArea = d3.select(d);
+
+		var properties = data[i].attributes;
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
+
+				thisArea.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
+	});
+
 }// END: generateAreas
 
 function generateCounts(data, countAttribute) {
@@ -96,8 +104,9 @@ function generateCounts(data, countAttribute) {
 	var scale = d3.scale.linear().domain(countAttribute.range).range(
 			[ min_area, max_area ]);
 
-	areasLayer.selectAll("circle").data(data).enter().append("circle") //
-	.attr("class", "circle") //
+	areasLayer.selectAll("circle").data(data).enter() //
+	.append("circle") //
+	.attr("class", "count") //
 	.attr("startTime", function(d) {
 
 		return (d.startTime);
@@ -137,29 +146,21 @@ function generateCounts(data, countAttribute) {
 		return (radius);
 
 	}) //
-	.attr("fill", "brown") //
+	.attr("fill", fixedColors[areaDefaultColorIndex]) //
 	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
-	.attr("opacity", POLYGON_OPACITY) //
+	.attr("fill-opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
 	.on('mouseover', function(d) {
 
 		var point = d3.select(this);
 		point.attr('stroke', '#000');
 
-		// var r = point.attr("r");
-		// point.transition().duration(200).attr("r", r * 2
-		// ).transition().duration(200).attr("r", r );
-		// .attr("r", point.attr("r") * 2 );
-
 	}) //
 	.on('mouseout', function(d, i) {
 
 		var point = d3.select(this);
 		point.attr('stroke', '#fff');
-
-		// point.transition().duration(500)
-		// .attr("r", point.attr("r") / 2 );
 
 	}) //
 	.call(d3.kodama.tooltip().format(function(d, i) {
