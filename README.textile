@@ -7,7 +7,7 @@ Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe '
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
 
-![ScreenShot](https://{www.dropbox.com/s/fo0y4epl1q5sr5n/spreaD3.png?dl=0})
+![spread3](https://cloud.githubusercontent.com/assets/468572/11506781/5a82efb2-9851-11e5-839f-47852187e3b1.png)
 
 
 h1. PURPOSE
