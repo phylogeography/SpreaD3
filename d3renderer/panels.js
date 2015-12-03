@@ -152,6 +152,27 @@ function populateLinePanels(attributes) {
 
 					});
 
+	// ---LINE FIXED OPACITY---//
+
+	var lineFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.0).max(1.0).step(0.1).value(lineOpacity);
+
+	d3.select('#lineFixedOpacitySlider').call(lineFixedOpacitySlider);
+
+	// line fixed opacity listener
+	lineFixedOpacitySlider.on("slide", function(evt, value) {
+
+		lineOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		linesLayer.selectAll(".line") //
+		.transition() //
+		.ease("linear") //
+		.attr("stroke-opacity", lineOpacity);
+
+	});
+
+	
 	// ---LINE CURVATURE---//
 
 	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(
@@ -657,7 +678,6 @@ function populateAreaPanels(attributes) {
 
 					});
 
-	
 	// ---AREA FIXED OPACITY---//
 
 	var areaFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
@@ -677,13 +697,11 @@ function populateAreaPanels(attributes) {
 		.attr("fill-opacity", areaOpacity);
 
 	});
-	
-	
+
 }// END: populateAreaPanels
 
 function populateCountPanels() {
-	
-	
+
 	// ---COUNT FIXED COLOR---//
 
 	var countFixedColorSelect = document.getElementById("countFixedColor");
@@ -746,8 +764,7 @@ function populateCountPanels() {
 		.attr("fill-opacity", countOpacity);
 
 	});
-	
-	
+
 }
 
 // ---MAP---//
@@ -992,26 +1009,18 @@ function populateExportPanel() {
 								.attr("version", 1.1).attr("xmlns",
 										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
 
-//						d3
-//								.select("body")
-//								.append("div")
-//								.attr("id", "download")
-//								.html(
-//										"Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
-//								.append("img").attr(
-//										"src",
-//										"data:image/svg+xml;base64,"
-//												+ btoa(html));
-//
-//						d3.select("#download").on(
-//								"click",
-//								function() {
-//									if (event.button == 0) {
-//										d3.select(this).transition().style(
-//												"opacity", 0).remove();
-//									}
-//								}).transition().duration(500).style("opacity",
-//								1);
+//						http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
+						
+//						var html = d3.select("svg")
+//				        .attr("title", "test2")
+//				        .attr("version", 1.1)
+//				        .attr("xmlns", "http://www.w3.org/2000/svg")
+//				        .node().parentNode.innerHTML;
+//				d3.select("body").append("div")
+//				        .attr("id", "download")
+//				        .html("Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
+//				        .append("img")
+//				        .attr("src", "data:image/svg+xml;base64,"+ btoa(html));
 
 					});
 

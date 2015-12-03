@@ -52,6 +52,10 @@ var countDefaultColorIndex = 1;
 
 var mapFillOpacity = 0.5;
 var polygonOpacity = 0.5;
+var lineOpacity = 1.0;
+
+var lineStartOpacity = 0.1;
+var lineEndOpacity = 1.0;
 
 var mapDefaultColorIndex = 6;
 var mapStartFill = "#" + pairedSimpleColors[0];
@@ -435,7 +439,8 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/ebov_discrete.json", function ready(error, json) {
+//d3.json("data/ebov_discrete.json", function ready(error, json) {
+d3.json("data/H3N2_mds_all.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
