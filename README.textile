@@ -1,24 +1,22 @@
 ==============
-.:: SPREAD ::.
+.:: SpreaD3 ::.
 ==============
-*Spatial Phylogenetic Reconstruction of EvolutionAry Dynamics*
+*Spatial Phylogenetic Reconstruction of Evolutionary Dynamics*
 Version: 2.0.2, 2015 
 Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
 
-![spread3](https://cloud.githubusercontent.com/assets/468572/11506781/5a82efb2-9851-11e5-839f-47852187e3b1.png)
-
 
 h1. PURPOSE
 
-SPREAD is a program supporting processing and visualizations of Bayesian phylogeographic models.
+SpreaD3 is a program supporting processing and visualizations of Bayesian phylogeographic models.
 
 h1. USAGE EXAMPLES
 
-Spread visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), and then all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
+SpreaD3 visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), and then all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
 
-Spread supports KML output for viewing in GoogleEarth [www.google.com/intl/pl/earth/] as well as in-browser, interactive display of the data, driven by D3 libraries [www.d3js.org]. 
+SpreaD3 supports KML output for viewing in GoogleEarth [www.google.com/intl/pl/earth/] as well as in-browser, interactive display of the data, driven by D3 libraries [www.d3js.org]. 
 
 h3. DISCRETE TREE PARSER
 
@@ -262,9 +260,7 @@ h1. TODO
   - defaults on top of selectors in kml
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]
-* Write tests    
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
-* Processing large tree distributions on GPUs. Write small library and JNI to it.  
 
 h1. BUGS
 

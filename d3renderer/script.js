@@ -15,9 +15,6 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
-// fixed colors
-// var mapFixedColors = colorbrewer.Dark2[8];
-
 //
 // ---DATA---//
 //
@@ -28,25 +25,30 @@ fixedColors.splice(6, 0, "#ffffff");
 fixedColors.push("#000000");
 
 // colors for mappings (paired for better interpolating)
-var pairedSimpleColors = getSimpleColors(colorbrewer.Paired[12]);
+var pairedSimpleColors = colorbrewer.Paired[12];//getSimpleColors(colorbrewer.Paired[12]);
+
+//getSimpleColors(pairedSimpleColors);
+
+// colors for categorical attributes
+var ordinalColors = d3.scale.category20().range();//colorbrewer.RdBu[11] ;
 
 // defaults
 var lineDefaultColorIndex = 12;
-var lineStartColor = "#" + pairedSimpleColors[0];
-var lineEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var lineStartColor =  pairedSimpleColors[0];
+var lineEndColor =   pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var lineMaxCurvature = 1.0;
 var lineWidth = 1;
 
 var pointDefaultColorIndex = 6;
-var pointStartColor = "#" + pairedSimpleColors[0];
-var pointEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var pointStartColor =   pairedSimpleColors[0];
+var pointEndColor =   pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var pointArea = 2;
 
 var areaDefaultColorIndex = 1;
-var areaStartColor = "#" + pairedSimpleColors[0];
-var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var areaStartColor =  pairedSimpleColors[0];
+var areaEndColor =   pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var countDefaultColorIndex = 1;
 
@@ -58,8 +60,8 @@ var lineStartOpacity = 0.1;
 var lineEndOpacity = 1.0;
 
 var mapDefaultColorIndex = 6;
-var mapStartFill = "#" + pairedSimpleColors[0];
-var mapEndFill = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var mapStartFill =  pairedSimpleColors[0];
+var mapEndFill =   pairedSimpleColors[pairedSimpleColors.length - 1];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -440,6 +442,7 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
+//d3.json("data/H3N2_mds_all.json", function ready(error, json) {
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 //d3.json("data/languages.json", function ready(error, json) {
 

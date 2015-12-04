@@ -13,11 +13,11 @@ public class Spread2App {
 
 	public static final boolean DEBUG = true;
 
-	public static final String SHORT_NAME = "SPREAD";
+	public static final String SHORT_NAME = "SpreaD3";
 	public static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
-	public static final String VERSION = "2.1.2";
+	public static final String VERSION = "0.9.0";
 	public static final String DATE_STRING = "2015";
-	public static final String CODENAME = "Rough & Ready.";
+	public static final String CODENAME = "Good Enough";
 
 	public static final String FILIP_BIELEJEC = "Filip Bielejec";
 	public static final String GUY_BAELE = "Guy Baele";

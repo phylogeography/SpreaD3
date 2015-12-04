@@ -34,7 +34,7 @@ public class AboutDialog extends JDialog {
 	private static final int FONT_SIZE = 15;
 
 	private static final String CITATION1 = "To cite " + Spread2App.SHORT_NAME + " in publications, please use:";
-	private static final String CITATION2 = "Spread2: In preparation.";
+	private static final String CITATION2 = "Manuscript in preparation.";
 	
 	public AboutDialog() {
 		initUI();
