@@ -52,6 +52,10 @@ var countDefaultColorIndex = 1;
 
 var mapFillOpacity = 0.5;
 var polygonOpacity = 0.5;
+var lineOpacity = 1.0;
+
+var lineStartOpacity = 0.1;
+var lineEndOpacity = 1.0;
 
 var mapDefaultColorIndex = 6;
 var mapStartFill = "#" + pairedSimpleColors[0];
@@ -412,6 +416,7 @@ var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
 // layers
 var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
+
 
 d3.selectAll("button[data-zoom]").on("click", clicked);
 
