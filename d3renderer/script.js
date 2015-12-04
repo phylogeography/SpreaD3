@@ -15,9 +15,6 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
-// fixed colors
-// var mapFixedColors = colorbrewer.Dark2[8];
-
 //
 // ---DATA---//
 //
@@ -29,6 +26,9 @@ fixedColors.push("#000000");
 
 // colors for mappings (paired for better interpolating)
 var pairedSimpleColors = getSimpleColors(colorbrewer.Paired[12]);
+
+// colors for categorical attributes
+var ordinalColors = d3.scale.category20().range();//colorbrewer.RdBu[11] ;
 
 // defaults
 var lineDefaultColorIndex = 12;
@@ -440,6 +440,7 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
+//d3.json("data/H3N2_mds_all.json", function ready(error, json) {
 d3.json("data/ebov_discrete.json", function ready(error, json) {
 //d3.json("data/languages.json", function ready(error, json) {
 

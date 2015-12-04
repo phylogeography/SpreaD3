@@ -114,7 +114,9 @@ function populateLinePanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
 
 							colorlegend("#lineColorLegend", scale, "ordinal", {
 								title : "",
@@ -377,7 +379,9 @@ function populatePointPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
 
 							colorlegend("#pointColorLegend", scale, "ordinal",
 									{
@@ -471,8 +475,10 @@ function populatePointPanels(attributes) {
 								areaAttribute);
 						if (attribute.scale == ORDINAL) {
 
-							scale = d3.scale.category20().domain(
-									attribute.domain);
+							data = attribute.domain;
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
 
 						} else {
 
@@ -641,8 +647,10 @@ function populateAreaPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
-
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
+								
 							colorlegend("#areaColorLegend", scale, "ordinal", {
 								title : "",
 								boxHeight : 20,
@@ -927,7 +935,9 @@ function populateMapPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
 
 							colorlegend("#mapFillLegend", scale, "ordinal", {
 								title : "",
