@@ -148,7 +148,7 @@ function generateCounts(data, countAttribute) {
 
 	}) //
 	.attr("fill", fixedColors[areaDefaultColorIndex]) //
-	.attr("stroke", "#fff") //
+//	.attr("stroke", "#fff") //
 	.attr("stroke-width", "0.5px") //
 	.attr("fill-opacity", polygonOpacity) //
 	.attr("visibility", "visible") //
@@ -161,8 +161,9 @@ function generateCounts(data, countAttribute) {
 	.on('mouseout', function(d, i) {
 
 		var point = d3.select(this);
-		point.attr('stroke', '#fff');
-
+//		point.attr('stroke', '#fff');
+		point.attr('stroke', null);
+		
 	}) //
 	.call(d3.kodama.tooltip().format(function(d, i) {
 

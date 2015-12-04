@@ -47,6 +47,14 @@ function generateTopoLayer(geojson) {
 	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
 			path);
 
+	// apply inline style
+	svg.selectAll('.graticule').style({
+		'stroke' : '#bbb',
+		'fill' : 'none',
+		'stroke-width' : '.5px',
+			'stroke-opacity' : '.5'
+	});
+	
 	// add equator
 	equatorLayer.append("path").datum(
 			{
@@ -55,6 +63,13 @@ function generateTopoLayer(geojson) {
 						[ 180, 0 ] ]
 			}).attr("class", "equator").attr("d", path);
 
+	// apply inline style
+	equatorLayer.selectAll('.equator').style({
+		'stroke' : '#ccc',
+		'fill' : 'none',
+		'stroke-width' : '1px',
+	});
+	
 	var features = geojson.features;
 	var topo = topoLayer.selectAll("path").data(features).enter()
 			.append("path") //

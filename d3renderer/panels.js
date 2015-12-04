@@ -1011,7 +1011,7 @@ function populateExportPanel() {
 
 //						http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
 						
-//						var html = d3.select("svg")
+//						var html = d3.select("#container")
 //				        .attr("title", "test2")
 //				        .attr("version", 1.1)
 //				        .attr("xmlns", "http://www.w3.org/2000/svg")

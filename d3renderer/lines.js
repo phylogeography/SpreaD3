@@ -95,7 +95,6 @@ function generateLines(data, points) {
 						// line['endCoordinate'] = endCoordinate;
 
 						// line bend
-
 						var curvature;
 						var startTime = line.startTime;
 						if (typeof startTime != "undefined") {
@@ -122,6 +121,8 @@ function generateLines(data, points) {
 						var targetX = targetXY[0];
 						var targetY = targetXY[1];
 
+//						console.log(curvature)
+						
 						var dx = targetX - sourceX;
 						var dy = targetY - sourceY;
 						var dr = Math.sqrt(dx * dx + dy * dy) * curvature;

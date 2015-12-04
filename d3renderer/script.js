@@ -417,6 +417,7 @@ var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
 var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
 
+
 d3.selectAll("button[data-zoom]").on("click", clicked);
 
 var g = svg.append("g");
@@ -439,8 +440,8 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-//d3.json("data/ebov_discrete.json", function ready(error, json) {
-d3.json("data/H3N2_mds_all.json", function ready(error, json) {
+d3.json("data/ebov_discrete.json", function ready(error, json) {
+//d3.json("data/languages.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
