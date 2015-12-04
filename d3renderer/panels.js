@@ -53,7 +53,7 @@ function populateLinePanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -70,7 +70,7 @@ function populateLinePanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -312,7 +312,7 @@ function populatePointPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -329,7 +329,7 @@ function populatePointPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -582,7 +582,7 @@ function populateAreaPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -598,7 +598,7 @@ function populateAreaPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -875,7 +875,7 @@ function populateMapPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		onSelect : function(hex, element) {
 
 			mapStartFill = "#" + hex;
@@ -890,7 +890,7 @@ function populateMapPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
