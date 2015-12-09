@@ -445,7 +445,7 @@ var sliderEndValue;
 //var currentDateDisplay = null;
 //var dateFormat = null;
 
-d3.json("data/data.json", function ready(error, json) {
+d3.json("data/ebov_discrete.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
