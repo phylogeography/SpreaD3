@@ -53,7 +53,7 @@ function populateLinePanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -70,7 +70,7 @@ function populateLinePanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -114,7 +114,9 @@ function populateLinePanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
 
 							colorlegend("#lineColorLegend", scale, "ordinal", {
 								title : "",
@@ -152,6 +154,27 @@ function populateLinePanels(attributes) {
 
 					});
 
+	// ---LINE FIXED OPACITY---//
+
+	var lineFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.0).max(1.0).step(0.1).value(lineOpacity);
+
+	d3.select('#lineFixedOpacitySlider').call(lineFixedOpacitySlider);
+
+	// line fixed opacity listener
+	lineFixedOpacitySlider.on("slide", function(evt, value) {
+
+		lineOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		linesLayer.selectAll(".line") //
+		.transition() //
+		.ease("linear") //
+		.attr("stroke-opacity", lineOpacity);
+
+	});
+
+	
 	// ---LINE CURVATURE---//
 
 	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(
@@ -213,6 +236,9 @@ function populateLinePanels(attributes) {
 
 		});
 
+//		update(currentSliderValue, timeScale,
+//				currentDateDisplay, dateFormat);
+		
 	});
 
 	// ---LINE WIDTH---//
@@ -289,7 +315,7 @@ function populatePointPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -306,7 +332,7 @@ function populatePointPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -356,7 +382,9 @@ function populatePointPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#pointColorLegend", scale, "ordinal",
 									{
@@ -450,8 +478,10 @@ function populatePointPanels(attributes) {
 								areaAttribute);
 						if (attribute.scale == ORDINAL) {
 
-							scale = d3.scale.category20().domain(
-									attribute.domain);
+							data = attribute.domain;
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 						} else {
 
@@ -555,7 +585,7 @@ function populateAreaPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -571,7 +601,7 @@ function populateAreaPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -620,8 +650,10 @@ function populateAreaPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
-
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
+								
 							colorlegend("#areaColorLegend", scale, "ordinal", {
 								title : "",
 								boxHeight : 20,
@@ -657,7 +689,6 @@ function populateAreaPanels(attributes) {
 
 					});
 
-	
 	// ---AREA FIXED OPACITY---//
 
 	var areaFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top"))
@@ -677,13 +708,11 @@ function populateAreaPanels(attributes) {
 		.attr("fill-opacity", areaOpacity);
 
 	});
-	
-	
+
 }// END: populateAreaPanels
 
 function populateCountPanels() {
-	
-	
+
 	// ---COUNT FIXED COLOR---//
 
 	var countFixedColorSelect = document.getElementById("countFixedColor");
@@ -746,8 +775,7 @@ function populateCountPanels() {
 		.attr("fill-opacity", countOpacity);
 
 	});
-	
-	
+
 }
 
 // ---MAP---//
@@ -850,7 +878,7 @@ function populateMapPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		onSelect : function(hex, element) {
 
 			mapStartFill = "#" + hex;
@@ -865,7 +893,7 @@ function populateMapPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -910,7 +938,9 @@ function populateMapPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#mapFillLegend", scale, "ordinal", {
 								title : "",
@@ -988,30 +1018,22 @@ function populateExportPanel() {
 
 						window.open().document.write(svg_xml);
 
-						var html = d3.select("svg").attr("title", "image")
-								.attr("version", 1.1).attr("xmlns",
-										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+//						var html = d3.select("svg").attr("title", "image")
+//								.attr("version", 1.1).attr("xmlns",
+//										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
 
-//						d3
-//								.select("body")
-//								.append("div")
-//								.attr("id", "download")
-//								.html(
-//										"Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
-//								.append("img").attr(
-//										"src",
-//										"data:image/svg+xml;base64,"
-//												+ btoa(html));
-//
-//						d3.select("#download").on(
-//								"click",
-//								function() {
-//									if (event.button == 0) {
-//										d3.select(this).transition().style(
-//												"opacity", 0).remove();
-//									}
-//								}).transition().duration(500).style("opacity",
-//								1);
+//						http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
+						
+//						var html = d3.select("#container")
+//				        .attr("title", "test2")
+//				        .attr("version", 1.1)
+//				        .attr("xmlns", "http://www.w3.org/2000/svg")
+//				        .node().parentNode.innerHTML;
+//				d3.select("body").append("div")
+//				        .attr("id", "download")
+//				        .html("Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
+//				        .append("img")
+//				        .attr("src", "data:image/svg+xml;base64,"+ btoa(html));
 
 					});
 
