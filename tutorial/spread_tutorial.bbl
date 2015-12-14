@@ -1,5 +1,12 @@
 \begin{thebibliography}{}
 
+\bibitem[Bielejec et~al., 2016]{Bielejec:2016aa}
+Bielejec, F., Baele, G., Vrancken, B., M.A., S., Rambaut, A., and Lemey, P.
+  (2016).
+\newblock Spread3: Spatial phylogenetic reconstruction of evolutionary dynamics
+  3.
+\newblock {\em Molecular Biology and Evolution}.
+
 \bibitem[Bielejec et~al., 2011]{bielejec11}
 Bielejec, F., Rambaut, A., Suchard, M.~A., and Lemey, P. (2011).
 \newblock Spread: spatial phylogenetic reconstruction of evolutionary dynamics.
@@ -15,5 +22,10 @@ Bostock, M., Ogievetsky, V., and Heer, J. (2011).
 Drummond, A.~J., Suchard, M.~A., Xie, D., and Rambaut, A. (2012).
 \newblock Bayesian phylogenetics with beauti and the beast 1.7.
 \newblock {\em Mol Biol Evol}.
+
+\bibitem[Lemey et~al., 2009]{lemey:2009fk}
+Lemey, P., Rambaut, A., Drummond, A.~J., and Suchard, M.~A. (2009).
+\newblock Bayesian phylogeography finds its roots.
+\newblock {\em PLoS Comput Biol}, 5(9):e1000520.
 
 \end{thebibliography}

@@ -71,14 +71,15 @@ Filip Bielejec (filip.bielejec@rega.kuleuven.be)
 \begin{flushleft}
 \textbf{Download}
 \par\end{flushleft}
-SpreaD3 and its source code are freely available from \url{https: //github.com/phylogeography/SPREAD2}.
+SpreaD3 and its source code are freely available from \url{https://github.com/phylogeography/SPREAD2}.
 You can also clone the project with Git by running: 
-\\\$ git clone https://github.com/phylogeography/SPREAD2. (UPDATE NAME?)
+\\\$ git clone https://github.com/phylogeography/SPREAD2. (TO DO: change name to SpreaD3)
 \\
 cd into the base dir and compile SpreaD3 by running 
 \\\$ ant jar
 \\
 This builds a executable jar-file in the directory ./dist, which can be run by double-clicking it.
+%All data used in the examples (cfr. infra) are available from \url{https://rega.kuleuven.be/cev/ecv/software/SpreaD3}.
 
 %---TOC---%
 \pagebreak{}
@@ -117,7 +118,7 @@ By separating the parsing from the rendering, the user can quickly test various 
 Note that because JSON is a language-independent data format, the output of the parsing step can be forked to utilities based on several programming languages through dedicated packages and libraries. %examples?
 Second, much of the added versatility from this version comes from the newly introduced capability of combining several layers in one illustration. %, as has become default in all widely-used image editors (e.g. Adobe CS, ???).
 On the one hand this lifts the restriction of projecting phylogenies on a pre-specified canvas, and gives the user detailed control on the type of map and the displayed %geographical 
-attributes (e.g. province borders, altitude contours, \dots). %or no examples? .
+attributes (e.g. province borders, altitude contours, population density, \dots). %or no examples? .
 At the same time this opens door to mapping traits using any arbitrary coordinate system (see \ref{tips} for an example). 
 %are a number of default maps provided? I.e. a world map? where can such input be found? 
 A third advantage of the layered approach to image building is the ease with which complex stratified images can be constructed (see \ref{JSONmerge} for an example). 
@@ -128,25 +129,40 @@ This is achieved by rendering the figures using the Data Driven Documents JavaSc
 %how can the latter easily be constructed (geojson.io? https://google-developers.appspot.com/maps/documentation/utils/geojson/?)
 For reasons of consistency with the previous version, and as an illustration of the branching to other renderers enabled by the versatile JSON data format as a go-between, SpreaD3 also supports re-interpreting parsed input data in the Keyhole Markup Language (KLM) for visualisations in virtual globe software like Google Earth (\url{www.google.com/earth/}). 
 \par
-In this tutorial we give a detailed description of program functionalities by presenting an example for the main genres of possible analyses and give general guidelines on running SpreaD3. 
-The data files used in the example can be found at \url{http://www.phylogeography.org/}.
+In this tutorial we give a detailed description of program functionalities, with an emphasis on the Graphical User Interface (GUI), by presenting an example for the main genres of possible analyses and give general guidelines on running SpreaD3. 
+The data files used in the example can be found at  \url{https://rega.kuleuven.be/cev/ecv/software/SpreaD3}.
 The user is assumed to know how to build a Maximum Clade Credibility (MCC) tree. 
 A good tutorial on how to summarize BEAST trees with TreeAnnotator can be found at \url{???}.
-\par
-There are a number of easy-to-use utilities for creating geoJSON maps, such as EXAMPLES. %geoJSON github repository?, our own website?
-A handy feature is that in geoJSON the latitude and longitude are treated as absolute values.
-Like this, the coordinates for a location (e.g. Leuven) remain valid when providing a more focused map (e.g. western Europoe instead of the entire world).
-If no geoJSON map is provided, a bounding box based on the provided coordinates will be created automatically.
-
 
 \section{Software requirements}
 
+\section{geoJSON maps}
+
+There are many places where ready-made geoJSON maps are available, and various ways in which tailor-made geoJSON maps can be made. 
+We point out a few resources, but don't even attempt to provide an exhaustive list.
+\\
+A good introduction to building geoJSON maps can be found here: \url{http://bost.ocks.org/mike/map/}.
+Large repositories for geoJSON maps can be found here:
+\url{http://grokbase.com/t/gg/d3-js/1372gq18j9/geojson-maps} and \url{http://data.okfn.org/data/datasets/geo-boundaries-world-110m}.
+% and \url{http://geocommons.com/}.
+\\
+There are a number of easy-to-use utilities for creating geoJSON maps starting from shape files. 
+The latter can be among others found at \url{http://www.naturalearthdata.com/downloads/} and \url{http://www.gadm.org/}.
+An example of a conversion utility is \url{http://www.mapshaper.org/} or its command line version available at \url{https://github.com/mbloch/mapshaper}.
+\par
+A handy feature is that the latitude and longitude are treated as absolute values in the geoJSON format.
+Like this, the coordinates for a location (e.g. Leuven) remain valid when providing a more focused map (e.g. Belgium instead of the entire world).
+If no geoJSON map is provided, a bounding box based on the provided coordinates will be created automatically.
+
 \section{Usage examples}
-%SpreaD3 can process four distinct input types labelled MCC tree with DISCRETE traits, Log file from BSSVS analysis, MCC tree with CONTINUOUS traits, Tree distribution with CONTINUOUS traits. These specify the basic type of analysis performed, with more options available by selecting different parser options for a given input.
+
+SpreaD3 can process four distinct input types labelled MCC tree with DISCRETE traits, Log file from BSSVS analysis, MCC tree with CONTINUOUS traits, Tree distribution with CONTINUOUS traits. 
+These specify the basic type of analysis performed, with more options available by selecting different parser options for a given input.
 % 
 % 2. Examples of usage. Whese should show not just how but also why, what
 % can we learn by visualising these processes.
 % 
+\par
 For the command line examples throughout this tutorial we assume the following alias has been added to your .bash\_profile:
 \\
 alias spread=`java -jar <absolute path to SpreaD3.jar>' 
@@ -162,91 +178,120 @@ in the current session  [\#assuming your bash\_profile resides at \$HOME].
 % 2.1 MCC tree with discrete traits.
 %  - Here we could use the EBOV as a case for study. All the steps Parse
 % -> render -> manipulate the visualisation, screenshots etc. Place live links to data (hosted at github)   
-% 
-%what is this EBOV datasets exactly => pretty needed to claim that the vis leads to additional insights? 
-%\\
 
-%H5N1 dataset 
-%most recent date: why not automatically set to half of the uncertainty when only known up to year or month? Now manually set to yyyy/06/15?
-%$ spread -parse -locations locationCoordinates_H5N1 -tree H5N1_HA_discrete_MCC.tre -locationtrait states -intervals 1 -output parse_states.json -mrsd 2005/06/15
-%I would change the name of 'locationtrait' to 'trait'
-%in automatic message 'Imported locations' -> the 'locations' should be set to whatever the user has used as trait name
-%$ spread -render kml -json parse_states.json -output rendered_states.kml
+In this example we turn to the recent Ebola virus outbreak in western Africa to show how a MCC tree summary created under a discrete diffusion model \citep{lemey:2009fk} can be used to visualise its spatiotemporal spread. 
+Samples were collected from March to December 2014; BEAST \citep{drummond:2012zr} was used to co-estimate the temporal and spatial history. 
 
-In this example we use data of the highly pathogenic avian influenza virus (HPAIV) H5N1 that have been used to shed light on the large-scale H5N1 transmission patterns and disentangle the contributions of different avian hosts on the tempo and mode of HPAIV H5N1 dispersal \citep{Trovao:2015aa}.
-The sequence data are from the HA gene and were sampled between 1996 and 2011 from two avian families, \textit{Anatidae} and \textit{Phasianidae} %, and the \textit{Neoaves} avian superorder
- throughout Russia and Asia.
-The MCC tree used in this example is annotated with the avian family to which the host species belongs and with the sampling location.
-The MCC tree, location coordinates and geoJSON file are available from \url{}.
-%We will visualise the host jumps and the geographical dispersal using a newly created geoJSON file.
-
-%\subsection{Creating an appropriate geoJSON map}
-%Go to \url{http://geojson.io}, and follow the instructions there to obtain a map that covers the part of the world covered by H5N1, as can be seen Figure 2 \citep{}.
-%Save this file 
-
-\subsection{Parsing the data}
-The Graphical User Interface (GUI) opens in the `Data' tab.
-Select the option `MCC tree with DISCRETE traits', and browse to where you saved the example MCC tree to load it.
-
-\begin{figure}[!H]
-\centering
-\includegraphics[width=1\textwidth]{./figures/fig1_GUI_loadDiscreteTree.pdf} %[scale=0.22]
-%\caption{
-%\footnotesize{\textbf{Illustration of both dimensions of sequence upscaling.} 
-%The rectangle marks an area in the HIV-1 genome alignment, for which the aligned reads and the coverage they achieve are presented in more detail. Results were obtained from a pilot GS20 run.
-%}}
-\label{fig:loadData}
-\end{figure}
-
-SpreaD3 will now set the working directory to the one containing your file. 
+\subsubsection{Parsing the data}
+The GUI opens in the `Data' tab.
+Select the option `MCC tree with DISCRETE traits' (Figure \ref{fig:parseDiscrete}, nr.1), and browse to where you saved the example MCC tree to load it.
+SpreaD3 will now set the working directory to the one from which the MCC tree was loaded. 
 This means that all output generated by SpreaD3 will be saved in this directory.
-To view the MCC tree in it's geographic context, we have to associate each location with a particular latitude and longitude. 
-To do this, indicate under which name the location trait is known (`Select location attribute') and associate the appropriate coordinates with each location.
-You can either use the editor supplied with SpreaD3 and generate the input file or load previously prepared tab-delimited file including each location, its latitude and longitude. 
+To view the MCC tree in its geographic context, we have to associate each location with a particular latitude and longitude. 
+To do this, indicate under which name the location trait is known (Figure \ref{fig:parseDiscrete}, nr.2) and associate the appropriate coordinates with each location.
+For this you can either use the editor supplied with SpreaD3 (Figure \ref{fig:parseDiscrete}, nr.3) or load a previously prepared tab-delimited file including each location, its latitude and longitude. 
+\par
+SpreaD3 sets the most recent sampling date to the current date. 
+In this example, the date should be set to 27/12/2014 (Figure \ref{fig:parseDiscrete}, nr.4).
+Leave the `Time scale multiplier' (Figure \ref{fig:parseDiscrete}, nr.5) to its default value of 1 \footnote{This option is useful when the time units should be rescaled,  e.g. in molecular archeological work}. 
+Next, browse to the location where the geoJSON file is stored and load it (Figure \ref{fig:parseDiscrete}, nr.6).
+The number of intervals equals the number of periods in which the history is partitioned (Figure \ref{fig:parseDiscrete}, nr.7). %correct?
+Specifically, all lineages of the tree are virtually intersected at each transition time and the the number of branches over which no trait state transition has occurred (e.g. no change in location between the branch's parent and child node) contribute to the trait's Markov reward counts at that time slice.
+The reward counts (`Circular polygons', cfr. infra) at slice $n$ are plotted in the animation starting from period $n$.
+Save the file as `ebov.json' (Figure \ref{fig:parseDiscrete}, nr.8).
 
 \begin{figure}[!H]
 \centering
-\includegraphics[width=1\textwidth]{./figures/fig2_setupLocations.pdf} %[scale=0.22]
-%\caption{
-%\footnotesize{\textbf{Illustration of both dimensions of sequence upscaling.} 
-%The rectangle marks an area in the HIV-1 genome alignment, for which the aligned reads and the coverage they achieve are presented in more detail. Results were obtained from a pilot GS20 run.
-%}}
-\label{fig:loadData}
+\includegraphics[width=1\textwidth]{./figures/Fig1_parsing_discrete.pdf} %[scale=0.22]
+\label{fig:parseDiscrete}
 \end{figure}
 
-SpreaD3 sets the most recent sampling date to the date of the most recent tip, but this can also be specified manually.
-Leave the `Time scale multiplier' to its default value of 1 \footnote{This option is useful when the time units should be rescaled,  e.g. in molecular archeological work}. 
-Next, browse to the location where you saved the geoJSON file and load it.
-The number of intervals equals the number of periods in which the history is partitioned. %correct?
-At each change point, all branches of the tree are virtually `cut', and the intersected branches over which no trait state transition has occurred (e.g. no change in location between the branch's parent and child node) contribute to the Markov reward count for that trait state at that time slice.
-%The reward counts at slice $n$ are plotted in the animation starting from period $n$.
-Save the file as `output.json'.
-
-\subsection{Rendering and specifying the visualisation options}
+\subsubsection{Rendering and specifying the visualisation options}
 
 The `Rendering' tab in the GUI by default opens the D3 renderer.
-Here, you can load `output.json' and save the files rendered with D3 as `rendered\_D3'. %adjust name in GUI: not 'to' but 'with'
+Load `ebov.json' and specify the name of the folder in which the rendered output will be stored. %adjust name in GUI: not 'to' but 'with'
+Following the name-giving in Figure \ref{fig:renderD3}, this creates a folder `ebov\_d3' with several files.
+The most important one is 'index.html', which can be opened by any modern internet browser by double-clicking. 
+\par
+The visualisation options can be set via menu's in the left column of the window.
+The branches of the tree are represented by lines and the nodes by points. %polygons, circular polygons
+Each has particular properties (e.g. color, opacity, \dots) that can either be given a fixed value, or have values assigned by corresponding traits.
+\par
+`index.html' opens a web-page showing the tree and the sampling locations mapped in their geographical context (Figure \ref{}). 
+For this example, let's lay the visual focus on the cross-country location transitions.
+Start by colouring the map by country. 
+To concentrate on the pure geographical aspect of the picture, unselect the Polygons and Lines layer under `Toggle layer visibility'.
+Now set the `Map fill attribute' to 'ISO', which assigns a different color to Guinea, Sierra Leone and Liberia.
+Lower the `Map fill opacity' to 0.2 to enhance the contrast with the branch colors (cfr. infra).
+Set the size of the `Point area' to 4 and also color the sampling locations by country via the `Point color attribute'.
+Reselect the Lines layer.
+Setting the `Line color attribute' to `country' colours the lines by destination location, and attracts the eye to cross-country movements.
+Reselect the Polygons layer.
+Because the size of the polygons around a sampling location is proportional to the number of lineages that are estimated to reside at that location, this captures the relative intensity with which the various locations are affected at any given point in time.
+For example, set the `Circular polygon color'  to the darkest red in combination with a low value for its opacity. 
+After this, the figure should closely resemble Figure 1a in \cite{Bielejec:2016aa}.
 
 \begin{figure}[!H]
 \centering
-\includegraphics[width=1\textwidth]{./figures/fig3_renderD3.pdf} %[scale=0.22]
-%\caption{
-%\footnotesize{\textbf{Illustration of both dimensions of sequence upscaling.} 
-%The rectangle marks an area in the HIV-1 genome alignment, for which the aligned reads and the coverage they achieve are presented in more detail. Results were obtained from a pilot GS20 run.
-%}}
-\label{fig:loadData}
+\includegraphics[width=1\textwidth]{./figures/fig2_render_d3.pdf} %[scale=0.22]
+\label{fig:renderD3}
 \end{figure}
 
-This created a folder `rendered\_D3' with several files.
-The most important one is 'index.html', which can be opened with any modern internet browser by double-clicking. 
-Doing so opens a web-page in which all visualisation options can be set.
-In this example we want to lay focus on the host jumps.
-To do so, give the hosts
+\begin{figure}[!H]
+\centering
+\includegraphics[width=1\textwidth]{./figures/fig2_render_d3.pdf} %[scale=0.22]
+\label{fig:renderD3}
+\end{figure}
 
+\subsection{Visualising a MCC tree annotated with continuous traits}
+% 2.3 MCC tree with Continuous traits
+%  - languages example would look really nice here overlayed on a whole
+% world map
+\subsection{Visualising a distribution of trees annotated with continuous traits}
+\subsection{Visualising a MCC tree annotated with continuous traits}
+\label{JSONmerge}
+%combine multiple layers
+\subsection{Identifying well-supported rates using Bayes factors test}
 
-\section{}
+% 2.2 BF calculation and visualisation
+%  - there seems to be a lot of confusion among folks as to what this
+% actually does. I've seen them do calculations on binary coefficients
+% other than indicators, or dismiss it thinking we do HME to get the BF
+% we could use this to mitigate some of that confusion, so write what
+% (and how) do we actually calculate these. I suppose a table in a text
+% file is of main use but we also show the (graph) visualisation. H5N1 as
+% an example?
+% 
+% - in location coordinates editor there's now 'generate button that will uniformly spread locations over a circle. Show an example of how this can be used to generate a vis (doesn't need a map layer, so no geojson needed). Perhaps more exciting than just a mere graph of BF values
+%
+\subsection{Time-slicing}
+-> to be put under MCC continuous 
 
+% 2.4 time-slicing 
+% - West Nile Virus as an example?
+% - show how one can use MCC tree to generate the slices or define
+% his/her own slice heights
+% - merge continuous tree with JSON file resulting form time slicing a
+% posterior distribution for a joint visualisation.
+% 
+% 
 
+\subsection{Tips \& tricks}
+\label{tips}
+% Tips & Tricks
+%  - we should show the antigenic coordinates example here, where the
+% coordinates are other than lat/long and there's no underlying map. I
+% also have the multiple HPD's example, on which we can sho whow the
+% merging works. W parse 3 JSONs for all HPD levels, merg ethem and
+% jointly visualise, coloring polygons by HPD levels.
+% - antigenic coord (or any other trait for taht matter) coul dbe plotted as a function of time (height attribute)
+% - nodes/ branches of a given tree can be anotated in Figtree, these
+%   values can then be used as a basis for mapping
+% 
+% - Some examples of KML rendering, using previously generated JSON files,
+%   just to show that we still support it.
+
+\section{not made up my mind yet on what example to use for the kml rendering}
 
 To create a JSON data file compatible with KML-based rendering, we parse the MCC tree without passing the corresponding geoJSON map as an argument:
 \\
@@ -355,59 +400,7 @@ $\ddagger$: while here the trait of interest in a standard pylogeographical anal
 %GUI counts color: seems OK. But I wonder: what makes an area suddenly pop up? Is this the number of intervals -> yep?
 
 LINE COLOR = GET CHILD NODE COLOR
-\subsection{Visualising a MCC tree annotated with continuous traits}
-% 2.3 MCC tree with Continuous traits
-%  - languages example would look really nice here overlayed on a whole
-% world map
-% 
 
-\subsection{Visualising a MCC tree annotated with continuous traits}
-\label{JSONmerge}
-%combine multiple layers
-
-
-\subsection{Visualising a distribution of trees annotated with continuous traits}
-
-
-\subsection{Identifying well-supported rates using Bayes factors test}
-
-% 2.2 BF calculation and visualisation
-%  - there seems to be a lot of confusion among folks as to what this
-% actually does. I've seen them do calculations on binary coefficients
-% other than indicators, or dismiss it thinking we do HME to get the BF
-% we could use this to mitigate some of that confusion, so write what
-% (and how) do we actually calculate these. I suppose a table in a text
-% file is of main use but we also show the (graph) visualisation. H5N1 as
-% an example?
-% 
-% - in location coordinates editor there's now 'generate button that will uniformly spread locations over a circle. Show an example of how this can be used to generate a vis (doesn't need a map layer, so no geojson needed). Perhaps more exciting than just a mere graph of BF values
-%
-\subsection{Time-slicing}
--> to be put under MCC continuous 
-
-% 2.4 time-slicing 
-% - West Nile Virus as an example?
-% - show how one can use MCC tree to generate the slices or define
-% his/her own slice heights
-% - merge continuous tree with JSON file resulting form time slicing a
-% posterior distribution for a joint visualisation.
-% 
-% 
-
-\subsection{Tips \& tricks}
-\label{tips}
-% Tips & Tricks
-%  - we should show the antigenic coordinates example here, where the
-% coordinates are other than lat/long and there's no underlying map. I
-% also have the multiple HPD's example, on which we can sho whow the
-% merging works. W parse 3 JSONs for all HPD levels, merg ethem and
-% jointly visualise, coloring polygons by HPD levels.
-% - antigenic coord (or any other trait for taht matter) coul dbe plotted as a function of time (height attribute)
-% - nodes/ branches of a given tree can be anotated in Figtree, these
-%   values can then be used as a basis for mapping
-% 
-% - Some examples of KML rendering, using previously generated JSON files,
-%   just to show that we still support it.
 
 
 
