@@ -216,9 +216,9 @@ public class BayesFactorParser {
 				continue;
 			}
 			
-			Double distance = Utils.rhumbDistance(fromLocation.getCoordinate(),
-					toLocation.getCoordinate());
-			attributes.put(Utils.DISTANCE, distance);
+//			Double distance = Utils.rhumbDistance(fromLocation.getCoordinate(),
+//					toLocation.getCoordinate());
+//			attributes.put(Utils.DISTANCE, distance);
 
 			// Utils.printMap(attributes);
 

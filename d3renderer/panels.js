@@ -236,6 +236,9 @@ function populateLinePanels(attributes) {
 
 		});
 
+//		update(currentSliderValue, timeScale,
+//				currentDateDisplay, dateFormat);
+		
 	});
 
 	// ---LINE WIDTH---//
@@ -381,7 +384,7 @@ function populatePointPanels(attributes) {
 							data = attribute.domain;
 							scale = 
 //								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data)
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#pointColorLegend", scale, "ordinal",
 									{
@@ -478,7 +481,7 @@ function populatePointPanels(attributes) {
 							data = attribute.domain;
 							scale = 
 //								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data)
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 						} else {
 
@@ -649,7 +652,7 @@ function populateAreaPanels(attributes) {
 							data = attribute.domain;
 							scale = 
 //								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data)
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 								
 							colorlegend("#areaColorLegend", scale, "ordinal", {
 								title : "",
@@ -937,7 +940,7 @@ function populateMapPanels(attributes) {
 							data = attribute.domain;
 							scale = 
 //								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data)
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#mapFillLegend", scale, "ordinal", {
 								title : "",
@@ -1015,9 +1018,9 @@ function populateExportPanel() {
 
 						window.open().document.write(svg_xml);
 
-						var html = d3.select("svg").attr("title", "image")
-								.attr("version", 1.1).attr("xmlns",
-										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+//						var html = d3.select("svg").attr("title", "image")
+//								.attr("version", 1.1).attr("xmlns",
+//										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
 
 //						http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
 						

@@ -316,7 +316,9 @@ public class BayesFactorsPanel extends SpreadPanel {
 					BayesFactorSpreadDataParser parser = new BayesFactorSpreadDataParser(settings);
 					SpreadData data = parser.parse();
 
-					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					
+					Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().setPrettyPrinting().create();
+					
 					String s = gson.toJson(data);
 
 					File file = new File(settings.outputFilename);

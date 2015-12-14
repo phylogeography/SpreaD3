@@ -12,6 +12,7 @@ import structure.data.SpreadData;
 import structure.data.TimeLine;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
+import structure.data.primitive.Coordinate;
 import structure.geojson.GeoJsonData;
 import utils.Utils;
 import exceptions.AnalysisException;
@@ -27,7 +28,7 @@ public class BayesFactorSpreadDataParser {
 	public SpreadData parse() throws IOException, AnalysisException {
 
 		TimeLine timeLine = null;
-		AxisAttributes axis = null;
+//		AxisAttributes axis = null;
 		LinkedList<Attribute> mapAttributes = null;
 		LinkedList<Attribute> lineAttributes = null;
 		LinkedList<Attribute> pointAttributes = null;
@@ -112,6 +113,25 @@ public class BayesFactorSpreadDataParser {
 
 		System.out.println("Parsed line attributes");
 
+		
+		// TODO: axis att's
+		
+		LinkedList<Attribute> rangeAttributes = getCoordinateRangeAttributes(locationsList);
+		Attribute xCoordinate = rangeAttributes.get(Utils.X_INDEX);
+		Attribute yCoordinate = rangeAttributes.get(Utils.Y_INDEX);
+
+		pointAttributes = new LinkedList<Attribute>();
+		pointAttributes.add(xCoordinate);
+		pointAttributes.add(yCoordinate);
+		AxisAttributes axis = new AxisAttributes(xCoordinate.getId(),
+				yCoordinate.getId());
+		
+		
+		
+		
+		
+		
+		
 		SpreadData data = new SpreadData(timeLine, //
 				axis, //
 				mapAttributes, //
@@ -136,4 +156,57 @@ public class BayesFactorSpreadDataParser {
 		return data;
 	}// END: parse
 
+	private LinkedList<Attribute> getCoordinateRangeAttributes(
+			LinkedList<Location> locationsList) throws AnalysisException {
+
+		LinkedList<Attribute> coordinateRange = new LinkedList<Attribute>();
+
+		Double[] xCoordinateRange = new Double[2];
+		xCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
+		xCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
+
+		Double[] yCoordinateRange = new Double[2];
+		yCoordinateRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
+		yCoordinateRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
+
+		for (Location location : locationsList) {
+
+			Coordinate coordinate = location.getCoordinate();
+			if (coordinate == null) {
+				throw new AnalysisException("Location " + location.getId()
+						+ " has no coordinates set.");
+			}
+
+			Double latitude = coordinate.getXCoordinate();
+			Double longitude = coordinate.getYCoordinate();
+
+			// update coordinates range
+
+			if (latitude < xCoordinateRange[Attribute.MIN_INDEX]) {
+				xCoordinateRange[Attribute.MIN_INDEX] = latitude;
+			} // END: min check
+
+			if (latitude > xCoordinateRange[Attribute.MAX_INDEX]) {
+				xCoordinateRange[Attribute.MAX_INDEX] = latitude;
+			} // END: max check
+
+			if (longitude < yCoordinateRange[Attribute.MIN_INDEX]) {
+				yCoordinateRange[Attribute.MIN_INDEX] = longitude;
+			} // END: min check
+
+			if (longitude > yCoordinateRange[Attribute.MAX_INDEX]) {
+				yCoordinateRange[Attribute.MAX_INDEX] = longitude;
+			} // END: max check
+
+		}
+
+		Attribute xCoordinate = new Attribute("xCoordinate", xCoordinateRange);
+		Attribute yCoordinate = new Attribute("yCoordinate", yCoordinateRange);
+
+		coordinateRange.add(Utils.X_INDEX, xCoordinate);
+		coordinateRange.add(Utils.Y_INDEX, yCoordinate);
+
+		return coordinateRange;
+	}// END: getCoordinateRange
+	
 }// END: class
