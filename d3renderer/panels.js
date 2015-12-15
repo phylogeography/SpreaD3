@@ -1133,10 +1133,23 @@ function populateToggleLayers() {
 		var visibility = this.checked ? "visible" : "hidden";
 		pointsLayer.selectAll("circle").style("visibility", visibility);
 		locationsLayer.selectAll("circle").style("visibility", visibility);
-		labelsLayer.selectAll("text").style("visibility", visibility);
+//		labelsLayer.selectAll("text").style("visibility", visibility);
 
 	});
 
+	// ---LABELS VISIBILITY---//
+	
+	var labelsLayerCheckbox = document.getElementById("labelsLayerCheckbox");
+	// default state is checked
+	labelsLayerCheckbox.checked = true;
+
+	d3.select(labelsLayerCheckbox).on("change", function() {
+
+		var visibility = this.checked ? "visible" : "hidden";
+		labelsLayer.selectAll("text").style("visibility", visibility);
+
+	});
+	
 	// ---LINES VISIBILITY---//
 
 	var linesLayerCheckbox = document.getElementById("linesLayerCheckbox");

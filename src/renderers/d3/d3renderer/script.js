@@ -15,9 +15,6 @@ var height = width / 2;
 var graticule = d3.geo.graticule();
 var scale;
 
-// fixed colors
-// var mapFixedColors = colorbrewer.Dark2[8];
-
 //
 // ---DATA---//
 //
@@ -28,25 +25,28 @@ fixedColors.splice(6, 0, "#ffffff");
 fixedColors.push("#000000");
 
 // colors for mappings (paired for better interpolating)
-var pairedSimpleColors = getSimpleColors(colorbrewer.Paired[12]);
+var pairedSimpleColors = colorbrewer.Paired[12];
+
+// colors for categorical attributes
+var ordinalColors = d3.scale.category20().range();// colorbrewer.Blues[3] ;
 
 // defaults
 var lineDefaultColorIndex = 12;
-var lineStartColor = "#" + pairedSimpleColors[0];
-var lineEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var lineStartColor = pairedSimpleColors[0];
+var lineEndColor = pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var lineMaxCurvature = 1.0;
 var lineWidth = 1;
 
 var pointDefaultColorIndex = 6;
-var pointStartColor = "#" + pairedSimpleColors[0];
-var pointEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var pointStartColor = pairedSimpleColors[0];
+var pointEndColor = pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var pointArea = 2;
 
 var areaDefaultColorIndex = 1;
-var areaStartColor = "#" + pairedSimpleColors[0];
-var areaEndColor = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var areaStartColor = pairedSimpleColors[0];
+var areaEndColor = pairedSimpleColors[pairedSimpleColors.length - 1];
 
 var countDefaultColorIndex = 1;
 
@@ -58,8 +58,8 @@ var lineStartOpacity = 0.1;
 var lineEndOpacity = 1.0;
 
 var mapDefaultColorIndex = 6;
-var mapStartFill = "#" + pairedSimpleColors[0];
-var mapEndFill = "#" + pairedSimpleColors[pairedSimpleColors.length - 1];
+var mapStartFill = pairedSimpleColors[0];
+var mapEndFill = pairedSimpleColors[pairedSimpleColors.length - 1];
 
 // /////////////////
 // ---FUNCTIONS---//
@@ -110,13 +110,14 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 		if (type == TREE) {
 
 			var points = layer.points;
-			if (typeof points != 'undefined') {
-				generatePoints(points);
-			}
 
 			var lines = layer.lines;
 			if (typeof lines != 'undefined') {
 				generateLines(lines, points);
+			}
+
+			if (typeof points != 'undefined') {
+				generatePoints(points);
 			}
 
 			var areas = layer.areas;
@@ -417,16 +418,16 @@ var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
 var svg = d3.select("#container").append('svg').attr('width', width).attr(
 		'height', height).call(zoom);
 
-
 d3.selectAll("button[data-zoom]").on("click", clicked);
 
+// this defines order of things painted
 var g = svg.append("g");
 var equatorLayer = g.append("g");
 var topoLayer = g.append("g");
 
 var areasLayer = g.append("g");
-var pointsLayer = g.append("g");
 var linesLayer = g.append("g");
+var pointsLayer = g.append("g");
 var locationsLayer = g.append("g");
 var labelsLayer = g.append("g");
 
@@ -440,7 +441,11 @@ var sliderInterval;
 var sliderStartValue;
 var sliderEndValue;
 
-d3.json("data/data.json", function ready(error, json) {
+//var timeScale = null;
+//var currentDateDisplay = null;
+//var dateFormat = null;
+
+	 d3.json("data/data.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
@@ -496,10 +501,10 @@ d3.json("data/data.json", function ready(error, json) {
 	if (typeof areaAttributes != 'undefined') {
 		populateAreaPanels(areaAttributes);
 	}
-	
+
 	// circular polygons
 	populateCountPanels();
-	
+
 	var mapAttributes = json.mapAttributes;
 	if (typeof mapAttributes != 'undefined') {
 		populateMapPanels(mapAttributes);

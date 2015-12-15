@@ -114,8 +114,6 @@ public class BayesFactorSpreadDataParser {
 		System.out.println("Parsed line attributes");
 
 		
-		// TODO: axis att's
-		
 		LinkedList<Attribute> rangeAttributes = getCoordinateRangeAttributes(locationsList);
 		Attribute xCoordinate = rangeAttributes.get(Utils.X_INDEX);
 		Attribute yCoordinate = rangeAttributes.get(Utils.Y_INDEX);
@@ -125,12 +123,6 @@ public class BayesFactorSpreadDataParser {
 		pointAttributes.add(yCoordinate);
 		AxisAttributes axis = new AxisAttributes(xCoordinate.getId(),
 				yCoordinate.getId());
-		
-		
-		
-		
-		
-		
 		
 		SpreadData data = new SpreadData(timeLine, //
 				axis, //
@@ -142,9 +134,6 @@ public class BayesFactorSpreadDataParser {
 				layersList //
 		);
 
-		// TODO: write or print
-		
-		
 		System.out.println("Bayes factors table: ");
 		bayesFactorParser.printBfTable();
 

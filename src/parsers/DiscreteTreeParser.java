@@ -242,6 +242,11 @@ public class DiscreteTreeParser {
 				String attributeId = entry.getKey();
 				Object attributeValue = entry.getValue();
 
+//				TODO
+//				System.out.println(attributeId);
+//				System.out.println(attributeValue);
+				
+				
 				if (branchAttributesMap.containsKey(attributeId)) {
 
 					Attribute attribute = branchAttributesMap.get(attributeId);
@@ -252,8 +257,11 @@ public class DiscreteTreeParser {
 
 					} else {
 
+						//TODO
+//						System.out.println(attributeValue);
+						
 						double value = Utils
-								.round((Double) attributeValue, 100);
+								.round( Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -316,7 +324,7 @@ public class DiscreteTreeParser {
 					} else {
 
 						double value = Utils
-								.round((Double) attributeValue, 100);
+								.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
