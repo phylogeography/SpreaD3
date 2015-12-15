@@ -307,7 +307,8 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils.round((Double) attributeValue, 100);
+						double value = Utils
+								.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -370,7 +371,8 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils.round((Double) attributeValue, 100);
+						double value = Utils
+								.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -433,7 +435,8 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils.round((Double) attributeValue, 100);
+						double value = Utils
+								.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;

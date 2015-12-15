@@ -250,7 +250,6 @@ public class LocationCoordinatesEditor {
 		String nodeState;
 		Location dummy;
 		for (Node node : rootedTree.getNodes()) {
-			if (!rootedTree.isRoot(node)) {
 
 				try {
 
@@ -288,7 +287,6 @@ public class LocationCoordinatesEditor {
 
 				} // END: tie check
 
-			} // END: root check
 		} // END: nodeloop
 
 		return locationsList;

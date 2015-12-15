@@ -53,7 +53,7 @@ function populateLinePanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -70,7 +70,7 @@ function populateLinePanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -114,7 +114,9 @@ function populateLinePanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data)
 
 							colorlegend("#lineColorLegend", scale, "ordinal", {
 								title : "",
@@ -234,6 +236,9 @@ function populateLinePanels(attributes) {
 
 		});
 
+//		update(currentSliderValue, timeScale,
+//				currentDateDisplay, dateFormat);
+		
 	});
 
 	// ---LINE WIDTH---//
@@ -310,7 +315,7 @@ function populatePointPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -327,7 +332,7 @@ function populatePointPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -377,7 +382,9 @@ function populatePointPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#pointColorLegend", scale, "ordinal",
 									{
@@ -471,8 +478,10 @@ function populatePointPanels(attributes) {
 								areaAttribute);
 						if (attribute.scale == ORDINAL) {
 
-							scale = d3.scale.category20().domain(
-									attribute.domain);
+							data = attribute.domain;
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 						} else {
 
@@ -576,7 +585,7 @@ function populateAreaPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 
 		onSelect : function(hex, element) {
 
@@ -592,7 +601,7 @@ function populateAreaPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -641,8 +650,10 @@ function populateAreaPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
-
+							scale = 
+//								d3.scale.category20().domain(data);
+								d3.scale.ordinal().range(ordinalColors).domain(data);
+								
 							colorlegend("#areaColorLegend", scale, "ordinal", {
 								title : "",
 								boxHeight : 20,
@@ -765,7 +776,7 @@ function populateCountPanels() {
 
 	});
 
-}
+}//END: populateCountPanels
 
 // ---MAP---//
 
@@ -867,7 +878,7 @@ function populateMapPanels(attributes) {
 		cellHeight : 13,
 		columns : 4,
 		displayColorCode : true,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		onSelect : function(hex, element) {
 
 			mapStartFill = "#" + hex;
@@ -882,7 +893,7 @@ function populateMapPanels(attributes) {
 		cellWidth : 13,
 		cellHeight : 13,
 		columns : 4,
-		colors : pairedSimpleColors,
+		colors : getSimpleColors(pairedSimpleColors),
 		displayColorCode : true,
 		onSelect : function(hex, element) {
 
@@ -927,7 +938,8 @@ function populateMapPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.category20().domain(data);
+							scale = 
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#mapFillLegend", scale, "ordinal", {
 								title : "",
@@ -1005,9 +1017,9 @@ function populateExportPanel() {
 
 						window.open().document.write(svg_xml);
 
-						var html = d3.select("svg").attr("title", "image")
-								.attr("version", 1.1).attr("xmlns",
-										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+//						var html = d3.select("svg").attr("title", "image")
+//								.attr("version", 1.1).attr("xmlns",
+//										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
 
 //						http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
 						
@@ -1120,10 +1132,22 @@ function populateToggleLayers() {
 		var visibility = this.checked ? "visible" : "hidden";
 		pointsLayer.selectAll("circle").style("visibility", visibility);
 		locationsLayer.selectAll("circle").style("visibility", visibility);
-		labelsLayer.selectAll("text").style("visibility", visibility);
 
 	});
 
+	// ---LABELS VISIBILITY---//
+	
+	var labelsLayerCheckbox = document.getElementById("labelsLayerCheckbox");
+	// default state is checked
+	labelsLayerCheckbox.checked = true;
+
+	d3.select(labelsLayerCheckbox).on("change", function() {
+
+		var visibility = this.checked ? "visible" : "hidden";
+		labelsLayer.selectAll("text").style("visibility", visibility);
+
+	});
+	
 	// ---LINES VISIBILITY---//
 
 	var linesLayerCheckbox = document.getElementById("linesLayerCheckbox");

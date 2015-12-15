@@ -183,7 +183,7 @@ function generateLines(data, points) {
 				line.classed("hover", true);
 
 				// bring line to the front
-				this.parentNode.parentNode.appendChild(this.parentNode);
+//				this.parentNode.parentNode.appendChild(this.parentNode);
 
 			})
 			//
