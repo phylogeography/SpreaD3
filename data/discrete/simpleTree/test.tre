@@ -1,0 +1,4 @@
+#NEXUS
+begin trees;
+	tree TREE1 = [&R] (taxon1[&height=0,location="Conakry"]:1.0,(taxon2[&height=0.25,location="Sinoe"]:0.25,taxon3[&height=0.0,location="PortLoko"]:0.5)[&height=0.5,location="Kenema"]:0.5)[&height=1.0,location="Gueckedou"];
+end;

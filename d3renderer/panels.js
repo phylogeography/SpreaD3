@@ -776,7 +776,7 @@ function populateCountPanels() {
 
 	});
 
-}
+}//END: populateCountPanels
 
 // ---MAP---//
 
@@ -939,7 +939,6 @@ function populateMapPanels(attributes) {
 
 							data = attribute.domain;
 							scale = 
-//								d3.scale.category20().domain(data);
 								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#mapFillLegend", scale, "ordinal", {
@@ -1133,7 +1132,6 @@ function populateToggleLayers() {
 		var visibility = this.checked ? "visible" : "hidden";
 		pointsLayer.selectAll("circle").style("visibility", visibility);
 		locationsLayer.selectAll("circle").style("visibility", visibility);
-//		labelsLayer.selectAll("text").style("visibility", visibility);
 
 	});
 

@@ -226,7 +226,7 @@ public class JsonMerger {
 
 					if (!areaAttributesCreated) {
 
-						if (json.getLineAttributes() != null) {
+						if (json.getAreaAttributes() != null) {
 							areaAttributes = new LinkedList<Attribute>();
 							areaAttributes.addAll(json.getAreaAttributes());
 							areaAttributesCreated = true;

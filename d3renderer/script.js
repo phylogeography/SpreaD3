@@ -129,8 +129,11 @@ function initializeLayers(layers, pointAttributes, lineAttributes) {
 
 			var countAttribute = getObject(pointAttributes, "id", COUNT);
 			var counts = layer.points;
-			generateCounts(counts, countAttribute);
-
+			
+			if(counts.length > 0) {
+			    generateCounts(counts, countAttribute);
+			}
+			
 		} else {
 
 			// do nothing
@@ -445,9 +448,9 @@ var sliderEndValue;
 //var currentDateDisplay = null;
 //var dateFormat = null;
 
-//d3.json("data/H3N2_mds_all.json", function ready(error, json) {
+d3.json("data/wnv_merged.json", function ready(error, json) {
 //	 d3.json("data/ebov_discrete.json", function ready(error, json) {
-	 d3.json("data/test.json", function ready(error, json) {
+//	 d3.json("data/test.json", function ready(error, json) {
 
 	// -- TIME LINE-- //
 	var hasTime = false;
