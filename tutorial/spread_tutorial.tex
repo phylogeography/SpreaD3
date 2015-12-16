@@ -416,22 +416,26 @@ To save the merged file as ag\_combined.json, select File $\rightarrow$  Merge.
 \begin{figure}[!H]
 \centering
 \includegraphics[width=1\textwidth]{./figures/Fig_mergeWNV.pdf} 
-\caption{Example of a merging the desired layers of various SpreaD3 parsing outputs}
+\caption{Example of merging the desired layers of various SpreaD3 parsing outputs}
 \label{fig:mergeTimeSlice}
 \end{figure}
 
 
 \subsubsection{Rendering and specifying the visualisation options}
 
-There are only a few steps required to arrive at the final image for this example (Figure \ref{}).
-First colour the land mass bluish by setting the Map color to \#abd9e9, and the Map fill opacity to 1.
-\par
-projection bias??
+There are only a few steps required to arrive at the final image for this example (Figure \ref{fig:TimeSliceFigure}).
+First give the seas a grey colour by setting the Backgound color to grey.
+Next, colour the land mass dark grey by setting the Map color to black (colour code \#000000) and the Map fill opacity to .7.
+Update the colour of the contours: set the Polygon color  to \#74add1 and the Polygon opacity to .4.
+Finally, color the poins and lines by the time by setting the Poins/Lines color attribute to `heigth', and their start and end colours to \#b2df8a and \#fdbf6f respectively.
 
-%issues with merged json:
-% Toggle layer visibility does not work
-% the coloring of the time slicing contours cannot be changed?
-% 
+\begin{figure}[!H]
+\centering
+\includegraphics[width=1\textwidth]{./figures/Fig_WNVout.pdf} 
+\caption{SpreaD3 generated image of the West Nile virus dataset from \citet{Pybus:2012aa}}
+\label{fig:TimeSliceFigure}
+\end{figure}
+
 
 \subsection{Tips \& tricks\label{sub:tips}}
 
@@ -451,7 +455,7 @@ projection bias??
 We illustrate the use of SpreaD3 for data mapped to other coordinates than longitude and latitude with an antigenic coordinate ancestral reconstruction for an influenza A/H3N2 virus dataset taken from \citet{Bedford:2014aa}.
 Antigenic distances are a quantitative measure of how antigenically dissimilar virus strains are, and are projected on a 2D map.
 When no underlying map is provided, SpreaD3 simply draws a bounding box around the data points.
-The idea here is to visualise three layers of uncertainty by combining the polygons of the 50\%, 75\% and 95\% Highest Posterior Density interval,
+The idea here is to visualise three layers of uncertainty by combining the polygons of the 50\%, 75\% and 95\% Highest Posterior Density interval.
 
 \subsubsection{Parsing the data}
 
@@ -477,9 +481,10 @@ Now combine these files (Figure \ref{fig:mergeTipsTricks}) and save as `ag\_comb
 \subsubsection{Rendering and specifying the visualisation options}
 
 Do the following to obtain Figure \ref{}.
-Set the Line color to \#4575b4 and the Point color to \#a50026, the Polygon color to \#f46d43, and the Polygon opacity to .10.
-\par
-add something on how to edit in Illustrator? Will it not be a bit weird to have a much prettier figure in the paper?
+Set the Line color attribute to antigenic1 and its start and end colors to \#1f78b4 and \#fb9a99 respectively. 
+Do the same for the Point color attribute.
+The HPD layers, which take 3 discrete values, can be given a separate colour by setting the Polygon attribute color to HPD.
+Lower the Polygon opacity to .1 to visualise the contours of the wider HPDs.
 
 \begin{figure}[!H]
 \centering

@@ -208,7 +208,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 					xCoordinate.setModel(xCoordinateSelectorModel);
 					xCoordinate.addItemListener(new ListenXCoordinate());
 					xCoordinate.setToolTipText("Longitude");
-					addComponentWithLabel("Select x coordinate attribute",
+					addComponentWithLabel("Select y coordinate (latitude)",
 							xCoordinate);
 
 					yCoordinate = new JComboBox<Object>();
@@ -217,7 +217,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 					yCoordinate.setModel(yCoordinateSelectorModel);
 					yCoordinate.addItemListener(new ListenYCoordinate());
 					yCoordinate.setToolTipText("Latitude");
-					addComponentWithLabel("Select y coordinate attribute",
+					addComponentWithLabel("Select x coordinate (longitude)",
 							yCoordinate);
 
 
