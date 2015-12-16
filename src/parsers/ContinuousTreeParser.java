@@ -257,6 +257,7 @@ public class ContinuousTreeParser {
 							continue;
 						} // END: try-catch
 
+						
 						List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 						for (int c = 0; c < xCoordinateHPD.length; c++) {
 
@@ -268,6 +269,13 @@ public class ContinuousTreeParser {
 
 						} // END: c loop
 
+//						if(rootedTree.isExternal(node)) {
+//						System.out.println(rootedTree.getTaxon(node));
+//						Utils.printArray(xCoordinateHPD);
+//						System.out.println();
+//						Utils.printArray(yCoordinateHPD);
+//						}
+						
 						Polygon polygon = new Polygon(coordinateList);
 
 						HashMap<String, Object> areaAttributesMap = new HashMap<String, Object>();
