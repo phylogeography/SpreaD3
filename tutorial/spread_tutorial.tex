@@ -16,12 +16,44 @@
 \usepackage{natbib}
 \usepackage{booktabs}
 \usepackage{multirow}
-
+\usepackage{amstext}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %---USER SPECIFIED LaTeX COMMANDS---%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \makeatletter
+
+\long\def\greybox#1{%
+    \newbox\contentbox%
+    \newbox\bkgdbox%
+    \setbox\contentbox\hbox to \hsize{%
+        \vtop{
+            \kern\columnsep
+            \hbox to \hsize{%
+                \kern\columnsep%
+                \advance\hsize by -2\columnsep%
+                \setlength{\textwidth}{\hsize}%
+                \vbox{
+                    \parskip=\baselineskip
+                    \parindent=0bp
+                    #1
+                }%
+                \kern\columnsep%
+            }%
+            \kern\columnsep%
+        }%
+    }%
+    \setbox\bkgdbox\vbox{
+        \pdfliteral{0.85 0.85 0.85 rg}
+        \hrule width  \wd\contentbox %
+               height \ht\contentbox %
+               depth  \dp\contentbox
+        \pdfliteral{0 0 0 rg}
+    }%
+    \wd\bkgdbox=0bp%
+    \vbox{\hbox to \hsize{\box\bkgdbox\box\contentbox}}%
+    \vskip\baselineskip%
+}
 
 \newenvironment{lyxcode}
 {\par\begin{list}{}{
@@ -241,9 +273,10 @@ Intuitively it should be clear that if this frequency is higher than the prior e
 Bayes factors provide a sense of how much the posterior (i.e. the outcome of the analysis) deviates from the prior beliefs, and are defined as the ratio of the posterior odds over the prior odds \citep{kass:1995a}.
 Thanks to the prior specification we can write:
 
-$$ Bayes factor = \frac{posterior odds}{prior odds} = \frac{\frac{posterior frequency}{1 - posterior frequency}}{\frac{prior frequency}{1 - prior frequency}} = \frac{posterior frequency}{1 - posterior frequency}$$
+$$ \text{Bayes factor} = \frac{ \text{posterior odds}}{\text{prior odds}} = \frac{\frac{\text{posterior frequency}}{1 - \text{posterior frequency}}}{\frac{\text{prior frequency}}{1 - \text{prior frequency}}} = \frac{\text{posterior frequency}}{1 - \text{posterior frequency}},$$
 
-, which makes we can directly obtain the Bayes factor support for each pairwise rate of diffusion between locations from samples collected from the posterior. 
+\noindent
+which means we can directly obtain the Bayes factor support for each pairwise rate of diffusion between locations from samples collected from the posterior. 
 
 \subsubsection{Parsing the data}
 
@@ -252,7 +285,7 @@ Browse to the log file (H5N1\_HA\_discrete\_rateMatrix.log) and open it to load 
 There are two options when specifying the location coordinates (Figure \ref{fig:parseBF}, nr 3).
 Either a set of longitude and latitude coordinates is passed, and these are afterwards coupled to the geoJSON formatted map that can be given along (Figure \ref{fig:parseBF}, nr 4), or the locations are represented by equally spaced points on a circle\footnote{This is most useful for traits that cannot be readily linked to another coordinate system} (Figure \ref{fig:parseBF}, nr 5).
 To set up the latter visualisation, select `Generate' and enter the number of location states (Figure \ref{fig:parseBF}, nr 6), which is 7 for this example.
-The locations are now referred to as location1, location2 etcetera. 
+The locations are now referred to as location1, location2 \textit{etc}. 
 Change this to the actual location names by updating the names in the same order as the location states are declared in the XML\footnote{The names should be passed in the same order as in the locations.txt file}.
 Save as BF\_circle.json.
 We'll also map the BSSVS outcome on a world map, for which you'll have to load `locations.txt', and the provided geoJSON map (world\_countries.geojson).
@@ -271,7 +304,7 @@ In the default plot the location names may be overlaid with the lines; this too 
 The result should look similar to Figure \ref{fig:BFcircle}.
 %I had to move the location names in Illustrator.
 \par
-To plot the Bayes factor support on a geographical map, again start by selecting an appropriate background coluor.
+To plot the Bayes factor support on a geographical map, again start by selecting an appropriate background color.
 Give China another shade of blue than its neighbouring countries by setting the Map fill attribute to `adm0\_dif.
 For this example let's use the same colour scheme for the lines and points as above. 
 Also include the legend in the same way. 
@@ -318,7 +351,7 @@ Because the locations at the tips in this example cover the areas where the lang
 Whenever the tips traits have no associated uncertainty (e.g. exact longitude and latitude), one can safely ignore this option. 
 When the MCC tree is annotated with multiple levels of trait uncertainty (that is, multiple HPD levels), the level of interest can be chosen (Figure \ref{fig:parseMCCcont}, nr 4).
 The provided example tree only has 1 HPD level annotation (80\%).
-You can leave the the most recent sampling date for this example to its default value, just as the Time scale multiplier (Figure \ref{fig:parseMCCcont}, nr 5).
+You can leave the most recent sampling date for this example to its default value, just as the Time scale multiplier (Figure \ref{fig:parseMCCcont}, nr 5).
 To conclude the parsing step, select the world.geojson file and generate `language.json' (Figure \ref{fig:parseMCCcont}, nr 6 and 7.
 
 \begin{figure}[!H]
@@ -334,7 +367,7 @@ Open the Rendering tab, load language.json and save as language\_D3 (Figure \ref
 As before, we start by giving the geographical map on which the tree is projected an appropriate color. 
 Let's keep the white color for the seas, and contrast this with light blue for the land masses. % de gustibus et coloribus ...
 For this, set the Map fill color to \#abd9e9, the Map fill to white (color code \#ffffff) and the Map fill opacity to 0.8. 
-Note that, depending on the loaded goeJSON map, this may also be achieve by selecting the appropriate Map fill attribute. 
+Note that, depending on the loaded geoJSON map, this may also be achieve by selecting the appropriate Map fill attribute. 
 Next, give the lines another color than that of the country boundaries, e.g. select Line color \#f4575b4.
 Finally, let's visualise the uncertainty on the inferred location at the internal nodes by setting the Polygon color attribute to `posterior'.
 By setting the start color to light orange (color code \#fbdf6f) and the end color to \#b2df8a, the node uncertainty will range from orange (most uncertain), to progressively more green for the nodes with higher posterior support.
@@ -374,12 +407,18 @@ Uncertainty on these estimates is reflected by contouring them with polygons, wh
 
 \subsubsection{Parsing the data}
 
-Select `Tree distribution with CONTINUOUS traits' from the Data tab, load the trees, set the 2D trait to `location' and load the MCC tree summary (Figure \ref{fig:renderPosterior}, nr2 1, 2 and 3).
+Select `Tree distribution with CONTINUOUS traits' from the Data tab, load the trees, set the 2D trait to `location' and load the MCC tree summary 
+% FB: undefined reference?
+(Figure \ref{fig:renderPosterior}, nr2 1, 2 and 3).
 The time slices are based on the MCC tree length, but it is also possible to supply a file with custom slice heights in a single column and in ascending order (from the tips to the root of the phylogeny) . 
 For this, set `time slices' to Custom (Figure \ref{fig:customTimeSlices}, nr 1) and load the time slice file (Figure \ref{fig:customTimeSlices}, nr 2).
-The most recent sampling tine in this dataset is 2007.63 - reset the data format to decimal (Figure \ref{fig:renderPosterior}, nr 4).
+The most recent sampling tine in this dataset is 2007.63 - reset the data format to decimal 
+% FB: undefined reference?
+(Figure \ref{fig:renderPosterior}, nr 4).
 The trees distribution has been subsampled with LogCombiner (a tool distributed with BEAST) to reduce its size, at which stage the burnin was removed. 
-Hence, set the burnin to zero (Figure \ref{fig:renderPosterior}, nr 5).
+Hence, set the burnin to zero 
+% FB: undefined reference?
+(Figure \ref{fig:renderPosterior}, nr 5).
 Leave the other options at their default values, select the provided geojson map (Figure \ref{fig:parsePosterior}, nr 6) and generate wnv\_trees.json.
 Because the trees-file is rather large this may take a few moments.
 \par
@@ -431,7 +470,8 @@ Finally, color the poins and lines by the time by setting the Poins/Lines color 
 
 \begin{figure}[!H]
 \centering
-\includegraphics[width=1\textwidth]{./figures/Fig_WNVout.pdf} 
+% FB: uncommited figure?
+% \includegraphics[width=1\textwidth]{./figures/Fig_WNVout.pdf} 
 \caption{SpreaD3 generated image of the West Nile virus dataset from \citet{Pybus:2012aa}}
 \label{fig:TimeSliceFigure}
 \end{figure}
@@ -480,6 +520,7 @@ Now combine these files (Figure \ref{fig:mergeTipsTricks}) and save as `ag\_comb
 
 \subsubsection{Rendering and specifying the visualisation options}
 
+% FB: undefined reference?
 Do the following to obtain Figure \ref{}.
 Set the Line color attribute to antigenic1 and its start and end colors to \#1f78b4 and \#fb9a99 respectively. 
 Do the same for the Point color attribute.
@@ -510,17 +551,22 @@ The output of this rendering can be viewed in virtual globe software (e.g. Googl
 \end{figure}
 
 
-\subsection{Command line interface}
-\label{CLI}
+\subsection{Command line interface\label{CLI}}
 
 We have found it easiest to use the command line interface with an alias added to .bash\_profile:
-\\
+
+\begin{lyxcode}
 alias spread=`java -jar <absolute path to SpreaD3.jar>' 
-\\
+\end{lyxcode}
+
+\noindent
 The alias will become active when you open another session in Terminal, or it can be used in the current session after executing
-\\
+
+\greybox{
 \$ source $\sim$/.bash\_profile
-\\
+}
+
+\noindent
 in the current session  [assuming your bash\_profile resides at \$HOME]. 
 \par
 All visualisation options available via the Graphical User Interface can also be set via the command line. 
