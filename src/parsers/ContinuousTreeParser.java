@@ -510,6 +510,13 @@ public class ContinuousTreeParser {
 
 		} // END: attributes loop
 
+		String attributeName = "nodeName";
+		Object value = "internal";
+		if(rootedTree.isExternal(node)) {
+			 value = rootedTree.getTaxon(node).toString();
+		}
+		attributes.put(attributeName, value);
+		
 		Point point = new Point(id, coordinate, startTime, attributes);
 
 		return point;
