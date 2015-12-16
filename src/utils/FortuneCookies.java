@@ -118,6 +118,7 @@ public class FortuneCookies {
 
 "Great Scott!",
 "Please excuse the crudity of this model, I didn't have time to build it to scale or paint it",
+"All the good stuff is made in Japan",
 
 	};
 
