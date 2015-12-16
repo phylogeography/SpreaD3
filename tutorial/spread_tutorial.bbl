@@ -1,5 +1,11 @@
 \begin{thebibliography}{}
 
+\bibitem[Bedford et~al., 2014]{Bedford:2014aa}
+Bedford, T., Suchard, M.~A., Lemey, P., Dudas, G., Gregory, V., Hay, A.~J.,
+  McCauley, J.~W., Russell, C.~A., Smith, D.~J., and Rambaut, A. (2014).
+\newblock Integrating influenza antigenic dynamics with molecular evolution.
+\newblock {\em Elife}, 3:e01914.
+
 \bibitem[Bielejec et~al., 2016]{Bielejec:2016aa}
 Bielejec, F., Baele, G., Vrancken, B., M.A., S., Rambaut, A., and Lemey, P.
   (2016).
@@ -48,5 +54,13 @@ Lemey, P., Rambaut, A., Bedford, T., Faria, N., Bielejec, F., Baele, G.,
 Lemey, P., Rambaut, A., Drummond, A.~J., and Suchard, M.~A. (2009).
 \newblock Bayesian phylogeography finds its roots.
 \newblock {\em PLoS Comput Biol}, 5(9):e1000520.
+
+\bibitem[Pybus et~al., 2012]{Pybus:2012aa}
+Pybus, O.~G., Suchard, M.~A., Lemey, P., Bernardin, F.~J., Rambaut, A.,
+  Crawford, F.~W., Gray, R.~R., Arinaminpathy, N., Stramer, S.~L., Busch,
+  M.~P., and Delwart, E.~L. (2012).
+\newblock Unifying the spatial epidemiology and molecular evolution of emerging
+  epidemics.
+\newblock {\em Proc Natl Acad Sci U S A}, 109(37):15066--71.
 
 \end{thebibliography}
