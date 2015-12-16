@@ -12,7 +12,10 @@ function generateTopoLayer(geojson) {
 	scale = basicScale;
 	var offset = [ width / 2, height / 2 ];
 
-	projection = d3.geo.mercator().scale(scale).center(center)
+	projection = 
+		d3.geo.mercator()
+//	d3.geo.equirectangular()
+	.scale(scale).center(center)
 			.translate(offset);
 	path = d3.geo.path().projection(projection);
 
