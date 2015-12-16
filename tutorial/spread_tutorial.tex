@@ -192,7 +192,7 @@ Set the size of the `Point area' to 4 and also color the sampling locations by c
 Reselect the Lines layer.
 Setting the `Line color attribute' to `country' colours the lines by destination location, and attracts the eye to cross-country movements.
 Reselect the Polygons layer.
-Because the size of the polygons around a sampling location is proportional to the number of lineages that maintain that location, this captures the relative intensity of local virus spread at any given point in time.
+Because the size of the polygons around a sampling location is proportional to the number of lineages that maintain that location, this captures the absolute and relative intensity of the local virus spread at any given point in time.
 For example, set the `Circular polygon color'  to the darkest red in combination with a low value for its opacity. 
 After this, the figure should closely resemble Figure 1a in \cite{Bielejec:2016aa} (Figure \ref{fig:ebov_final}).
 \par
@@ -299,7 +299,7 @@ This should result in a similar image as Figure \ref{fig:BFmap}.
 
 For the example using an MCC tree annotated with continuous traits we revisit the work of \citet{Bouckaert:2012aa} in which the origin and spread of Indo-European languages was investigated with well-established phylogenetic methods.
 We will here use the MCC tree summary to visualise their origin in and spread from what is present day Anatolia. 
-This maps all branches of a continuous diffusion phylogeography and allows plotting the uncertainty of geographic coordinates at the internal nodes through their annotated highest posterior density contours.
+This maps all branches of a continuous diffusion phylogeographic reconstruction and allows plotting the uncertainty of geographic coordinates at the internal nodes through their annotated highest posterior density contours.
 
 \subsubsection{Parsing the data}
 \label{MCCcontParse}
@@ -308,7 +308,8 @@ In the Data tab, select `MCC tree with continuous traits' and browse to where th
 The x-coordinate (longitude) in this example is encoded by trait1, and the y-coordinate (latitude) by trait2 (Figure \ref{fig:parseMCCcont}, nr 2).
 The option `External annotations' %perhaps change to `External branch annotations' 
 is to be used when the child node trait values have an associated uncertainty (Figure \ref{fig:parseMCCcont}, nr 3).
-For this example (and most other geographical reconstructions), selecting this option has no effect because the locations at the tips are known;  you  can safely ignore this option. 
+Because the locations at the tips in this example cover the areas where the language is spoken this options should be selected.
+Whenever the tips traits have no associated uncertainty (e.g. exact longitude and latitude), one can safely ignore this option. 
 When the MCC tree is annotated with multiple levels of trait uncertainty (that is, multiple HPD levels), the level of interest can be chosen (Figure \ref{fig:parseMCCcont}, nr 4).
 The provided example tree only has 1 HPD level annotation (80\%).
 You can leave the the most recent sampling date for this example to its default value, just as the Time scale multiplier (Figure \ref{fig:parseMCCcont}, nr 5).
