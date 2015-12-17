@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
+
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 import structure.data.Attribute;
@@ -510,12 +512,18 @@ public class ContinuousTreeParser {
 
 		} // END: attributes loop
 
+		// annotate with node names
 		String attributeName = "nodeName";
 		Object value = "internal";
 		if(rootedTree.isExternal(node)) {
 			 value = rootedTree.getTaxon(node).toString();
 		}
 		attributes.put(attributeName, value);
+		
+      // external nodes have no posterior annotated, need to fix that
+		if(rootedTree.isExternal(node)) {
+			attributes.put(Utils.POSTERIOR, 1.0);
+		}
 		
 		Point point = new Point(id, coordinate, startTime, attributes);
 

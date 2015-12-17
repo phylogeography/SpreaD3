@@ -28,7 +28,7 @@ fixedColors.push("#000000");
 var pairedSimpleColors = colorbrewer.Paired[12];
 
 // colors for categorical attributes
-var ordinalColors = d3.scale.category20().range();// colorbrewer.Blues[3] ;
+var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
 
 // defaults
 var lineDefaultColorIndex = 12;

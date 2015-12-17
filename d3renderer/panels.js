@@ -92,7 +92,6 @@ function populateLinePanels(attributes) {
 		element.value = option;
 
 		lineColorAttributeSelect.appendChild(element);
-
 	}// END: i loop
 
 	// line color attribute listener
@@ -115,8 +114,7 @@ function populateLinePanels(attributes) {
 
 							data = attribute.domain;
 							scale = 
-//								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data)
+								d3.scale.ordinal().range(ordinalColors).domain(data);
 
 							colorlegend("#lineColorLegend", scale, "ordinal", {
 								title : "",
@@ -127,6 +125,7 @@ function populateLinePanels(attributes) {
 
 						} else {
 
+							
 							data = attribute.range;
 							scale = d3.scale.linear().domain(data).range(
 									[ lineStartColor, lineEndColor ]);
@@ -149,6 +148,11 @@ function populateLinePanels(attributes) {
 							var attributeValue = line.attr(colorAttribute);
 							var color = scale(attributeValue);
 
+							if(attributeValue == null) {
+								console.log("null found");
+								color = "#000";
+								}
+							
 							return (color);
 						});
 
@@ -417,6 +421,11 @@ function populatePointPanels(attributes) {
 							var attributeValue = point.attr(colorAttribute);
 							var color = scale(attributeValue);
 
+							if(attributeValue == null) {
+								console.log("null found");
+								color = "#000";
+								}
+							
 							return (color);
 						});
 
@@ -500,6 +509,11 @@ function populatePointPanels(attributes) {
 							var area = scale(attributeValue);
 							var radius = Math.sqrt(area / Math.PI);
 
+							if(attributeValue == null) {
+								console.log("null found");
+								radius = 0.0;
+								}
+							
 							return (radius);
 						});
 					});
@@ -650,9 +664,8 @@ function populateAreaPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = 
-//								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data);
+							scale = d3.scale.ordinal().range(ordinalColors)
+									.domain(data);
 								
 							colorlegend("#areaColorLegend", scale, "ordinal", {
 								title : "",
@@ -674,7 +687,7 @@ function populateAreaPanels(attributes) {
 								vertical : true
 							});
 
-						}
+						}// END: range/domain check
 
 						areasLayer.selectAll(".area").transition() //
 						.ease("linear") //
@@ -684,6 +697,11 @@ function populateAreaPanels(attributes) {
 							var attributeValue = area.attr(colorAttribute);
 							var color = scale(attributeValue);
 
+							if(attributeValue == null) {
+							console.log("null found");
+							color = "#000";
+							}
+							
 							return (color);
 						});
 

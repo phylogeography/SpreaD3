@@ -399,6 +399,19 @@ public class DiscreteTreeParser {
 
 		} // END: attributes loop
 
+		// annotate with node names
+		String attributeName = "nodeName";
+		Object value = "internal";
+		if(rootedTree.isExternal(node)) {
+			 value = rootedTree.getTaxon(node).toString();
+		}
+		attributes.put(attributeName, value);
+		
+      // external nodes have no posterior annotated, need to fix that
+		if(rootedTree.isExternal(node)) {
+			attributes.put(Utils.POSTERIOR, 1.0);
+		}
+		
 		Point point = new Point(id, location, startTime, attributes);
 
 		return point;
