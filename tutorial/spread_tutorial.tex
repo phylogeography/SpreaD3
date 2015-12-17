@@ -531,7 +531,7 @@ Now combine these files (Figure \ref{fig:mergeTipsTricks}) and save as `ag\_comb
 \centering
 \includegraphics[width=1\textwidth]{./figures/new_merge_ag.pdf} 
 \caption{Example of a merging the desired layers of various {\spreadname} parsing outputs}
-\label{fig:mergeTipsTricks}
+\label{fig:mergeTipsTricks2}
 \end{figure}
 
 \subsubsection{Rendering and specifying the visualisation options}
@@ -608,9 +608,159 @@ The alias will become active when you open another session in Terminal, or it ca
 
 \noindent
 in the current session  [assuming your bash\_profile resides at \$HOME]. 
-\par
-All visualisation options available via the Graphical User Interface can also be set via the command line. 
-An overview of the syntax to be used is given in the README.textile (and at \url{https://github.com/phylogeography/SPREAD2}.
+
+\vspace{.5cm}
+
+To parse trees, the following syntax should be used:
+
+A) discrete traits, with map:
+
+\greybox{
+\$ spread -parse -locations locations.txt -header false -tree some.tree -locationTrait location -intervals 10 -mrsd 2015.8 -geojson some.geojson -output output.json
+}
+
+B) discrete traits, without map:
+
+\greybox{
+\$ spread -parse -locations locations.txt -header false -tree some.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output output.json
+}
+
+C) Bayes factor, with map:
+
+\greybox{
+\$ spread -parse -locations locations.txt -log rateMatrix.log -burnin 10 -geojson some.geojson -output output.json
+}
+
+D) Bayes factor, circle view:
+
+\greybox{
+\$ spread -parse XXXXXX
+}
+
+E) continuous trait MCC tree, without map:
+
+\greybox{
+\$ spread -parse -tree some.tre -yCoordinate latitude -xCoordinate longitude -HPD 95 -externalAnnotations true -mrsd 2011.1 -output output.json
+}
+
+F) continuous trait MCC tree, with map:
+
+\greybox{
+\$ spread -parse -tree some.tre -yCoordinate latitude -xCoordinate longitude -HPD 95 -externalAnnotations true -mrsd 2011.1 -geojson
+ some.geojson -output output.json
+}
+
+G) continuous trait posterior tree distribution, with slices according to MCC tree:
+
+\greybox{
+\$ spread -parse -trees some.trees -tree some.tre -trait location -externalAnnotations true -mrsd 2011.1 -geojson
+ some.geojson -output output.json
+}
+
+H) continuous trait posterior tree distribution, with predefined slices:
+
+\greybox{
+\$ spread -parse -trees some.trees -tree some.tre -trait location -sliceHeights someHeights.txt -externalAnnotations true -mrsd 2011.1 -geojson some.geojson -output output.json
+\\
+\#to override some default settings:
+-intervals 15 -burnin 5 -hpd 0.8
+}
+
+%HPD: as 90 or .9?
+
+\vspace{.5cm}
+
+To merge JSON files, the following syntax should be used:
+
+\greybox{
+\$ spread -merge --axisAttributes some.json -points some.json -lines some.json -areas some.json -geojson some.json -output merged.json
+\\\#N.B. one or more JSON files can be specified for each option.
+}
+
+
+\vspace{.5cm}
+
+Parsing and rendering options can also be set via the command line (see Table \ref{tab:options} for an overview of the syntax and a concise description). 
+
+%TABLE 1
+\vspace{0.5cm}
+\begin{table}
+\centering
+\caption[Overview of available command line visualisation options]{\footnotesize{\textbf{Overview of available command line visualisation options}}}
+\begin{tabular}{ll}
+\\
+\toprule
+			\multicolumn{2}{c}{Points}															\\
+\midrule	
+\textit{color}:						&		
+																						\\
+								&														\\
+override default points color			& -pointColor 0 255 255										\\
+map point colors to a continuous attribute 	& -pointColor 0 255 255 -pointColorMapping \textit{attribute}			\\
+override default start-end colors		& -pointStartColor 250 0 0 -pointEndColor 0 0 150				\\
+map point colors to a discrete attribute:	& 					 									\\
+	-same color for all states			&-pointColor 0 255 255 -pointColorMapping \textit{attribute}			\\
+	-state-specific colors: via color sheet$\dagger$&-pointcolors traitColors.txt -pointColorMapping \textit{attribute}	\\
+								&														\\
+\textit{area}: 						&														\\
+								&														\\
+override default points area			& -pointArea \textit{number}									\\	
+map point areas to a continuous attribute	& -pointAreaMapping \textit{attribute}								\\
+map point areas to a discrete attribute	& -pointAreaMapping \textit{attribute}								\\
+%resizes point area proportional to max of selected trait values
+\midrule
+			\multicolumn{2}{c}{Lines}															\\
+\midrule
+\textit{color}:						&														\\
+								&														\\
+adjust width						&	-lineWidth \textit{number}									\\
+override default lines color				&	-lineColor 250 0 0										\\
+map line colors to a continuous attribute	&	-lineColorMapping \textit{attribute}							\\
+override default start-end colors		& 	-lineStartColor 250 0 0 -lineEndColor 0 0 150					\\
+map line colors to a discrete attribute:	&														\\
+	-same color for all states			&	-lineColor 250 0 0 -lineColorMapping \textit{attribute}				\\
+	-state-specific colors: via color sheet$\dagger$&-linecolors traitColors.txt -lineColorMapping \textit{attribute}	\\
+
+								&														\\
+\textit{width}:						&														\\
+								&														\\
+	override default lines width		&-lineWidth \textit{number}									\\
+								&														\\
+								&														\\
+\textit{altitude (curvature)}:	KML only?	&														\\
+								&														\\
+override default lines altitude			&-lineAltitude  \textit{number}									\\
+map line altitude to a continuous attribute	&-lineAltitudeMapping \textit{attribute}							\\
+map line altitude to a discrete attribute	&-lineAltitudeMapping \textit{attribute}							\\
+\midrule
+			\multicolumn{2}{c}{Counts}														\\
+\midrule
+\textit{color}:						&														\\
+								&														\\
+override default count color			&	-countColor 0 0 250										\\
+\midrule
+			\multicolumn{2}{c}{Polygons}														\\
+\midrule
+\textit{color}:						&														\\
+								&														\\
+override default area color				& -areaColor 0 0 250											\\
+map area colors to a continuous attribute 	& -areaColorMapping \textit{attribute}							\\
+override default start-end colors		& -areaStartColor 250 0 0 -areaEndColor 0 0 150					\\
+map area colors to a discrete attribute:	& 					 									\\
+	-same color for all states			&-areaColor 0 255 255 -areaColorMapping \textit{attribute}			\\
+	-state-specific colors: via color sheet$\dagger$&-areacolors traitColors.txt -areaColorMapping \textit{attribute}	\\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+{\footnotesize 
+$\dagger$: a file with per line only the trait state name and its color code, separated by a tab. The colors should be supplied in RGB or RGBA values.
+} 
+\end{flushleft}
+\label{tab:options}
+\end{table}
+
+
+
 
 \newpage
 \bibliographystyle{apalike}

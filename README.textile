@@ -1,31 +1,3 @@
-==============
-.:: SpreaD3 ::.
-==============
-*Spatial Phylogenetic Reconstruction of Evolutionary Dynamics*
-Version: 0.9.0, 2015 
-Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
-Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
-License: LGPL
-
-
-h1. PURPOSE
-
-SpreaD3 is a program supporting processing and visualizations of Bayesian phylogeographic models.
-
-h1. USAGE EXAMPLES
-
-SpreaD3 visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), and then all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
-
-SpreaD3 supports KML output for viewing in GoogleEarth [www.google.com/intl/pl/earth/] as well as in-browser, interactive display of the data, driven by D3 libraries [www.d3js.org]. 
-
-h3. DISCRETE TREE PARSER
-
-
-* with map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/combined.geojson -output ebov_discrete.json
-
-* no map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
 
 h3. DISCRETE TREE D3 RENDERER
 
@@ -39,25 +11,6 @@ h3. DISCRETE TREE KML RENDERER
 * use all default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -output test.kml
 
-h4. POINTS
-
-h5. Color
-
-* override default points color
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColor 0 255 255 -output test.kml
-
-* map point colors to a continuous attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping height -output test.kml
-
-* map point colors to a continuous attribute, override default start-end colors
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping height -pointStartColor 250 0 0 -pointEndColor 0 0 150  -output test.kml
-
-* map point colors to a discrete attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping location -output test.kml
-
-* map point colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping location -pointcolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
-
 h5.  Area 
 
 * map point areas to a continuous attribute
@@ -68,59 +21,6 @@ h5.  Area
 
 * map point areas to a discrete attribute
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping location -output test.kml
-
-h4. LINES
-
-h5. Color
-
-* override default fixed lines color
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColor 250 0 0 -output test.kml
-
-* map line colors to a continuous attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping length -output test.kml
-
-* map line colors to a continuous attribute, override default start-end colors
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping length -lineStartColor 250 0 0 -lineEndColor 0 0 150 -output test.kml
-
-* map line colors to a discrete attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping country -output test.kml
-
-* map line colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping country -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
-
-h5. Width
-
-* override default lines width
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineWidth 4 -output test.kml
-
-h5. Altitude
-
-* override default lines altitude
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitude 0 -output test.kml
-
-* map line altitude to a continuous attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitudeMapping height -output test.kml
-
-* map line altitude to a discrete attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitudeMapping country -output test.kml
-
-h4. COUNTS
-
-h5. Color
-
-* override default count color
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -countColor 0 0 250 -output test.kml
-
-
-h3. BAYES FACTORS PARSER
-
-
-* with world map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output /home/filip/test_bf.json
-
-* with map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/locations.txt -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/FMDV_Ecuador.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output fmdv_bf.json
-
 
 h3. BAYES FACTORS D3 RENDERER
 
@@ -134,40 +34,6 @@ h3. BAYES FACTORS KML RENDERER
 
 * default settings
 -render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -output test.kml
-
-h4. LINES
-
-h5. Color
-
-* override default lines color
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineColor 250 0 0 -output test.kml
-
-* map line colors to a BF attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineColorMapping bayesFactor -output test.kml
-
-h4. Altitude
-
-* map line altitude to a continuous attribute
--render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineAltitudeMapping posteriorProbability -output test.kml
-
-
-h3. CONTINUOUS TREE PARSER
-
-
-* antigenic coordinates example
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/multipleHPD/H3N2_mds.MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -HPD 50 -externalAnnotations true -mrsd 2011.1 -output antigenic_test.json
-
-* antigenic coordinates example, antigenic coordinate vs time
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/multipleHPD/H3N2_mds.MCC.tre -xCoordinate height -yCoordinate antigenic1 -externalAnnotations true -HPD 90 -mrsd 2011.1 -output antigenic_test.json
-
-* geographical coordinates example, world map
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
-
-* geographical coordinates example, world map, negative (BC) date in decimal format
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd -2000.5 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
-
-* geographical coordinates example, clipped map
--parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
 
 
 h3. CONTINUOUS TREE D3 RENDERER
