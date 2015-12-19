@@ -113,8 +113,8 @@ function populateLinePanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = 
-								d3.scale.ordinal().range(ordinalColors).domain(data);
+							scale = d3.scale.ordinal().range(ordinalColors)
+									.domain(data);
 
 							colorlegend("#lineColorLegend", scale, "ordinal", {
 								title : "",
@@ -125,7 +125,6 @@ function populateLinePanels(attributes) {
 
 						} else {
 
-							
 							data = attribute.range;
 							scale = d3.scale.linear().domain(data).range(
 									[ lineStartColor, lineEndColor ]);
@@ -148,11 +147,11 @@ function populateLinePanels(attributes) {
 							var attributeValue = line.attr(colorAttribute);
 							var color = scale(attributeValue);
 
-							if(attributeValue == null) {
+							if (attributeValue == null) {
 								console.log("null found");
 								color = "#000";
-								}
-							
+							}
+
 							return (color);
 						});
 
@@ -178,7 +177,6 @@ function populateLinePanels(attributes) {
 
 	});
 
-	
 	// ---LINE CURVATURE---//
 
 	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(
@@ -240,9 +238,9 @@ function populateLinePanels(attributes) {
 
 		});
 
-//		update(currentSliderValue, timeScale,
-//				currentDateDisplay, dateFormat);
-		
+		// update(currentSliderValue, timeScale,
+		// currentDateDisplay, dateFormat);
+
 	});
 
 	// ---LINE WIDTH---//
@@ -261,6 +259,76 @@ function populateLinePanels(attributes) {
 		.attr("stroke-width", lineWidth + "px");
 
 	});
+
+	// ---LINE CUT OFF---//
+	
+	// attribute selector
+	lineCutoffAttributeSelect = document.getElementById("lineCutoffAttribute");
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineCutoffAttributeSelect.appendChild(element);
+	}// END: i loop
+
+	// listener
+	d3
+			.select(lineCutoffAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						// clean-up
+						$('#lineCutoffSlider').html('');
+//						linesLayer.selectAll("path").style("visibility", null); 
+						
+						var cutoffAttribute = lineCutoffAttributeSelect.options[lineCutoffAttributeSelect.selectedIndex].text;
+						var attribute = getObject(attributes, "id",
+								cutoffAttribute);
+
+						// slider
+						if (attribute.scale == LINEAR) {
+
+							var minValue = Math.floor(attribute.range[MIN_INDEX]);
+							var maxValue = Math.ceil(attribute.range[MAX_INDEX]);
+							var step = (maxValue - minValue) / 10;
+
+							var lineCutoffSlider = d3.slider().axis(
+									d3.svg.axis().orient("top")).min(minValue)
+									.max(maxValue).step(step).value(minValue);
+							
+							d3.select('#lineCutoffSlider').call(
+									lineCutoffSlider);
+
+							//TODO: listener
+							lineCutoffSlider.on("slide", function(evt, value) {
+
+								linesLayer.selectAll("path").style("visibility", function(d) {
+
+//									linesLayerCheckbox.checked
+									
+									var sliderValue = value;
+									
+									var line = d3.select(this);
+									var attributeValue = line.attr(attribute.id);
+									
+									var visibility = "visible";
+									if(attributeValue < sliderValue  || !linesLayerCheckbox.checked) {
+										visibility = "hidden";
+									}
+									
+									return (visibility);
+								});
+								
+							});
+							
+						}//END: scale check
+
+					}// END: function
+			);
 
 }// END: populateLinePanels
 
@@ -386,9 +454,9 @@ function populatePointPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = 
-//								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data);
+							scale =
+							d3.scale.ordinal().range(ordinalColors)
+									.domain(data);
 
 							colorlegend("#pointColorLegend", scale, "ordinal",
 									{
@@ -421,11 +489,11 @@ function populatePointPanels(attributes) {
 							var attributeValue = point.attr(colorAttribute);
 							var color = scale(attributeValue);
 
-							if(attributeValue == null) {
+							if (attributeValue == null) {
 								console.log("null found");
 								color = "#000";
-								}
-							
+							}
+
 							return (color);
 						});
 
@@ -488,9 +556,10 @@ function populatePointPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = 
-//								d3.scale.category20().domain(data);
-								d3.scale.ordinal().range(ordinalColors).domain(data);
+							scale =
+							// d3.scale.category20().domain(data);
+							d3.scale.ordinal().range(ordinalColors)
+									.domain(data);
 
 						} else {
 
@@ -509,11 +578,11 @@ function populatePointPanels(attributes) {
 							var area = scale(attributeValue);
 							var radius = Math.sqrt(area / Math.PI);
 
-							if(attributeValue == null) {
+							if (attributeValue == null) {
 								console.log("null found");
 								radius = 0.0;
-								}
-							
+							}
+
 							return (radius);
 						});
 					});
@@ -666,7 +735,7 @@ function populateAreaPanels(attributes) {
 							data = attribute.domain;
 							scale = d3.scale.ordinal().range(ordinalColors)
 									.domain(data);
-								
+
 							colorlegend("#areaColorLegend", scale, "ordinal", {
 								title : "",
 								boxHeight : 20,
@@ -697,11 +766,11 @@ function populateAreaPanels(attributes) {
 							var attributeValue = area.attr(colorAttribute);
 							var color = scale(attributeValue);
 
-							if(attributeValue == null) {
-							console.log("null found");
-							color = "#000";
+							if (attributeValue == null) {
+								console.log("null found");
+								color = "#000";
 							}
-							
+
 							return (color);
 						});
 
@@ -794,7 +863,7 @@ function populateCountPanels() {
 
 	});
 
-}//END: populateCountPanels
+}// END: populateCountPanels
 
 // ---MAP---//
 
@@ -956,8 +1025,8 @@ function populateMapPanels(attributes) {
 						if (attribute.scale == ORDINAL) {
 
 							data = attribute.domain;
-							scale = 
-								d3.scale.ordinal().range(ordinalColors).domain(data);
+							scale = d3.scale.ordinal().range(ordinalColors)
+									.domain(data);
 
 							colorlegend("#mapFillLegend", scale, "ordinal", {
 								title : "",
@@ -1020,39 +1089,35 @@ function populateMapPanels(attributes) {
 function populateExportPanel() {
 
 	saveSVGButton = document.getElementById("saveSVG");
-	d3
-			.select(saveSVGButton)
-			.on(
-					'click',
-					function() {
+	d3.select(saveSVGButton).on('click', function() {
 
-						var tmp = document.getElementById("container");
-						var svg = tmp.getElementsByTagName("svg")[0];
+		var tmp = document.getElementById("container");
+		var svg = tmp.getElementsByTagName("svg")[0];
 
-						// Extract the data as SVG text string
-						var svg_xml = (new XMLSerializer)
-								.serializeToString(svg);
+		// Extract the data as SVG text string
+		var svg_xml = (new XMLSerializer).serializeToString(svg);
 
-						window.open().document.write(svg_xml);
+		window.open().document.write(svg_xml);
 
-//						var html = d3.select("svg").attr("title", "image")
-//								.attr("version", 1.1).attr("xmlns",
-//										"http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+		// var html = d3.select("svg").attr("title", "image")
+		// .attr("version", 1.1).attr("xmlns",
+		// "http://www.w3.org/2000/svg").node().parentNode.innerHTML;
 
-//						http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
-						
-//						var html = d3.select("#container")
-//				        .attr("title", "test2")
-//				        .attr("version", 1.1)
-//				        .attr("xmlns", "http://www.w3.org/2000/svg")
-//				        .node().parentNode.innerHTML;
-//				d3.select("body").append("div")
-//				        .attr("id", "download")
-//				        .html("Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
-//				        .append("img")
-//				        .attr("src", "data:image/svg+xml;base64,"+ btoa(html));
+		// http://nesterko.com/blog/2012/01/30/measuring-homophily-in-network-data-and-how-to-export-from-d3-js-to-pdf/
 
-					});
+		// var html = d3.select("#container")
+		// .attr("title", "test2")
+		// .attr("version", 1.1)
+		// .attr("xmlns", "http://www.w3.org/2000/svg")
+		// .node().parentNode.innerHTML;
+		// d3.select("body").append("div")
+		// .attr("id", "download")
+		// .html("Right-click on this preview and choose Save as<br />Left-Click
+		// to dismiss<br />")
+		// .append("img")
+		// .attr("src", "data:image/svg+xml;base64,"+ btoa(html));
+
+	});
 
 }// END: populateExportPanel
 
@@ -1154,7 +1219,7 @@ function populateToggleLayers() {
 	});
 
 	// ---LABELS VISIBILITY---//
-	
+
 	var labelsLayerCheckbox = document.getElementById("labelsLayerCheckbox");
 	// default state is checked
 	labelsLayerCheckbox.checked = true;
@@ -1165,7 +1230,7 @@ function populateToggleLayers() {
 		labelsLayer.selectAll("text").style("visibility", visibility);
 
 	});
-	
+
 	// ---LINES VISIBILITY---//
 
 	var linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
@@ -1181,7 +1246,7 @@ function populateToggleLayers() {
 		} else {
 			// style is superior to attribute, make them hidden
 			linesLayer.selectAll("path").style("visibility", "hidden");
-			areasLayer.selectAll("area").style("visibility", "hidden");
+//			areasLayer.selectAll("area").style("visibility", "hidden");
 		}
 
 	});

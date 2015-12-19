@@ -271,12 +271,11 @@ Any post-processing, if required, can then be handled by e.g. Adobe Illustrator 
 \subsection{Identifying well-supported rates through Bayes factors tests}
 \label{BayesFactor}
 
-To identify well supported rates between locations in standard discrete phylogeographic reconstruction we turn to a subset of the avian influenza type A H5N1 data that was also used by \citet{lemey:2009fk} in their pioneering paper on statistical phylogeography.
+To identify well supported rates between locations in standard discrete phylogeographic reconstruction we turn to a subset of the avian influenza type A H5N1 data that was also used by \citet{lemey:2009fk} in the original paper on  Bayesian phylogeographic inference in BEAST.
 %7 location states
-
-We will identify the subset of location exchange rates that dominate the diffusion process using the Bayesian stochastic search variable selection (BSSVS) procedure \citep{lemey:2009fk}, which was run on an empirical tree distribution obtained from the timed phylogenetic inference \citep{Lemey:2014aa}. 
+We will identify the subset of location exchange rates that dominate the diffusion process using the Bayesian stochastic search variable selection (BSSVS) procedure \citep{lemey:2009fk}. %, which was run on an empirical tree distribution obtained from the timed phylogenetic inference \citep{Lemey:2014aa}. 
 \par
-For the BSSVS procedure the standard phylogeographical model is extended with a matrix of indicator variables $\delta_{i{\rightarrow}j}$ \citep{lemey:2009fk}.
+In the BSSVS procedure, the standard phylogeographical model is augmented with a matrix of indicator variables $\delta_{i{\rightarrow}j}$ \citep{lemey:2009fk}.
 When the rate between locations $i$ and $j$ is included in the model, the indicator variable $\delta_{i{\rightarrow}j}$ takes the value of 1, and otherwise $\delta_{i{\rightarrow}j}$ equals 0.
 The indicator variables are parameters of the model, and are hence also treated as random variables associated with statistical distributions (that is, the so-called priors).
 The ingenuity of the BSSVS procedure lies in the prior specification that puts an equal probability for $\delta_{i{\rightarrow}j} = 0$ as for $\delta_{i{\rightarrow}j} = 1$. 
