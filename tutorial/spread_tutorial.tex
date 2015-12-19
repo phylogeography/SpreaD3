@@ -631,33 +631,27 @@ C) Bayes factor, with map:
 \$ spread -parse -locations locations.txt -log rateMatrix.log -burnin 10 -geojson some.geojson -output output.json
 }
 
-D) Bayes factor, circle view:
-
-\greybox{
-\$ spread -parse XXXXXX
-}
-
-E) continuous trait MCC tree, without map:
+D) continuous trait MCC tree, without map:
 
 \greybox{
 \$ spread -parse -tree some.tre -yCoordinate latitude -xCoordinate longitude -HPD 95 -externalAnnotations true -mrsd 2011.1 -output output.json
 }
 
-F) continuous trait MCC tree, with map:
+E) continuous trait MCC tree, with map:
 
 \greybox{
 \$ spread -parse -tree some.tre -yCoordinate latitude -xCoordinate longitude -HPD 95 -externalAnnotations true -mrsd 2011.1 -geojson
  some.geojson -output output.json
 }
 
-G) continuous trait posterior tree distribution, with slices according to MCC tree:
+F) continuous trait posterior tree distribution, with slices according to MCC tree:
 
 \greybox{
 \$ spread -parse -trees some.trees -tree some.tre -trait location -externalAnnotations true -mrsd 2011.1 -geojson
  some.geojson -output output.json
 }
 
-H) continuous trait posterior tree distribution, with predefined slices:
+G) continuous trait posterior tree distribution, with predefined slices:
 
 \greybox{
 \$ spread -parse -trees some.trees -tree some.tre -trait location -sliceHeights someHeights.txt -externalAnnotations true -mrsd 2011.1 -geojson some.geojson -output output.json
@@ -666,8 +660,6 @@ H) continuous trait posterior tree distribution, with predefined slices:
 -intervals 15 -burnin 5 -hpd 0.8
 }
 
-%HPD: as 90 or .9?
-
 \vspace{.5cm}
 
 To merge JSON files, the following syntax should be used:
@@ -675,6 +667,17 @@ To merge JSON files, the following syntax should be used:
 \greybox{
 \$ spread -merge --axisAttributes some.json -points some.json -lines some.json -areas some.json -geojson some.json -output merged.json
 \\\#N.B. one or more JSON files can be specified for each option.
+}
+
+\vspace{.5cm}
+
+To render, the following syntax should be used:
+
+\greybox{
+\# D3:
+\$ spread -render d3 -json some.json -output rendered
+\\\# KML:
+\$ spread -render kml -json some.json -output rendered.kml
 }
 
 
