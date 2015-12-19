@@ -30,3 +30,4 @@
 * KML start / end colors for mappings
 * various bug fixes
   - posterior probability on external nodes is not annotated by TreeAnnotator. We add these annotations. 
+* cut-off selector
