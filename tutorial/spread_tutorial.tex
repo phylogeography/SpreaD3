@@ -275,20 +275,24 @@ To identify well supported rates between locations in standard discrete phylogeo
 %7 location states
 We will identify the subset of location exchange rates that dominate the diffusion process using the Bayesian stochastic search variable selection (BSSVS) procedure \citep{lemey:2009fk}. %, which was run on an empirical tree distribution obtained from the timed phylogenetic inference \citep{Lemey:2014aa}. 
 \par
-In the BSSVS procedure, the standard phylogeographical model is augmented with a matrix of indicator variables $\delta_{i{\rightarrow}j}$ \citep{lemey:2009fk}.
-When the rate between locations $i$ and $j$ is included in the model, the indicator variable $\delta_{i{\rightarrow}j}$ takes the value of 1, and otherwise $\delta_{i{\rightarrow}j}$ equals 0.
+In the BSSVS procedure, the standard phylogeographical model is augmented with a matrix of indicator variables $\delta_{i{\rightarrow}j}$. %\citep{lemey:2009fk}.
+When the rate  $q$ between locations $i$ and $j$ is non-zero, the indicator variable $\delta_{i{\rightarrow}j}$ takes the value of 1, and otherwise $\delta_{i{\rightarrow}j}$ equals 0.
 The indicator variables are parameters of the model, and are hence also treated as random variables associated with statistical distributions (that is, the so-called priors).
-The ingenuity of the BSSVS procedure lies in the prior specification that puts an equal probability for $\delta_{i{\rightarrow}j} = 0$ as for $\delta_{i{\rightarrow}j} = 1$. 
-Because of this, the prior expectation for each $\delta_{i{\rightarrow}j} = .5$, which is the inclusion probability of a non-zero exchange rate between locations $i$ and $j$ in a coin tossing (or random) model.
-Just as for other parameters in the model, the fraction of time the Markov Chain Monte Carlo (MCMC) chain spends in a state $\delta_{i{\rightarrow}j} = 0$ or $\delta_{i{\rightarrow}j} = 1$ equals its steady state probability.
-In other words, the frequency with which $\delta_{i{\rightarrow}j}$ is included in the model in the sample of the stationary distribution equals the odds with which transitions between locations $i$ and $j$ help explain the observed distribution of locations at the tips of the tree.
+The ingenuity of the BSSVS procedure lies in the specification of a truncated Poisson prior with mean $\eta = log2$, which assigns 50\% prior probability on the minimal rate configuration. 
+For a model with $K$ location states, this translates to a 50\% prior probability on a model with $K-1$ non-zero rates.
+Because of this, the prior expectation for each exchange rate $q_{i{\rightarrow}j}$ equals  
+
+$$ q_k = \frac{\eta + K - 1}{K(K-2)/2}$$
+
+Just as for other parameters in the model, the fraction of time the Markov chain Monte Carlo (MCMC) chain spends in a state $\delta_{i{\rightarrow}j} = 0$ or $\delta_{i{\rightarrow}j} = 1$ equals its steady state probability.
+In other words, the frequency with which $\delta_{i{\rightarrow}j}$ is included in the model in the sample of the stationary distribution equals the odds with which transitions between locations $i$ and $j$ help explain the observed distribution of locations at the tips of the tree, or equals the odds that $q_{i{\rightarrow}j}$ is non-zero.
 Intuitively it should be clear that if this frequency is higher than the prior expectation, location transitions between $i$ and $j$ help explain the diffusion process. 
-To distinguish between inclusion probabilities that are just a little higher than under the random expectation and those that indicate the  concerning exchange rate really matters, we make use of Bayes factors.
+To distinguish between inclusion probabilities that are just a little higher than expected and those that indicate the  concerning exchange rate really matters, we make use of Bayes factors.
 \par
 Bayes factors provide a sense of how much the posterior (i.e. the outcome of the analysis) deviates from the prior beliefs, and are defined as the ratio of the posterior odds over the prior odds \citep{kass:1995a}.
 Thanks to the prior specification we can write:
 
-$$ \text{Bayes factor} = \frac{ \text{posterior odds}}{\text{prior odds}} = \frac{\frac{\text{posterior frequency}}{1 - \text{posterior frequency}}}{\frac{\text{prior frequency}}{1 - \text{prior frequency}}} = \frac{\text{posterior frequency}}{1 - \text{posterior frequency}},$$
+$$ \text{Bayes factor for $q_{i{\rightarrow}j}$} = \frac{ \text{posterior odds}}{\text{prior odds}} = \frac{\frac{\text{posterior frequency $\delta_{i{\rightarrow}j} = 1$}}{1 - \text{posterior frequency $\delta_{i{\rightarrow}j} = 1$}}}{\frac{\eta + K - 1}{K(K-2)/2}},$$
 
 \noindent
 which means we can directly obtain the Bayes factor support for each pairwise rate of diffusion between locations from samples collected from the posterior. 
@@ -630,33 +634,27 @@ C) Bayes factor, with map:
 \$ spread -parse -locations locations.txt -log rateMatrix.log -burnin 10 -geojson some.geojson -output output.json
 }
 
-D) Bayes factor, circle view:
-
-\greybox{
-\$ spread -parse XXXXXX
-}
-
-E) continuous trait MCC tree, without map:
+D) continuous trait MCC tree, without map:
 
 \greybox{
 \$ spread -parse -tree some.tre -yCoordinate latitude -xCoordinate longitude -HPD 95 -externalAnnotations true -mrsd 2011.1 -output output.json
 }
 
-F) continuous trait MCC tree, with map:
+E) continuous trait MCC tree, with map:
 
 \greybox{
 \$ spread -parse -tree some.tre -yCoordinate latitude -xCoordinate longitude -HPD 95 -externalAnnotations true -mrsd 2011.1 -geojson
  some.geojson -output output.json
 }
 
-G) continuous trait posterior tree distribution, with slices according to MCC tree:
+F) continuous trait posterior tree distribution, with slices according to MCC tree:
 
 \greybox{
 \$ spread -parse -trees some.trees -tree some.tre -trait location -externalAnnotations true -mrsd 2011.1 -geojson
  some.geojson -output output.json
 }
 
-H) continuous trait posterior tree distribution, with predefined slices:
+G) continuous trait posterior tree distribution, with predefined slices:
 
 \greybox{
 \$ spread -parse -trees some.trees -tree some.tre -trait location -sliceHeights someHeights.txt -externalAnnotations true -mrsd 2011.1 -geojson some.geojson -output output.json
@@ -665,8 +663,6 @@ H) continuous trait posterior tree distribution, with predefined slices:
 -intervals 15 -burnin 5 -hpd 0.8
 }
 
-%HPD: as 90 or .9?
-
 \vspace{.5cm}
 
 To merge JSON files, the following syntax should be used:
@@ -674,6 +670,17 @@ To merge JSON files, the following syntax should be used:
 \greybox{
 \$ spread -merge --axisAttributes some.json -points some.json -lines some.json -areas some.json -geojson some.json -output merged.json
 \\\#N.B. one or more JSON files can be specified for each option.
+}
+
+\vspace{.5cm}
+
+To render, the following syntax should be used:
+
+\greybox{
+\# D3:
+\$ spread -render d3 -json some.json -output rendered
+\\\# KML:
+\$ spread -render kml -json some.json -output rendered.kml
 }
 
 
