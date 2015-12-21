@@ -75,6 +75,8 @@ public class Spread2ConsoleApp {
 	// private static final String GENERATE_JSON = "generateJson";
 	 private static final String PRIOR_MEAN = "priorMean";
 	
+	// TODO rrw rate
+	 private static final String RRW_RATE = "rate";
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
 	private static final String GEOJSON = "geojson";
@@ -308,6 +310,8 @@ public class Spread2ConsoleApp {
 						new Arguments.RealOption(HPD,
 								"hpd level for contouring"),
 
+								new Arguments.StringOption(RRW_RATE, "", "relaxed random walk rate attribute. Defaults to 1 (homogenous Brownian motion)"),
+								
 						new Arguments.StringOption(OUTPUT, "",
 								"json output file name"),
 
@@ -1093,8 +1097,19 @@ public class Spread2ConsoleApp {
 							settings.timeSlicerSettings.hpdLevel = hpdLevel;
 						}
 
-					} // END: option check
+					}// END: option check
 
+					if(args4.hasOption(RRW_RATE)) {
+						
+//						settings.timeSlicerSettings.hasRRWrate = true;
+						settings.timeSlicerSettings.rrwRate = args4.getStringOption(RRW_RATE);
+						
+					} else {
+						
+//						settings.timeSlicerSettings.hasRRWrate = false;
+						
+					}
+					
 					if (args4.hasOption(MRSD)) {
 						settings.timeSlicerSettings.mrsd = args4
 								.getStringOption(MRSD);

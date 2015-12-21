@@ -39,10 +39,10 @@ public class TimeSlicerSettings {
 	public int burnIn = 1;
 
 	// relaxed random walk or homogenous Brownian motion?
-	public boolean hasRRWrate = false;
+//	public boolean hasRRWrate = false;
 
 	// rrw rate attribute (if any)
-	public String rrwRate = (trait).concat(".rate");
+	public String rrwRate = null;//(trait).concat(".rate");
 
 	// rrw rate precision
 //	public String precision = "precision";

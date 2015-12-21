@@ -7,6 +7,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.LinkedHashSet;
 
 import javax.swing.ComboBoxModel;
@@ -43,6 +44,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 	private MainFrame frame;
 	private TimeSlicerSettings settings;
 
+	private static final String NO_RATE = "no rate";
+
 	// Combo boxes
 	private JComboBox<Object> analysisType;
 	private boolean analysisTypeCreated = false;
@@ -67,8 +70,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 	private boolean rrwRateCreated = false;
 
 	// Check boxes
-	private JCheckBox hasRRWrate;
-	private boolean hasRRWrateCreated = false;
+	// private JCheckBox hasRRWrate;
+	// private boolean hasRRWrateCreated = false;
 
 	// private JComboBox<Object> precision;
 	// private boolean precisionCreated = false;
@@ -110,7 +113,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 		hpdLevelCreated = false;
 		burnInCreated = false;
 		outputCreated = false;
-		hasRRWrateCreated = false;
+		// hasRRWrateCreated = false;
 		rrwRateCreated = false;
 		// precisionCreated = false;
 
@@ -233,7 +236,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 							traitAttributes.toArray(new String[0]));
 					trait.setModel(traitSelectorModel);
 					trait.addItemListener(new ListenTrait());
-					addComponentWithLabel("Select 2D trait attribute: ", trait);
+					addComponentWithLabel("Select 2D trait attribute:", trait);
 
 				}
 
@@ -303,7 +306,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 					AnalysisTypes.values());
 			analysisType.setModel(analysisTypeSelectorModel);
 			analysisType.addItemListener(new ListenAnalysisType());
-			addComponentWithLabel("Time slices: ", analysisType);
+			addComponentWithLabel("Time slices:", analysisType);
 
 			// set to MCC tree
 			analysisType.setSelectedIndex(0);
@@ -481,24 +484,30 @@ public class TimeSlicerPanel extends SpreadPanel {
 			timescaleMultiplierCreated = true;
 		}
 
-		if (!hasRRWrateCreated) {
-			hasRRWrate = new JCheckBox();
-			hasRRWrate.addItemListener(new ListenHasRRWrate());
-			addComponentWithLabel("Relaxed random walk:", hasRRWrate);
-			hasRRWrateCreated = true;
-		}
-
 		if (!rrwRateCreated) {
 			rrwRate = new JComboBox<Object>();
+
+			String[] rrwRateAttributes = new String[traitAttributes.size() + 1];
+			int k = 0;
+			for (int i = 0; i < rrwRateAttributes.length; i++) {
+				if (i == 0) {
+					rrwRateAttributes[i] = NO_RATE;
+				} else {
+					rrwRateAttributes[i] = traitAttributes.toArray()[k++]
+							.toString();
+				}
+			}// END: i loop
+
 			ComboBoxModel<Object> rrwRateSelectorModel = new DefaultComboBoxModel<Object>(
-					traitAttributes.toArray(new String[0]));
+					rrwRateAttributes);
+
 			rrwRate.setModel(rrwRateSelectorModel);
 			rrwRate.addItemListener(new ListenRRWrate());
-			addComponentWithLabel("2D trait rate attribute: ", rrwRate);
+			rrwRate.setSelectedIndex(0);
+
+			addComponentWithLabel("2D trait rate attribute:", rrwRate);
 			rrwRateCreated = true;
 		}
-
-		setupRRW();
 
 		if (!hpdLevelCreated) {
 			hpdLevel = new JSliderDouble(0.1, 1.0, 0.8, 20, 2);
@@ -545,37 +554,6 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 	}// END: populateOptionalSettings
 
-	private void setupRRW() {
-
-		if (settings.hasRRWrate) {
-			hasRRWrate.setSelected(true);
-			rrwRate.setEnabled(true);
-		} else {
-			hasRRWrate.setSelected(false);
-			rrwRate.setEnabled(false);
-		}
-
-	}// END: setRRW
-
-	private class ListenHasRRWrate implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-
-			if (hasRRWrate.isSelected()) {
-				settings.hasRRWrate = true;
-				rrwRate.setEnabled(true);
-			} else {
-				settings.hasRRWrate = false;
-				rrwRate.setEnabled(false);
-			}
-
-			frame.setStatus((settings.hasRRWrate ? " Relaxed random walk "
-					: " homogenous Brownian motion "));
-
-		}// END: itemStateChanged
-	}// END: ListenHasRRWrate
-
 	private class ListenRRWrate implements ItemListener {
 
 		@Override
@@ -585,13 +563,18 @@ public class TimeSlicerPanel extends SpreadPanel {
 				Object item = event.getItem();
 				String attribute = item.toString();
 
-				settings.rrwRate = attribute;
+				if (attribute.equalsIgnoreCase(NO_RATE)) {
+					settings.rrwRate = null;
+				} else {
+
+					settings.rrwRate = attribute;
+				}
+
 				frame.setStatus("Relaxed random walk rate attribute '"
 						+ settings.rrwRate + "'" + " selected");
 
 			} // END: selected check
 		}// END: itemStateChanged
-
 	}// END: ListenRRWrate
 
 	private class ListenOutput implements ActionListener {

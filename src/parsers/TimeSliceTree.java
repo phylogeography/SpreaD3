@@ -17,14 +17,14 @@ public class TimeSliceTree implements Runnable {
 	private RootedTree currentTree;
 	private double[] sliceHeights;
 	private String traitName;
-	private boolean hasRRWrate;
+	// private boolean hasRRWrate;
 	private String rrwRateName;
-	
+
 	public TimeSliceTree(ConcurrentHashMap<Double, List<double[]>> sliceMap, //
 			RootedTree currentTree, //
 			double[] sliceHeights, //
 			String traitName, //
-			boolean isRRW, //
+			// boolean isRRW, //
 			String rrwRateName //
 	) {
 
@@ -32,9 +32,9 @@ public class TimeSliceTree implements Runnable {
 		this.currentTree = currentTree;
 		this.sliceHeights = sliceHeights;
 		this.traitName = traitName;
-		this.hasRRWrate = isRRW;
+		// this.hasRRWrate = isRRW;
 		this.rrwRateName = rrwRateName;
-		
+
 	}// END: Constructor
 
 	@Override
@@ -44,11 +44,13 @@ public class TimeSliceTree implements Runnable {
 
 			// parse once per tree
 
-			Double[] precisionArray = Utils.getDoubleArrayTreeAttribute(currentTree, Utils.PRECISION);
+			Double[] precisionArray = Utils.getDoubleArrayTreeAttribute(
+					currentTree, Utils.PRECISION);
 
 			int dim = (int) Math.sqrt(1 + 8 * precisionArray.length) / 2;
 
-			double treeNormalization = getTreeLength(currentTree, currentTree.getRootNode());
+			double treeNormalization = getTreeLength(currentTree,
+					currentTree.getRootNode());
 
 			for (Node node : currentTree.getNodes()) {
 				if (!currentTree.isRoot(node)) {
@@ -57,19 +59,21 @@ public class TimeSliceTree implements Runnable {
 
 					Node parentNode = currentTree.getParent(node);
 
-					Double parentHeight = Utils.getNodeHeight(currentTree, parentNode);
+					Double parentHeight = Utils.getNodeHeight(currentTree,
+							parentNode);
 
 					Double nodeHeight = Utils.getNodeHeight(currentTree, node);
 
 					Double rate = 1.0;
-					if(hasRRWrate) {
-						try{
-						rate = (Double) Utils.getObjectNodeAttribute(node, rrwRateName);
-						} catch(Exception e) {
+					if (rrwRateName != null) {
+						try {
+							rate = (Double) Utils.getObjectNodeAttribute(node,
+									rrwRateName);
+						} catch (Exception e) {
 							// can only throw unchecked exceptions in a Runnable
 							throw new RuntimeException(e.getMessage());
 						}
-					} 
+					}// END: rate set check
 
 					Trait trait = getNodeTrait(node, traitName);
 					Trait parentTrait = getNodeTrait(parentNode, traitName);
@@ -77,24 +81,29 @@ public class TimeSliceTree implements Runnable {
 					if (!trait.isNumber() || !parentTrait.isNumber()) {
 
 						// can only throw unchecked exceptions in a Runnable
-						throw new RuntimeException("Trait " + traitName + " is not numeric!");
+						throw new RuntimeException("Trait " + traitName
+								+ " is not numeric!");
 
 					} else {
 
-						if (trait.getDim() != dim || parentTrait.getDim() != dim) {
+						if (trait.getDim() != dim
+								|| parentTrait.getDim() != dim) {
 
 							// can only throw unchecked exceptions in a
 							// Runnable
-							throw new RuntimeException("Trait " + traitName + " is not " + dim + " dimensional!");
+							throw new RuntimeException("Trait " + traitName
+									+ " is not " + dim + " dimensional!");
 						}
 					} // END: exception handling
 
 					for (int i = 0; i < sliceHeights.length; i++) {
 
 						double sliceHeight = sliceHeights[i];
-						if (nodeHeight < sliceHeight && sliceHeight <= parentHeight) {
+						if (nodeHeight < sliceHeight
+								&& sliceHeight <= parentHeight) {
 
-							double[] imputedLocation = imputeValue(trait.getValue(), //
+							double[] imputedLocation = imputeValue(
+									trait.getValue(), //
 									parentTrait.getValue(), //
 									sliceHeight, //
 									nodeHeight, //
@@ -153,7 +162,8 @@ public class TimeSliceTree implements Runnable {
 		int c = 0;
 		for (int i = 0; i < dim; i++) {
 			for (int j = i; j < dim; j++) {
-				precision[j][i] = precision[i][j] = precisionArray[c++] * treeNormalization;
+				precision[j][i] = precision[i][j] = precisionArray[c++]
+						* treeNormalization;
 			}
 		}
 
@@ -169,7 +179,8 @@ public class TimeSliceTree implements Runnable {
 
 		final double scaledTimeChild = (sliceHeight - nodeHeight) * rate;
 		final double scaledTimeParent = (parentHeight - sliceHeight) * rate;
-		final double scaledWeightTotal = (1.0 / scaledTimeChild) + (1.0 / scaledTimeParent);
+		final double scaledWeightTotal = (1.0 / scaledTimeChild)
+				+ (1.0 / scaledTimeParent);
 
 		if (scaledTimeChild == 0) {
 			return trait;
@@ -183,13 +194,17 @@ public class TimeSliceTree implements Runnable {
 		double[][] scaledPrecision = new double[dim][dim];
 
 		for (int i = 0; i < dim; i++) {
-			mean[i] = (nodeValue[i] / scaledTimeChild + parentValue[i] / scaledTimeParent) / scaledWeightTotal;
+			mean[i] = (nodeValue[i] / scaledTimeChild + parentValue[i]
+					/ scaledTimeParent)
+					/ scaledWeightTotal;
 
 			for (int j = i; j < dim; j++)
-				scaledPrecision[j][i] = scaledPrecision[i][j] = precision[i][j] * scaledWeightTotal;
+				scaledPrecision[j][i] = scaledPrecision[i][j] = precision[i][j]
+						* scaledWeightTotal;
 		}
 
-		mean = MultivariateNormalDistribution.nextMultivariateNormalPrecision(mean, scaledPrecision);
+		mean = MultivariateNormalDistribution.nextMultivariateNormalPrecision(
+				mean, scaledPrecision);
 
 		double[] result = new double[dim];
 		for (int i = 0; i < dim; i++) {
@@ -199,12 +214,14 @@ public class TimeSliceTree implements Runnable {
 		return result;
 	}// END: imputeValue
 
-	private Trait getNodeTrait(Node node, String traitName) throws AnalysisException {
+	private Trait getNodeTrait(Node node, String traitName)
+			throws AnalysisException {
 
 		Object nodeAttribute = node.getAttribute(traitName);
 
 		if (nodeAttribute == null) {
-			throw new AnalysisException("Attribute " + traitName + " missing from the node. \n");
+			throw new AnalysisException("Attribute " + traitName
+					+ " missing from the node. \n");
 		}
 
 		return new Trait(nodeAttribute);

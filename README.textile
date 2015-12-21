@@ -213,7 +213,7 @@ h3. TIME SLICING PARSER
 * Override some of the default settings
 -parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
 
-
+-parse -trees /home/filip/RacRABV_cont.trees -tree /home/filip/RacRABV_cont_0.8_MCC_snyder.tre -trait location -rate location.rate -mrsd 2011.1 -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
 
 h3. TIME SLICING D3 RENDERER
 

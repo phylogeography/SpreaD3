@@ -36,7 +36,7 @@ public class TimeSlicerParser {
 	private double hpdLevel;
 	private double timescaleMultiplier;
 
-	private boolean hasRRWrate;
+//	private boolean hasRRWrate;
 	private String rrwRateName;
 	
 	private int gridSize;
@@ -50,7 +50,7 @@ public class TimeSlicerParser {
 			int burnIn, //
 			int assumedTrees, //
 			
-			boolean hasRRWrate, //
+//			boolean hasRRWrate, //
 			String rrwRateName, //
 			
 			double hpdLevel, //
@@ -67,7 +67,7 @@ public class TimeSlicerParser {
 		this.assumedTrees = assumedTrees;
 		this.traitName = traitName;
 		
-		this.hasRRWrate = hasRRWrate;
+//		this.hasRRWrate = hasRRWrate;
 		this.rrwRateName = rrwRateName;
 		this.hpdLevel = hpdLevel;
 
@@ -113,7 +113,7 @@ public class TimeSlicerParser {
 							currentTree, //
 							sliceHeights, //
 							traitName, //
-							hasRRWrate,
+//							hasRRWrate,
 							rrwRateName //
 					).run();
 

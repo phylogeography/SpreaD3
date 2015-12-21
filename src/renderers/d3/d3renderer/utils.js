@@ -10,6 +10,9 @@
 var ORDINAL = "ordinal";
 var LINEAR = "linear";
 
+var MIN_INDEX = 0;
+var MAX_INDEX = 1;
+
 var MAP = "map";
 var TREE = "tree";
 var COUNTS = "counts";
