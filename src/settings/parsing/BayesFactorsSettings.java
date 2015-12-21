@@ -22,6 +22,8 @@ public class BayesFactorsSettings implements DiscreteSpreadDataSettings {
 	// burnin in %
 	public Double burninPercent = 10.0;
 
+	public Double meanPoissonPrior = Math.log(2);
+	
 	public boolean hasHeader = false;
 	
 //	public boolean generateJson = true;

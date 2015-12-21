@@ -8,11 +8,14 @@ import gui.SimpleFileFilter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JSlider;
 import javax.swing.SwingWorker;
@@ -47,6 +50,10 @@ public class BayesFactorsPanel extends SpreadPanel {
 	private JSlider burninPercent;
 	private boolean burninPercentCreated = false;
 
+	// Combo boxes
+	private JComboBox<Object> meanPoissonPrior;
+	private boolean meanPoissonPriorCreated = false;
+	
 	public BayesFactorsPanel(MainFrame frame) {
 
 		this.frame = frame;
@@ -85,7 +92,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 		setupLocationCoordinatesCreated = false;
 		loadGeojsonCreated = false;
 		outputCreated = false;
-		
+		meanPoissonPriorCreated = false;
 	}// END: resetFlags
 
 	private class ListenBurninPercent implements ChangeListener {
@@ -215,6 +222,15 @@ public class BayesFactorsPanel extends SpreadPanel {
 
 				// remaining optional settings
 				
+				if (!meanPoissonPriorCreated) {
+					String[] options = { "log(2)", " " };
+					meanPoissonPrior = new JComboBox<Object>(options);
+					meanPoissonPrior.setEditable(true);
+					meanPoissonPrior.addItemListener(new ListenMeanPoissonPrior(options));
+					addComponentWithLabel("Poisson prior mean:", meanPoissonPrior);
+					meanPoissonPriorCreated = true;
+				}
+				
 				if (!loadGeojsonCreated) {
 					loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 					loadGeojson.addActionListener(new ListenLoadGeojson());
@@ -234,6 +250,41 @@ public class BayesFactorsPanel extends SpreadPanel {
 		}// END: actionPerformed
 	}// END: ListenOpenLocationCoordinatesEditor
 
+private class ListenMeanPoissonPrior implements ItemListener {
+	
+	private String[] options;
+	
+	public ListenMeanPoissonPrior(String[] options) {
+		this.options = options;
+	}
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			
+			try {
+			
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+
+				Object item = event.getItem();
+
+				if (item.toString() == options[0]) {
+					// use default
+					settings.meanPoissonPrior = Math.log(2);
+				} else {
+					settings.meanPoissonPrior = Double.valueOf(item.toString());
+				}
+
+				frame.setStatus(item.toString() + " selected");
+
+			}// END: selected check
+			
+			} catch(NumberFormatException e) {
+				InterfaceUtils.handleException(e, "Spread needs a numerical value enterd as Poisson prior mean ");
+				meanPoissonPrior.setSelectedIndex(0);
+			} //END: try-catch
+			
+		}// END: itemStateChanged
+	}// END: ListenMeanPoissonPrior
 	
 	private class ListenLoadGeojson implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {

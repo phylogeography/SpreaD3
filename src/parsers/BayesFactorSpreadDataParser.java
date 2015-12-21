@@ -91,7 +91,7 @@ public class BayesFactorSpreadDataParser {
 
 		// ---DATA LAYER (LINES & POINTS WITH LOCATIONS)---//
 
-		BayesFactorParser bayesFactorParser = new BayesFactorParser(locationsList, indicators);
+		BayesFactorParser bayesFactorParser = new BayesFactorParser(locationsList, indicators, settings.meanPoissonPrior);
 		bayesFactorParser.parse();
 
 		LinkedList<Line> linesList = bayesFactorParser.getLinesList();

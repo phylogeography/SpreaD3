@@ -35,8 +35,10 @@ public class BayesFactorParser {
 	private LinkedList<Line> linesList;
 	private LinkedList<Point> pointsList;
 
+	private double meanPoissonPrior;
+	
 	public BayesFactorParser(LinkedList<Location> locationsList,
-			Double[][] indicators) {
+			Double[][] indicators, double meanPoissonPrior) {
 
 		this.locationsList = locationsList;
 		this.indicators = indicators;
@@ -45,6 +47,8 @@ public class BayesFactorParser {
 		this.pointsList = new LinkedList<Point>();
 		this.uniqueLineAttributes = new LinkedList<Attribute>();
 
+		this.meanPoissonPrior = meanPoissonPrior;
+		
 	}// END: Constructor
 
 	public void parse() throws AnalysisException {
@@ -76,7 +80,7 @@ public class BayesFactorParser {
 					"Number of rate indicators does not match the number of locations!");
 		}
 
-		double meanPoissonPrior = Math.log(2);
+//		double meanPoissonPrior = settings.meanPoissonPrior;//Math.log(2);
 		double poissonPriorOffset = (double) (n - 1);
 		double qk = Double.NaN;
 

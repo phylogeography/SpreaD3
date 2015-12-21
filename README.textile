@@ -115,11 +115,11 @@ h5. Color
 h3. BAYES FACTORS PARSER
 
 
-* with world map
--parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output /home/filip/test_bf.json
-
 * with map
 -parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/locations.txt -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/FMDV_Ecuador.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output fmdv_bf.json
+
+* override default poisson prior mean
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -priorMean 0.5 -output h5n1_bf.json
 
 
 h3. BAYES FACTORS D3 RENDERER
