@@ -17,18 +17,24 @@ public class TimeSliceTree implements Runnable {
 	private RootedTree currentTree;
 	private double[] sliceHeights;
 	private String traitName;
-
+	private boolean hasRRWrate;
+	private String rrwRateName;
+	
 	public TimeSliceTree(ConcurrentHashMap<Double, List<double[]>> sliceMap, //
 			RootedTree currentTree, //
 			double[] sliceHeights, //
-			String traitName //
+			String traitName, //
+			boolean isRRW, //
+			String rrwRateName //
 	) {
 
 		this.sliceMap = sliceMap;
 		this.currentTree = currentTree;
 		this.sliceHeights = sliceHeights;
 		this.traitName = traitName;
-
+		this.hasRRWrate = isRRW;
+		this.rrwRateName = rrwRateName;
+		
 	}// END: Constructor
 
 	@Override
@@ -55,7 +61,15 @@ public class TimeSliceTree implements Runnable {
 
 					Double nodeHeight = Utils.getNodeHeight(currentTree, node);
 
-					Double rate = (Double) Utils.getObjectNodeAttribute(node, Utils.RATE);
+					Double rate = 1.0;
+					if(hasRRWrate) {
+						try{
+						rate = (Double) Utils.getObjectNodeAttribute(node, rrwRateName);
+						} catch(Exception e) {
+							// can only throw unchecked exceptions in a Runnable
+							throw new RuntimeException(e.getMessage());
+						}
+					} 
 
 					Trait trait = getNodeTrait(node, traitName);
 					Trait parentTrait = getNodeTrait(parentNode, traitName);

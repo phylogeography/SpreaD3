@@ -22,12 +22,13 @@
 * Graphical User Interface
 * Tick box for continuous tree external nodes annotated yes/no
 
+
 2015: SpreaD3 version 0.9.0 Good Enough
 --------------------------------------------
 * Name change
 * Opacity control for lines
 * Inline styles for svg
 * KML start / end colors for mappings
-* various bug fixes
+* Various bug fixes
   - posterior probability on external nodes is not annotated by TreeAnnotator. We add these annotations. 
-* cut-off selector
+* Cut-off selector for lines

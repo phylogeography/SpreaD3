@@ -118,6 +118,8 @@ public class TimeSlicerSpreadDataParser {
 				timeParser, //
 				settings.burnIn, //
 				assumedTrees, //
+				settings.hasRRWrate, //
+				settings.rrwRate, //
 				settings.hpdLevel, //
 				settings.gridSize, //
 				settings.timescaleMultiplier, //

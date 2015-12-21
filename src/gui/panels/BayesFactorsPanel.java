@@ -93,6 +93,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 		loadGeojsonCreated = false;
 		outputCreated = false;
 		meanPoissonPriorCreated = false;
+		
 	}// END: resetFlags
 
 	private class ListenBurninPercent implements ChangeListener {

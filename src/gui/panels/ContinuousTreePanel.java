@@ -347,7 +347,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 					InterfaceUtils.handleException(e, e.getMessage());
 					frame.setStatus("Exception occured.");
 					frame.setIdle();
-				}
+				}//END: try-catch
 
 				return null;
 			}// END: doInBackground
@@ -395,8 +395,6 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 			populateHpdCombobox();
 
-			
-			//TODO
 			if(!externalAnnotationsCreated) {
 				externalAnnotations  = new JCheckBox( );
 				externalAnnotations.addItemListener(new ListenExternalAnnotations());

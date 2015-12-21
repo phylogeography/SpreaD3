@@ -266,12 +266,15 @@ function populateLinePanels(attributes) {
 	lineCutoffAttributeSelect = document.getElementById("lineCutoffAttribute");
 	for (var i = 0; i < attributes.length; i++) {
 
-		option = attributes[i].id;
-		element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
+		// TODO: discrete too
+		if (attributes[i].scale == LINEAR) {
+			option = attributes[i].id;
+			element = document.createElement("option");
+			element.textContent = option;
+			element.value = option;
+			lineCutoffAttributeSelect.appendChild(element);
+		}
 
-		lineCutoffAttributeSelect.appendChild(element);
 	}// END: i loop
 
 	// listener
@@ -290,6 +293,7 @@ function populateLinePanels(attributes) {
 								cutoffAttribute);
 
 						// slider
+						// TODO: discrete too
 						if (attribute.scale == LINEAR) {
 
 							var minValue = Math.floor(attribute.range[MIN_INDEX]);
@@ -303,13 +307,10 @@ function populateLinePanels(attributes) {
 							d3.select('#lineCutoffSlider').call(
 									lineCutoffSlider);
 
-							//TODO: listener
 							lineCutoffSlider.on("slide", function(evt, value) {
 
 								linesLayer.selectAll("path").style("visibility", function(d) {
 
-//									linesLayerCheckbox.checked
-									
 									var sliderValue = value;
 									
 									var line = d3.select(this);

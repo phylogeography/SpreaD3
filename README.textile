@@ -261,6 +261,9 @@ h1. TODO
 * Parsers
   - parsing BEAST2 and MrBayes output [separate parsers]
 * Restrict visual summaries or rate statistics to a particular set of nodes, like a clade or a trunk/backbone
+* UI
+  - set tooltips everywhere
+
 
 h1. BUGS
 
