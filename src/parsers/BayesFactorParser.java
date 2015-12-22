@@ -39,7 +39,7 @@ public class BayesFactorParser {
 	private Double offsetPoissonPrior;
 	
 	public BayesFactorParser(LinkedList<Location> locationsList,
-			Double[][] indicators, double meanPoissonPrior, double offsetPoissonPrior) {
+			Double[][] indicators, Double meanPoissonPrior, Double offsetPoissonPrior) {
 
 		this.locationsList = locationsList;
 		this.indicators = indicators;

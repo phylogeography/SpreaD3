@@ -37,14 +37,6 @@ Kass, R.~E. and Raftery, A.~E. (1995).
 \newblock {\em journal of the american Statistical Association},
   90(430):773--795.
 
-\bibitem[Lemey et~al., 2014]{Lemey:2014aa}
-Lemey, P., Rambaut, A., Bedford, T., Faria, N., Bielejec, F., Baele, G.,
-  Russell, C.~A., Smith, D.~J., Pybus, O.~G., Brockmann, D., and Suchard, M.~A.
-  (2014).
-\newblock Unifying viral genetics and human transportation data to predict the
-  global transmission dynamics of human influenza h3n2.
-\newblock {\em PLoS Pathog}, 10(2):e1003932.
-
 \bibitem[Lemey et~al., 2009]{lemey:2009fk}
 Lemey, P., Rambaut, A., Drummond, A.~J., and Suchard, M.~A. (2009).
 \newblock Bayesian phylogeography finds its roots.

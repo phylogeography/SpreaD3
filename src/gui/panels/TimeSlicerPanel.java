@@ -241,6 +241,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 				try {
 
+					// TODO: wait with populating optional untill this finishes
+					
 					int assumedTrees = TimeSlicerSpreadDataParser
 							.getAssumedTrees(settings.treesFilename);
 					settings.assumedTrees = assumedTrees;
