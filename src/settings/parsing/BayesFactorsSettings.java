@@ -24,6 +24,8 @@ public class BayesFactorsSettings implements DiscreteSpreadDataSettings {
 
 	public Double meanPoissonPrior = Math.log(2);
 	
+	public Double offsetPoissonPrior = null;//Math.log(2);
+	
 	public boolean hasHeader = false;
 	
 //	public boolean generateJson = true;

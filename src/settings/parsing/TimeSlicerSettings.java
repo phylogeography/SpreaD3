@@ -23,6 +23,15 @@ public class TimeSlicerSettings {
 	
 	//---OPTIONAL---//
 
+	// rrw rate attribute (if any)
+	public String rrwRate = null;//(trait).concat(".rate");
+	
+	// relaxed random walk or homogenous Brownian motion?
+//	public boolean hasRRWrate = false;
+
+	// rrw rate precision
+//	public String precision = "precision";
+	
 	// most recent sampling date yyy/mm/dd
 	public String mrsd = "0/0/0";
 
@@ -38,15 +47,6 @@ public class TimeSlicerSettings {
 	// how many trees to burn in (in #trees)
 	public int burnIn = 1;
 
-	// relaxed random walk or homogenous Brownian motion?
-//	public boolean hasRRWrate = false;
-
-	// rrw rate attribute (if any)
-	public String rrwRate = null;//(trait).concat(".rate");
-
-	// rrw rate precision
-//	public String precision = "precision";
-	
 	// contouring hpd level
 	public double hpdLevel = 0.8;
 	
@@ -56,9 +56,5 @@ public class TimeSlicerSettings {
 	//---GUI---//
 
 	public Integer assumedTrees = null;
-	
-	
-	
-	
 	
 }//END: class

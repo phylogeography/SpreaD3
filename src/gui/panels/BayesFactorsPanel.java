@@ -53,6 +53,9 @@ public class BayesFactorsPanel extends SpreadPanel {
 	// Combo boxes
 	private JComboBox<Object> meanPoissonPrior;
 	private boolean meanPoissonPriorCreated = false;
+	private JComboBox<Object> offsetPoissonPrior;
+	private boolean offsetPoissonPriorCreated = false;
+	
 	
 	public BayesFactorsPanel(MainFrame frame) {
 
@@ -93,6 +96,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 		loadGeojsonCreated = false;
 		outputCreated = false;
 		meanPoissonPriorCreated = false;
+		offsetPoissonPriorCreated = false;
 		
 	}// END: resetFlags
 
@@ -232,6 +236,15 @@ public class BayesFactorsPanel extends SpreadPanel {
 					meanPoissonPriorCreated = true;
 				}
 				
+				if(!offsetPoissonPriorCreated) {
+					String[] options = { "n-1", " " };
+					offsetPoissonPrior = new JComboBox<Object>(options);
+					offsetPoissonPrior.setEditable(true);
+					offsetPoissonPrior.addItemListener(new ListenOffsetPoissonPrior(options));
+					addComponentWithLabel("Poisson prior offset:", offsetPoissonPrior);
+					offsetPoissonPriorCreated = true;
+				}
+				
 				if (!loadGeojsonCreated) {
 					loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 					loadGeojson.addActionListener(new ListenLoadGeojson());
@@ -251,39 +264,82 @@ public class BayesFactorsPanel extends SpreadPanel {
 		}// END: actionPerformed
 	}// END: ListenOpenLocationCoordinatesEditor
 
-private class ListenMeanPoissonPrior implements ItemListener {
-	
-	private String[] options;
-	
-	public ListenMeanPoissonPrior(String[] options) {
-		this.options = options;
-	}
+	private class ListenOffsetPoissonPrior implements ItemListener {
+
+		private String[] options;
+
+		public ListenOffsetPoissonPrior(String[] options) {
+			this.options = options;
+		}
 
 		@Override
 		public void itemStateChanged(ItemEvent event) {
-			
+
 			try {
-			
-			if (event.getStateChange() == ItemEvent.SELECTED) {
 
-				Object item = event.getItem();
+				// TODO
+				if (event.getStateChange() == ItemEvent.SELECTED) {
 
-				if (item.toString() == options[0]) {
-					// use default
-					settings.meanPoissonPrior = Math.log(2);
-				} else {
-					settings.meanPoissonPrior = Double.valueOf(item.toString());
-				}
+					Object item = event.getItem();
 
-				frame.setStatus(item.toString() + " selected");
+					if (item.toString() == options[0]) {
+						// use default (n-1)
+						settings.offsetPoissonPrior = null;
+					} else {
+						settings.offsetPoissonPrior = Double.valueOf(item
+								.toString());
+					}
 
-			}// END: selected check
-			
-			} catch(NumberFormatException e) {
-				InterfaceUtils.handleException(e, "Spread needs a numerical value enterd as Poisson prior mean ");
+					frame.setStatus(item.toString() + " selected");
+
+				}// END: selected check
+
+			} catch (NumberFormatException e) {
+				InterfaceUtils
+						.handleException(e,
+								"Spread needs a numerical value enterd as Poisson prior offset.");
+				offsetPoissonPrior.setSelectedIndex(0);
+			} // END: try-catch
+
+		}// END: itemStateChanged
+	}// END: ListenMeanPoissonPrior
+	
+	private class ListenMeanPoissonPrior implements ItemListener {
+
+		private String[] options;
+
+		public ListenMeanPoissonPrior(String[] options) {
+			this.options = options;
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+
+			try {
+
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+
+					Object item = event.getItem();
+
+					if (item.toString() == options[0]) {
+						// use default
+						settings.meanPoissonPrior = Math.log(2);
+					} else {
+						settings.meanPoissonPrior = Double.valueOf(item
+								.toString());
+					}
+
+					frame.setStatus(item.toString() + " selected");
+
+				}// END: selected check
+
+			} catch (NumberFormatException e) {
+				InterfaceUtils
+						.handleException(e,
+								"Spread needs a numerical value enterd as Poisson prior mean.");
 				meanPoissonPrior.setSelectedIndex(0);
-			} //END: try-catch
-			
+			} // END: try-catch
+
 		}// END: itemStateChanged
 	}// END: ListenMeanPoissonPrior
 	

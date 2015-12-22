@@ -35,10 +35,11 @@ public class BayesFactorParser {
 	private LinkedList<Line> linesList;
 	private LinkedList<Point> pointsList;
 
-	private double meanPoissonPrior;
+	private Double meanPoissonPrior;
+	private Double offsetPoissonPrior;
 	
 	public BayesFactorParser(LinkedList<Location> locationsList,
-			Double[][] indicators, double meanPoissonPrior) {
+			Double[][] indicators, double meanPoissonPrior, double offsetPoissonPrior) {
 
 		this.locationsList = locationsList;
 		this.indicators = indicators;
@@ -48,6 +49,7 @@ public class BayesFactorParser {
 		this.uniqueLineAttributes = new LinkedList<Attribute>();
 
 		this.meanPoissonPrior = meanPoissonPrior;
+		this.offsetPoissonPrior = offsetPoissonPrior;
 		
 	}// END: Constructor
 
@@ -80,14 +82,21 @@ public class BayesFactorParser {
 					"Number of rate indicators does not match the number of locations!");
 		}
 
-//		double meanPoissonPrior = settings.meanPoissonPrior;//Math.log(2);
-		double poissonPriorOffset = (double) (n - 1);
+		double poissonPriorMean = meanPoissonPrior; //Math.log(2);
+		
+		double poissonPriorOffset;
+		if(offsetPoissonPrior == null) {
+		 poissonPriorOffset = (double) (n - 1);
+		}  else {
+			poissonPriorOffset = offsetPoissonPrior;
+		}
+		
 		double qk = Double.NaN;
 
 		if (symmetrical) {
-			qk = (meanPoissonPrior + poissonPriorOffset) / ((n * (n - 1)) / 2);
+			qk = (poissonPriorMean + poissonPriorOffset) / ((n * (n - 1)) / 2);
 		} else {
-			qk = (meanPoissonPrior + poissonPriorOffset) / ((n * (n - 1)) / 1);
+			qk = (poissonPriorMean + poissonPriorOffset) / ((n * (n - 1)) / 1);
 		}
 
 		double priorOdds = qk / (1 - qk);

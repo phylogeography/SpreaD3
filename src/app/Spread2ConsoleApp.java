@@ -74,9 +74,9 @@ public class Spread2ConsoleApp {
 	private static final String EXTERNAL_ANNOTATIONS = "externalAnnotations";
 	// private static final String GENERATE_JSON = "generateJson";
 	 private static final String PRIOR_MEAN = "priorMean";
-	
-	// TODO rrw rate
-	 private static final String RRW_RATE = "rate";
+	 private static final String PRIOR_OFFSET = "priorOffset";
+	 
+	private static final String RRW_RATE = "rate";
 	private static final String HPD = Utils.HPD;
 	private static final String INTERVALS = "intervals";
 	private static final String GEOJSON = "geojson";
@@ -227,12 +227,9 @@ public class Spread2ConsoleApp {
 
 		new Arguments.RealOption(BURNIN, "log file burning in %"),
 
-		new Arguments.RealOption(PRIOR_MEAN, "prior mean"),
-		
-				// new Arguments.StringOption(GENERATE_JSON, new String[] {
-				// TRUE, //
-				// FALSE //
-				// }, false, "generate JSON output for renderers?"),
+		new Arguments.RealOption(PRIOR_MEAN, "Poisson prior mean"),
+
+		new Arguments.RealOption(PRIOR_OFFSET, "Poisson prior offset"),
 
 				new Arguments.StringOption(GEOJSON, "", "geojson file name"),
 
@@ -837,16 +834,10 @@ public class Spread2ConsoleApp {
 								.getRealOption(PRIOR_MEAN);
 					}
 					
-					// if (args2.hasOption(GENERATE_JSON)) {
-					//
-					// String option = args2.getStringOption(GENERATE_JSON);
-					// if (option.equalsIgnoreCase(FALSE)) {
-					// settings.bayesFactorsSettings.generateJson = false;
-					// } else {
-					// settings.bayesFactorsSettings.generateJson = false;
-					// }
-					//
-					// } // END: option check
+					if (args2.hasOption(PRIOR_OFFSET)) {
+						settings.bayesFactorsSettings.offsetPoissonPrior = args2
+								.getRealOption(PRIOR_OFFSET);
+					}
 
 					if (args2.hasOption(GEOJSON)) {
 

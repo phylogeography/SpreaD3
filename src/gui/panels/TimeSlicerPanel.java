@@ -1,5 +1,11 @@
 package gui.panels;
 
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.JSliderDouble;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -7,13 +13,11 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.LinkedHashSet;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JSlider;
@@ -22,14 +26,6 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.JSliderDouble;
-import gui.MainFrame;
-import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -37,6 +33,9 @@ import parsers.TimeSlicerSpreadDataParser;
 import settings.parsing.TimeSlicerSettings;
 import structure.data.SpreadData;
 import utils.Utils;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @SuppressWarnings("serial")
 public class TimeSlicerPanel extends SpreadPanel {
