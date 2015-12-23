@@ -231,9 +231,11 @@ h3. TIME SLICING KML RENDERER
 h3. MERGING OF JSON FILES
 
 h4. merge time slices and continuous MCC tree
+
 -merge -axisAttributes /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/mcctree.json -points /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/mcctree.json -lines /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/mcctree.json -areas /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/timeSlices.json -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/timeSlices.json -output /home/filip/merged.json
 
 h4 Parse and merge multiple HPD levels (50, 75, 95) from continuous MCC tree
+
 -parse -tree /home/filip/H3N2_mds.MCC.tre  -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -hpd 50 -output antigenic_50hpd.json
 -parse -tree /home/filip/H3N2_mds.MCC.tre  -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -hpd 75 -output antigenic_75hpd.json
 -parse -tree /home/filip/H3N2_mds.MCC.tre  -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -hpd 75 -output antigenic_95hpd.json
