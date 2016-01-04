@@ -158,7 +158,7 @@ To maintain consistency with the previous software version, and as an illustrati
 
 \par
 In this tutorial we give a detailed description of program functionalities, with an emphasis on using the Graphical User Interface (GUI), by presenting an example for the main genres of possible analyses. % and give general guidelines on running {\spreadname}. 
-The data files used in the example can be found at  \url{https://rega.kuleuven.be/cev/ecv/software/{\spreadname}}.
+The data files used in the example can be found at  \url{https://rega.kuleuven.be/cev/ecv/software/\spreadname}.
 The user is assumed to know how to run discrete and continuous trait analyses in BEAST, and how to build a Maximum Clade Credibility (MCC) tree. 
 %A good tutorial on how to summarise BEAST trees with TreeAnnotator can be found at \url{http://beast.bio.ed.ac.uk/Summarizing-BEAST-trees}.
 Good tutorials for this can be found at \url{http://beast.bio.ed.ac.uk/tutorials}.
@@ -271,14 +271,15 @@ Any post-processing, if required, can then be handled by e.g. Adobe Illustrator 
 \subsection{Identifying well-supported rates through Bayes factors tests}
 \label{BayesFactor}
 
-To identify well supported rates between locations in standard discrete phylogeographic reconstruction we turn to a subset of the avian influenza type A H5N1 data that was also used by \citet{lemey:2009fk} in the original paper on  Bayesian phylogeographic inference in BEAST.
+To identify well supported rates between locations in standard discrete phylogeographic reconstructions we turn to a subset of the avian influenza type A H5N1 data that was also used by \citet{lemey:2009fk} in the original paper on  Bayesian phylogeographic inference in BEAST.
 %7 location states
 We will identify the subset of location exchange rates that dominate the diffusion process using the Bayesian stochastic search variable selection (BSSVS) procedure \citep{lemey:2009fk}. %, which was run on an empirical tree distribution obtained from the timed phylogenetic inference \citep{Lemey:2014aa}. 
 \par
 In the BSSVS procedure, the standard phylogeographical model is augmented with a matrix of indicator variables $\delta_{i{\rightarrow}j}$. %\citep{lemey:2009fk}.
 When the rate  $q$ between locations $i$ and $j$ is non-zero, the indicator variable $\delta_{i{\rightarrow}j}$ takes the value of 1, and otherwise $\delta_{i{\rightarrow}j}$ equals 0.
 The indicator variables are parameters of the model, and are hence also treated as random variables associated with statistical distributions (that is, the so-called priors).
-The ingenuity of the BSSVS procedure lies in the specification of a truncated Poisson prior with mean $\eta = log2$, which assigns 50\% prior probability on the minimal rate configuration. 
+In the BSSVS procedure, the prior is a truncated Poisson prior with mean $\eta = log2$, which assigns 50\% prior probability on the minimal rate configuration. 
+%The ingenuity of the BSSVS procedure lies in the specification of a truncated Poisson prior with mean $\eta = log2$, which assigns 50\% prior probability on the minimal rate configuration. 
 For a model with $K$ location states, this translates to a 50\% prior probability on a model with $K-1$ non-zero rates.
 Because of this, the prior expectation for each exchange rate $q_{i{\rightarrow}j}$ equals  
 
@@ -305,9 +306,9 @@ There are two options when specifying the location coordinates (Figure \ref{fig:
 Either a set of longitude and latitude coordinates is passed, and these are afterwards coupled to the geoJSON formatted map that can be given along (Figure \ref{fig:parseBF}, nr 4), or the locations are represented by equally spaced points on a circle\footnote{This is most useful for traits that cannot be readily linked to another coordinate system} (Figure \ref{fig:parseBF}, nr 5).
 To set up the latter visualisation, select `Generate' and enter the number of location states (Figure \ref{fig:parseBF}, nr 6), which is 7 for this example.
 The locations are now referred to as location1, location2 \textit{etc}. 
-Change this to the actual location names by updating the names in the same order as the location states are declared in the XML\footnote{The names should be passed in the same order as in the locations.txt file}.
+Change this to the actual location names by updating the names in the same order as the location states are declared in the XML\footnote{The names should be passed in the same order as in the locationCoordinates\_H5N1 file}.
 Save as BF\_circle.json.
-We'll also map the BSSVS outcome on a world map, for which you'll have to load `locations.txt', and the provided geoJSON map (world\_countries.geojson).
+We'll also map the BSSVS outcome on a world map, for which you'll have to load `locationCoordinates\_H5N1', and the provided geoJSON map (world\_countries.geojson).
 Save this as BF\_world.json.
 In addition to the *.json files, {\spreadname} creates a text file with the Bayes factors for all possible transitions between locations. 
 For this example these are named BF\_circle.json.txt and BF\_world.json.txt.
@@ -318,6 +319,7 @@ Open the Rendering tab and load BF\_circle.json.
 Change the Line color attribute start color to light green (color code \#b2df8a) and the end color to red (color code \#e31a1c).
 The changes take effect after toggling between `posteriorProbability' and 'bayesFactor'.
 The location dots can be better contrasted from the lines by setting the Point color to blue (color code \#4575b4), and adjusting the Point Area to 5. 
+By leaving the Line cut-off to its default value it is possible to visualise the Bayes factor support for all location transitions.
 To include the legend in the image, print the page and copy-paste the legend in the image with e.g. Illustrator. 
 In the default plot the location names may be overlaid with the lines; this too can be easily adjusted in e.g. Illustrator.
 The result should look similar to Figure \ref{fig:BFcircle}.
@@ -327,8 +329,8 @@ The result should look similar to Figure \ref{fig:BFcircle}.
 To plot the Bayes factor support on a geographical map, again start by selecting an appropriate background color.
 Give China another shade of blue than its neighbouring countries by setting the Map fill attribute to `adm0\_dif.
 For this example let's use the same colour scheme for the lines and points as above. 
-Also include the legend in the same way. 
-This should result in a similar image as Figure \ref{fig:BFmap}.
+It is possible to lay focus on the significant location transitions by changing the Line cut-off to e.g. 4. 
+Including the legend in the same way as above should result in a similar image as Figure \ref{fig:BFmap}.
 
 \begin{figure}%[!H]
 \centering
@@ -346,8 +348,8 @@ This should result in a similar image as Figure \ref{fig:BFmap}.
 
 \begin{figure}%[!H]
 \centering
-\includegraphics[width=1\textwidth]{./figures/bf_map_final.pdf} %[scale=0.22]
-\caption{Bayes factor support for the possible location transitions for the H5N1 dataset overlaid on a geographical map}
+\includegraphics[width=1\textwidth]{./figures/bf_map_update.pdf} %[scale=0.22]
+\caption{Visualisation of the most significant location transitions for the H5N1 dataset overlaid on a geographical map}
 \label{fig:BFmap}
 \end{figure}
 
@@ -439,7 +441,7 @@ The trees distribution has been subsampled with LogCombiner (a tool distributed 
 Hence, set the burnin to zero 
 (Figure \ref{fig:parsePosterior}, nr 5).
 Leave the other options at their default values, select the provided geojson map (Figure \ref{fig:parsePosterior}, nr 6) and generate wnv\_trees.json.
-Because the trees-file is rather large this may take a few moments.
+This may take a few moments for large trees-files.
 \par
 We also visualise the MCC tree which gave rise to the time slices by drawing its branches.
 For this, parse the West Nile virus MCC tree as before and save as wnv\_mcc.json (Figure \ref{fig:parsePosteriorMCC}).
