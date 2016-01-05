@@ -435,7 +435,7 @@ Select `Tree distribution with CONTINUOUS traits' from the Data tab, load the tr
 (Figure \ref{fig:parsePosterior}, nr 1, 2 and 3).
 The time slices are based on the MCC tree length, but it is also possible to supply a file with custom slice heights in a single column and in ascending order (from the tips to the root of the phylogeny) . 
 For this, set `time slices' to Custom (Figure \ref{fig:customTimeSlices}, nr 1) and load the time slice file (Figure \ref{fig:customTimeSlices}, nr 2).
-The most recent sampling tine in this dataset is 2007.63 - reset the data format to decimal 
+The most recent sampling tine in this dataset is 2007.63 - reset the date format to decimal 
 (Figure \ref{fig:parsePosterior}, nr 4).
 The trees distribution has been subsampled with LogCombiner (a tool distributed with BEAST) to reduce its size, at which stage the burnin was removed. 
 Hence, set the burnin to zero 
@@ -453,7 +453,8 @@ To save the merged file as ag\_combined.json, select File $\rightarrow$  Merge.
 
 \begin{figure}%[!H]
 \centering
-\includegraphics[width=1\textwidth]{./figures/Fig_parseTrees.pdf} 
+%\includegraphics[width=1\textwidth]{./figures/Fig_parseTrees.pdf} 
+\includegraphics[width=1\textwidth]{./figures/tim_slice_update.pdf}
 \caption{Parsing options for the `Tree distribution with continuous traits' analysis}
 \label{fig:parsePosterior}
 \end{figure}
