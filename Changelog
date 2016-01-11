@@ -32,3 +32,7 @@
 * Various bug fixes
   - posterior probability on external nodes is not annotated by TreeAnnotator. We add these annotations. 
 * Cut-off selector for lines
+
+2015: SpreaD3 version 0.9.1 release candidate
+--------------------------------------------
+

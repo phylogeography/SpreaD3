@@ -2,7 +2,7 @@
 .:: SpreaD3 ::.
 ==============
 *Spatial Phylogenetic Reconstruction of Evolutionary Dynamics*
-Version: 0.9.0, 2015 
+Version: 0.9.1rc, 20156
 Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/spread
 License: LGPL
