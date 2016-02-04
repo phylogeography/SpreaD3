@@ -16,7 +16,9 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
+import exceptions.AnalysisException;
 import settings.reading.JsonMergerSettings;
 import structure.data.Attribute;
 import structure.data.AxisAttributes;
@@ -27,6 +29,7 @@ import structure.data.TimeLine;
 import structure.data.attributable.Area;
 import structure.data.attributable.Line;
 import structure.data.attributable.Point;
+import utils.Utils;
 
 public class JsonMerger {
 
@@ -38,7 +41,7 @@ public class JsonMerger {
 
 	}// END: Constructor
 
-	public SpreadData merge() throws FileNotFoundException {
+	public SpreadData merge() throws FileNotFoundException, AnalysisException {
 
 		SpreadData data = null;
 
@@ -110,8 +113,18 @@ public class JsonMerger {
 
 			Reader reader = new FileReader(file);
 			Gson gson = new GsonBuilder().create();
-			SpreadData json = gson.fromJson(reader, SpreadData.class);
+			SpreadData json = null;
+			
+			try {
+				
+			 json = gson.fromJson(reader, SpreadData.class);
 
+			} catch (JsonSyntaxException e) {
+				
+				throw new AnalysisException(e.getLocalizedMessage());
+				
+			}
+			
 			// ---TIME LINE---//
 
 			if (!timeLineCreated) {
@@ -160,17 +173,24 @@ public class JsonMerger {
 
 			// --- POINT ATTRIBUTES---//
 
-			// TODO: grow if neccessary
-
 			// for areas too
 			if (settings.pointsFiles != null) {
 				if (Arrays.asList(settings.pointsFiles).contains(file)) {
 
+//					System.out.println(file.toString());
+					
 					if (!pointAttributesCreated) {
 
 						if (json.getPointAttributes() != null) {
 							pointAttributes = new LinkedList<Attribute>();
 							pointAttributes.addAll(json.getPointAttributes());
+							
+							
+//							for(Attribute a : pointAttributes) {
+//								System.out.println(a.getId());
+//							}
+							
+							
 							pointAttributesCreated = true;
 						}
 
@@ -179,7 +199,9 @@ public class JsonMerger {
 						if (json.getPointAttributes() != null) {
 							for (Attribute attribute : json.getPointAttributes()) {
 
-								replaceAttribute(attribute, pointAttributes);
+//								System.out.println(attribute.getId());
+								
+								replaceOrGrowAttributesList(attribute, pointAttributes);
 
 							} // END: attributes loop
 						} // END: null check
@@ -208,7 +230,7 @@ public class JsonMerger {
 
 							for (Attribute attribute : json.getLineAttributes()) {
 
-								replaceAttribute(attribute, lineAttributes);
+								replaceOrGrowAttributesList(attribute, lineAttributes);
 
 							} // END: attributes loop
 
@@ -238,7 +260,7 @@ public class JsonMerger {
 
 							for (Attribute attribute : json.getAreaAttributes()) {
 
-								replaceAttribute(attribute, areaAttributes);
+								replaceOrGrowAttributesList(attribute, areaAttributes);
 
 							} // END: attributes loop
 
@@ -411,6 +433,11 @@ public class JsonMerger {
 				} // END: get counts check
 			} // END: null check
 
+		
+		
+		
+		
+		
 		} // END: json loop
 
 		// ---LAYERS---//
@@ -488,20 +515,20 @@ public class JsonMerger {
 		return timeLine;
 	}// END: compareTimeLines
 
-	private void replaceAttribute(Attribute attribute, LinkedList<Attribute> areaAttributes) {
+	private void replaceOrGrowAttributesList(Attribute attribute, LinkedList<Attribute> attributesList) {
 
-		if (areaAttributes.contains(attribute)) {
+		if (attributesList.contains(attribute)) {
 			if (attribute.getScale().equals(Attribute.ORDINAL)) {
 
-				int attributeIndex = getAttributeIndex(attribute, areaAttributes);
-				Attribute mergedAttribute = areaAttributes.get(attributeIndex);
+				int attributeIndex = getAttributeIndex(attribute, attributesList);
+				Attribute mergedAttribute = attributesList.get(attributeIndex);
 				mergedAttribute.getDomain().addAll(attribute.getDomain());
-				areaAttributes.set(attributeIndex, mergedAttribute);
+				attributesList.set(attributeIndex, mergedAttribute);
 
 			} else {
 
-				int attributeIndex = getAttributeIndex(attribute, areaAttributes);
-				Attribute mergedAttribute = areaAttributes.get(attributeIndex);
+				int attributeIndex = getAttributeIndex(attribute, attributesList);
+				Attribute mergedAttribute = attributesList.get(attributeIndex);
 
 				double minValue = attribute.getRange()[Attribute.MIN_INDEX];
 				if (minValue < mergedAttribute.getRange()[Attribute.MIN_INDEX]) {
@@ -513,12 +540,18 @@ public class JsonMerger {
 					mergedAttribute.getRange()[Attribute.MAX_INDEX] = maxValue;
 				} // END: max check
 
-				areaAttributes.set(attributeIndex, mergedAttribute);
+				attributesList.set(attributeIndex, mergedAttribute);
 
 			} // END: domain check
+		} else {
+			
+//			System.out.println("FOO for " +attribute.getId());
+			
+			attributesList.add(attribute);
+			
 		} // END: contains check
 
-	}
+	}//END: replaceAttribute
 
 	private Integer getAttributeIndex(Attribute source, LinkedList<Attribute> attributes) {
 

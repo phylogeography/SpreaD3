@@ -1249,6 +1249,8 @@ public class Spread2ConsoleApp {
 
 			} catch (IOException e) {
 				gracefullyExit(e.getMessage(), jsonMergerArguments, e);
+			} catch (AnalysisException e) {
+				gracefullyExit(e.getMessage(), jsonMergerArguments, e);
 			}
 
 		} else if (settings.render) {
