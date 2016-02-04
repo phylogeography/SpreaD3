@@ -457,9 +457,13 @@ var sliderEndValue;
 	var currentDateDisplay = null;
 	var dateFormat = null;
 
-	var timeLine = json.timeLine;
-	if (typeof timeLine != 'undefined') {
+  //  var timeLine = json.timeLine;	
+//	if (typeof timeLine != 'undefined') {
 
+	var timeLine;
+	if (!(typeof json.timeLine === 'undefined')) {
+
+        timeLine = json.timeLine;
 		dateFormat = d3.time.format("%Y/%m/%d");
 
 		var startDate = formDate(timeLine.startTime);
