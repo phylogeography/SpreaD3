@@ -35,4 +35,6 @@
 
 2015: SpreaD3 version 0.9.1 release candidate
 --------------------------------------------
+* fixed bug in JsonMerger: checked for lines not points
+* fixed bug in JsonMerger: grow a list of attributes if neccesary
 
