@@ -347,7 +347,14 @@ public class JsonMerger {
 						points = new ArrayList<Point>();
 
 						for (Layer layer : json.getLayers()) {
-							if (layer.hasLines()) {
+							if (layer.hasPoints()) {
+								
+//								System.out.println(layer.getId());
+//								for(Point p : layer.getPoints()) {
+//									System.out.println(p.getId());
+//								}
+								
+								
 								points.addAll(layer.getPoints());
 							}
 						} // END: layers loop
@@ -360,6 +367,12 @@ public class JsonMerger {
 
 						for (Layer layer : json.getLayers()) {
 							if (layer.hasPoints()) {
+								
+//								System.out.println(layer.getId());
+//								for(Point p : layer.getPoints()) {
+//									System.out.println(p.getId());
+//								}
+								
 								points.addAll(layer.getPoints());
 							}
 						} // END: layers loop
