@@ -11,8 +11,6 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
-import utils.Utils;
-
 public class Spread2UIApp {
 
 	public Spread2UIApp() {
@@ -88,14 +86,14 @@ public class Spread2UIApp {
 
 		ImageIcon spreadIcon = InterfaceUtils.createImageIcon(InterfaceUtils.SPREAD_ICON);
 		SingleDocApplication app = new SingleDocApplication(new MenuBarFactory(), //
-				Spread2App.LONG_NAME, //
-				Spread2App.VERSION.concat(" ").concat(
-						Spread2App.DATE_STRING), //
+				SpreaD3.LONG_NAME, //
+				SpreaD3.VERSION.concat(" ").concat(
+						SpreaD3.DATE_STRING), //
 						spreadIcon //
 		);
 
 		Image spreadImage = InterfaceUtils.CreateImage(InterfaceUtils.SPREAD_ICON);
-		MainFrame frame = new MainFrame(Spread2App.SHORT_NAME);
+		MainFrame frame = new MainFrame(SpreaD3.SHORT_NAME);
 		frame.setIconImage(spreadImage);
 		app.setDocumentFrame(frame);
 		

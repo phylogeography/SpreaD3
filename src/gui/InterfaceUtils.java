@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import app.Spread2App;
+import app.SpreaD3;
 
 public class InterfaceUtils {
 
@@ -33,7 +33,7 @@ public class InterfaceUtils {
 	
 	
 	public static Image CreateImage(String path) {
-		URL imgURL = Spread2App.class.getResource(path);
+		URL imgURL = SpreaD3.class.getResource(path);
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		Image img = kit.createImage(imgURL);
 
@@ -49,7 +49,7 @@ public class InterfaceUtils {
 	public static ImageIcon createImageIcon(String path) {
 
 		ImageIcon icon = null;
-		URL imgURL = Spread2App.class.getResource(path);
+		URL imgURL = SpreaD3.class.getResource(path);
 		if (imgURL != null) {
 			icon = new ImageIcon(imgURL);
 		} else {

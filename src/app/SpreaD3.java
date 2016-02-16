@@ -9,7 +9,7 @@ import utils.FortuneCookies;
  * @author Filip Bielejec
  * @version $Id$
  */
-public class Spread2App {
+public class SpreaD3 {
 
 	public static final boolean DEBUG = true;
 

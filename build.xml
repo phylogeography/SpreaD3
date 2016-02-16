@@ -2,7 +2,7 @@
 <project name="SPREAD" default="help" basedir=".">
 
    <property name="build.sysclasspath" value="last" />
-   <property name="Main-Class" value="app.Spread2App" />
+   <property name="Main-Class" value="app.SpreaD3" />
    <property name="JDK_VERSION" value="1.6" />
    <property name="src" location="src"/>
    <property name="buildDir" location="classes" />

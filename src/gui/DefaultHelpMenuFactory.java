@@ -38,7 +38,7 @@ import java.net.URISyntaxException;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import app.Spread2App;
+import app.SpreaD3;
 
 /**
  * @author Filip Bielejec
@@ -58,7 +58,7 @@ public class DefaultHelpMenuFactory implements MenuFactory {
 
 		// Setup About
 		item = new JMenuItem();
-		item.setText("About " + Spread2App.LONG_NAME + "...");
+		item.setText("About " + SpreaD3.LONG_NAME + "...");
 		item.addActionListener(new ListenAboutMenuItem());
 		menu.add(item);
 

@@ -19,8 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import utils.FortuneCookies;
-import app.Spread2App;
+import app.SpreaD3;
 
 /**
  * @author Filip Bielejec
@@ -33,7 +32,7 @@ public class AboutDialog extends JDialog {
 	private static final int HEIGHT = 650;
 	private static final int FONT_SIZE = 15;
 
-	private static final String CITATION1 = "To cite " + Spread2App.SHORT_NAME + " in publications, please use:";
+	private static final String CITATION1 = "To cite " + SpreaD3.SHORT_NAME + " in publications, please use:";
 	private static final String CITATION2 = "Manuscript in preparation.";
 	
 	public AboutDialog() {
@@ -61,7 +60,7 @@ public class AboutDialog extends JDialog {
 		add(Box.createRigidArea(new Dimension(0, 10)));
 
 		// Setup name
-		label = new JLabel(Spread2App.SHORT_NAME);
+		label = new JLabel(SpreaD3.SHORT_NAME);
 		label.setFont(new Font("Serif", Font.BOLD, FONT_SIZE));
 		label.setAlignmentX(0.5f);
 		add(label);
@@ -69,13 +68,13 @@ public class AboutDialog extends JDialog {
 		add(Box.createRigidArea(new Dimension(0, 10)));
 
 		// Setup long name
-		label = new JLabel(Spread2App.LONG_NAME);
+		label = new JLabel(SpreaD3.LONG_NAME);
 		label.setFont(new Font("Serif", Font.PLAIN, FONT_SIZE - 2));
 		label.setAlignmentX(0.5f);
 		add(label);
 
 		// Setup version
-		label = new JLabel(Spread2App.SHORT_NAME + " version " + Spread2App.VERSION + " (" + Spread2App.DATE_STRING + ")" + " -- " + Spread2App.CODENAME);
+		label = new JLabel(SpreaD3.SHORT_NAME + " version " + SpreaD3.VERSION + " (" + SpreaD3.DATE_STRING + ")" + " -- " + SpreaD3.CODENAME);
 		label.setFont(new Font("Serif", Font.PLAIN, FONT_SIZE - 2));
 		label.setAlignmentX(0.5f);
 		add(label);
@@ -83,9 +82,9 @@ public class AboutDialog extends JDialog {
 		add(Box.createRigidArea(new Dimension(0, 10)));
 
 		// Setup authors
-		label = new JLabel( "Authors: " + Spread2App.FILIP_BIELEJEC + ", " + Spread2App.GUY_BAELE + ", "
-				+ Spread2App.ANDREW_RAMBAUT + ", " + Spread2App.MARC_SUCHARD + " and "
-				+ Spread2App.PHILIPPE_LEMEY);
+		label = new JLabel( "Authors: " + SpreaD3.FILIP_BIELEJEC + ", " + SpreaD3.GUY_BAELE + ", "
+				+ SpreaD3.ANDREW_RAMBAUT + ", " + SpreaD3.MARC_SUCHARD + " and "
+				+ SpreaD3.PHILIPPE_LEMEY);
 		label.setFont(new Font("Serif", Font.PLAIN, FONT_SIZE - 2));
 		label.setAlignmentX(0.5f);
 		add(label);
@@ -176,7 +175,7 @@ public class AboutDialog extends JDialog {
 
 		setModalityType(ModalityType.APPLICATION_MODAL);
 
-		setTitle("About " + Spread2App.SHORT_NAME);
+		setTitle("About " + SpreaD3.SHORT_NAME);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setSize(WIDTH, HEIGHT);

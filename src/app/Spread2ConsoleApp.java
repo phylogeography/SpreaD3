@@ -1749,7 +1749,7 @@ public class Spread2ConsoleApp {
 
 		// TODO: read / parse / render in help message
 
-		if (Spread2App.DEBUG) {
+		if (SpreaD3.DEBUG) {
 			if (e != null) {
 				e.printStackTrace();
 			}
