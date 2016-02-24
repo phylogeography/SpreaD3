@@ -218,8 +218,8 @@ public class LocationCoordinatesEditor {
 
 			Coordinate coordinate = location.getCoordinate();
 			if (coordinate != null) {
-				longitude = String.valueOf(coordinate.getYCoordinate());
-				latitude = String.valueOf(coordinate.getXCoordinate());
+				longitude = String.valueOf(coordinate.getXCoordinate());
+				latitude = String.valueOf(coordinate.getYCoordinate());
 			}
 
 			tableModel.insertRow(i, new TableRecord(location.getId(),
@@ -476,8 +476,8 @@ public class LocationCoordinatesEditor {
 
 				Coordinate coordinate = location.getCoordinate();
 				if (coordinate != null) {
-					longitude = String.valueOf(coordinate.getYCoordinate());
-					latitude = String.valueOf(coordinate.getXCoordinate());
+					longitude = String.valueOf(coordinate.getXCoordinate());
+					latitude = String.valueOf(coordinate.getYCoordinate());
 				}
 
 				printWriter.println(location.getId() + Utils.TAB + longitude

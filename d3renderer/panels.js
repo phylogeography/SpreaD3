@@ -941,7 +941,7 @@ function populateMapPanels(attributes) {
 		vertical : true
 	});
 
-	// line fixed color listener
+	// map fixed color listener
 	d3
 			.select(mapFixedFillSelect)
 			.on(

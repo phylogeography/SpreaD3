@@ -60,10 +60,10 @@ public class DiscreteLocationsParser {
 
 			}
 
-			Double latitude = Double.valueOf(line[LATITUDE_COLUMN]);
-			Double longitude = Double.valueOf(line[LONGITUDE_COLUMN]);
+			Double yCoordinate = Double.valueOf(line[LATITUDE_COLUMN]);
+			Double xCoordinate = Double.valueOf(line[LONGITUDE_COLUMN]);
 
-			Coordinate coordinate = new Coordinate(latitude, longitude);
+			Coordinate coordinate = new Coordinate(yCoordinate, xCoordinate);
 
 			// create Location and add to the list of Locations
 			Location location = new Location(locationName, coordinate);

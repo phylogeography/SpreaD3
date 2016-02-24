@@ -120,8 +120,6 @@ public class ContinuousTreeParser {
 				} // END: try-catch
 
 				nodeCoordinate = new Coordinate(
-//						nodeCoordinateX, 
-//						nodeCoordinateY
 						nodeCoordinateY, // latitude 
 						nodeCoordinateX // longitude
 						);
@@ -179,10 +177,8 @@ public class ContinuousTreeParser {
 				} // END: try-catch
 
 				Coordinate parentCoordinate = new Coordinate(
-//						parentCoordinateX, 
-//						parentCoordinateY
-						parentCoordinateY, // long 
-						parentCoordinateX // lat
+						parentCoordinateY, // lat 
+						parentCoordinateX // long
 						);
 				Point parentPoint = pointsMap.get(parentNode);
 				if (parentPoint == null) {

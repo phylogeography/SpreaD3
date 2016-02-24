@@ -180,24 +180,24 @@ public class DiscreteTreeSpreadDataParser {
 						+ " has no coordinates set.");
 			}
 
-			Double latitude = coordinate.getXCoordinate();
-			Double longitude = coordinate.getYCoordinate();
+			Double latitude = coordinate.getYCoordinate();
+			Double longitude = coordinate.getXCoordinate();
 
 			// update coordinates range
 
-			if (latitude < xCoordinateRange[Attribute.MIN_INDEX]) {
+			if (latitude < yCoordinateRange[Attribute.MIN_INDEX]) {
 				xCoordinateRange[Attribute.MIN_INDEX] = latitude;
 			} // END: min check
 
-			if (latitude > xCoordinateRange[Attribute.MAX_INDEX]) {
+			if (latitude > yCoordinateRange[Attribute.MAX_INDEX]) {
 				xCoordinateRange[Attribute.MAX_INDEX] = latitude;
 			} // END: max check
 
-			if (longitude < yCoordinateRange[Attribute.MIN_INDEX]) {
+			if (longitude < xCoordinateRange[Attribute.MIN_INDEX]) {
 				yCoordinateRange[Attribute.MIN_INDEX] = longitude;
 			} // END: min check
 
-			if (longitude > yCoordinateRange[Attribute.MAX_INDEX]) {
+			if (longitude > xCoordinateRange[Attribute.MAX_INDEX]) {
 				yCoordinateRange[Attribute.MAX_INDEX] = longitude;
 			} // END: max check
 

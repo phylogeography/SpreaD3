@@ -168,8 +168,8 @@ public class KmlRenderer implements Renderer {
 		kmlframework.kml.Point point = new kmlframework.kml.Point();
 		point.setAltitudeMode(AltitudeModeEnum.relativeToGround);
 		point.setAltitude(coordinate.getAltitude());
-		point.setLatitude(coordinate.getXCoordinate());
-		point.setLongitude(coordinate.getYCoordinate());
+		point.setLatitude(coordinate.getYCoordinate());
+		point.setLongitude(coordinate.getXCoordinate());
 
 		return point;
 	}// END: generatePoint
@@ -964,8 +964,8 @@ public class KmlRenderer implements Renderer {
 
 		double radius = Math.sqrt(area / Math.PI);
 
-		Double latitude = centroid.getXCoordinate();
-		Double longitude = centroid.getYCoordinate();
+		Double latitude = centroid.getYCoordinate();
+		Double longitude = centroid.getXCoordinate();
 
 		List<kmlframework.kml.Point> points = new ArrayList<kmlframework.kml.Point>();
 
@@ -1071,10 +1071,10 @@ public class KmlRenderer implements Renderer {
 		// Convert to radians
 		double rlon1 = longNormalise(Math.toRadians(startCoordinate
 				.getYCoordinate()));
-		double rlat1 = Math.toRadians(startCoordinate.getXCoordinate());
+		double rlat1 = Math.toRadians(startCoordinate.getYCoordinate());
 		double rlon2 = longNormalise(Math.toRadians(endCoordinate
 				.getYCoordinate()));
-		double rlat2 = Math.toRadians(endCoordinate.getXCoordinate());
+		double rlat2 = Math.toRadians(endCoordinate.getYCoordinate());
 
 		coords.add(0, startCoordinate);
 		for (int i = 1; i < sliceCount; i++) {

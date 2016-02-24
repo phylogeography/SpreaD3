@@ -305,10 +305,10 @@ public class Utils {
 		 * @param endCoordinate
 		 * @return distance in km
 		 */
-		double rlon1 = Math.toRadians(startCoordinate.getYCoordinate());
-		double rlat1 = Math.toRadians(startCoordinate.getXCoordinate());
-		double rlon2 = Math.toRadians(endCoordinate.getYCoordinate());
-		double rlat2 = Math.toRadians(endCoordinate.getXCoordinate());
+		double rlon1 = Math.toRadians(startCoordinate.getXCoordinate());
+		double rlat1 = Math.toRadians(startCoordinate.getYCoordinate());
+		double rlon2 = Math.toRadians(endCoordinate.getXCoordinate());
+		double rlat2 = Math.toRadians(endCoordinate.getYCoordinate());
 
 		double dLat = (rlat2 - rlat1);
 		double dLon = Math.abs(rlon2 - rlon1);
