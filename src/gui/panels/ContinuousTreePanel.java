@@ -202,23 +202,23 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 //					System.out.println("FUBAR");
 					
-					xCoordinate = new JComboBox<Object>();
-					ComboBoxModel<Object> xCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
-							uniqueAttributes.toArray(new String[0]));
-					xCoordinate.setModel(xCoordinateSelectorModel);
-					xCoordinate.addItemListener(new ListenXCoordinate());
-					xCoordinate.setToolTipText("Latitude");
-					addComponentWithLabel("Select y coordinate (latitude)",
-							xCoordinate);
-
 					yCoordinate = new JComboBox<Object>();
 					ComboBoxModel<Object> yCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
 							uniqueAttributes.toArray(new String[0]));
 					yCoordinate.setModel(yCoordinateSelectorModel);
 					yCoordinate.addItemListener(new ListenYCoordinate());
-					yCoordinate.setToolTipText("Longitude");
-					addComponentWithLabel("Select x coordinate (longitude)",
+					yCoordinate.setToolTipText("Latitude");
+					addComponentWithLabel("Select y coordinate (latitude)",
 							yCoordinate);
+
+					xCoordinate = new JComboBox<Object>();
+					ComboBoxModel<Object> xCoordinateSelectorModel = new DefaultComboBoxModel<Object>(
+							uniqueAttributes.toArray(new String[0]));
+					xCoordinate.setModel(xCoordinateSelectorModel);
+					xCoordinate.addItemListener(new ListenXCoordinate());
+					xCoordinate.setToolTipText("Longitude");
+					addComponentWithLabel("Select x coordinate (longitude)",
+							xCoordinate);
 
 
 //					Utils.printArray(uniqueAttributes.toArray());
@@ -264,6 +264,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 				xCoordinateEdited = true;
 				frame.setStatus("Location attribute '" + settings.xCoordinate
 						+ "'" + " selected");
+				
 				populateOptionalSettings();
 
 				// populateHpdCombobox();
@@ -286,6 +287,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 				yCoordinateEdited = true;
 				frame.setStatus("Location attribute '" + settings.yCoordinate
 						+ "'" + " selected");
+				
 				populateOptionalSettings();
 
 				// populateHpdCombobox();

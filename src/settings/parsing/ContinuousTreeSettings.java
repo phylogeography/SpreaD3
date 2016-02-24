@@ -10,8 +10,8 @@ public class ContinuousTreeSettings {
 	public String treeFilename = null;
 
 	// continuous coordinate attribute names
-	public String xCoordinate = null; // lat
-	public String yCoordinate = null; // long
+	public String xCoordinate = null; // long
+	public String yCoordinate = null; // lat
 
 	public String hpd = "";
 	

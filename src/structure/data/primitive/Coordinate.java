@@ -11,8 +11,10 @@ public class Coordinate {
 			Double altitude //
 	) {
 
-		this.xCoordinate = latitude;
-		this.yCoordinate = longitude;
+//		this.xCoordinate = latitude;
+//		this.yCoordinate = longitude;
+		this.xCoordinate = longitude;
+		this.yCoordinate = latitude;
 		this.altitude = altitude;
 
 	}
@@ -21,8 +23,10 @@ public class Coordinate {
 			Double longitude //
 	) {
 
-		this.xCoordinate = latitude;
-		this.yCoordinate = longitude;
+//		this.xCoordinate = latitude;
+//		this.yCoordinate = longitude;
+		this.xCoordinate = longitude;
+		this.yCoordinate = latitude;
 		this.altitude = 0.0;
 
 	}// END: Constructor
