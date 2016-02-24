@@ -8,8 +8,8 @@ import javax.swing.table.AbstractTableModel;
 public class InteractiveTableModel extends AbstractTableModel {
 
 	public static final int LOCATION_INDEX = 0;
-	public static final int LONGITUDE_INDEX = 1;
-	public static final int LATITUDE_INDEX = 2;
+	public static final int LONGITUDE_INDEX = 2;
+	public static final int LATITUDE_INDEX = 1;
 	public static final int HIDDEN_INDEX = 3;
 
 	private String[] columnNames;

@@ -119,7 +119,12 @@ public class ContinuousTreeParser {
 					continue;
 				} // END: try-catch
 
-				nodeCoordinate = new Coordinate(nodeCoordinateX, nodeCoordinateY);
+				nodeCoordinate = new Coordinate(
+//						nodeCoordinateX, 
+//						nodeCoordinateY
+						nodeCoordinateY, // latitude 
+						nodeCoordinateX // longitude
+						);
 
 				// ---POINTS PARSED FIRST DO NOT CHANGE ORDER---//
 
@@ -173,7 +178,12 @@ public class ContinuousTreeParser {
 					continue;
 				} // END: try-catch
 
-				Coordinate parentCoordinate = new Coordinate(parentCoordinateX, parentCoordinateY);
+				Coordinate parentCoordinate = new Coordinate(
+//						parentCoordinateX, 
+//						parentCoordinateY
+						parentCoordinateY, // long 
+						parentCoordinateX // lat
+						);
 				Point parentPoint = pointsMap.get(parentNode);
 				if (parentPoint == null) {
 
@@ -266,7 +276,12 @@ public class ContinuousTreeParser {
 							Double xCoordinate = (Double) xCoordinateHPD[c];
 							Double yCoordinate = (Double) yCoordinateHPD[c];
 
-							Coordinate coordinate = new Coordinate(xCoordinate, yCoordinate);
+							Coordinate coordinate = new Coordinate(
+//									xCoordinate, 
+//									yCoordinate
+									yCoordinate, // lat 
+									xCoordinate // long
+									);
 							coordinateList.add(coordinate);
 
 						} // END: c loop

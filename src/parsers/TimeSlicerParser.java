@@ -176,8 +176,8 @@ public class TimeSlicerParser {
 
 			for (ContourPath path : paths) {
 
-				double[] latitude = path.getAllX();
-				double[] longitude = path.getAllY();
+				double[] latitude = path.getAllY();
+				double[] longitude = path.getAllX();
 
 				List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 
