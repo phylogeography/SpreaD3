@@ -1,0 +1,225 @@
+
+h3. DISCRETE TREE PARSER
+
+
+* with map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/combined.geojson -output ebov_discrete.json
+
+* no map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/locations.txt -header false -tree /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/EBOV/sequence_data_1085.GLM.MCC.tree -locationTrait location -intervals 10 -mrsd 2015.8 -output ebov_discrete.json
+
+h3. DISCRETE TREE D3 RENDERER
+
+* this will generate a webpage and point system default browser to it:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/ebov_discrete.json -output /home/filip/Desktop/output
+
+
+h3. DISCRETE TREE KML RENDERER
+
+
+* use all default settings
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -output test.kml
+
+h4. POINTS
+
+h5. Color
+
+* override default points color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColor 0 255 255 -output test.kml
+
+* map point colors to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping height -output test.kml
+
+* map point colors to a continuous attribute, override default start-end colors
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping height -pointStartColor 250 0 0 -pointEndColor 0 0 150  -output test.kml
+
+* map point colors to a discrete attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping location -output test.kml
+
+* map point colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointColorMapping location -pointcolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
+
+h5.  Area 
+
+* map point areas to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
+
+* map point areas to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping height -output test.kml
+
+* map point areas to a discrete attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -pointAreaMapping location -output test.kml
+
+h4. LINES
+
+h5. Color
+
+* override default fixed lines color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColor 250 0 0 -output test.kml
+
+* map line colors to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping length -output test.kml
+
+* map line colors to a continuous attribute, override default start-end colors
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping length -lineStartColor 250 0 0 -lineEndColor 0 0 150 -output test.kml
+
+* map line colors to a discrete attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping country -output test.kml
+
+* map line colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineColorMapping country -linecolors /home/filip/Dropbox/JavaProjects/Spread2/data/country3colors -output test.kml
+
+h5. Width
+
+* override default lines width
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineWidth 4 -output test.kml
+
+h5. Altitude
+
+* override default lines altitude
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitude 0 -output test.kml
+
+* map line altitude to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitudeMapping height -output test.kml
+
+* map line altitude to a discrete attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -lineAltitudeMapping country -output test.kml
+
+h4. COUNTS
+
+h5. Color
+
+* override default count color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/ebov_discrete.json -countColor 0 0 250 -output test.kml
+
+
+h3. BAYES FACTORS PARSER
+
+
+* with map
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/locations.txt -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/FMDV/FMDV_Ecuador.log -burnin 10 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output fmdv_bf.json
+
+* override default poisson prior mean
+-parse -locations /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/locationCoordinates_H5N1 -log /home/filip/Dropbox/JavaProjects/Spread2/data/discrete/H5N1/H5N1_HA_discrete_rateMatrix.log -burnin 10 -priorMean 0.5 -output h5n1_bf.json
+
+
+h3. BAYES FACTORS D3 RENDERER
+
+
+* this will generate a webpage and point system default browser to it:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/test_bf.json -output /home/filip/Pulpit/output
+
+
+h3. BAYES FACTORS KML RENDERER
+
+
+* default settings
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -output test.kml
+
+h4. LINES
+
+h5. Color
+
+* override default lines color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineColor 250 0 0 -output test.kml
+
+* map line colors to a BF attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineColorMapping bayesFactor -output test.kml
+
+h4. Altitude
+
+* map line altitude to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/test_bf.json -lineAltitudeMapping posteriorProbability -output test.kml
+
+
+h3. CONTINUOUS TREE PARSER
+
+
+* antigenic coordinates example
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/multipleHPD/H3N2_mds.MCC.tre -xCoordinate antigenic2 -yCoordinate antigenic1 -HPD 50 -externalAnnotations true -mrsd 2011.1 -output antigenic_test.json
+
+* antigenic coordinates example, antigenic coordinate vs time
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/antigenic/multipleHPD/H3N2_mds.MCC.tre -xCoordinate height -yCoordinate antigenic1 -externalAnnotations true -HPD 90 -mrsd 2011.1 -output antigenic_test.json
+
+* geographical coordinates example, world map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
+
+* geographical coordinates example, world map, negative (BC) date in decimal format
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/languages/languageMCC.tre -xCoordinate trait1 -yCoordinate trait2 -mrsd -2000.5 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output languages_worldmap.json
+
+* geographical coordinates example, clipped map
+-parse -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/236_subG_PT_cauchy_geo.mcc.tre -xCoordinate location1 -yCoordinate location2 -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/Nuno/portugal.geojson -output continuous_test.json
+
+
+h3. CONTINUOUS TREE D3 RENDERER
+
+
+* this will generate a webpage in the output directory and point system default browser to it:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/languages_worldmap.json -output /home/filip/Pulpit/output
+
+
+h3. CONTINUOUS TREE KML RENDERER
+
+* default settings
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -output test.kml
+
+h4. AREAS
+
+h5. Color
+
+* override default areas color
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColor 150 50 50 -output test.kml
+
+* map areas color to a continuous attribute
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping height -output test.kml
+
+* map areas color to a continuous attribute, override default start-end colors
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping height -areaStartColor 250 0 0 -areaEndColor 0 250 0  -output test.kml
+
+* map areas colors to a discrete attribute, use supplied color schemes
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/languages_worldmap.json -areaColorMapping trait_80HPD_modality -output test.kml
+
+* map areas colors to a discrete attribute, use supplied color sheet (RGB or RGBA values)
+TODO: make example
+
+h3. TIME SLICING PARSER
+
+
+* Slices defined by MCC tree, world map
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
+
+* Slices defined by slice heights, world map
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma.trees -sliceHeights /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/sliceHeights -trait location -mrsd 2011.1 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -output slicing_test.json
+
+* Override some of the default settings
+-parse -trees /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_small.trees -tree /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/WNV/WNV_relaxed_geo_gamma_MCC.tre -trait location -mrsd 2011/01/01 -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/world.geojson -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
+
+-parse -trees /home/filip/RacRABV_cont.trees -tree /home/filip/RacRABV_cont_0.8_MCC_snyder.tre -trait location -rate location.rate -mrsd 2011.1 -intervals 15 -burnin 5 -hpd 0.8 -output slicing_test.json
+
+h3. TIME SLICING D3 RENDERER
+
+
+* this will generate a webpage in the output directory and point system default browser to it. Previous output is overwritten:
+-render d3 -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/data/slicing_test.json -output /home/filip/Pulpit/output
+
+
+h3. TIME SLICING KML RENDERER
+
+* default settings
+-render kml -json /home/filip/Dropbox/JavaProjects/Spread2/d3renderer/src/data/slicing_test.json -output test.kml
+
+
+h3. MERGING OF JSON FILES
+
+h4. merge time slices and continuous MCC tree
+
+-merge -axisAttributes /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/mcctree.json -points /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/mcctree.json -lines /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/mcctree.json -areas /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/timeSlices.json -geojson /home/filip/Dropbox/JavaProjects/Spread2/data/continuous/merge/timeSlices.json -output /home/filip/merged.json
+
+h4. Parse and merge multiple HPD levels (50, 75, 95) from continuous MCC tree
+
+-parse -tree /home/filip/H3N2_mds.MCC.tre  -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -hpd 50 -output antigenic_50hpd.json
+-parse -tree /home/filip/H3N2_mds.MCC.tre  -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -hpd 75 -output antigenic_75hpd.json
+-parse -tree /home/filip/H3N2_mds.MCC.tre  -xCoordinate antigenic2 -yCoordinate antigenic1 -mrsd 2011.1 -hpd 75 -output antigenic_95hpd.json
+
+-merge -axisAttributes /home/filip/antigenic_50hpd.json -points /home/filip/antigenic_50hpd.json -lines /home/filip/antigenic_50hpd.json -areas /home/filip/antigenic_50hpd.json,/home/filip/antigenic_75hpd.json,/home/filip/antigenic_95hpd.json  -output /home/filip/antigenic_merged.json
+
