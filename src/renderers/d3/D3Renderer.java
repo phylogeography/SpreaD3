@@ -19,7 +19,7 @@ import settings.rendering.D3RendererSettings;
 public class D3Renderer {
 
 	private static final String D3_RENDERER_DIR = "renderers/d3/d3renderer/";
-	private static final String D3_DATA_DIR = "data/data.json";
+	private static final String D3_DATA_FILENAME = "data.json";
 	private static final String HTML = "index.html";
 
 	private D3RendererSettings settings;
@@ -74,7 +74,7 @@ public class D3Renderer {
 
 			// copy input.json to path/output/data/data.json
 			File srcDir = new File(settings.jsonFilename);
-			String destPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(D3_DATA_DIR);
+			String destPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(D3_DATA_FILENAME);
 			File destDir = new File(destPath);
 			FileUtils.copyFile(srcDir, destDir);
 
@@ -91,7 +91,7 @@ public class D3Renderer {
 
 			// copy input.json to path/output/data/data.json
 			srcDir = new File(settings.jsonFilename);
-			destDir = new File(settings.outputFilename.concat("/").concat(D3_DATA_DIR));
+			destDir = new File(settings.outputFilename.concat("/").concat(D3_DATA_FILENAME));
 			FileUtils.copyFile(srcDir, destDir);
 
 			// point system default browser to index.html

@@ -15,9 +15,9 @@ public class SpreaD3 {
 
 	public static final String SHORT_NAME = "SpreaD3";
 	public static final String LONG_NAME = "Spatial Phylogenetic Reconstruction Of Evolutionary Dynamics";
-	public static final String VERSION = "0.9.0";
-	public static final String DATE_STRING = "2015";
-	public static final String CODENAME = "Good Enough";
+	public static final String VERSION = "0.9.5";
+	public static final String DATE_STRING = "2016";
+	public static final String CODENAME = "Ardberg & Talisker";
 
 	public static final String FILIP_BIELEJEC = "Filip Bielejec";
 	public static final String GUY_BAELE = "Guy Baele";
