@@ -1,40 +1,47 @@
 2015: SPREAD version 2.0.1 One O'Clock Gun
 ------------------------------------------
-* Implemented custom slice heights
-* Reinstated time scale multiplier option
-* Discrete and Continuous annotated tree parsers: all univariate traits found on branches are parsed
+* implemented custom slice heights
+* reinstated time scale multiplier option
+* discrete and Continuous annotated tree parsers: all univariate traits found on branches are parsed
 
 
 2015: SPREAD version 2.0.2 Classy & Fabulous
 --------------------------------------------
-* D3 renderer
-* Any continuous traits found on tree nodes can be parsed as coordinates
+* d3 renderer
+* any continuous traits found on tree nodes can be parsed as coordinates
 * new JSON format centered around attributes
 * new KML renderer
 
 
 2015: SPREAD version 2.1.2 Rough & Ready
 --------------------------------------------
-* Color mapping for areas
-* ColorBrewer color schemes
-* Toggle layer visibility
-* Opacity controls
-* Graphical User Interface
-* Tick box for continuous tree external nodes annotated yes/no
+* color mapping for areas
+* colorBrewer color schemes
+* toggle layer visibility
+* opacity controls
+* graphical User Interface
+* tick box for continuous tree external nodes annotated yes/no
 
 
 2015: SpreaD3 version 0.9.0 Good Enough
 --------------------------------------------
-* Name change
-* Opacity control for lines
-* Inline styles for svg
+* name change
+* opacity control for lines
+* inline styles for svg
 * KML start / end colors for mappings
-* Various bug fixes
+* various bug fixes
   - posterior probability on external nodes is not annotated by TreeAnnotator. We add these annotations. 
-* Cut-off selector for lines
+* cut-off selector for lines
 
-2016: SpreaD3 version 0.9.1 release candidate
---------------------------------------------
+
+2016: SpreaD3 version 0.9.5 Ardberg & Kilchoman release candidate
+-----------------------------------------------------------------
 * fixed bug in JsonMerger: checked for lines not points
 * fixed bug in JsonMerger: grow a list of attributes if neccesary
+* fixed bug in d3-renderer which caused panels to be opened on load
+* d3-renderer in a separate code-base
+* color-choosers listen to color changes
+* size legends
+* tooltips updated with attribute values
+* improved line curvature
 

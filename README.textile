@@ -2,7 +2,7 @@
 .:: SpreaD3 ::.
 ==============
 *Spatial Phylogenetic Reconstruction of Evolutionary Dynamics*
-Version: 0.9.1rc, 2016
+Version: 0.9.5rc, 2016
 Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
 Homepage: http://rega.kuleuven.be/cev/ecv/software/SpreaD3
 License: LGPL
@@ -14,7 +14,7 @@ SpreaD3 is a program supporting processing and visualizations of Bayesian phylog
 
 h1. USAGE
 
-SpreaD3 visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), and then all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
+SpreaD3 visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
 
 SpreaD3 supports KML output for viewing in GoogleEarth [www.google.com/intl/pl/earth/] as well as in-browser, interactive display of the data, driven by D3 libraries [www.d3js.org]. 
 
@@ -31,17 +31,11 @@ h1. LICENSE
    "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
 h1. TODO
-* D3
 * setup test scripts  
 * backend
   - simpify d3 rendered folder structure
 
 
 h1. BUGS
-
-
-h1. TIPS & TRICKS
-
-* If you're interested in getting raw (no visualisation) Bayes Factors you can use the coordinates editor filled with dummy locations filling 0's as their coordinate values.
-
+* D3 line curvature listeners leave artifacts
 
