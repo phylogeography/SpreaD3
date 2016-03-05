@@ -40,8 +40,8 @@
 * fixed bug in JsonMerger: grow a list of attributes if neccesary
 * fixed bug in d3-renderer which caused panels to be opened on load
 * d3-renderer in a separate code-base
+* parsers follow the same x/y order of coordinates for consistency [incompatible with previous renderers!]
 * color-choosers listen to color changes
 * size legends
 * tooltips updated with attribute values
 * improved line curvature
-

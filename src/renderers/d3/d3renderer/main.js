@@ -10767,22 +10767,22 @@
 
 	var exports = module.exports = {};
 
-	var hasTime = true;
+	var hasTime = false;
 	exports.hasTime = hasTime;
 
-	var hasPoints = true;
+	var hasPoints = false;
 	exports.hasPoints = hasPoints;
 
-	var hasLines = true;
+	var hasLines = false;
 	exports.hasLines = hasLines;
 
-	var hasAreas = true;
+	var hasAreas = false;
 	exports.hasAreas = hasAreas;
 
-	var hasCounts = true;
+	var hasCounts = false;
 	exports.hasCounts = hasCounts;
 
-	var hasLocations = true;
+	var hasLocations = false;
 	exports.hasLocations = hasLocations;
 
 	//var COUNT = "count";
@@ -21153,11 +21153,11 @@
 	// ---MODULE IMPORTS---//
 	__webpack_require__(15);
 	var d3 = __webpack_require__(8);
-	// TODO: require form node_modules
+	// TODO: require from node_modules
 	__webpack_require__(19);
 	__webpack_require__(22);
 	var utils = __webpack_require__(12);
-	 var global = __webpack_require__(9);
+	var global = __webpack_require__(9);
 	var points = __webpack_require__(24);
 	var lines = __webpack_require__(31);
 	var areas = __webpack_require__(32);
@@ -21182,47 +21182,15 @@
 
 	var exports = module.exports = {};
 
-	//exports.createHtml = function( document,  all) {
-	//	
-	//	var controls = document.createElement('DIV');
-	//	controls.setAttribute('id', "controls");
-	//
-	//	var h2 = document.createElement("H2");
-	//	var text = document.createTextNode("Current date:");
-	//	h2.appendChild(text);
-	//
-	//	var span = document.createElement('SPAN');
-	//	span.setAttribute('id', "currentDate");
-	//	h2.appendChild(span);
-	//
-	//	controls.appendChild(h2);
-	//	
-	//	var wrapper = document.createElement('DIV');
-	//
-	//	var playPause = document.createElement('DIV');
-	//	playPause.setAttribute('id', "playPause");
-	//	wrapper.appendChild(playPause);
-	//
-	//	var timeSliderDiv = document.createElement('DIV');
-	//	timeSliderDiv.setAttribute('id', "timeSlider");
-	//	wrapper.appendChild(timeSliderDiv);
-	//
-	//	controls.appendChild(wrapper);
-	//
-	////	document.body
-	//	all.appendChild(controls);
-	//	
-	//}//END:createHtml
-
 	exports.initializeTimeSlider = function( timeLine) {
 
 		// initialize module variables
 		initializeVariables(timeLine);
-		
+
 		// put slider at the end of timeLine, everything painted
 		timeSlider.value( sliderEndValue);
 		updateDateDisplay(sliderEndValue);
-		
+
 		// time slider listener
 		timeSlider.on('slide', function(evt, value) {
 
@@ -21296,39 +21264,39 @@
 	}// END: generateTime
 
 	function updateDateDisplay(value) {
-			
+
 		var currentDate = timeScale.invert(timeScale(value));
 		currentDateDisplay.text(dateFormat(currentDate));
 
 	}// END: updateDateDisplay
 
 	function update(value) {
-			
+
 		updateDateDisplay(value);
 
 	    //---POINTS---//
-		
+
 		if(global.hasPoints) {
 		points.updatePointsLayer(value);
 		}
-		
+
 		// ---LINES---//
-		
+
 		if(global.hasLines) {
 		lines.updateLinesLayer(value);
 		}
-		
-		
+
+
 		// --- AREAS--//
 		if(global.hasAreas) {
 		areas.updateAreasLayer(value);
 		}
-		
+
 		// --- COUNTS--//
 		if(global.hasCounts) {
 		counts.updateCountsLayer(value);
 		}
-		
+
 	}// END: update
 
 
@@ -24581,89 +24549,41 @@
 
 	exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
-		console.log("generateEmptyLayer");
+		//console.log("generateEmptyLayer");
 
 		var xlim = utils.getObject(pointAttributes, "id",
 				axisAttributes.xCoordinate).range;
 		var ylim = utils.getObject(pointAttributes, "id",
 				axisAttributes.yCoordinate).range;
-		// ylim = [ ylim[0] - 2, ylim[1] + 2 ];
-		// xlim = [ xlim[0] - 2, xlim[1] + 2 ];
 
-		console.log("width: " + global.width);
+		/*console.log("width: " + global.width);
 		console.log("height: " + global.height);
 
 		console.log("xlim: " + xlim);
-		console.log("ylim: " + ylim);
+		console.log("ylim: " + ylim);*/
 
 		// reversed because coordinates come as lat (y), long (x)
 		var bounds = [ ylim, xlim ];
 
-		// maxX = xlim[0];
-		console.log("bounds: " + bounds);
+		/*console.log("bounds: " + bounds);
+	    console.log("bounds[0][0] = " + bounds[0][0]);
+	    console.log("bounds[0][1] = " + bounds[0][1]);
+	    console.log("bounds[1][0] = " + bounds[1][0]);
+	    console.log("bounds[1][1] = " + bounds[1][1]);*/
 
-		var hscale = global.height / (bounds[0][1] - bounds[0][0]);
-		var vscale = global.width / (bounds[1][1] - bounds[1][0]);
+		//var hscale = global.height / (bounds[0][1] - bounds[0][0]);
+		//var vscale = global.width / (bounds[1][1] - bounds[1][0]);
+	    var vscale = global.height / (bounds[0][1] - bounds[0][0]);
+	    var hscale = global.width / (bounds[1][1] - bounds[1][0]);
 
-		console.log("hscale: " + hscale);
-		console.log("vscale: " + vscale);
+		//console.log("hscale: " + hscale);
+		//console.log("vscale: " + vscale);
 
 		var projectionScale = (hscale < vscale) ? hscale : vscale;
-		projectionScale = projectionScale * 150;
+		//projectionScale = projectionScale * 150;
+	    projectionScale = projectionScale * 100;
 
-		// x axis
-		var xScale = d3.scale.linear().domain(xlim).nice().range(
-				[ 0, global.width ]);
-
-		// x axis
-		var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
-				-global.height).outerTickSize(0);
-
-		// add the x axis
-		var xAxisLayer = global.g.append("g").attr("class", "x axis");
-		xAxisLayer.attr("transform", "translate(0," + global.height + ")").call(
-				xAxis);
-
-		// x axis title
-		global.g.append("text").attr("class", "x label").attr("text-anchor",
-				"middle").attr("x", global.width / 2).attr("y",
-				global.height + global.margin.bottom - 10).style("font-size",
-				"18px") //
-		.style({
-			'stroke' : 'Black',
-			'fill' : 'Black',
-			'stroke-width' : '0.5px'
-		}).text(utils.capitalizeFirstLetter(axisAttributes.xCoordinate));
-
-		// remove the first tick
-		global.g.selectAll(".tick").filter(function(d) {
-			return d === xScale.domain()[0];
-		}).remove();
-
-		// y axis
-		var yScale = d3.scale.linear().domain(ylim).nice().range(
-				[ global.height, 0 ]);
-
-		var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
-				-global.width).outerTickSize(0);
-		var yAxisLayer = global.g.append("g").attr("class", "y axis");
-		yAxisLayer.call(yAxis);
-
-		// y axis title
-		global.g.append("text") //
-		.attr("class", "y label") //
-		.attr("text-anchor", "middle") //
-		// .attr("x", 0).attr("y", width / 2)
-		// .attr("transform","rotate(-90)")
-		.attr("transform",
-				"translate(" + (40) + "," + (global.height / 2) + ")rotate(-90)") //
-		.style("font-size", "18px") //
-		.style({
-			'stroke' : 'Black',
-			'fill' : 'Black',
-			'stroke-width' : '0.5px'
-		}) //
-		.text(utils.capitalizeFirstLetter(axisAttributes.yCoordinate));
+	    //console.log("projectionScale: " + projectionScale);
 
 		// define null projection
 		var zeroProjection = d3.geo.projection(function(x, y) {
@@ -24672,20 +24592,24 @@
 		});
 
 		// test projection
-		console.log("test projection [0,0]: " + zeroProjection([ 0, 0 ]));
+		/*console.log("test projection [0,0]: " + zeroProjection([ 0, 0 ]));
 		console.log("test projection [0,1]: " + zeroProjection([ 0, 1 ]));
 		console.log("test projection [1,0]: " + zeroProjection([ 1, 0 ]));
-		console.log("test projection [1,1]: " + zeroProjection([ 1, 1 ]));
+		console.log("test projection [1,1]: " + zeroProjection([ 1, 1 ]));*/
 
 		var currentXDifference = zeroProjection([ 1, 1 ])[0]
 				- zeroProjection([ 0, 0 ])[0];
 		var currentYDifference = zeroProjection([ 1, 1 ])[1]
 				- zeroProjection([ 0, 0 ])[1];
-		console.log("current X difference: " + currentXDifference);
-		console.log("current Y difference: " + currentYDifference);
+		//console.log("current X difference: " + currentXDifference);
+		//console.log("current Y difference: " + currentYDifference);
+	    //var oldXDifference = currentXDifference;
+	    //var oldYDifference = currentYDifference;
 
 		projectionScale = global.minScaleExtent * projectionScale
 				/ currentXDifference;
+
+	    //console.log("global.minScaleExtent = " + global.minScaleExtent);
 
 		global.projection = zeroProjection.scale(projectionScale);
 
@@ -24694,8 +24618,8 @@
 		currentYDifference = zeroProjection([ 1, 1 ])[1]
 				- zeroProjection([ 0, 0 ])[1];
 
-		console.log("current X difference: " + currentXDifference);
-		console.log("current Y difference: " + currentYDifference);
+		//console.log("current X difference: " + currentXDifference);
+		//console.log("current Y difference: " + currentYDifference);
 
 		global.projection = zeroProjection.translate(
 				[
@@ -24704,11 +24628,80 @@
 
 						global.height / 2 + (bounds[0][0] + bounds[0][1]) / 2
 								* currentXDifference ] //
-		).scale(projectionScale
+		).scale(projectionScale);
 
-		);
+	    // test projection
+	    /*console.log("test projection [-1.37,-4.3]: " + global.projection([ -1.37, -4.3 ]));
+	    console.log("test projection [-1.37,4.29]: " + global.projection([ -1.37, 4.29 ]));
+	    console.log("test projection [52.39,-4.3]: " + global.projection([ 52.39, -4.3 ]));
+	    console.log("test projection [52.39,4.29]: " + global.projection([ 52.39, 4.29 ]));
 
-	updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
+	    console.log("global.projection([-1.37,-4.3])[0]: " + global.projection([-1.37,-4.3])[0]);
+	    console.log("global.projection([ 52.39, 4.29 ])[0]: " + global.projection([ 52.39, 4.29 ])[0]);
+
+	    console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
+	    console.log("global.projection([0,0])[1]: " + global.projection([0,0])[1]);
+	    console.log("global.projection([1,1])[0]: " + global.projection([1,1])[0]);
+	    console.log("global.projection([1,1])[1]: " + global.projection([1,1])[1]);*/
+
+	    // x axis
+	    //var xScale = d3.scale.linear().domain(xlim).nice().range([ 0, global.width ]);
+	    var xScale = d3.scale.linear().domain(xlim).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
+
+	    // x axis
+	    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
+	        -global.height).outerTickSize(0).ticks(xlim[1]-xlim[0]);
+
+	    // add the x axis
+	    var xAxisLayer = global.g.append("g").attr("class", "x axis");
+	    xAxisLayer.attr("transform", "translate(0," + global.height + ")").call(xAxis);
+
+	    // x axis title
+	    global.g.append("text").attr("class", "x label").attr("text-anchor",
+	        "middle").attr("x", global.width / 2).attr("y",
+	        global.height + global.margin.bottom - 20).style("font-size",
+	        "18px") //
+	        .style({
+	            'stroke' : 'Black',
+	            'fill' : 'Black',
+	            'stroke-width' : '0.5px'
+	        }).text(utils.capitalizeFirstLetter(axisAttributes.xCoordinate));
+
+	    // remove the first tick
+	    /*global.g.selectAll(".tick").filter(function(d) {
+	        return d === xScale.domain()[0];
+	    }).remove();*/
+
+	    // y axis
+	    //var yScale = d3.scale.linear().domain(ylim).nice().range([ global.height, 0 ]);
+	    var yScale = d3.scale.linear().domain(ylim).range([ global.projection([xlim[0],ylim[0]])[1], global.projection([ xlim[1], ylim[1] ])[1] ]);
+
+	    var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
+	        -global.width).outerTickSize(0).ticks(ylim[1]-ylim[0]);
+
+	    var yAxisLayer = global.g.append("g").attr("class", "y axis");
+	    yAxisLayer.attr("transform", "translate(" + (global.margin.left - 10) + ",0)").call(yAxis);
+
+	    /*yAxisLayer.selectAll(".tick").filter(function(d) {
+	        return d === yScale.domain()[0] || d === yScale.domain()[1];
+	    }).remove();*/
+
+	    // y axis title
+	    global.g.append("text").attr("class", "y label") //
+	        .attr("text-anchor", "middle") //
+	        // .attr("x", 0).attr("y", width / 2)
+	        // .attr("transform","rotate(-90)")
+	        .attr("transform",
+	        "translate(" + (20) + "," + (global.height / 2) + ")rotate(-90)") //
+	        .style("font-size", "18px") //
+	        .style({
+	            'stroke' : 'Black',
+	            'fill' : 'Black',
+	            'stroke-width' : '0.5px'
+	        }) //
+	        .text(utils.capitalizeFirstLetter(axisAttributes.yCoordinate));
+
+	    updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
 
 	}// END: generateEmptyLayer
 
