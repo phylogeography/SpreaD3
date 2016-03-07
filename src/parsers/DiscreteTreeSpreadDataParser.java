@@ -1,6 +1,7 @@
 package parsers;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import jebl.evolution.io.ImportException;
@@ -30,6 +31,8 @@ public class DiscreteTreeSpreadDataParser {
 	public SpreadData parse() throws IOException, ImportException,
 			AnalysisException {
 
+		validateSettings();
+		
 		TimeLine timeLine = null;
 		LinkedList<Attribute> mapAttributes = null;
 		LinkedList<Attribute> lineAttributes = null;
@@ -159,6 +162,31 @@ public class DiscreteTreeSpreadDataParser {
 		return data;
 	}// END: parse
 
+	private void validateSettings() {
+		// TODO check if all fields set, if not throw Analysis exceptions
+		
+//		Field[] fields = this.settings.getClass().getDeclaredFields();
+//		
+//		for(Field f : fields) {
+//		   Class t = f.getType();
+//		   Object v = f.get(this.settings);
+//				   
+////		   if(t == boolean.class && Boolean.FALSE.equals(v)) 
+////		     // found default value
+////		   else if(t.isPrimitive() && ((Number) v).doubleValue() == 0)
+////		     // found default value
+////		   else if(!t.isPrimitive() && v == null)
+////		     // found default value
+//			
+//			
+//			System.out.println(f.getName());
+//			
+//			System.out.println(v);
+//			
+//		}
+		
+	}//END: validateSettings
+
 	private LinkedList<Attribute> getCoordinateRangeAttributes(
 			LinkedList<Location> locationsList) throws AnalysisException {
 
@@ -186,19 +214,19 @@ public class DiscreteTreeSpreadDataParser {
 			// update coordinates range
 
 			if (latitude < yCoordinateRange[Attribute.MIN_INDEX]) {
-				xCoordinateRange[Attribute.MIN_INDEX] = latitude;
+				yCoordinateRange[Attribute.MIN_INDEX] = latitude;
 			} // END: min check
 
 			if (latitude > yCoordinateRange[Attribute.MAX_INDEX]) {
-				xCoordinateRange[Attribute.MAX_INDEX] = latitude;
+				yCoordinateRange[Attribute.MAX_INDEX] = latitude;
 			} // END: max check
 
 			if (longitude < xCoordinateRange[Attribute.MIN_INDEX]) {
-				yCoordinateRange[Attribute.MIN_INDEX] = longitude;
+				xCoordinateRange[Attribute.MIN_INDEX] = longitude;
 			} // END: min check
 
 			if (longitude > xCoordinateRange[Attribute.MAX_INDEX]) {
-				yCoordinateRange[Attribute.MAX_INDEX] = longitude;
+				xCoordinateRange[Attribute.MAX_INDEX] = longitude;
 			} // END: max check
 
 		}

@@ -16,6 +16,8 @@ public class JsonMergerTest {
 
 		try {
 
+			// ---SETTINGS---//
+			
 			JsonMergerSettings settings = new JsonMergerSettings();
 
 			settings.pointsFiles = new String[]{"/home/filip/Desktop/IntroductionDSalEdDel.MCC.json", "/home/filip/Desktop/countries.json"};
