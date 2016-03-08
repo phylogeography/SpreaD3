@@ -74,10 +74,17 @@
 			[ global.width / 2, global.height / 2 ]).size(
 			[ global.width, global.height ]).on("zoom", move);
 
+
+	// TODO: make responsive
 	var svg = d3.select(".container").append('svg') //
-	.attr("width", global.width + global.margin.left + global.margin.right) //
-	.attr("height", global.height + global.margin.top + global.margin.bottom) //
+	//.attr("width", global.width + global.margin.left + global.margin.right) //
+	//.attr("height", global.height + global.margin.top + global.margin.bottom) //
+	  .attr("preserveAspectRatio", "xMinYMin meet")
+	   .attr("viewBox", "0 0 " + global.width + " " + global.height)
 	.call(zoom);
+
+
+
 
 	global.g = svg.append("g");
 
@@ -167,7 +174,7 @@
 		document.write("					<\/div>");
 		document.write("				<\/div>");
 
-		document.write("				<div class=\"panel\">");
+		document.write("				<div class=\"panelcollapsed\">");
 		document.write("					<h2>Points fixed radius<\/h2>");
 		document.write("					<div class=\"panelcontent\">");
 
@@ -657,7 +664,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".container {\n\tborder: 2px solid #000;\n\tborder-radius: 5px;\n\theight: auto;\n\twidth: auto;\n\toverflow: hidden;\n}\n\n.selectors {\n\t\t/*width: 20%;*/\n\t/*margin-top: 1.5cm;*/\n\tfloat: left;\n\toverflow: hidden;\n}\n\n/* styling for collapsible panels */\n.panel, .panelcollapsed {\n\tmargin-top: 5px;\n\tmargin-right: 5px;\n}\n\n/* panel heading */\n.panel h2, .panelcollapsed h2 {\n\tfont-size: 14px;\n\tfont-weight: 300;\n\tmargin: 0px;\n\tpadding: 4px;\n\tpadding-left: 20px;\n\t/*\tbackground: #EEEEEE; */\n\tbackground-image: url("+__webpack_require__(4)+");\n\tbackground-repeat: no-repeat;\n\tbackground-position: left center;\n\tborder-top: 1px solid #CCC;\n\t/*\tborder-bottom: 1px solid #CCC;\n\t\t\tborder-right: 1px solid #CCC;\n\t\t\tborder-left: 1px solid #CCC;\n\t\t\t-moz-border-radius: 3px;\n\t\t\t-webkit-border-radius: 3px;\n\t\t\t*/\n}\n\n/* panel heading on rollover */\n.panel h2:hover, .panelcollapsed h2:hover {\n\tbackground-color: #F5F7F9;\n}\n\n/* heading of a collapsed panel */\n.panelcollapsed h2 {\n\t/*\tbackground: #DDDDDD; */\n\tbackground-image: url("+__webpack_require__(5)+");\n\tbackground-repeat: no-repeat;\n\tbackground-position: left center;\n\tborder-color: #CCC;\n}\n\n/* panel content - do not set borders or paddings */\n.panelcontent {\n\tbackground: #FFFFFF;\n\toverflow: hidden;\n}\n\n/* collapsed panel content */\n.panelcollapsed .panelcontent {\n\tdisplay: none;\n}\n\n.wrapper {\n\twidth: 190px;\n\tmargin: 25px 0;\n\tmargin-left: 10px;\n\tmargin-right: 15px;\n}\n", ""]);
+	exports.push([module.id, ".container {\n\tborder: 2px solid #000;\n\tborder-radius: 5px;\n/* \theight: auto; */\n/* \twidth: auto; */\n/* \toverflow: hidden; */\n/* \tdisplay: inline-block; */\n    position: relative;\n/*     width: 100%; */\n/*     padding-bottom: 100%; aspect ratio */\n    vertical-align: top;\n    overflow: hidden;\n}\n\n\n.selectors {\n\t\t/*width: 20%;*/\n\t/*margin-top: 1.5cm;*/\n\tfloat: left;\n\toverflow: hidden;\n}\n\n/* styling for collapsible panels */\n.panel, .panelcollapsed {\n\tmargin-top: 5px;\n\tmargin-right: 5px;\n}\n\n/* panel heading */\n.panel h2, .panelcollapsed h2 {\n\tfont-size: 14px;\n\tfont-weight: 300;\n\tmargin: 0px;\n\tpadding: 4px;\n\tpadding-left: 20px;\n\t/*\tbackground: #EEEEEE; */\n\tbackground-image: url("+__webpack_require__(4)+");\n\tbackground-repeat: no-repeat;\n\tbackground-position: left center;\n\tborder-top: 1px solid #CCC;\n\t/*\tborder-bottom: 1px solid #CCC;\n\t\t\tborder-right: 1px solid #CCC;\n\t\t\tborder-left: 1px solid #CCC;\n\t\t\t-moz-border-radius: 3px;\n\t\t\t-webkit-border-radius: 3px;\n\t\t\t*/\n}\n\n/* panel heading on rollover */\n.panel h2:hover, .panelcollapsed h2:hover {\n\tbackground-color: #F5F7F9;\n}\n\n/* heading of a collapsed panel */\n.panelcollapsed h2 {\n\t/*\tbackground: #DDDDDD; */\n\tbackground-image: url("+__webpack_require__(5)+");\n\tbackground-repeat: no-repeat;\n\tbackground-position: left center;\n\tborder-color: #CCC;\n}\n\n/* panel content - do not set borders or paddings */\n.panelcontent {\n\tbackground: #FFFFFF;\n\toverflow: hidden;\n}\n\n/* collapsed panel content */\n.panelcollapsed .panelcontent {\n\tdisplay: none;\n}\n\n.wrapper {\n\twidth: 190px;\n\tmargin: 25px 0;\n\tmargin-left: 10px;\n\tmargin-right: 15px;\n}\n", ""]);
 
 /***/ },
 /* 3 */
@@ -24558,7 +24565,6 @@
 
 		/*console.log("width: " + global.width);
 		console.log("height: " + global.height);
-
 		console.log("xlim: " + xlim);
 		console.log("ylim: " + ylim);*/
 
@@ -24571,8 +24577,6 @@
 	    console.log("bounds[1][0] = " + bounds[1][0]);
 	    console.log("bounds[1][1] = " + bounds[1][1]);*/
 
-		//var hscale = global.height / (bounds[0][1] - bounds[0][0]);
-		//var vscale = global.width / (bounds[1][1] - bounds[1][0]);
 	    var vscale = global.height / (bounds[0][1] - bounds[0][0]);
 	    var hscale = global.width / (bounds[1][1] - bounds[1][0]);
 
@@ -24580,36 +24584,22 @@
 		//console.log("vscale: " + vscale);
 
 		var projectionScale = (hscale < vscale) ? hscale : vscale;
-		//projectionScale = projectionScale * 150;
 	    projectionScale = projectionScale * 100;
 
 	    //console.log("projectionScale: " + projectionScale);
 
 		// define null projection
 		var zeroProjection = d3.geo.projection(function(x, y) {
-			// return [ x, y ];
 			return [ x, y ];
 		});
-
-		// test projection
-		/*console.log("test projection [0,0]: " + zeroProjection([ 0, 0 ]));
-		console.log("test projection [0,1]: " + zeroProjection([ 0, 1 ]));
-		console.log("test projection [1,0]: " + zeroProjection([ 1, 0 ]));
-		console.log("test projection [1,1]: " + zeroProjection([ 1, 1 ]));*/
 
 		var currentXDifference = zeroProjection([ 1, 1 ])[0]
 				- zeroProjection([ 0, 0 ])[0];
 		var currentYDifference = zeroProjection([ 1, 1 ])[1]
 				- zeroProjection([ 0, 0 ])[1];
-		//console.log("current X difference: " + currentXDifference);
-		//console.log("current Y difference: " + currentYDifference);
-	    //var oldXDifference = currentXDifference;
-	    //var oldYDifference = currentYDifference;
 
 		projectionScale = global.minScaleExtent * projectionScale
 				/ currentXDifference;
-
-	    //console.log("global.minScaleExtent = " + global.minScaleExtent);
 
 		global.projection = zeroProjection.scale(projectionScale);
 
@@ -24618,8 +24608,8 @@
 		currentYDifference = zeroProjection([ 1, 1 ])[1]
 				- zeroProjection([ 0, 0 ])[1];
 
-		//console.log("current X difference: " + currentXDifference);
-		//console.log("current Y difference: " + currentYDifference);
+	    //console.log("currentXDifference: " + currentXDifference);
+	    //console.log("currentYDifference: " + currentYDifference);
 
 		global.projection = zeroProjection.translate(
 				[
@@ -24631,35 +24621,45 @@
 		).scale(projectionScale);
 
 	    // test projection
-	    /*console.log("test projection [-1.37,-4.3]: " + global.projection([ -1.37, -4.3 ]));
-	    console.log("test projection [-1.37,4.29]: " + global.projection([ -1.37, 4.29 ]));
-	    console.log("test projection [52.39,-4.3]: " + global.projection([ 52.39, -4.3 ]));
-	    console.log("test projection [52.39,4.29]: " + global.projection([ 52.39, 4.29 ]));
-
-	    console.log("global.projection([-1.37,-4.3])[0]: " + global.projection([-1.37,-4.3])[0]);
-	    console.log("global.projection([ 52.39, 4.29 ])[0]: " + global.projection([ 52.39, 4.29 ])[0]);
-
-	    console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
+	    /*console.log("global.projection([xlim[0],ylim[0])[0]: " + global.projection([xlim[0],ylim[0]])[0]);
+	    console.log("global.projection([xlim[0],ylim[0])[1]: " + global.projection([xlim[0],ylim[0]])[1]);
+	    console.log("global.projection([xlim[1],ylim[1])[0]: " + global.projection([xlim[1],ylim[1]])[0]);
+	    console.log("global.projection([xlim[1],ylim[1])[1]: " + global.projection([xlim[1],ylim[1]])[1]);*/
+	    /*console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
 	    console.log("global.projection([0,0])[1]: " + global.projection([0,0])[1]);
 	    console.log("global.projection([1,1])[0]: " + global.projection([1,1])[0]);
 	    console.log("global.projection([1,1])[1]: " + global.projection([1,1])[1]);*/
 
-	    // x axis
-	    //var xScale = d3.scale.linear().domain(xlim).nice().range([ 0, global.width ]);
-	    var xScale = d3.scale.linear().domain(xlim).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
+	    var xOffset = global.projection([xlim[1],ylim[1]])[0] - global.projection([xlim[0],ylim[0]])[0];
+	    var yOffset = global.projection([xlim[0],ylim[0]])[1] - global.projection([xlim[1],ylim[1]])[1];
+
+	    var addedXAxis = global.margin.left/currentXDifference;
+	    var addedYAxis = -global.margin.bottom/currentYDifference;
+	    //console.log("addedXAxis: " + addedXAxis);
+	    //console.log("addedYAxis: " + addedYAxis);
 
 	    // x axis
+	    //var xScale = d3.scale.linear().domain(xlim).nice().range([ 0, global.width ]);
+	    //var xScale = d3.scale.linear().domain(xlim).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
+
+	    //try the xScale below to make the axes intersect
+	    var xScale = d3.scale.linear().domain([xlim[0]-addedXAxis,xlim[1]+addedXAxis]).range([ global.projection([xlim[0]-addedXAxis,ylim[0]])[0]-0, global.projection([ xlim[1]+addedXAxis, ylim[1] ])[0]+0]);
+
+	    // x axis
+	    //var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
+	    //    -global.height).outerTickSize(0).ticks(xlim[1]-xlim[0]);
 	    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
-	        -global.height).outerTickSize(0).ticks(xlim[1]-xlim[0]);
+	        -yOffset - 2*global.margin.bottom).outerTickSize(0).ticks(xlim[1]-xlim[0]);
 
 	    // add the x axis
 	    var xAxisLayer = global.g.append("g").attr("class", "x axis");
-	    xAxisLayer.attr("transform", "translate(0," + global.height + ")").call(xAxis);
+	    //xAxisLayer.attr("transform", "translate(0," + global.height + ")").call(xAxis);
+	    xAxisLayer.attr("transform", "translate(0," + (global.projection([xlim[0],ylim[0]])[1] + global.margin.bottom) + ")").call(xAxis);
 
 	    // x axis title
 	    global.g.append("text").attr("class", "x label").attr("text-anchor",
 	        "middle").attr("x", global.width / 2).attr("y",
-	        global.height + global.margin.bottom - 20).style("font-size",
+	        (global.projection([xlim[0],ylim[0]])[1] + global.margin.bottom) + global.margin.bottom - 20).style("font-size",
 	        "18px") //
 	        .style({
 	            'stroke' : 'Black',
@@ -24667,32 +24667,26 @@
 	            'stroke-width' : '0.5px'
 	        }).text(utils.capitalizeFirstLetter(axisAttributes.xCoordinate));
 
-	    // remove the first tick
-	    /*global.g.selectAll(".tick").filter(function(d) {
-	        return d === xScale.domain()[0];
-	    }).remove();*/
-
 	    // y axis
 	    //var yScale = d3.scale.linear().domain(ylim).nice().range([ global.height, 0 ]);
-	    var yScale = d3.scale.linear().domain(ylim).range([ global.projection([xlim[0],ylim[0]])[1], global.projection([ xlim[1], ylim[1] ])[1] ]);
+	    //var yScale = d3.scale.linear().domain(ylim).range([ global.projection([xlim[0],ylim[0]])[1], global.projection([ xlim[1], ylim[1] ])[1] ]);
 
+	    //try the yScale below to make the axes intersect
+	    var yScale = d3.scale.linear().domain([ylim[0]-addedYAxis,ylim[1]+addedYAxis]).range([ global.projection([xlim[0],ylim[0]-addedYAxis])[1]-0, global.projection([ xlim[1], ylim[1]+addedYAxis ])[1]+0]);
+
+	    //var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
+	    //    -global.width).outerTickSize(0).ticks(ylim[1]-ylim[0]);
 	    var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
-	        -global.width).outerTickSize(0).ticks(ylim[1]-ylim[0]);
+	        -xOffset - 2*global.margin.left).outerTickSize(0).ticks(ylim[1]-ylim[0]);
 
 	    var yAxisLayer = global.g.append("g").attr("class", "y axis");
-	    yAxisLayer.attr("transform", "translate(" + (global.margin.left - 10) + ",0)").call(yAxis);
-
-	    /*yAxisLayer.selectAll(".tick").filter(function(d) {
-	        return d === yScale.domain()[0] || d === yScale.domain()[1];
-	    }).remove();*/
+	    //yAxisLayer.attr("transform", "translate(" + (global.margin.left + 20) + ",0)").call(yAxis);
+	    yAxisLayer.attr("transform", "translate(" + (global.projection([xlim[0],ylim[0]])[0] - global.margin.left) + ",0)").call(yAxis);
 
 	    // y axis title
 	    global.g.append("text").attr("class", "y label") //
 	        .attr("text-anchor", "middle") //
-	        // .attr("x", 0).attr("y", width / 2)
-	        // .attr("transform","rotate(-90)")
-	        .attr("transform",
-	        "translate(" + (20) + "," + (global.height / 2) + ")rotate(-90)") //
+	        .attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left - 20)) + "," + (global.height / 2) + ")rotate(-90)") //
 	        .style("font-size", "18px") //
 	        .style({
 	            'stroke' : 'Black',
