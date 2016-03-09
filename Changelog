@@ -46,3 +46,4 @@
 * tooltips updated with attribute values
 * improved line curvature
 * added intersecting X and Y axes for representing data when no map is available
+* panels are generated if and only if modules are called
