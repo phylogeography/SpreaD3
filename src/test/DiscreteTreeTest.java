@@ -38,6 +38,8 @@ public class DiscreteTreeTest {
 			
 			settings.outputFilename = new String("/home/filip/Desktop/output.json");
 			
+			settings.mrsd = "2015.3";
+			
 			// ---PARSE---//
 			
 			DiscreteTreeSpreadDataParser parser = new DiscreteTreeSpreadDataParser(settings);
