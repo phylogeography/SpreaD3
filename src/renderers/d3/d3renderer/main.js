@@ -21516,8 +21516,6 @@
 
 		$(".selectors").append(html);
 
-	/////////
-
 		var pointFixedColorSelect = document.getElementById("pointFixedColor");
 		var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
 				global.fixedColors);
@@ -23678,8 +23676,128 @@
 		setupAreaFixedColorPanel();
 		setupAreaColorAttributePanel(attributes);
 		setupAreaFixedOpacityPanel();
+	  setupAreaOpacityAttributePanel(attributes);
 
 	}// END: setupPanels
+
+	setupAreaOpacityAttributePanel = function(attributes) {
+
+	// TODO : two sliders
+	var str = ("				<div class=\"panelcollapsed\">")+
+	("					<h2>Polygons opacity attribute<\/h2>")+
+	("					<div class=\"panelcontent\">")+
+	("						<div id='areaStartOpacitySlider'>")+
+	("						<\/div>")+
+	("						<div id='areaEndOpacitySlider'>")+
+	("						<\/div>")+
+	("						<h4>Attribute<\/h4>")+
+	("						<select id=\"areaOpacityAttribute\">")+
+	("						<\/select>")+
+	// ("						<div id=\"areaColorLegend\" ><\/div>")+
+	("					<\/div>")+
+	("				<\/div>");
+
+	var html = $.parseHTML(str);
+
+	$(".selectors").append(html);
+
+	// attribute
+	var areaOpacityAttributeSelect = document
+			.getElementById("areaOpacityAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == global.COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		areaOpacityAttributeSelect.appendChild(element);
+
+	}// END: i loop
+
+	// area opacity attribute listener
+	d3
+			.select(areaOpacityAttribute)
+			.on(
+					'change',
+					function() {
+
+						var opacityAttribute = areaOpacityAttributeSelect.options[areaOpacityAttributeSelect.selectedIndex].text;
+						var attribute = utils.getObject(attributes, "id",
+								opacityAttribute);
+
+						var data;
+						var scale;
+
+						// $('#areaStartOpacitySlider').html('');
+						// $('#areaEndOpacitySlider').html('');
+
+						if (attribute.scale == global.ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.ordinal().range(
+									global.ordinalColors).domain(data);
+
+							// updatePolygonOpacityLegend(scale);
+
+						} else if (attribute.scale == global.LINEAR) {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									// [ min_polygon_opacity, max_polygon_opacity ]
+	                   [0.1, 0.2]
+								);
+
+		// updatePolygonOpacityLegend(scale);
+
+		// $('#areaStartOpacitySlider').html('<input type="range" class="areaFixedOpacitySlider" step="0.1" min="' + min_polygon_opacity + '" max="' + max_polygon_opacity + '" value="'+polygonOpacity+'"  />');
+		// $('#areaStartOpacitySlider').append('<span>' + min_polygon_opacity + '</span>');
+
+						} else {
+
+							console
+									.log("Error occured when resolving scale type!");
+						}
+
+						// trigger repaint
+						updatePolygonOpacity(scale, opacityAttribute);
+
+						// tooltipAttributes['color'] = colorAttribute;
+						// updateTooltips();
+
+	} );
+
+
+
+	}//END: setupAreaOpacityAttributePanel
+
+	updatePolygonOpacity = function(scale, opacityAttribute) {
+
+	// TODO
+
+		areasLayer.selectAll(".area").transition() //
+		.ease("linear") //
+		.attr("fill-opacity", function() {
+
+			var polygon = d3.select(this);
+			var attributeValue = polygon.attr(opacityAttribute);
+			var opacity = scale(attributeValue);
+
+			if (attributeValue == null) {
+				console.log("null found");
+				opacity = 0.0;
+			}
+
+			return (opacity);
+		});
+
+	}// END: updatePolygonOpacity
 
 	setupAreaFixedOpacityPanel = function() {
 

@@ -166,9 +166,10 @@ public class TimeSlicerParser {
 					System.out.println("null found");
 				}
 
-				x[i] = coords.get(i)[Utils.LATITUDE_INDEX];
-				y[i] = coords.get(i)[Utils.LONGITUDE_INDEX];
-
+				x[i] = coords.get(i)[Utils.LONGITUDE_INDEX];
+				y[i] = coords.get(i)[Utils.LATITUDE_INDEX];
+				
+				
 			} // END: i loop
 
 			ContourMaker contourMaker = new ContourWithSnyder(x, y, gridSize);
@@ -176,9 +177,9 @@ public class TimeSlicerParser {
 
 			for (ContourPath path : paths) {
 
-				double[] latitude = path.getAllY();
 				double[] longitude = path.getAllX();
-
+				double[] latitude = path.getAllY();
+				
 				List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 
 				for (int i = 0; i < latitude.length; i++) {
