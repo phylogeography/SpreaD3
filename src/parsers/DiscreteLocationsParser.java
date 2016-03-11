@@ -25,8 +25,7 @@ public class DiscreteLocationsParser {
 
 	}// END: Constructor
 
-	public LinkedList<Location> parseLocations() throws IOException,
-			AnalysisException {
+	public LinkedList<Location> parseLocations() throws IOException, AnalysisException {
 
 		LinkedList<Location> locationsList = new LinkedList<Location>();
 
@@ -40,12 +39,13 @@ public class DiscreteLocationsParser {
 		int nrow = lines.length;
 		for (int i = 0; i < nrow; i++) {
 
-			String[] line = lines[i].split("\t");
+			// String[] line = lines[i].split("\t");
+			// TODO:test
+			String[] line = lines[i].split("\\s+");
 
 			if (line.length != 3) {
 				throw new AnalysisException(
-						"Incorrect number of columns in locations file. Expecting 3, found "
-								+ line.length);
+						"Incorrect number of columns in locations file. Expecting 3, found " + line.length);
 			}
 
 			String locationName = line[0];
@@ -55,8 +55,8 @@ public class DiscreteLocationsParser {
 			String illegalCharacter = "+";
 			if (locationName.contains(illegalCharacter)) {
 
-				throw new AnalysisException("Location " + locationName
-						+ " contains illegal character " + illegalCharacter);
+				throw new AnalysisException(
+						"Location " + locationName + " contains illegal character " + illegalCharacter);
 
 			}
 
