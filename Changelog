@@ -34,7 +34,7 @@
 * cut-off selector for lines
 
 
-2016: SpreaD3 version 0.9.5 Ardberg & Kilchoman
+2016: SpreaD3 version 0.9.5 Ardberg & Talisker
 -----------------------------------------------
 * fixed bug in JsonMerger: checked for lines not points
 * fixed bug in JsonMerger: grow a list of attributes if neccesary
