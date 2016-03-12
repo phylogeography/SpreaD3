@@ -119,7 +119,7 @@ public class AboutDialog extends JDialog {
 		add(label);
 
 		website = new JLabel();
-		addres = "http://rega.kuleuven.be/cev/ecv/software/spread";
+		addres = "http://rega.kuleuven.be/cev/ecv/software/SpreaD3";
 		website.setText("<html><p><a href=\"" + addres + "\">" + addres
 				+ "</a></p></html>");
 		website.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

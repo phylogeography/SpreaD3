@@ -34,8 +34,8 @@
 * cut-off selector for lines
 
 
-2016: SpreaD3 version 0.9.5 Ardberg & Kilchoman release candidate
------------------------------------------------------------------
+2016: SpreaD3 version 0.9.5 Ardberg & Kilchoman
+-----------------------------------------------
 * fixed bug in JsonMerger: checked for lines not points
 * fixed bug in JsonMerger: grow a list of attributes if neccesary
 * fixed bug in d3-renderer which caused panels to be opened on load
@@ -47,3 +47,8 @@
 * improved line curvature
 * added intersecting X and Y axes for representing data when no map is available
 * panels are generated if and only if modules are called
+
+2016: SpreaD3 version 0.9.6 rc
+-----------------------------------------------------------------
+
+
