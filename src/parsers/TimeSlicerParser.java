@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import contouring.ContourMaker;
 import contouring.ContourPath;
@@ -100,6 +102,10 @@ public class TimeSlicerParser {
 		RootedTree currentTree;
 		ConcurrentHashMap<Double, List<double[]>> slicesMap = new ConcurrentHashMap<Double, List<double[]>>();
 
+		// Executor for threads
+		int NTHREDS = Runtime.getRuntime().availableProcessors();
+		ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
+		
 		int counter = 0;
 		while (treesImporter.hasTree()) {
 
@@ -109,13 +115,14 @@ public class TimeSlicerParser {
 
 				if (counter >= burnIn) {
 
-					new TimeSliceTree(slicesMap, //
+					executor.submit(new TimeSliceTree(slicesMap, //
 							currentTree, //
 							sliceHeights, //
 							traitName, //
 //							hasRRWrate,
 							rrwRateName //
-					).run();
+					));
+//							.run();
 
 					treesRead++;
 				} // END: burnin check
@@ -131,6 +138,12 @@ public class TimeSlicerParser {
 			} // END: try-catch
 
 		} // END: trees loop
+		
+		// Wait until all threads are finished
+		executor.shutdown();
+		while (!executor.isTerminated()) {
+		}
+		
 		progressBar.showCompleted();
 		progressBar.setShowProgress(false);
 
