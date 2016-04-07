@@ -158,7 +158,6 @@ public class TimeSlicerSpreadDataParser {
 		double[] timeSlices = new double[numberOfIntervals];
 
 		for (int i = 0; i < numberOfIntervals; i++) {
-
 			timeSlices[i] = rootHeight - (rootHeight / (double) numberOfIntervals) * ((double) i);
 		}
 

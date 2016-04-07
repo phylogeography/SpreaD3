@@ -32,6 +32,10 @@ public class TimeSlicerTest {
 			
 			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/output.json");
 
+			settings.burnIn = 0;
+			
+			settings.intervals = 11;
+			
 			settings.mrsd = "2015.3";
 
 			// ---PARSE---//

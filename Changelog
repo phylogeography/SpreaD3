@@ -50,5 +50,9 @@
 
 2016: SpreaD3 version 0.9.6 rc
 ------------------------------
+* Concurrent AnalyzeTree for time slicer
+* fixed bug in KML line generator
+
+
 
 

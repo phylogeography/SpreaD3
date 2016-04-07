@@ -557,13 +557,11 @@ public class KmlRenderer implements Renderer {
 		Double area = settings.pointArea;
 		if (areaAttribute != null) {
 
-			
-			
 			Object areaAttributeValue = point.getAttributes().get(
 					settings.pointAreaMapping);
 
 			//TODO: null pointers
-			System.out.println(areaAttributeValue);
+//			System.out.println(areaAttributeValue);
 			
 			
 			if (pointAreaMap.containsKey(areaAttributeValue)) { // get
@@ -1070,10 +1068,10 @@ public class KmlRenderer implements Renderer {
 
 		// Convert to radians
 		double rlon1 = longNormalise(Math.toRadians(startCoordinate
-				.getYCoordinate()));
+				.getXCoordinate()));
 		double rlat1 = Math.toRadians(startCoordinate.getYCoordinate());
 		double rlon2 = longNormalise(Math.toRadians(endCoordinate
-				.getYCoordinate()));
+				.getXCoordinate()));
 		double rlat2 = Math.toRadians(endCoordinate.getYCoordinate());
 
 		coords.add(0, startCoordinate);
