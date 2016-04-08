@@ -52,7 +52,7 @@
 ------------------------------
 * Concurrent AnalyzeTree for time slicer
 * fixed bug in KML line generator
-
+* fixed bug which caused counts to be omitted when merging JSON files
 
 
 
