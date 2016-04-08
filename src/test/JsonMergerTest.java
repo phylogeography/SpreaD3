@@ -38,7 +38,6 @@ public class JsonMergerTest {
 
 			// ---MERGE---//
 			
-			
 			JsonMerger jsonMerger = new JsonMerger(settings);
 			SpreadData data = jsonMerger.merge();
 

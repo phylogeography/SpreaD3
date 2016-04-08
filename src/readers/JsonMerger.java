@@ -447,11 +447,6 @@ public class JsonMerger {
 
 				} // END: get counts check
 			} // END: null check
-
-		
-		
-		
-		
 		
 		} // END: json loop
 
