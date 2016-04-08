@@ -20,19 +20,20 @@ public class JsonMergerTest {
 			
 			JsonMergerSettings settings = new JsonMergerSettings();
 
-			settings.pointsFiles = new String[]{"/home/filip/Desktop/IntroductionDSalEdDel.MCC.json", "/home/filip/Desktop/countries.json"};
+			settings.pointsFiles = new String[] {"/home/filip/ebov1.json", 
+					"/home/filip/ebov2.json"};
 
-			settings.linesFiles = new String[]{"/home/filip/Desktop/IntroductionDSalEdDel.MCC.json"};
+			settings.linesFiles = new String[] {"/home/filip/ebov1.json"};
 
 //			settings.areasFiles = new String[]{""};
 			
-//			settings.countsFiles = new String[]{""};
+			settings.countsFiles = new String[]{"/home/filip/ebov2.json"};
 			
 //			settings.geojsonFiles = new String[]{""};
 			
-			settings.axisAttributesFile = new String("/home/filip/Desktop/IntroductionDSalEdDel.MCC.json");
+			settings.axisAttributesFile = new String("/home/filip/ebov1.json");
 			
-			settings.outputFilename = new String("/home/filip/Desktop/output.json");;
+			settings.outputFilename = new String("/home/filip/merged.json");;
 			
 
 			// ---MERGE---//

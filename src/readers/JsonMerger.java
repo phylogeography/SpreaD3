@@ -424,9 +424,11 @@ public class JsonMerger {
 						counts = new ArrayList<Point>();
 
 						for (Layer layer : json.getLayers()) {
-							if (layer.getType().equals(Layer.Type.counts)) {
+							
+							if (layer.getType().equals(Layer.Type.counts.toString())) {
 								counts.addAll(layer.getPoints());
 							}
+							
 						} // END: layers loop
 
 						if (counts.size() != 0) {
