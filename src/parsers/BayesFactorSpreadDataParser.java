@@ -166,8 +166,8 @@ public class BayesFactorSpreadDataParser {
 						+ " has no coordinates set.");
 			}
 
-			Double latitude = coordinate.getYCoordinate();
-			Double longitude = coordinate.getXCoordinate();
+			Double latitude = coordinate.getXCoordinate();
+			Double longitude = coordinate.getYCoordinate();
 
 			// update coordinates range
 

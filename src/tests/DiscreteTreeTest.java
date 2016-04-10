@@ -1,4 +1,4 @@
-package test;
+package tests;
 
 import java.awt.*;
 import java.io.File;
@@ -36,7 +36,7 @@ public class DiscreteTreeTest {
 			
 			settings.geojsonFilename = new String("/home/filip/Dropbox/JavaProjects/SpreaD3/data/discrete/EBOV/combined.geojson");
 			
-			settings.outputFilename = new String("/home/filip/Desktop/output.json");
+			settings.outputFilename = new String("/home/filip/Pulpit/output.json");
 			
 			settings.mrsd = "2015.3";
 			

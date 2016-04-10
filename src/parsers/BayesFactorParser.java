@@ -147,7 +147,7 @@ public class BayesFactorParser {
 
 		HashMap<Location, Point> pointsMap = new HashMap<Location, Point>();
 
-		int index = 0;
+//		int index = 0;
 		Location dummy;
 		int n = bayesFactors.size();
 		for (int i = 0; i < n; i++) {
@@ -173,9 +173,9 @@ public class BayesFactorParser {
 			Point fromPoint = pointsMap.get(fromLocation);
 			if (fromPoint == null) {
 
-				fromPoint = createPoint(index, fromLocation);
+				fromPoint = createPoint( fromLocation);
 				pointsMap.put(fromLocation, fromPoint);
-				index++;
+//				index++;
 
 			}// END: null check
 
@@ -197,9 +197,9 @@ public class BayesFactorParser {
 			Point toPoint = pointsMap.get(toLocation);
 			if (toPoint == null) {
 
-				toPoint = createPoint(index, toLocation);
+				toPoint = createPoint( toLocation);
 				pointsMap.put(toLocation, toPoint);
-				index++;
+//				index++;
 
 			}// END: null check
 
@@ -317,9 +317,9 @@ public class BayesFactorParser {
 
 	}// END: parseAttributes
 
-	private Point createPoint(int index, Location location) {
+	private Point createPoint(  Location location) {
 
-		String id = "point_" + index;
+		String id = "point_" + location.getId();
 
 		// Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 		// for (String attributeName : node.getAttributeNames()) {
