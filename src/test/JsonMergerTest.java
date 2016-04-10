@@ -20,22 +20,30 @@ public class JsonMergerTest {
 			
 			JsonMergerSettings settings = new JsonMergerSettings();
 
-			settings.pointsFiles = new String[] {"/home/filip/ebov1.json", 
-					"/home/filip/ebov2.json"};
+			settings.pointsFiles = new String[] {
+					"/home/filip/Pulpit/clusters/CLUSTER51.json", 
+					"/home/filip/Pulpit/clusters/CLUSTER84.json"
+					};
 
-			settings.linesFiles = new String[] {"/home/filip/ebov1.json"};
+			settings.linesFiles = new String[] {
+					"/home/filip/Pulpit/clusters/CLUSTER51.json", 
+					"/home/filip/Pulpit/clusters/CLUSTER84.json"
+					};
 
 //			settings.areasFiles = new String[]{""};
 			
-			settings.countsFiles = new String[]{"/home/filip/ebov2.json"};
+			settings.countsFiles = new String[] {
+					"/home/filip/Pulpit/clusters/CLUSTER51.json", 
+					"/home/filip/Pulpit/clusters/CLUSTER84.json"
+					};
 			
 //			settings.geojsonFiles = new String[]{""};
 			
-			settings.axisAttributesFile = new String("/home/filip/ebov1.json");
+			settings.axisAttributesFile = new String("/home/filip/Pulpit/clusters/CLUSTER51.json");
 			
-			settings.outputFilename = new String("/home/filip/merged.json");;
-			
+			settings.outputFilename = new String("/home/filip/Pulpit/clusters/merged.json");
 
+			
 			// ---MERGE---//
 			
 			JsonMerger jsonMerger = new JsonMerger(settings);

@@ -347,7 +347,8 @@ public class JsonMerger {
 						points = new ArrayList<Point>();
 
 						for (Layer layer : json.getLayers()) {
-							if (layer.hasPoints()) {
+							
+							if (layer.hasPoints() && !isCountsLayer(layer)) {
 								
 //								System.out.println(layer.getId());
 //								for(Point p : layer.getPoints()) {
@@ -366,7 +367,7 @@ public class JsonMerger {
 					} else {
 
 						for (Layer layer : json.getLayers()) {
-							if (layer.hasPoints()) {
+							if (layer.hasPoints()  && !isCountsLayer(layer)) {
 								
 //								System.out.println(layer.getId());
 //								for(Point p : layer.getPoints()) {
@@ -425,7 +426,7 @@ public class JsonMerger {
 
 						for (Layer layer : json.getLayers()) {
 							
-							if (layer.getType().equals(Layer.Type.counts.toString())) {
+							if (isCountsLayer(layer)) {
 								counts.addAll(layer.getPoints());
 							}
 							
@@ -438,7 +439,7 @@ public class JsonMerger {
 					} else {
 
 						for (Layer layer : json.getLayers()) {
-							if (layer.getType().equals(Layer.Type.counts)) {
+							if (isCountsLayer(layer)) {
 								counts.addAll(layer.getPoints());
 							}
 						} // END: layers loop
@@ -563,6 +564,10 @@ public class JsonMerger {
 
 	}//END: replaceAttribute
 
+	private boolean isCountsLayer(Layer layer) {
+		return(layer.getType().equals(Layer.Type.counts.toString()));
+	}
+	
 	private Integer getAttributeIndex(Attribute source, LinkedList<Attribute> attributes) {
 
 		Integer i = 0;

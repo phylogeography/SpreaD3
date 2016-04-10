@@ -67,7 +67,7 @@ public class DiscreteTreeParser {
 		int[][] locationCounts = new int[sliceHeights.length][locationsList
 				.size()];
 
-		int index = 0;
+//		int index = 0;
 		Location dummy;
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
@@ -133,18 +133,18 @@ public class DiscreteTreeParser {
 					Point parentPoint = pointsMap.get(parentNode);
 					if (parentPoint == null) {
 
-						parentPoint = createPoint(index, parentNode, parentLocation);
+						parentPoint = createPoint( parentNode, parentLocation);
 						pointsMap.put(parentNode, parentPoint);
-						index++;
+//						index++;
 
 					}// END: null check
 
 					Point nodePoint = pointsMap.get(node);
 					if (nodePoint == null) {
 
-						nodePoint = createPoint(index, node, nodeLocation);
+						nodePoint = createPoint(  node, nodeLocation);
 						pointsMap.put(node, nodePoint);
-						index++;
+//						index++;
 
 					}// END: null check
 
@@ -189,7 +189,7 @@ public class DiscreteTreeParser {
 
 		// create Points list with count attributes
 
-		index = 0;
+//		index = 0;
 		Double[] countRange = new Double[2];
 		countRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
 		countRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
@@ -204,7 +204,6 @@ public class DiscreteTreeParser {
 				Double count = (double) locationCounts[sliceIndex][locationIndex];
 				if (count > 0) {
 
-					String id = "point_" + index;
 					Location location = locationsList.get(locationIndex);
 					String startTime = timeParser.getNodeDate(height);
 					String endTime = timeParser.getNodeDate(nextHeight);
@@ -213,9 +212,10 @@ public class DiscreteTreeParser {
 					attributes.put(COUNT,
 							locationCounts[sliceIndex][locationIndex]);
 
+					String id = "count_" + location.getId();
 					Point point = new Point(id, location, startTime, endTime, attributes);
 					countsList.add(point);
-					index++;
+//					index++;
 
 					if (count < countRange[Attribute.MIN_INDEX]) {
 						countRange[Attribute.MIN_INDEX] = count;
@@ -374,10 +374,11 @@ public class DiscreteTreeParser {
 		return sliceHeights;
 	}//END: createSliceHeights
 
-	private Point createPoint(int index, Node node, Location location)
+	private Point createPoint(Node node, Location location)
 			throws   AnalysisException {
 
-		String id = "point_" + index;
+//		String id = "point_" + index;
+		String id = "point_" + location.getId();
 		Double height = Utils.getNodeHeight(rootedTree, node)
 				* timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);

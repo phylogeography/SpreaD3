@@ -950,7 +950,6 @@ public class KmlRenderer implements Renderer {
 		placemark.setDescription(label);
 
 		return placemark;
-
 	}// END: generateCount
 
 	// /////////////
