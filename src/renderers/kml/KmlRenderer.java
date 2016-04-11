@@ -76,14 +76,14 @@ public class KmlRenderer implements Renderer {
 
 	// Areas: color
 	private Map<Object, Color> areaColorMap = new LinkedHashMap<Object, Color>();
-	
+
 	// Cunts: area
 	private Map<Object, Double> countAreaMap = new LinkedHashMap<Object, Double>();
 
 	private List<StyleSelector> styles = new ArrayList<StyleSelector>();
 
 	public KmlRenderer(
-	// SpreadData data,
+			// SpreadData data,
 			KmlRendererSettings settings) {
 
 		// this.data = data;
@@ -113,8 +113,9 @@ public class KmlRenderer implements Renderer {
 		kml.setFeature(document);
 
 		// locations go on top
-		if (data.getLocations() != null) {
-			document.addFeature(generateLocations(data.getLocations()));
+		LinkedList<Location> locations = data.getLocations();
+		if (locations != null) {
+			document.addFeature(generateLocations(locations));
 		}
 
 		// then layers
@@ -122,9 +123,9 @@ public class KmlRenderer implements Renderer {
 
 			if (layer.getType().equalsIgnoreCase(Layer.Type.map.toString())) {
 				continue;
-			}// END: map layer check
+			} // END: map layer check
 
-			document.addFeature(generateLayer(layer));
+			document.addFeature(generateLayer(layer, locations));
 
 		}
 
@@ -135,8 +136,7 @@ public class KmlRenderer implements Renderer {
 	// ---LOCATIONS---//
 	// /////////////////
 
-	public Feature generateLocations(List<Location> locations)
-			throws AnalysisException {
+	public Feature generateLocations(List<Location> locations) throws AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("locations");
@@ -150,8 +150,7 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateLocations
 
-	private Placemark generateLocation(Location location)
-			throws AnalysisException {
+	private Placemark generateLocation(Location location) throws AnalysisException {
 
 		Placemark placemark = new Placemark();
 		placemark.setName(location.getId());
@@ -162,8 +161,7 @@ public class KmlRenderer implements Renderer {
 
 	// ---KML POINT---//
 
-	private kmlframework.kml.Point generatePoint(Coordinate coordinate)
-			throws AnalysisException {
+	private kmlframework.kml.Point generatePoint(Coordinate coordinate) throws AnalysisException {
 
 		kmlframework.kml.Point point = new kmlframework.kml.Point();
 		point.setAltitudeMode(AltitudeModeEnum.relativeToGround);
@@ -178,8 +176,7 @@ public class KmlRenderer implements Renderer {
 	// ---LAYERS---//
 	// //////////////
 
-	private Feature generateLayer(Layer layer) throws IOException,
-			AnalysisException {
+	private Feature generateLayer(Layer layer, LinkedList<Location> locations) throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 
@@ -191,10 +188,10 @@ public class KmlRenderer implements Renderer {
 			if (layer.hasPoints()) {
 
 				List<Point> points = layer.getPoints();
-				folder.addFeature(generatePoints(points));
+				folder.addFeature(generatePoints(points, locations));
 
 				List<Line> lines = layer.getLines();
-				folder.addFeature(generateLines(lines, points));
+				folder.addFeature(generateLines(lines, points, locations));
 
 			}
 
@@ -202,11 +199,11 @@ public class KmlRenderer implements Renderer {
 				folder.addFeature(generateAreas(layer.getAreas()));
 			}
 
-		} else if (layer.getType().equalsIgnoreCase(
-				Layer.Type.counts.toString())) {
+		} else if (layer.getType().equalsIgnoreCase(Layer.Type.counts.toString())) {
 
 			if (layer.hasPoints()) {
-				folder.addFeature(generateCounts(layer.getPoints()));
+				List<Point> countPoints = layer.getPoints();
+				folder.addFeature(generateCounts(countPoints, locations));
 			}
 
 		} else {
@@ -218,7 +215,7 @@ public class KmlRenderer implements Renderer {
 
 	// ---LINES---//
 
-	public Feature generateLines(List<Line> lines, List<Point> points)
+	public Feature generateLines(List<Line> lines, List<Point> points, LinkedList<Location> locations)
 			throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
@@ -226,41 +223,71 @@ public class KmlRenderer implements Renderer {
 
 		// read the supplied colors and create map
 		if (settings.lineColors != null) {
-			DiscreteColorsParser colorsParser = new DiscreteColorsParser(
-					settings.lineColors);
+			DiscreteColorsParser colorsParser = new DiscreteColorsParser(settings.lineColors);
 			lineColorMap = colorsParser.parseColors();
 		}
 
 		// color, alpha, altitude, width attributes
 		Attribute colorAttribute = null;
 		if (this.settings.lineColorMapping != null) {
-			colorAttribute = getAttribute(data.getLineAttributes(),
-					settings.lineColorMapping);
+			colorAttribute = getAttributeById(data.getLineAttributes(), settings.lineColorMapping);
 		}
 
 		Attribute altitudeAttribute = null;
 		if (this.settings.lineAltitudeMapping != null) {
-			altitudeAttribute = getAttribute(data.getLineAttributes(),
-					settings.lineAltitudeMapping);
+			altitudeAttribute = getAttributeById(data.getLineAttributes(), settings.lineAltitudeMapping);
 		}
 
 		Attribute widthAttribute = null;
 		if (this.settings.lineWidthMapping != null) {
-			widthAttribute = getAttribute(data.getLineAttributes(),
-					settings.lineWidthMapping);
+			widthAttribute = getAttributeById(data.getLineAttributes(), settings.lineWidthMapping);
 		}
 
 		for (Line line : lines) {
-			Feature feature = generateLine(line, points, colorAttribute,
-					altitudeAttribute, widthAttribute);
+
+			// resolve, continue with warning if error
+			Coordinate startCoordinate = null;
+			Coordinate endCoordinate = null;
+
+			Location startLocation = null;
+			Location endLocation = null;
+
+			Point startPoint = getPointById(points, line.getStartPointId());
+			Point endPoint = getPointById(points, line.getEndPointId());
+			if (startPoint.hasLocationId() && endPoint.hasLocationId()) {
+
+				// discrete locations
+				startLocation = getLocationById(startPoint.getLocationId(), locations);
+				endLocation = getLocationById(endPoint.getLocationId(), locations);
+
+				startCoordinate = startLocation.getCoordinate();
+				endCoordinate = endLocation.getCoordinate();
+
+			} else {
+
+				// continuous case
+				startCoordinate = startPoint.getCoordinate();
+				endCoordinate = endPoint.getCoordinate();
+			}
+
+			// put some safety in place
+			if (startCoordinate == null || endCoordinate == null) {
+				System.out.println("Coordinates for line from " + line.getStartPointId() + " to " + line.getEndPointId()
+						+ " cannot be resolved. Resulting visualisation may be incomplete.");
+				continue;
+			}
+
+			Feature feature = generateLine(line, startCoordinate, endCoordinate, startLocation, endLocation,
+					colorAttribute, altitudeAttribute, widthAttribute);
 			folder.addFeature(feature);
+
 		} // END: points loop
 
 		return folder;
 	}// END: generateLines
 
-	private Feature generateLine(Line line, List<Point> points,
-			Attribute colorAttribute, Attribute altitudeAttribute,
+	private Feature generateLine(Line line, Coordinate startCoordinate, Coordinate endCoordinate,
+			Location startLocation, Location endLocation, Attribute colorAttribute, Attribute altitudeAttribute,
 			Attribute widthAttribute) throws AnalysisException {
 
 		// TODO: process includes (subsets)
@@ -271,15 +298,8 @@ public class KmlRenderer implements Renderer {
 		String name = "";
 		String label = "";
 
-		Point startPoint = getPoint(points, line.getStartPointId());
-		Coordinate startCoordinate = getCoordinate(startPoint);
-
-		Point endPoint = getPoint(points, line.getEndPointId());
-		Coordinate endCoordinate = getCoordinate(endPoint);
-
-		if (startPoint.hasLocation() && endPoint.hasLocation()) {
-			name += startPoint.getLocation().getId() + " to "
-					+ endPoint.getLocation().getId();
+		if (startLocation != null && endLocation != null) {
+			name += startLocation.getId() + " to " + endLocation.getId();
 		}
 
 		// ---COLOR---//
@@ -294,8 +314,7 @@ public class KmlRenderer implements Renderer {
 
 		if (colorAttribute != null) {
 
-			Object colorAttributeValue = line.getAttributes().get(
-					settings.lineColorMapping);
+			Object colorAttributeValue = line.getAttributes().get(settings.lineColorMapping);
 
 			if (lineColorMap.containsKey(colorAttributeValue)) { // get
 
@@ -310,27 +329,20 @@ public class KmlRenderer implements Renderer {
 					double minValue = colorAttribute.getRange()[0];
 					double maxValue = colorAttribute.getRange()[1];
 
-					red = (int) map(value, minValue, maxValue,
-							settings.minLineRed, settings.maxLineRed);
-					green = (int) map(value, minValue, maxValue,
-							settings.minLineGreen, settings.maxLineGreen);
-					blue = (int) map(value, minValue, maxValue,
-							settings.minLineBlue, settings.maxLineBlue);
+					red = (int) map(value, minValue, maxValue, settings.minLineRed, settings.maxLineRed);
+					green = (int) map(value, minValue, maxValue, settings.minLineGreen, settings.maxLineGreen);
+					blue = (int) map(value, minValue, maxValue, settings.minLineBlue, settings.maxLineBlue);
 
 				} else if (colorAttribute.getScale().equalsIgnoreCase(ORDINAL)) {
 
 					// value is index
-					double value = (double) getIndex(
-							colorAttribute.getDomain(), colorAttributeValue);
+					double value = (double) getIndex(colorAttribute.getDomain(), colorAttributeValue);
 					double minValue = 0;
 					double maxValue = colorAttribute.getDomain().size();
 
-					red = (int) map(value, minValue, maxValue,
-							settings.minLineRed, settings.maxLineRed);
-					green = (int) map(value, minValue, maxValue,
-							settings.minLineGreen, settings.maxLineGreen);
-					blue = (int) map(value, minValue, maxValue,
-							settings.minLineBlue, settings.maxLineBlue);
+					red = (int) map(value, minValue, maxValue, settings.minLineRed, settings.maxLineRed);
+					green = (int) map(value, minValue, maxValue, settings.minLineGreen, settings.maxLineGreen);
+					blue = (int) map(value, minValue, maxValue, settings.minLineBlue, settings.maxLineBlue);
 
 				} else {
 					//
@@ -339,15 +351,14 @@ public class KmlRenderer implements Renderer {
 				red = (int) limitValue(red, 0, 255);
 				green = (int) limitValue(green, 0, 255);
 				blue = (int) limitValue(blue, 0, 255);
-				
+
 				// store it for future reference
 				color = new Color(red, green, blue, alpha);
 				lineColorMap.put(colorAttributeValue, color);
 
 			} // END: key check
 
-			label += ", color[" + settings.lineColorMapping + "="
-					+ colorAttributeValue.toString() + "]";
+			label += ", color[" + settings.lineColorMapping + "=" + colorAttributeValue.toString() + "]";
 
 		} // END: mapping check
 
@@ -357,8 +368,7 @@ public class KmlRenderer implements Renderer {
 
 		if (altitudeAttribute != null) {
 
-			Object altitudeAttributeValue = line.getAttributes().get(
-					settings.lineAltitudeMapping);
+			Object altitudeAttributeValue = line.getAttributes().get(settings.lineAltitudeMapping);
 
 			if (lineAltitudeMap.containsKey(altitudeAttributeValue)) { // get it
 
@@ -373,21 +383,16 @@ public class KmlRenderer implements Renderer {
 					double minValue = altitudeAttribute.getRange()[0];
 					double maxValue = altitudeAttribute.getRange()[1];
 
-					altitude = map(value, minValue, maxValue,
-							settings.minLineAltitude, settings.maxLineAltitude);
+					altitude = map(value, minValue, maxValue, settings.minLineAltitude, settings.maxLineAltitude);
 
-				} else if (altitudeAttribute.getScale().equalsIgnoreCase(
-						ORDINAL)) {
+				} else if (altitudeAttribute.getScale().equalsIgnoreCase(ORDINAL)) {
 
 					// value is index
-					double value = (double) getIndex(
-							altitudeAttribute.getDomain(),
-							altitudeAttributeValue);
+					double value = (double) getIndex(altitudeAttribute.getDomain(), altitudeAttributeValue);
 					double minValue = 0;
 					double maxValue = altitudeAttribute.getDomain().size();
 
-					altitude = map(value, minValue, maxValue,
-							settings.minLineAltitude, settings.maxLineAltitude);
+					altitude = map(value, minValue, maxValue, settings.minLineAltitude, settings.maxLineAltitude);
 
 				} else {
 					//
@@ -398,8 +403,7 @@ public class KmlRenderer implements Renderer {
 
 			} // END: key check
 
-			label = ("altitude[" + settings.lineAltitudeMapping + ":"
-					+ altitudeAttributeValue.toString() + "]");
+			label = ("altitude[" + settings.lineAltitudeMapping + ":" + altitudeAttributeValue.toString() + "]");
 
 		} // END: mapping check
 
@@ -412,8 +416,7 @@ public class KmlRenderer implements Renderer {
 		double a = -2 * altitude / (Math.pow(sliceCount, 2) - sliceCount);
 		double b = 2 * altitude / (sliceCount - 1);
 
-		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate,
-				endCoordinate, sliceCount);
+		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 
 		DateTime startDate = new DateTime();
 		if (line.hasTime()) {
@@ -437,11 +440,9 @@ public class KmlRenderer implements Renderer {
 			LocalDate segmentDate = new LocalDate(startDate.plus(duration));
 			String segmentStartTime = segmentDate.toString();
 
-			double segmentStartAltitude = a * Math.pow((double) i, 2) + b
-					* (double) i;
+			double segmentStartAltitude = a * Math.pow((double) i, 2) + b * (double) i;
 
-			double segmentEndAltitude = a * Math.pow((double) (i + 1), 2) + b
-					* (double) (i + 1);
+			double segmentEndAltitude = a * Math.pow((double) (i + 1), 2) + b * (double) (i + 1);
 
 			Coordinate segmentStartCoordinate = coords.get(i);
 			segmentStartCoordinate.setAltitude(segmentStartAltitude);
@@ -456,11 +457,11 @@ public class KmlRenderer implements Renderer {
 				styles.add(segmentStyle);
 			}
 
-			Placemark lineSegment = generateLineSegment(segmentStartCoordinate,
-					segmentEndCoordinate, segmentStartTime, segmentStyle);
+			Placemark lineSegment = generateLineSegment(segmentStartCoordinate, segmentEndCoordinate, segmentStartTime,
+					segmentStyle);
 			folder.addFeature(lineSegment);
 
-		}// END: i loop
+		} // END: i loop
 
 		folder.setName(name);
 		folder.setDescription(label);
@@ -505,42 +506,59 @@ public class KmlRenderer implements Renderer {
 
 	// ---POINTS---//
 
-	private Feature generatePoints(List<Point> points) throws IOException,
-			AnalysisException {
+	private Feature generatePoints(List<Point> points, LinkedList<Location> locations)
+			throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("points");
 
 		// read the supplied colors and create map
 		if (settings.pointColors != null) {
-			DiscreteColorsParser colorsParser = new DiscreteColorsParser(
-					settings.pointColors);
+			DiscreteColorsParser colorsParser = new DiscreteColorsParser(settings.pointColors);
 			pointColorMap = colorsParser.parseColors();
 		}
 
 		Attribute areaAttribute = null;
 		if (this.settings.pointAreaMapping != null) {
-			areaAttribute = getAttribute(data.getPointAttributes(),
-					settings.pointAreaMapping);
+			areaAttribute = getAttributeById(data.getPointAttributes(), settings.pointAreaMapping);
 		}
 
 		Attribute colorAttribute = null;
 		if (this.settings.pointColorMapping != null) {
-			colorAttribute = getAttribute(data.getPointAttributes(),
-					settings.pointColorMapping);
+			colorAttribute = getAttributeById(data.getPointAttributes(), settings.pointColorMapping);
 		}
 
 		for (Point point : points) {
-			Feature feature = generatePoint(point, areaAttribute,
-					colorAttribute);
+
+			Coordinate pointCoordinate = null;
+			Location pointLocation = null;
+
+			if (point.hasLocationId()) {
+
+				// discrete
+				pointLocation = getLocationById(point.getLocationId(), locations);
+				pointCoordinate = pointLocation.getCoordinate();
+
+			} else {
+
+				// continuous
+				pointCoordinate = point.getCoordinate();
+			}
+
+			Feature feature = generatePoint(point,
+					// pointLocation,
+					pointCoordinate, areaAttribute, colorAttribute);
 			folder.addFeature(feature);
 		} // END: points loop
 
 		return folder;
 	}// END: generatePoints
 
-	private Feature generatePoint(Point point, Attribute areaAttribute,
-			Attribute colorAttribute) throws AnalysisException {
+	private Feature generatePoint(Point point,
+			// Location pointLocation,
+			Coordinate pointCoordinate,
+			// LinkedList<Location> locations,
+			Attribute areaAttribute, Attribute colorAttribute) throws AnalysisException {
 
 		// TODO: process includes (subsets)
 
@@ -557,13 +575,11 @@ public class KmlRenderer implements Renderer {
 		Double area = settings.pointArea;
 		if (areaAttribute != null) {
 
-			Object areaAttributeValue = point.getAttributes().get(
-					settings.pointAreaMapping);
+			Object areaAttributeValue = point.getAttributes().get(settings.pointAreaMapping);
 
-			//TODO: null pointers
-//			System.out.println(areaAttributeValue);
-			
-			
+			// TODO: null pointers
+			// System.out.println(areaAttributeValue);
+
 			if (pointAreaMap.containsKey(areaAttributeValue)) { // get
 
 				area = pointAreaMap.get(areaAttributeValue);
@@ -577,19 +593,16 @@ public class KmlRenderer implements Renderer {
 					double minValue = areaAttribute.getRange()[0];
 					double maxValue = areaAttribute.getRange()[1];
 
-					area = map(value, minValue, maxValue,
-							settings.minPointArea, settings.maxPointArea);
+					area = map(value, minValue, maxValue, settings.minPointArea, settings.maxPointArea);
 
 				} else if (areaAttribute.getScale().equalsIgnoreCase(ORDINAL)) {
 
 					// value is index
-					double value = (double) getIndex(areaAttribute.getDomain(),
-							areaAttributeValue);
+					double value = (double) getIndex(areaAttribute.getDomain(), areaAttributeValue);
 					double minValue = 0;
 					double maxValue = areaAttribute.getDomain().size();
 
-					area = map(value, minValue, maxValue,
-							settings.minPointArea, settings.maxPointArea);
+					area = map(value, minValue, maxValue, settings.minPointArea, settings.maxPointArea);
 
 				} else {
 					//
@@ -600,15 +613,14 @@ public class KmlRenderer implements Renderer {
 
 			} // END: key check
 
-			label = ("area[" + settings.pointAreaMapping + ":"
-					+ areaAttributeValue.toString() + "]");
+			label = ("area[" + settings.pointAreaMapping + ":" + areaAttributeValue.toString() + "]");
 
 		} // END: mapping check
 
 		// add coordinates
-		Coordinate coordinate = getCoordinate(point);
+		// Coordinate coordinate = getCoordinate(point, locations);
 
-		points.addAll(generateCircle(coordinate, area, numPoints));
+		points.addAll(generateCircle(pointCoordinate, area, numPoints));
 		linearRing.setCoordinates(points);
 
 		// ---COLOR---//
@@ -623,8 +635,7 @@ public class KmlRenderer implements Renderer {
 
 		if (colorAttribute != null) {
 
-			Object colorAttributeValue = point.getAttributes().get(
-					settings.pointColorMapping);
+			Object colorAttributeValue = point.getAttributes().get(settings.pointColorMapping);
 
 			if (pointColorMap.containsKey(colorAttributeValue)) { // get
 
@@ -639,27 +650,20 @@ public class KmlRenderer implements Renderer {
 					double minValue = colorAttribute.getRange()[0];
 					double maxValue = colorAttribute.getRange()[1];
 
-					red = (int) map(value, minValue, maxValue,
-							settings.minPointRed, settings.maxPointRed);
-					green = (int) map(value, minValue, maxValue,
-							settings.minPointGreen, settings.maxPointGreen);
-					blue = (int) map(value, minValue, maxValue,
-							settings.minPointBlue, settings.maxPointBlue);
+					red = (int) map(value, minValue, maxValue, settings.minPointRed, settings.maxPointRed);
+					green = (int) map(value, minValue, maxValue, settings.minPointGreen, settings.maxPointGreen);
+					blue = (int) map(value, minValue, maxValue, settings.minPointBlue, settings.maxPointBlue);
 
 				} else if (colorAttribute.getScale().equalsIgnoreCase(ORDINAL)) {
 
 					// value is index
-					double value = (double) getIndex(
-							colorAttribute.getDomain(), colorAttributeValue);
+					double value = (double) getIndex(colorAttribute.getDomain(), colorAttributeValue);
 					double minValue = 0;
 					double maxValue = colorAttribute.getDomain().size();
 
-					red = (int) map(value, minValue, maxValue,
-							settings.minPointRed, settings.maxPointRed);
-					green = (int) map(value, minValue, maxValue,
-							settings.minPointGreen, settings.maxPointGreen);
-					blue = (int) map(value, minValue, maxValue,
-							settings.minPointBlue, settings.maxPointBlue);
+					red = (int) map(value, minValue, maxValue, settings.minPointRed, settings.maxPointRed);
+					green = (int) map(value, minValue, maxValue, settings.minPointGreen, settings.maxPointGreen);
+					blue = (int) map(value, minValue, maxValue, settings.minPointBlue, settings.maxPointBlue);
 
 				} else {
 					//
@@ -668,15 +672,14 @@ public class KmlRenderer implements Renderer {
 				red = (int) limitValue(red, 0, 255);
 				green = (int) limitValue(green, 0, 255);
 				blue = (int) limitValue(blue, 0, 255);
-				
+
 				// store it for future reference
 				color = new Color(red, green, blue, alpha);
 				pointColorMap.put(colorAttributeValue, color);
 
 			} // END: key check
 
-			label += ", color[" + settings.pointColorMapping + "="
-					+ colorAttributeValue.toString() + "]";
+			label += ", color[" + settings.pointColorMapping + "=" + colorAttributeValue.toString() + "]";
 
 		} // END: mapping check
 
@@ -706,25 +709,22 @@ public class KmlRenderer implements Renderer {
 
 	// ---AREAS---//
 
-	public Feature generateAreas(List<Area> areas) throws IOException,
-			AnalysisException {
+	public Feature generateAreas(List<Area> areas) throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("areas");
 
 		// read the supplied colors and create map
 		if (settings.pointColors != null) {
-			DiscreteColorsParser colorsParser = new DiscreteColorsParser(
-					settings.pointColors);
+			DiscreteColorsParser colorsParser = new DiscreteColorsParser(settings.pointColors);
 			pointColorMap = colorsParser.parseColors();
 		}
-		
+
 		Attribute colorAttribute = null;
 		if (this.settings.areaColorMapping != null) {
-			colorAttribute = getAttribute(data.getPointAttributes(),
-					settings.areaColorMapping);
+			colorAttribute = getAttributeById(data.getPointAttributes(), settings.areaColorMapping);
 		}
-		
+
 		for (Area area : areas) {
 
 			Feature feature = generateArea(area, colorAttribute);
@@ -764,11 +764,9 @@ public class KmlRenderer implements Renderer {
 
 		Color color = new Color(red, green, blue, alpha);
 
-		
 		if (colorAttribute != null) {
 
-			Object colorAttributeValue = area.getAttributes().get(
-					settings.pointColorMapping);
+			Object colorAttributeValue = area.getAttributes().get(settings.pointColorMapping);
 
 			if (pointColorMap.containsKey(colorAttributeValue)) { // get
 
@@ -783,27 +781,20 @@ public class KmlRenderer implements Renderer {
 					double minValue = colorAttribute.getRange()[0];
 					double maxValue = colorAttribute.getRange()[1];
 
-					red = (int) map(value, minValue, maxValue,
-							settings.minAreaRed, settings.maxAreaRed);
-					green = (int) map(value, minValue, maxValue,
-							settings.minAreaGreen, settings.maxAreaGreen);
-					blue = (int) map(value, minValue, maxValue,
-							settings.minAreaBlue, settings.maxAreaBlue);
+					red = (int) map(value, minValue, maxValue, settings.minAreaRed, settings.maxAreaRed);
+					green = (int) map(value, minValue, maxValue, settings.minAreaGreen, settings.maxAreaGreen);
+					blue = (int) map(value, minValue, maxValue, settings.minAreaBlue, settings.maxAreaBlue);
 
 				} else if (colorAttribute.getScale().equalsIgnoreCase(ORDINAL)) {
 
 					// value is index
-					double value = (double) getIndex(
-							colorAttribute.getDomain(), colorAttributeValue);
+					double value = (double) getIndex(colorAttribute.getDomain(), colorAttributeValue);
 					double minValue = 0;
 					double maxValue = colorAttribute.getDomain().size();
 
-					red = (int) map(value, minValue, maxValue,
-							settings.minAreaRed, settings.maxAreaRed);
-					green = (int) map(value, minValue, maxValue,
-							settings.minAreaGreen, settings.maxAreaGreen);
-					blue = (int) map(value, minValue, maxValue,
-							settings.minAreaBlue, settings.maxAreaBlue);
+					red = (int) map(value, minValue, maxValue, settings.minAreaRed, settings.maxAreaRed);
+					green = (int) map(value, minValue, maxValue, settings.minAreaGreen, settings.maxAreaGreen);
+					blue = (int) map(value, minValue, maxValue, settings.minAreaBlue, settings.maxAreaBlue);
 
 				} else {
 					//
@@ -812,18 +803,17 @@ public class KmlRenderer implements Renderer {
 				red = (int) limitValue(red, 0, 255);
 				green = (int) limitValue(green, 0, 255);
 				blue = (int) limitValue(blue, 0, 255);
-				
+
 				// store it for future reference
 				color = new Color(red, green, blue, alpha);
 				areaColorMap.put(colorAttributeValue, color);
 
 			} // END: key check
 
-			label += ", color[" + settings.areaColorMapping + "="
-					+ colorAttributeValue.toString() + "]";
+			label += ", color[" + settings.areaColorMapping + "=" + colorAttributeValue.toString() + "]";
 
 		} // END: mapping check
-		
+
 		KmlStyle style = new KmlStyle(color);
 		style.setId(style.toString());
 
@@ -850,18 +840,25 @@ public class KmlRenderer implements Renderer {
 
 	// ---COUNTS---//
 
-	private Feature generateCounts(List<Point> counts) throws IOException,
-			AnalysisException {
+	private Feature generateCounts(List<Point> counts, LinkedList<Location> locations)
+			throws IOException, AnalysisException {
 
 		Folder folder = new Folder();
 		folder.setName("counts");
 
-		Attribute countAttribute = getAttribute(data.getPointAttributes(),
-				DiscreteTreeParser.COUNT);
+		Attribute countAttribute = getAttributeById(data.getPointAttributes(), DiscreteTreeParser.COUNT);
 
-		for (Point count : counts) {
+		for (Point countPoint : counts) {
 
-			Feature feature = generateCount(count, countAttribute);
+			Location countLocation = getLocationById(countPoint.getLocationId(), locations);
+
+			if (countLocation == null) {
+				System.out.println("Count location " + countPoint.getLocationId()
+						+ " cannot be resolved. Resulting visualisation may be incomplete.");
+				continue;
+			}
+
+			Feature feature = generateCount(countPoint, countLocation, countAttribute);
 			folder.addFeature(feature);
 
 		} // END: points loop
@@ -869,7 +866,7 @@ public class KmlRenderer implements Renderer {
 		return folder;
 	}// END: generateCounts
 
-	private Feature generateCount(Point count, Attribute countAttribute)
+	private Feature generateCount(Point countPoint, Location countLocation, Attribute countAttribute)
 			throws AnalysisException {
 
 		int numPoints = 36;
@@ -883,8 +880,7 @@ public class KmlRenderer implements Renderer {
 		// ---AREA---//
 
 		Double area = 0.0;
-		Double countAttributeValue = (Double) count.getAttributes().get(
-				DiscreteTreeParser.COUNT);
+		Double countAttributeValue = (Double) countPoint.getAttributes().get(DiscreteTreeParser.COUNT);
 		if (countAreaMap.containsKey(countAttributeValue)) { // get from map
 
 			area = countAreaMap.get(countAttributeValue);
@@ -894,17 +890,15 @@ public class KmlRenderer implements Renderer {
 			double minValue = countAttribute.getRange()[0];
 			double maxValue = countAttribute.getRange()[1];
 
-			area = map(countAttributeValue, minValue, maxValue,
-					settings.minCountArea, settings.maxCountArea);
+			area = map(countAttributeValue, minValue, maxValue, settings.minCountArea, settings.maxCountArea);
 
 			// store for future reference
 			countAreaMap.put(countAttributeValue, area);
 		} // END: key check
 
-		label = ("area[" + DiscreteTreeParser.COUNT + ":"
-				+ countAttributeValue.toString() + "]");
+		label = ("area[" + DiscreteTreeParser.COUNT + ":" + countAttributeValue.toString() + "]");
 
-		Coordinate coordinate = count.getLocation().getCoordinate();
+		Coordinate coordinate = countLocation.getCoordinate();
 		points.addAll(generateCircle(coordinate, area, numPoints));
 		linearRing.setCoordinates(points);
 
@@ -926,10 +920,8 @@ public class KmlRenderer implements Renderer {
 
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
-		// DateTime startDate = formatter.parseDateTime(count.getStartTime());
-		// DateTime endDate = formatter.parseDateTime(count.getEndTime());
-		LocalDate startDate = formatter.parseLocalDate(count.getStartTime());
-		LocalDate endDate = formatter.parseLocalDate(count.getEndTime());
+		LocalDate startDate = formatter.parseLocalDate(countPoint.getStartTime());
+		LocalDate endDate = formatter.parseLocalDate(countPoint.getEndTime());
 
 		timeSpan.setBegin(startDate.toString());
 		timeSpan.setEnd(endDate.toString());
@@ -956,8 +948,8 @@ public class KmlRenderer implements Renderer {
 	// ---UTILS---//
 	// /////////////
 
-	private List<kmlframework.kml.Point> generateCircle(Coordinate centroid,
-			double area, int numPoints) throws AnalysisException {
+	private List<kmlframework.kml.Point> generateCircle(Coordinate centroid, double area, int numPoints)
+			throws AnalysisException {
 
 		double radius = Math.sqrt(area / Math.PI);
 
@@ -983,19 +975,37 @@ public class KmlRenderer implements Renderer {
 		return points;
 	}// END: GenerateCircle
 
-	private Coordinate getCoordinate(Point point) throws AnalysisException {
+	// private Coordinate getCoordinate(Point point, LinkedList<Location>
+	// locations) throws AnalysisException {
+	//
+	// Coordinate coordinate = null;
+	// if (point.hasLocationId()) {
+	//
+	// String locationId = point.getLocationId();
+	// Location location = getLocationById(locationId, locations);
+	// coordinate = location.getCoordinate();
+	//
+	// } else {
+	// coordinate = point.getCoordinate();
+	// }
+	//
+	// return coordinate;
+	// }// END: getCoordinate
 
-		Coordinate coordinate = null;
-		if (point.hasLocation()) {
-			coordinate = point.getLocation().getCoordinate();
-		} else {
-			coordinate = point.getCoordinate();
+	private Location getLocationById(String locationId, LinkedList<Location> locations) {
+
+		Location location = null;
+		for (Location l : locations) {
+			if (l.getId().equalsIgnoreCase(locationId)) {
+				location = l;
+				break;
+			}
 		}
 
-		return coordinate;
-	}// END: getCoordinate
+		return location;
+	}// END:getLocationById
 
-	private Point getPoint(List<Point> points, String id) {
+	private Point getPointById(List<Point> points, String id) {
 
 		Point startPoint = null;
 		for (Point p : points) {
@@ -1009,7 +1019,7 @@ public class KmlRenderer implements Renderer {
 		return startPoint;
 	}// END: getPoint
 
-	private Attribute getAttribute(List<Attribute> attributes, String id) {
+	private Attribute getAttributeById(List<Attribute> attributes, String id) {
 
 		Attribute attribute = null;
 		for (Attribute att : attributes) {
@@ -1044,20 +1054,16 @@ public class KmlRenderer implements Renderer {
 		String b = Integer.toHexString(color.getBlue());
 		String g = Integer.toHexString(color.getGreen());
 		String r = Integer.toHexString(color.getRed());
-		return (a.length() < 2 ? "0" : "") + a + (b.length() < 2 ? "0" : "")
-				+ b + (g.length() < 2 ? "0" : "") + g
+		return (a.length() < 2 ? "0" : "") + a + (b.length() < 2 ? "0" : "") + b + (g.length() < 2 ? "0" : "") + g
 				+ (r.length() < 2 ? "0" : "") + r;
 	}// END: getKMLColor
 
-	private double map(double value, double fromLow, double fromHigh,
-			double toLow, double toHigh) {
-		return (toLow + (toHigh - toLow)
-				* ((value - fromLow) / (fromHigh - fromLow)));
+	private double map(double value, double fromLow, double fromHigh, double toLow, double toHigh) {
+		return (toLow + (toHigh - toLow) * ((value - fromLow) / (fromHigh - fromLow)));
 	}// END: map
 
-	private LinkedList<Coordinate> getIntermediateCoords(
-			Coordinate startCoordinate, Coordinate endCoordinate, int sliceCount)
-			throws AnalysisException {
+	private LinkedList<Coordinate> getIntermediateCoords(Coordinate startCoordinate, Coordinate endCoordinate,
+			int sliceCount) throws AnalysisException {
 
 		LinkedList<Coordinate> coords = new LinkedList<Coordinate>();
 
@@ -1066,11 +1072,9 @@ public class KmlRenderer implements Renderer {
 		double distanceSlice = distance / (double) sliceCount;
 
 		// Convert to radians
-		double rlon1 = longNormalise(Math.toRadians(startCoordinate
-				.getXCoordinate()));
+		double rlon1 = longNormalise(Math.toRadians(startCoordinate.getXCoordinate()));
 		double rlat1 = Math.toRadians(startCoordinate.getYCoordinate());
-		double rlon2 = longNormalise(Math.toRadians(endCoordinate
-				.getXCoordinate()));
+		double rlon2 = longNormalise(Math.toRadians(endCoordinate.getXCoordinate()));
 		double rlat2 = Math.toRadians(endCoordinate.getYCoordinate());
 
 		coords.add(0, startCoordinate);
@@ -1082,14 +1086,11 @@ public class KmlRenderer implements Renderer {
 			double bearing = rhumbBearing(rlon1, rlat1, rlon2, rlat2);
 
 			// use the bearing and the start point to find the destination
-			double newLonRad = longNormalise(rlon1
-					+ Math.atan2(
-							Math.sin(bearing) * Math.sin(rDist)
-									* Math.cos(rlat1),
-							Math.cos(rDist) - Math.sin(rlat1) * Math.sin(rlat2)));
+			double newLonRad = longNormalise(rlon1 + Math.atan2(Math.sin(bearing) * Math.sin(rDist) * Math.cos(rlat1),
+					Math.cos(rDist) - Math.sin(rlat1) * Math.sin(rlat2)));
 
-			double newLatRad = Math.asin(Math.sin(rlat1) * Math.cos(rDist)
-					+ Math.cos(rlat1) * Math.sin(rDist) * Math.cos(bearing));
+			double newLatRad = Math
+					.asin(Math.sin(rlat1) * Math.cos(rDist) + Math.cos(rlat1) * Math.sin(rDist) * Math.cos(bearing));
 
 			// Convert from radians to degrees
 			double newLat = Math.toDegrees(newLatRad);
@@ -1117,8 +1118,7 @@ public class KmlRenderer implements Renderer {
 		return (lon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
 	}// END: longNormalise
 
-	private double rhumbBearing(double rlon1, double rlat1, double rlon2,
-			double rlat2) {
+	private double rhumbBearing(double rlon1, double rlat1, double rlon2, double rlat2) {
 		/**
 		 * Returns the bearing from start point to the supplied point along a
 		 * rhumb line
@@ -1136,8 +1136,7 @@ public class KmlRenderer implements Renderer {
 		 */
 		double dLon = (rlon2 - rlon1);
 
-		double dPhi = Math.log(Math.tan(rlat2 / 2 + Math.PI / 4)
-				/ Math.tan(rlat1 / 2 + Math.PI / 4));
+		double dPhi = Math.log(Math.tan(rlat2 / 2 + Math.PI / 4) / Math.tan(rlat1 / 2 + Math.PI / 4));
 		if (Math.abs(dLon) > Math.PI)
 			dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
 
@@ -1161,5 +1160,5 @@ public class KmlRenderer implements Renderer {
 
 		return limitedValue;
 	}// END: limitValue
-	
+
 }// END: class

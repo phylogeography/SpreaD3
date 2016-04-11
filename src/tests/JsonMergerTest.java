@@ -16,6 +16,8 @@ public class JsonMergerTest {
 
 		try {
 
+			// TODO: call discrete parsers first, pass json data
+			
 			// ---SETTINGS---//
 			
 			JsonMergerSettings settings = new JsonMergerSettings();
@@ -41,7 +43,7 @@ public class JsonMergerTest {
 			
 			settings.axisAttributesFile = new String("/home/filip/Pulpit/clusters/CLUSTER51.json");
 			
-			settings.outputFilename = new String("/home/filip/Pulpit/clusters/merged.json");
+			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/merged.json");
 
 			
 			// ---MERGE---//

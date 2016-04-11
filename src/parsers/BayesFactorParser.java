@@ -319,13 +319,13 @@ public class BayesFactorParser {
 
 	private Point createPoint(  Location location) {
 
-		String id = "point_" + location.getId();
+//		String id = "point_" + location.getId();
 
 		// Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 		// for (String attributeName : node.getAttributeNames()) {
 		// } // END: attributes loop
 
-		Point point = new Point(id, location, null, null);
+		Point point = new Point( location.getId() );
 
 		return point;
 	}// END: createPoint

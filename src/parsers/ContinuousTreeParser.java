@@ -33,7 +33,6 @@ public class ContinuousTreeParser {
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
 
-	
 	private LinkedList<Attribute> uniqueBranchAttributes;
 	private LinkedList<Attribute> uniqueNodeAttributes;
 	private LinkedList<Attribute> uniqueAreaAttributes;
@@ -62,7 +61,7 @@ public class ContinuousTreeParser {
 		this.uniqueBranchAttributes = new LinkedList<Attribute>();
 		this.uniqueNodeAttributes = new LinkedList<Attribute>();
 		this.uniqueAreaAttributes = new LinkedList<Attribute>();
-		
+
 		this.linesList = new LinkedList<Line>();
 		this.pointsList = new LinkedList<Point>();
 		this.areasList = new LinkedList<Area>();
@@ -119,19 +118,17 @@ public class ContinuousTreeParser {
 					continue;
 				} // END: try-catch
 
-				nodeCoordinate = new Coordinate(
-						nodeCoordinateY, // latitude 
+				nodeCoordinate = new Coordinate(nodeCoordinateY, // latitude
 						nodeCoordinateX // longitude
-						);
+				);
 
 				// ---POINTS PARSED FIRST DO NOT CHANGE ORDER---//
 
 				Point nodePoint = pointsMap.get(node);
 				if (nodePoint == null) {
 
-					nodePoint = createPoint(index, node, nodeCoordinate);
+					nodePoint = createPoint(node, nodeCoordinate);
 					pointsMap.put(node, nodePoint);
-					index++;
 
 				} // END: null check
 
@@ -176,16 +173,14 @@ public class ContinuousTreeParser {
 					continue;
 				} // END: try-catch
 
-				Coordinate parentCoordinate = new Coordinate(
-						parentCoordinateY, // lat 
+				Coordinate parentCoordinate = new Coordinate(parentCoordinateY, // lat
 						parentCoordinateX // long
-						);
+				);
 				Point parentPoint = pointsMap.get(parentNode);
 				if (parentPoint == null) {
 
-					parentPoint = createPoint(index, parentNode, parentCoordinate);
+					parentPoint = createPoint(parentNode, parentCoordinate);
 					pointsMap.put(parentNode, parentPoint);
-					index++;
 
 				} // END: null check
 
@@ -265,7 +260,6 @@ public class ContinuousTreeParser {
 							continue;
 						} // END: try-catch
 
-						
 						List<Coordinate> coordinateList = new ArrayList<Coordinate>();
 						for (int c = 0; c < xCoordinateHPD.length; c++) {
 
@@ -273,22 +267,22 @@ public class ContinuousTreeParser {
 							Double yCoordinate = (Double) yCoordinateHPD[c];
 
 							Coordinate coordinate = new Coordinate(
-//									xCoordinate, 
-//									yCoordinate
-									yCoordinate, // lat 
+									// xCoordinate,
+									// yCoordinate
+									yCoordinate, // lat
 									xCoordinate // long
-									);
+							);
 							coordinateList.add(coordinate);
 
 						} // END: c loop
 
-//						if(rootedTree.isExternal(node)) {
-//						System.out.println(rootedTree.getTaxon(node));
-//						Utils.printArray(xCoordinateHPD);
-//						System.out.println();
-//						Utils.printArray(yCoordinateHPD);
-//						}
-						
+						// if(rootedTree.isExternal(node)) {
+						// System.out.println(rootedTree.getTaxon(node));
+						// Utils.printArray(xCoordinateHPD);
+						// System.out.println();
+						// Utils.printArray(yCoordinateHPD);
+						// }
+
 						Polygon polygon = new Polygon(coordinateList);
 
 						HashMap<String, Object> areaAttributesMap = new HashMap<String, Object>();
@@ -328,8 +322,7 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round(Double.valueOf(attributeValue.toString()), 100);
+						double value = Utils.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -392,8 +385,7 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round(Double.valueOf(attributeValue.toString()), 100);
+						double value = Utils.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -456,8 +448,7 @@ public class ContinuousTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round(Double.valueOf(attributeValue.toString()), 100);
+						double value = Utils.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -501,9 +492,11 @@ public class ContinuousTreeParser {
 
 	}// END: parseTree
 
-	private Point createPoint(int index, Node node, Coordinate coordinate) throws AnalysisException {
+	private Point createPoint(
+			// int index,
+			Node node, Coordinate coordinate) throws AnalysisException {
 
-		String id = "point_" + index;
+		// String id = "point_" + index;
 		Double height = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);
 
@@ -526,17 +519,17 @@ public class ContinuousTreeParser {
 		// annotate with node names
 		String attributeName = "nodeName";
 		Object value = "internal";
-		if(rootedTree.isExternal(node)) {
-			 value = rootedTree.getTaxon(node).toString();
+		if (rootedTree.isExternal(node)) {
+			value = rootedTree.getTaxon(node).toString();
 		}
 		attributes.put(attributeName, value);
-		
-      // external nodes have no posterior annotated, need to fix that
-		if(rootedTree.isExternal(node)) {
+
+		// external nodes have no posterior annotated, need to fix that
+		if (rootedTree.isExternal(node)) {
 			attributes.put(Utils.POSTERIOR, 1.0);
 		}
-		
-		Point point = new Point(id, coordinate, startTime, attributes);
+
+		Point point = new Point(coordinate, startTime, attributes);
 
 		return point;
 	}// END: createPoint
@@ -584,5 +577,5 @@ public class ContinuousTreeParser {
 	public LinkedList<Attribute> getAreaAttributes() {
 		return uniqueAreaAttributes;
 	}
-	
+
 }// END: class

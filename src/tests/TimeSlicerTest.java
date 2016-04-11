@@ -28,9 +28,9 @@ public class TimeSlicerTest {
 
 			settings.trait = "location";
 
-			settings.geojsonFilename = new String("/home/filip/Dropbox/JavaProjects/SpreaD3/data/geoJSON_maps/world.geojson");
+			settings.geojsonFilename = new String("/home/filip/Dropbox/JavaProjects/SpreaD3/data/geoJSON_maps/continents/continent_South_America_subunits.json");
 			
-			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/output.json");
+			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/wnv_time_slices.json");
 
 			settings.burnIn = 0;
 			

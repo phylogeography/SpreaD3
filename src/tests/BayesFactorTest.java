@@ -26,7 +26,7 @@ public class BayesFactorTest {
 
 //			settings.geojsonFilename = "/home/filip/Dropbox/JavaProjects/SpreaD3/data/geoJSON_maps/subregion/subregion_Eastern_Asia_subunits.json";
 			
-			settings.outputFilename = new String("/home/filip/Pulpit/output.json");
+			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/h5n1_bf.json");
 
 			// ---PARSE---//
 

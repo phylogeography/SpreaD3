@@ -9,31 +9,30 @@ import structure.data.primitive.Coordinate;
 public class Point {
 
 	private final String id;
-	private final Location location;
+	private final String locationId;
 	private final Coordinate coordinate;
 	private final String startTime;
 	private final String endTime;
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
-	public String getId() {
-		return id;
-	}
-
-	public Point(String id) {
-		this.id = id;
-		this.location = null;
+	public Point(String locationId) {
+		this.locationId = locationId;
 		this.coordinate = null;
 		this.startTime = null;
 		this.endTime = null;
+
+		this.id = String.valueOf(Math.abs(locationId.hashCode()));
+
 	}
 
-	public Point(String id, Location location, String startTime, Map<String, Object> attributes) {
+	public Point(String locationId, String startTime, Map<String, Object> attributes) {
 
-		this.id = id;
-		this.location = location;
+		this.locationId = locationId;
 		this.coordinate = null;
 		this.startTime = startTime;
 		this.endTime = null;
+
+		this.id = String.valueOf(Math.abs(locationId.hashCode() + startTime.hashCode()));
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
@@ -41,33 +40,39 @@ public class Point {
 
 	}// END: Constructor
 
-	public Point(String id, Location location, String startTime, String endTime, Map<String, Object> attributes) {
+	public Point(String locationId, String startTime, String endTime, Map<String, Object> attributes) {
 
-		this.id = id;
-		this.location = location;
+		this.locationId = locationId;
 		this.coordinate = null;
 		this.startTime = startTime;
 		this.endTime = endTime;
 
+		this.id = String.valueOf(Math.abs(locationId.hashCode() + startTime.hashCode() + endTime.hashCode()));
+
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
 		}
 
 	}// END: Constructor
 
-	public Point(String id, Coordinate coordinate, String startTime, Map<String, Object> attributes) {
+	public Point(Coordinate coordinate, String startTime, Map<String, Object> attributes) {
 
-		this.id = id;
 		this.coordinate = coordinate;
-		this.location = null;
+		this.locationId = null;
 		this.startTime = startTime;
 		this.endTime = null;
+
+		this.id = String.valueOf(Math.abs(coordinate.hashCode() + startTime.hashCode()));
 
 		if (attributes != null) {
 			this.attributes.putAll(attributes);
 		}
 	}// END:
 		// Constructor
+
+	public String getId() {
+		return id;
+	}
 
 	public String getStartTime() {
 		return startTime;
@@ -77,18 +82,17 @@ public class Point {
 		return endTime;
 	}
 
-	public boolean hasLocation() {
-
+	public boolean hasLocationId() {
 		boolean hasLocation = false;
-		if (this.location != null) {
+		if (this.locationId != null) {
 			hasLocation = true;
 		}
 
 		return hasLocation;
-	}//END: hasLocation
+	}// END: hasLocationId
 
-	public Location getLocation() {
-		return location;
+	public String getLocationId() {
+		return locationId;
 	}
 
 	public Coordinate getCoordinate() {

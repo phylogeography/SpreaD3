@@ -464,31 +464,6 @@ public class JsonMerger {
 
 		// ---SPREAD DATA---//
 
-		// LinkedList<Attribute> mapAttributesList = null;
-		// if (mapAttributes != null) {
-		// mapAttributesList = new LinkedList<Attribute>(mapAttributes);
-		// }
-		//
-		// LinkedList<Attribute> lineAttributesList = null;
-		// if (lineAttributes != null) {
-		// lineAttributesList = new LinkedList<Attribute>(lineAttributes);
-		// }
-		//
-		// LinkedList<Attribute> pointAttributesList = null;
-		// if (pointAttributes != null) {
-		// pointAttributesList = new LinkedList<Attribute>(pointAttributes);
-		// }
-		//
-		// LinkedList<Attribute> areaAttributesList = null;
-		// if (areaAttributes != null) {
-		// areaAttributesList = new LinkedList<Attribute>(areaAttributes);
-		// }
-		//
-		// LinkedList<Location> locationsList = null;
-		// if (locations != null) {
-		// locationsList = new LinkedList<Location>(locations);
-		// }
-
 		data = new SpreadData(timeLine, //
 				axisAttributes, //
 				mapAttributes, //

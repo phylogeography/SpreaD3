@@ -58,24 +58,20 @@ public class DiscreteTreeParser {
 
 	}// END: Constructor
 
-	public void parseTree() throws IOException, ImportException,
-		  AnalysisException {
+	public void parseTree() throws IOException, ImportException, AnalysisException {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 
 		Double[] sliceHeights = createSliceHeights(10);
-		int[][] locationCounts = new int[sliceHeights.length][locationsList
-				.size()];
+		int[][] locationCounts = new int[sliceHeights.length][locationsList.size()];
 
-//		int index = 0;
 		Location dummy;
 		for (Node node : rootedTree.getNodes()) {
 			if (!rootedTree.isRoot(node)) {
 
 				// node parsed first
 
-				String nodeState = (String) Utils.getObjectNodeAttribute(node,
-						locationTrait);
+				String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
 				if (nodeState.contains("+")) {
 					String message = "Found tied state " + nodeState;
 					nodeState = Utils.breakTiesRandomly(nodeState);
@@ -89,8 +85,7 @@ public class DiscreteTreeParser {
 					locationIndex = locationsList.indexOf(dummy);
 				} else {
 
-					String message1 = "Location " + dummy.getId()
-							+ " could not be found in the locations file.";
+					String message1 = "Location " + dummy.getId() + " could not be found in the locations file.";
 					String message2 = "Resulting file may be incomplete!";
 					System.out.println(message1 + " " + message2);
 					continue;
@@ -100,11 +95,10 @@ public class DiscreteTreeParser {
 				Location nodeLocation = locationsList.get(locationIndex);
 
 				// parent node parsed second
-				
+
 				Node parentNode = rootedTree.getParent(node);
 
-				String parentState = (String) Utils.getObjectNodeAttribute(
-						parentNode, locationTrait);
+				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
 				if (parentState.contains("+")) {
 
 					String message = "Found tied state " + parentState;
@@ -122,8 +116,8 @@ public class DiscreteTreeParser {
 
 				} else {
 
-					String message =  "Parent location " + dummy.getId() + " could not be found in the locations file.";
-					throw new  AnalysisException(message);
+					String message = "Parent location " + dummy.getId() + " could not be found in the locations file.";
+					throw new AnalysisException(message);
 				}
 
 				Location parentLocation = locationsList.get(locationIndex);
@@ -133,20 +127,18 @@ public class DiscreteTreeParser {
 					Point parentPoint = pointsMap.get(parentNode);
 					if (parentPoint == null) {
 
-						parentPoint = createPoint( parentNode, parentLocation);
+						parentPoint = createPoint(parentNode, parentLocation);
 						pointsMap.put(parentNode, parentPoint);
-//						index++;
 
-					}// END: null check
+					} // END: null check
 
 					Point nodePoint = pointsMap.get(node);
 					if (nodePoint == null) {
 
-						nodePoint = createPoint(  node, nodeLocation);
+						nodePoint = createPoint(node, nodeLocation);
 						pointsMap.put(node, nodePoint);
-//						index++;
 
-					}// END: null check
+					} // END: null check
 
 					Line line = new Line(parentPoint.getId(), //
 							nodePoint.getId(), //
@@ -168,8 +160,7 @@ public class DiscreteTreeParser {
 							if ((rootedTree.getHeight(node) <= sliceHeight)
 									&& (rootedTree.getHeight(parentNode) > sliceHeight)) {
 
-								if (nodeLocation.equals(parentLocation)
-										&& parentLocation.equals(location)) {
+								if (nodeLocation.equals(parentLocation) && parentLocation.equals(location)) {
 
 									int j = locationsList.lastIndexOf(location);
 									locationCounts[i][j]++;
@@ -189,7 +180,6 @@ public class DiscreteTreeParser {
 
 		// create Points list with count attributes
 
-//		index = 0;
 		Double[] countRange = new Double[2];
 		countRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
 		countRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
@@ -197,8 +187,8 @@ public class DiscreteTreeParser {
 		for (int sliceIndex = 0; sliceIndex < locationCounts.length; sliceIndex++) {
 
 			double height = sliceHeights[sliceIndex];
-			double nextHeight = sliceIndex < locationCounts.length-1 ? sliceHeights[sliceIndex+1] : 0.0;
-			
+			double nextHeight = sliceIndex < locationCounts.length - 1 ? sliceHeights[sliceIndex + 1] : 0.0;
+
 			for (int locationIndex = 0; locationIndex < locationCounts[0].length; locationIndex++) {
 
 				Double count = (double) locationCounts[sliceIndex][locationIndex];
@@ -207,15 +197,12 @@ public class DiscreteTreeParser {
 					Location location = locationsList.get(locationIndex);
 					String startTime = timeParser.getNodeDate(height);
 					String endTime = timeParser.getNodeDate(nextHeight);
-					
-					Map<String, Object> attributes = new LinkedHashMap<String, Object>();
-					attributes.put(COUNT,
-							locationCounts[sliceIndex][locationIndex]);
 
-					String id = "count_" + location.getId();
-					Point point = new Point(id, location, startTime, endTime, attributes);
+					Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+					attributes.put(COUNT, locationCounts[sliceIndex][locationIndex]);
+
+					Point point = new Point(location.getId(), startTime, endTime, attributes);
 					countsList.add(point);
-//					index++;
 
 					if (count < countRange[Attribute.MIN_INDEX]) {
 						countRange[Attribute.MIN_INDEX] = count;
@@ -227,8 +214,8 @@ public class DiscreteTreeParser {
 
 				}
 
-			}// END: locations loop
-		}// END: slice loop
+			} // END: locations loop
+		} // END: slice loop
 
 		Attribute countAttribute = new Attribute(COUNT, countRange);
 
@@ -252,8 +239,7 @@ public class DiscreteTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round( Double.valueOf(attributeValue.toString()), 100);
+						double value = Utils.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -315,8 +301,7 @@ public class DiscreteTreeParser {
 
 					} else {
 
-						double value = Utils
-								.round(Double.valueOf(attributeValue.toString()), 100);
+						double value = Utils.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -354,7 +339,7 @@ public class DiscreteTreeParser {
 
 			} // END: attributes loop
 
-		}// END: points loop
+		} // END: points loop
 
 		uniqueNodeAttributes.addAll(branchAttributesMap.values());
 		// we dump it here with node attributes
@@ -372,15 +357,11 @@ public class DiscreteTreeParser {
 		}
 
 		return sliceHeights;
-	}//END: createSliceHeights
+	}// END: createSliceHeights
 
-	private Point createPoint(Node node, Location location)
-			throws   AnalysisException {
+	private Point createPoint(Node node, Location location) throws AnalysisException {
 
-//		String id = "point_" + index;
-		String id = "point_" + location.getId();
-		Double height = Utils.getNodeHeight(rootedTree, node)
-				* timescaleMultiplier;
+		Double height = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);
 
 		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
@@ -389,13 +370,13 @@ public class DiscreteTreeParser {
 			Object nodeAttribute = node.getAttribute(attributeName);
 
 			if (!(nodeAttribute instanceof Object[])) {
-				
-				// TODO: remove invalid characters
+
+				// remove invalid characters
 				attributeName = attributeName.replaceAll("%", "");
 				attributeName = attributeName.replaceAll("!", "");
-				
+
 				attributes.put(attributeName, nodeAttribute);
-				
+
 			} // END: multivariate check
 
 		} // END: attributes loop
@@ -403,17 +384,17 @@ public class DiscreteTreeParser {
 		// annotate with node names
 		String attributeName = "nodeName";
 		Object value = "internal";
-		if(rootedTree.isExternal(node)) {
-			 value = rootedTree.getTaxon(node).toString();
+		if (rootedTree.isExternal(node)) {
+			value = rootedTree.getTaxon(node).toString();
 		}
 		attributes.put(attributeName, value);
-		
-      // external nodes have no posterior annotated, need to fix that
-		if(rootedTree.isExternal(node)) {
+
+		// external nodes have no posterior annotated, so fix that
+		if (rootedTree.isExternal(node)) {
 			attributes.put(Utils.POSTERIOR, 1.0);
 		}
-		
-		Point point = new Point(id, location, startTime, attributes);
+
+		Point point = new Point(location.getId(), startTime, attributes);
 
 		return point;
 	}// END: createPoint

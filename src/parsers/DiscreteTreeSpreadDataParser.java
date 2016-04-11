@@ -126,7 +126,7 @@ public class DiscreteTreeSpreadDataParser {
 
 		String treeLayerId = Utils.splitString(settings.treeFilename, "/");
 		Layer treeLayer = new Layer(treeLayerId, //
-				"Tre layer", //
+				"Tree layer", //
 				pointsList, //
 				linesList //
 		);
