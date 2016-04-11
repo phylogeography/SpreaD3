@@ -4,11 +4,6 @@ import java.util.Locale;
 
 import utils.FortuneCookies;
 
-/**
- * @author Andrew Rambaut
- * @author Filip Bielejec
- * @version $Id$
- */
 public class SpreaD3 {
 
 	public static final boolean DEBUG = true;

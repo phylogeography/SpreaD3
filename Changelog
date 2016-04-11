@@ -53,6 +53,8 @@
 * Concurrent AnalyzeTree for time slicer
 * fixed bug in KML line generator
 * fixed bug which caused counts to be omitted when merging JSON files
-
+* changes to JSON data format [incompatible with previous renderers!], resulting in smaller files
+  - points are id by their hash
+  - discrete points link to discrete location (by locationId attribute) 
 
 
