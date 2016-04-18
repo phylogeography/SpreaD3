@@ -444,6 +444,7 @@ public class LocationCoordinatesEditor {
 
 				try {
 
+					saveEdits();
 					writeLocations(filename, locationsList);
 
 				} catch (AnalysisException e) {
@@ -476,12 +477,12 @@ public class LocationCoordinatesEditor {
 
 				Coordinate coordinate = location.getCoordinate();
 				if (coordinate != null) {
-					longitude = String.valueOf(coordinate.getXCoordinate());
 					latitude = String.valueOf(coordinate.getYCoordinate());
+					longitude = String.valueOf(coordinate.getXCoordinate());
 				}
 
-				printWriter.println(location.getId() + Utils.TAB + longitude
-						+ Utils.TAB + latitude);
+				printWriter.println(location.getId() + Utils.TAB + latitude
+						+ Utils.TAB + longitude);
 
 			} // END: row loop
 			printWriter.close();
