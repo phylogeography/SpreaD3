@@ -56,5 +56,5 @@
 * changes to JSON data format [incompatible with previous renderers!], resulting in smaller files
   - points are id by their hash
   - discrete points link to discrete location (by locationId attribute) 
-
+* coordinates editor saves in (lat,long) [or (y,x)] order, consistent with the rest of the program
 

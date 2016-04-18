@@ -21,7 +21,8 @@ import exceptions.AnalysisException;
 public class DiscreteTreeParser {
 
 	public static final String COUNT = "count";
-
+    private static final Integer UNRESOLVED_INDEX = Integer.MAX_VALUE;
+	
 	private String locationTrait;
 	private RootedTree rootedTree;
 	private double timescaleMultiplier;
@@ -58,6 +59,7 @@ public class DiscreteTreeParser {
 
 	}// END: Constructor
 
+	
 	public void parseTree() throws IOException, ImportException, AnalysisException {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
@@ -70,17 +72,10 @@ public class DiscreteTreeParser {
 			if (!rootedTree.isRoot(node)) {
 
 				// node parsed first
-
-				String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
-				if (nodeState.contains("+")) {
-					String message = "Found tied state " + nodeState;
-					nodeState = Utils.breakTiesRandomly(nodeState);
-					message += (" randomly choosing " + nodeState);
-					System.out.println(message);
-				} // END: tie check
-
+				String nodeState = getNodeState(node);
+				
 				dummy = new Location(nodeState);
-				int locationIndex = Integer.MAX_VALUE;
+				int locationIndex = UNRESOLVED_INDEX;
 				if (locationsList.contains(dummy)) {
 					locationIndex = locationsList.indexOf(dummy);
 				} else {
@@ -95,21 +90,11 @@ public class DiscreteTreeParser {
 				Location nodeLocation = locationsList.get(locationIndex);
 
 				// parent node parsed second
-
 				Node parentNode = rootedTree.getParent(node);
-
-				String parentState = (String) Utils.getObjectNodeAttribute(parentNode, locationTrait);
-				if (parentState.contains("+")) {
-
-					String message = "Found tied state " + parentState;
-					parentState = Utils.breakTiesRandomly(parentState);
-					message += (" randomly choosing " + parentState);
-					System.out.println(message);
-
-				} // END: tie check
-
+				String parentState = getNodeState(parentNode);
+				
 				dummy = new Location(parentState);
-				locationIndex = Integer.MAX_VALUE;
+				locationIndex = UNRESOLVED_INDEX;
 				if (locationsList.contains(dummy)) {
 
 					locationIndex = locationsList.indexOf(dummy);
@@ -173,6 +158,29 @@ public class DiscreteTreeParser {
 
 				} // END: state check
 
+			} else {
+				
+			System.out.println("At the root node");
+			
+			String rootState = getNodeState(node);
+			
+			dummy = new Location(rootState);
+			int locationIndex = UNRESOLVED_INDEX;
+			if (locationsList.contains(dummy)) {
+				locationIndex = locationsList.indexOf(dummy);
+			} else {
+
+				String message1 = "Location " + dummy.getId() + " of the root node could not be found in the locations file.";
+				String message2 = "Resulting file may be incomplete!";
+				System.out.println(message1 + " " + message2);
+				continue;
+
+			}
+			
+			Location location = locationsList.get(locationIndex);
+			Point rootPoint =createPoint(node, location);
+			pointsMap.put(node, rootPoint);
+			
 			} // END: root check
 		} // END: node loop
 
@@ -359,11 +367,28 @@ public class DiscreteTreeParser {
 		return sliceHeights;
 	}// END: createSliceHeights
 
+	private String getNodeState(Node node) throws AnalysisException {
+		
+		String nodeState = (String) Utils.getObjectNodeAttribute(node, locationTrait);
+			if (nodeState.contains("+")) {
+				String message = "Found tied state " + nodeState;
+				nodeState = Utils.breakTiesRandomly(nodeState);
+				message += (" randomly choosing " + nodeState);
+				System.out.println(message);
+			} // END: tie check
+		
+			return nodeState;
+	}
+	
 	private Point createPoint(Node node, Location location) throws AnalysisException {
 
-		Double height = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
+		Double height = Utils.getNodeHeight(this.rootedTree, node) * timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);
 
+//		if(this.rootedTree.isRoot(node)) {
+//		System.out.println("this is root node");
+//	      }
+		
 		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 		for (String attributeName : node.getAttributeNames()) {
 
@@ -382,15 +407,20 @@ public class DiscreteTreeParser {
 		} // END: attributes loop
 
 		// annotate with node names
-		String attributeName = "nodeName";
-		Object value = "internal";
-		if (rootedTree.isExternal(node)) {
-			value = rootedTree.getTaxon(node).toString();
+		Object value;// = "internal";
+		if (this.rootedTree.isExternal(node)) {
+			value = this.rootedTree.getTaxon(node).toString();
+		} else if(this.rootedTree.isRoot(node)) {
+			value = "root";
+		} else {
+			value = "internal";
 		}
+		
+		String attributeName = "nodeName";
 		attributes.put(attributeName, value);
 
 		// external nodes have no posterior annotated, so fix that
-		if (rootedTree.isExternal(node)) {
+		if (this.rootedTree.isExternal(node)) {
 			attributes.put(Utils.POSTERIOR, 1.0);
 		}
 
