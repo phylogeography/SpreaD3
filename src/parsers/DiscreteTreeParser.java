@@ -385,10 +385,6 @@ public class DiscreteTreeParser {
 		Double height = Utils.getNodeHeight(this.rootedTree, node) * timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);
 
-//		if(this.rootedTree.isRoot(node)) {
-//		System.out.println("this is root node");
-//	      }
-		
 		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 		for (String attributeName : node.getAttributeNames()) {
 
@@ -406,8 +402,8 @@ public class DiscreteTreeParser {
 
 		} // END: attributes loop
 
-		// annotate with node names
-		Object value;// = "internal";
+		// annotate with node name
+		Object value;
 		if (this.rootedTree.isExternal(node)) {
 			value = this.rootedTree.getTaxon(node).toString();
 		} else if(this.rootedTree.isRoot(node)) {

@@ -74,6 +74,7 @@
 	  [global.width, global.height]).on("zoom", move);
 
 	var svg = d3.select(".container").append('svg') //
+	.attr("class", "svg")
 	  .attr("preserveAspectRatio", "xMinYMin meet")
 	  .attr("viewBox", "0 0 " + global.width + " " + global.height)
 	  .call(zoom);
@@ -140,12 +141,9 @@
 
 	  // fit the paths to the zoom level
 	  // d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-	  //	 d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
-	  // d3.selectAll(".point").attr("stroke-width", 1.0 / s);
-
+	  // d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
+	  d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 	} // END: move
-
-	// var json;
 
 	function render() {
 
@@ -379,6 +377,7 @@
 
 	collapsible.setUpPanels();
 	collapsible.collapseAll();
+	// collapsible.expandAll();
 
 	console.log("Done!");
 
@@ -10594,9 +10593,8 @@
 			expandAll : expandAll
 	};
 
-
 	function setUpPanels() {
-		
+
 		loadSettings();
 
 		// get all headings
@@ -10639,7 +10637,7 @@
 
 	/**
 	 * Start the expand/collapse animation of the panel
-	 * 
+	 *
 	 * @param panel
 	 *            reference to the panel div
 	 */
@@ -10674,7 +10672,7 @@
 
 	/**
 	 * Change the height of the target
-	 * 
+	 *
 	 * @param panelContent
 	 *            reference to the panel content to change height
 	 * @param iteration
@@ -10750,14 +10748,14 @@
 		for ( var key in panelsStatus) {
 			saveSettings(key, "false");
 		}
-			
+
 		setUpPanels();
 	}
 
 	/**
 	 * Takes data from the panelsStatus object, formats as key:value|key:value...
 	 * and puts in cookie valid for 365 days
-	 * 
+	 *
 	 * @param key
 	 *            key name to save
 	 * @paeam value key value
@@ -10788,6 +10786,7 @@
 		// the IE way
 		window.attachEvent("onload", setUpPanels);
 	}
+
 
 /***/ },
 /* 9 */
@@ -20431,7 +20430,8 @@
 	exports.pairedSimpleColors = fixedColors;
 
 	// colors for categorical attributes
-	var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
+	var ordinalColors = d3.scale.category20().range();
+	// var ordinalColors = colorbrewer.Set1[9] ;
 	exports.ordinalColors = ordinalColors;
 
 	var projection;
@@ -21158,7 +21158,7 @@
 
 	var pointRadius = 2;
 	var min_point_radius = 1;
-	var max_point_radius = 7;
+	var max_point_radius = 10;
 
 	var tooltipAttributes = {
 	  color: null,
@@ -22736,7 +22736,7 @@
 
 	var lineCurvature = 0.1;
 	var min_line_curvature = 0.0;
-	var max_line_curvature = 1.0;
+	var max_line_curvature = 0.3;//1.0;
 
 	// ---MODULE EXPORTS---//
 
@@ -22776,7 +22776,7 @@
 
 	            }
 
-	          }//END: start coord check
+	          } //END: start coord check
 
 	          var endCoordinate = line['endCoordinate'];
 	          if (typeof endCoordinate == 'undefined') {
@@ -22799,9 +22799,7 @@
 
 	            }
 
-	          }//END: end coord check
-
-	          // var startTime = line.startTime;
+	          } //END: end coord check
 
 	          var startY = startCoordinate.yCoordinate;
 	          var startX = startCoordinate.xCoordinate;
@@ -22832,8 +22830,7 @@
 	          var dx = targetX - sourceX;
 	          var dy = targetY - sourceY;
 
-	          var curvature = lineCurvature;
-	          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
+	          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(lineCurvature);
 
 	          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
@@ -23129,7 +23126,6 @@
 
 	        // trigger repaint
 	        updateLineColors(scale, colorAttribute);
-
 	      });
 
 	} // END: setupLineColorAttributePanel
@@ -23137,7 +23133,7 @@
 	function updateLineColorLegend(scale) {
 
 	  var width = 150;
-	  var height = 110;
+	  var height = 230;
 
 	  var margin = {
 	    left: 20,
@@ -23248,7 +23244,6 @@
 	          var line = d;
 
 	          // console.log(Date.parse(line.startTime));
-
 	          // var curvature = lineCurvature;
 
 	          var targetX = line.targetX;
@@ -24255,7 +24250,7 @@
 	      .call(d3.kodama.tooltip().format(function(d, i) {
 
 	          return {
-	            title: d.location.id,
+	            title: d.locationId,
 	            items: [{
 	              title: 'Date',
 	              value: d.startTime
@@ -24476,13 +24471,13 @@
 	 */
 
 	// ---MODULE IMPORTS---//
+
 	__webpack_require__(35);
 	var d3 = __webpack_require__(9);
 	__webpack_require__(27);
+	__webpack_require__(30);
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
-
-	__webpack_require__(30);
 
 	// ---MODULE VARIABLES---//
 
@@ -24537,14 +24532,12 @@
 
 		// if it failed stick to basics
 		if (projectionScale < basicScale) {
-
 			projectionScale = (global.width / 2 / Math.PI);
 			var offset = [ (global.width / 2), (global.height / 2) ];
 
 			global.projection = d3.geo.mercator() //
 			.scale(projectionScale) //
 			.translate(offset);
-
 		}
 
 		// new path
@@ -24603,7 +24596,6 @@
 		});
 
 	updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
-
 	}// END: generateTopoLayer
 
 	exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
@@ -24817,14 +24809,22 @@
 
 	updateMapBackground = function(color) {
 
-		d3.select('.container').style("background", color);
+		// d3.select('.container').style("background", color);
+		// d3.select('.svg').style("background", color);
+
+		d3.select('.svg').style({
+			// "fill": color,
+		 //  "color" :color,
+	     "background" : color
+		});
+
 
 	}//END: updateMapBackground
 
 	updateMapBackgroundLegend = function(scale) {
 
 		var width = 150;
-		var height = 250;
+		var height = 100;
 
 		var margin = {
 			left : 20,
