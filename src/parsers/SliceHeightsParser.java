@@ -12,12 +12,12 @@ public class SliceHeightsParser {
 		this.sliceHeights = sliceHeights;
 	}// END: Constructor
 
-	public double[] parseSliceHeights() throws IOException {
+	public Double[] parseSliceHeights() throws IOException {
 
 		String[] lines = Utils.readLines(sliceHeights, Utils.HASH_COMMENT);
 		int nrow = lines.length;
 
-		double[] sliceHeights = new double[nrow];
+		Double[] sliceHeights = new Double[nrow];
 		for (int i = 0; i < nrow; i++) {
 			sliceHeights[i] = Double.parseDouble(lines[i]);
 		}// END: i loop

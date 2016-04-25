@@ -28,7 +28,7 @@ import utils.Utils;
 
 public class TimeSlicerParser {
 
-	private double[] sliceHeights;
+	private Double[] sliceHeights;
 	private NexusImporter treesImporter;
 	private String traitName;
 	private TimeParser timeParser;
@@ -58,7 +58,7 @@ public class TimeSlicerParser {
 			double hpdLevel, //
 			int gridSize, //
 			double timescaleMultiplier, //
-			double[] sliceHeights //
+			Double[] sliceHeights //
 
 	) {
 

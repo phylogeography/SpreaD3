@@ -46,7 +46,7 @@ public class TimeSlicerSpreadDataParser {
 		// ---IMPORT---//
 
 		// import slice heights
-		double sliceHeights[] = null;
+		Double sliceHeights[] = null;
 		if (settings.sliceHeightsFilename != null) {
 
 			SliceHeightsParser sliceHeightsParser = new SliceHeightsParser(settings.sliceHeightsFilename);
@@ -152,10 +152,10 @@ public class TimeSlicerSpreadDataParser {
 		);
 	}// END: parse
 
-	private double[] generateSliceHeights(RootedTree rootedTree, int numberOfIntervals) {
+	private Double[] generateSliceHeights(RootedTree rootedTree, int numberOfIntervals) {
 
 		double rootHeight = rootedTree.getHeight(rootedTree.getRootNode());
-		double[] timeSlices = new double[numberOfIntervals];
+		Double[] timeSlices = new Double[numberOfIntervals];
 
 		for (int i = 0; i < numberOfIntervals; i++) {
 			timeSlices[i] = rootHeight - (rootHeight / (double) numberOfIntervals) * ((double) i);

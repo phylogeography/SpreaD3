@@ -201,26 +201,13 @@ public class Utils {
 	// ---PRINT UTILS---//
 	// ///////////////////
 
-	public static void printArray(double[] x) {
-		for (int i = 0; i < x.length; i++) {
-			System.out.print(x[i] + " ");
+	public static <E> void printArray(E[] array) {
+		for (E element : array) {
+			System.out.printf("%s ", element);
 		}
 		System.out.println();
-	}// END: printArray
+	}
 
-	public static void printArray(Object[] x) {
-		for (int i = 0; i < x.length; i++) {
-			System.out.print(x[i] + " ");
-		}
-		System.out.println();
-	}// END: printArray
-
-	public static void headArray(Object[] x, int nrow) {
-		for (int i = 0; i < nrow; i++) {
-			System.out.print(x[i] + " ");
-		}
-		System.out.println();
-	}// END: printArray
 
 	public static void printMap(Map<?, ?> map) {
 
@@ -238,18 +225,7 @@ public class Utils {
 		System.out.println();
 	}// END: printArray
 
-	public static void print2DArray(Object[][] array) {
-		int nRow = array.length;  
-		int nCol = array[0].length;  
-		for (int row = 0; row < nRow; row++) {
-			for (int col = 0; col < nCol; col++) {
-				System.out.print(array[row][col] + " ");
-			}
-			System.out.print("\n");
-		}
-	}// END: print2DArray
-	
-	public static void print2DArray(int[][] array) {
+	public static <E> void print2DArray(E[][] array) {
 		int nRow = array.length;  
 		int nCol = array[0].length;  
 		for (int row = 0; row < nRow; row++) {

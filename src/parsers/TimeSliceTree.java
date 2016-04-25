@@ -15,14 +15,14 @@ public class TimeSliceTree implements Runnable {
 
 	private ConcurrentHashMap<Double, List<double[]>> sliceMap;
 	private RootedTree currentTree;
-	private double[] sliceHeights;
+	private Double[] sliceHeights;
 	private String traitName;
 	// private boolean hasRRWrate;
 	private String rrwRateName;
 
 	public TimeSliceTree(ConcurrentHashMap<Double, List<double[]>> sliceMap, //
 			RootedTree currentTree, //
-			double[] sliceHeights, //
+			Double[] sliceHeights, //
 			String traitName, //
 			// boolean isRRW, //
 			String rrwRateName //
