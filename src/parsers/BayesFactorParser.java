@@ -3,6 +3,8 @@ package parsers;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -37,9 +39,9 @@ public class BayesFactorParser {
 
 	private Double meanPoissonPrior;
 	private Double offsetPoissonPrior;
-	
-	public BayesFactorParser(LinkedList<Location> locationsList,
-			Double[][] indicators, Double meanPoissonPrior, Double offsetPoissonPrior) {
+
+	public BayesFactorParser(LinkedList<Location> locationsList, Double[][] indicators, Double meanPoissonPrior,
+			Double offsetPoissonPrior) {
 
 		this.locationsList = locationsList;
 		this.indicators = indicators;
@@ -50,7 +52,7 @@ public class BayesFactorParser {
 
 		this.meanPoissonPrior = meanPoissonPrior;
 		this.offsetPoissonPrior = offsetPoissonPrior;
-		
+
 	}// END: Constructor
 
 	public void parse() throws AnalysisException {
@@ -78,19 +80,28 @@ public class BayesFactorParser {
 		} else if (ncol == (n * (n - 1)) / 2) {
 			symmetrical = true;
 		} else {
+
+			DecimalFormat df = new DecimalFormat("#.##");
+			df.setRoundingMode(RoundingMode.CEILING);;
+			
+			double n1 = (Math.sqrt(4 * ncol + 1) + 1) / 2;
+			double n2 = (Math.sqrt(8 * ncol + 1) + 1) / 2;
+
 			throw new AnalysisException(
-					"Number of rate indicators does not match the number of locations!");
+					"Number of rate indicators (" + ncol + ")" + " does not match the number of locations!" + " Specify "
+							+ df.format(n2) + " locations if the location exchange models is a symmetrical one, or " + df.format(n1)
+							+ " for a non-symmetrical one.");
 		}
 
-		double poissonPriorMean = meanPoissonPrior; //Math.log(2);
-		
+		double poissonPriorMean = meanPoissonPrior; // Math.log(2);
+
 		double poissonPriorOffset;
-		if(offsetPoissonPrior == null) {
-		 poissonPriorOffset = (double) (n - 1);
-		}  else {
+		if (offsetPoissonPrior == null) {
+			poissonPriorOffset = (double) (n - 1);
+		} else {
 			poissonPriorOffset = offsetPoissonPrior;
 		}
-		
+
 		double qk = Double.NaN;
 
 		if (symmetrical) {
@@ -107,22 +118,21 @@ public class BayesFactorParser {
 
 			if (bf == Double.POSITIVE_INFINITY) {
 
-				bf = ((pk[row] - (double) (1.0 / nrow)) / (1 - (pk[row] - (double) (1.0 / nrow))))
-						/ priorOdds;
+				bf = ((pk[row] - (double) (1.0 / nrow)) / (1 - (pk[row] - (double) (1.0 / nrow)))) / priorOdds;
 
 				System.out.println("Correcting for infinite bf: " + bf);
-			}// END: infinite BF check
+			} // END: infinite BF check
 
 			bayesFactors.add(bf);
 			posteriorProbabilities.add(pk[row]);
-		}// END: row loop
+		} // END: row loop
 
 		String[] locations = new String[locationsList.size()];
 		int ii = 0;
 		for (Location location : locationsList) {
 			locations[ii] = location.getId();
 			ii++;
-		}// END: locations loop
+		} // END: locations loop
 
 		for (int row = 0; row < n - 1; row++) {
 
@@ -132,9 +142,9 @@ public class BayesFactorParser {
 				from.add(locations[row]);
 				to.add(subset[i]);
 
-			}// END: i loop
+			} // END: i loop
 
-		}// END: row loop
+		} // END: row loop
 
 		if (!symmetrical) {
 			from.addAll(to);
@@ -147,7 +157,7 @@ public class BayesFactorParser {
 
 		HashMap<Location, Point> pointsMap = new HashMap<Location, Point>();
 
-//		int index = 0;
+		// int index = 0;
 		Location dummy;
 		int n = bayesFactors.size();
 		for (int i = 0; i < n; i++) {
@@ -160,8 +170,7 @@ public class BayesFactorParser {
 				fromLocationIndex = locationsList.indexOf(dummy);
 			} else {
 
-				String message1 = "Location " + dummy.getId()
-						+ " could not be found in the locations file.";
+				String message1 = "Location " + dummy.getId() + " could not be found in the locations file.";
 				String message2 = "Resulting file may be incomplete!";
 				System.out.println(message1 + " " + message2);
 				continue;
@@ -173,11 +182,11 @@ public class BayesFactorParser {
 			Point fromPoint = pointsMap.get(fromLocation);
 			if (fromPoint == null) {
 
-				fromPoint = createPoint( fromLocation);
+				fromPoint = createPoint(fromLocation);
 				pointsMap.put(fromLocation, fromPoint);
-//				index++;
+				// index++;
 
-			}// END: null check
+			} // END: null check
 
 			// to parsed second
 
@@ -187,8 +196,7 @@ public class BayesFactorParser {
 				toLocationIndex = locationsList.indexOf(dummy);
 			} else {
 
-				String message = "Parent location " + dummy.getId()
-						+ " could not be found in the locations file.";
+				String message = "Parent location " + dummy.getId() + " could not be found in the locations file.";
 				throw new AnalysisException(message);
 			}
 
@@ -197,11 +205,11 @@ public class BayesFactorParser {
 			Point toPoint = pointsMap.get(toLocation);
 			if (toPoint == null) {
 
-				toPoint = createPoint( toLocation);
+				toPoint = createPoint(toLocation);
 				pointsMap.put(toLocation, toPoint);
-//				index++;
+				// index++;
 
-			}// END: null check
+			} // END: null check
 
 			Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
@@ -211,27 +219,28 @@ public class BayesFactorParser {
 			Double posteriorProbability = posteriorProbabilities.get(i);
 			attributes.put(POSTERIOR_PROBABILITY, posteriorProbability);
 
-			if(!fromLocation.hasCoordinate()) {
-				
+			if (!fromLocation.hasCoordinate()) {
+
 				String message = "Coordinate values could not be found for the location " + fromLocation.getId()
 						+ " Resulting visualisation may be incomplete!";
 
 				System.out.println(message);
 				continue;
 			}
-			
-			if(!toLocation.hasCoordinate()) {
-				
+
+			if (!toLocation.hasCoordinate()) {
+
 				String message = "Coordinate values could not be found for the location " + toLocation.getId()
 						+ " Resulting visualisation may be incomplete!";
 
 				System.out.println(message);
 				continue;
 			}
-			
-//			Double distance = Utils.rhumbDistance(fromLocation.getCoordinate(),
-//					toLocation.getCoordinate());
-//			attributes.put(Utils.DISTANCE, distance);
+
+			// Double distance =
+			// Utils.rhumbDistance(fromLocation.getCoordinate(),
+			// toLocation.getCoordinate());
+			// attributes.put(Utils.DISTANCE, distance);
 
 			// Utils.printMap(attributes);
 
@@ -244,7 +253,7 @@ public class BayesFactorParser {
 
 			linesList.add(line);
 
-		}// END: i loop
+		} // END: i loop
 
 		pointsList.addAll(pointsMap.values());
 
@@ -272,8 +281,7 @@ public class BayesFactorParser {
 
 					} else {
 
-						double value = Utils
-								.round(Double.valueOf(attributeValue.toString()), 100);
+						double value = Utils.round(Double.valueOf(attributeValue.toString()), 100);
 
 						if (value < attribute.getRange()[Attribute.MIN_INDEX]) {
 							attribute.getRange()[Attribute.MIN_INDEX] = value;
@@ -317,15 +325,15 @@ public class BayesFactorParser {
 
 	}// END: parseAttributes
 
-	private Point createPoint(  Location location) {
+	private Point createPoint(Location location) {
 
-//		String id = "point_" + location.getId();
+		// String id = "point_" + location.getId();
 
 		// Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 		// for (String attributeName : node.getAttributeNames()) {
 		// } // END: attributes loop
 
-		Point point = new Point( location.getId() );
+		Point point = new Point(location.getId());
 
 		return point;
 	}// END: createPoint
@@ -356,8 +364,8 @@ public class BayesFactorParser {
 
 	public void printBfTable() {
 
-		System.out.println("FROM" + Utils.TAB + "TO" + Utils.TAB
-				+ "BAYES_FACTOR" + Utils.TAB + "POSTERIOR PROBABILITY");
+		System.out
+				.println("FROM" + Utils.TAB + "TO" + Utils.TAB + "BAYES_FACTOR" + Utils.TAB + "POSTERIOR PROBABILITY");
 
 		for (int i = 0; i < bayesFactors.size(); i++) {
 
@@ -366,17 +374,15 @@ public class BayesFactorParser {
 			System.out.print(bayesFactors.get(i) + Utils.TAB);
 			System.out.println(posteriorProbabilities.get(i));
 
-		}// END: i loop
+		} // END: i loop
 
 	}// END: print
 
-	public void writeBfTable(String filename) throws FileNotFoundException,
-			UnsupportedEncodingException {
+	public void writeBfTable(String filename) throws FileNotFoundException, UnsupportedEncodingException {
 
 		PrintWriter writer = new PrintWriter(filename, "UTF-8");
 
-		writer.println("FROM" + Utils.TAB + "TO" + Utils.TAB + "BAYES_FACTOR"
-				+ Utils.TAB + "POSTERIOR PROBABILITY");
+		writer.println("FROM" + Utils.TAB + "TO" + Utils.TAB + "BAYES_FACTOR" + Utils.TAB + "POSTERIOR PROBABILITY");
 
 		for (int i = 0; i < bayesFactors.size(); i++) {
 
@@ -385,7 +391,7 @@ public class BayesFactorParser {
 			writer.print(bayesFactors.get(i) + Utils.TAB);
 			writer.println(posteriorProbabilities.get(i));
 
-		}// END: i loop
+		} // END: i loop
 
 		writer.close();
 	}// END: writeBfTable
