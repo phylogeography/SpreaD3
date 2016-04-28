@@ -140,12 +140,6 @@ public class ContinuousTreeParser {
 				// rate (facepalm)
 				Node parentNode = rootedTree.getParent(node);
 
-				// if(rootedTree.isRoot(parentNode)) {
-				//
-				// System.out.println("at root");
-				//
-				// }
-
 				Double parentCoordinateX = null;
 				Double parentCoordinateY = null;
 				tryingCoordinate = 0;
@@ -295,6 +289,41 @@ public class ContinuousTreeParser {
 					} // END: modality loop
 
 				} // parse check
+
+			} else {
+
+				System.out.println("At the root node");
+
+				Double rootCoordinateX = null;
+				Double rootCoordinateY = null;
+				int tryingCoordinate = 0;
+
+				try {
+
+					tryingCoordinate = Utils.X_INDEX;
+					rootCoordinateX = (Double) Utils.getObjectNodeAttribute(node, xCoordinateAttributeName);
+
+					tryingCoordinate = Utils.Y_INDEX;
+					rootCoordinateY = (Double) Utils.getObjectNodeAttribute(node, yCoordinateAttributeName);
+
+				} catch (AnalysisException e) {
+
+					String coordinateName = (tryingCoordinate == Utils.X_INDEX ? xCoordinateAttributeName
+							: yCoordinateAttributeName);
+
+					String message = coordinateName + " attribute was found on the root node."
+							+ "Resulting visualisation may be incomplete!";
+
+					System.out.println(message);
+					continue;
+				} // END: try-catch
+
+				Coordinate rootCoordinate = new Coordinate(rootCoordinateY, // lat
+						rootCoordinateX // long
+				);
+
+				Point rootPoint = createPoint(node, rootCoordinate);
+				pointsMap.put(node, rootPoint);
 
 			} // END: root check
 		} // END: nodes loop
@@ -492,11 +521,8 @@ public class ContinuousTreeParser {
 
 	}// END: parseTree
 
-	private Point createPoint(
-			// int index,
-			Node node, Coordinate coordinate) throws AnalysisException {
+	private Point createPoint(Node node, Coordinate coordinate) throws AnalysisException {
 
-		// String id = "point_" + index;
 		Double height = Utils.getNodeHeight(rootedTree, node) * timescaleMultiplier;
 		String startTime = timeParser.getNodeDate(height);
 
@@ -516,12 +542,17 @@ public class ContinuousTreeParser {
 
 		} // END: attributes loop
 
-		// annotate with node names
-		String attributeName = "nodeName";
-		Object value = "internal";
-		if (rootedTree.isExternal(node)) {
-			value = rootedTree.getTaxon(node).toString();
+		// annotate with node name
+		Object value;
+		if (this.rootedTree.isExternal(node)) {
+			value = this.rootedTree.getTaxon(node).toString();
+		} else if (this.rootedTree.isRoot(node)) {
+			value = "root";
+		} else {
+			value = "internal";
 		}
+
+		String attributeName = "nodeName";
 		attributes.put(attributeName, value);
 
 		// external nodes have no posterior annotated, need to fix that
@@ -533,26 +564,6 @@ public class ContinuousTreeParser {
 
 		return point;
 	}// END: createPoint
-
-	// private String getHpdAttribute(RootedTree tree) {
-	//
-	// String hpdString = null;
-	// for (Node node : tree.getNodes()) {
-	// for (String attributeName : node.getAttributeNames()) {
-	//
-	// if (attributeName.contains("HPD_modality")) {
-	//
-	// hpdString = attributeName.replaceAll("\\D+", "");
-	// // System.out.println(attributeName);
-	// break;
-	//
-	// } // END: hpd check
-	// } // END: attributes loop
-	// break;
-	// } // END: nodes loop
-	//
-	// return hpdString;
-	// }// END: getHpdAttribute
 
 	public LinkedList<Line> getLinesList() {
 		return linesList;

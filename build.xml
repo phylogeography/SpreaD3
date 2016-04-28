@@ -36,7 +36,7 @@
       <mkdir dir="${dist}" />
       
       <!-- TODO: parse version from main and append here -->
-      <jar jarfile="${dist}/spreaD3_v0.9.6rc.jar">
+      <jar jarfile="${dist}/spreaD3_v0.9.6.jar">
 
          <manifest>
             <attribute name="Built-By" value="${user.name}" />

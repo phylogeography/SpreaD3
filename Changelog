@@ -48,8 +48,8 @@
 * added intersecting X and Y axes for representing data when no map is available
 * panels are generated if and only if modules are called
 
-2016: SpreaD3 version 0.9.6 rc
-------------------------------
+2016: SpreaD3 version 0.9.6 Milford Cubicle
+-------------------------------------------
 * Concurrent AnalyzeTree for time slicer
 * fixed bug in KML line generator
 * fixed bug which caused counts to be omitted when merging JSON files
@@ -57,4 +57,8 @@
   - points are id by their hash
   - discrete points link to discrete location (by locationId attribute) 
 * coordinates editor saves in (lat,long) [or (y,x)] order, consistent with the rest of the program
+* help message when setting locations or fake locations for the Bayes factor test
+
+2016: SpreaD3 version 0.9.7 rc
+------------------------------
 
