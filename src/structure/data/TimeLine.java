@@ -20,4 +20,8 @@ public class TimeLine {
 		return endTime;
 	}// END: getEndTime
 
+	public String toString() {
+		return startTime + " " + endTime;
+	}
+	
 }// END: class

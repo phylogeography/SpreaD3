@@ -129,9 +129,10 @@ public class JsonMerger {
 
 			if (!timeLineCreated) {
 
+				
 				timeLine = json.getTimeLine();
 				if (timeLine != null) {
-					timeLineCreated = false;
+					timeLineCreated = true;
 				}
 
 			} else {
@@ -477,7 +478,7 @@ public class JsonMerger {
 	}// END: merge
 
 	private TimeLine compareTimeLines(TimeLine current, TimeLine candidate, DateTimeFormatter dateFormatter) {
-
+		
 		TimeLine timeLine = null;
 
 		LocalDate currentStart = dateFormatter.parseLocalDate(current.getStartTime());
@@ -498,6 +499,10 @@ public class JsonMerger {
 
 		timeLine = new TimeLine(newStartTime, newEndTime);
 
+//		System.out.println("current: " + current);
+//		System.out.println("candidate: " + candidate);
+//		System.out.println("result: " + timeLine);
+		
 		return timeLine;
 	}// END: compareTimeLines
 
