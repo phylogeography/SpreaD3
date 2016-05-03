@@ -1,4 +1,4 @@
-<img src="http://rega.kuleuven.be/cev/ecv/software/spread3_files/h3n2.png/" width="250" align="right">
+<img src="http://rega.kuleuven.be/cev/ecv/software/spread3_files/h3n2.png/" height="250" align="center">
 
 ==============
 .:: SpreaD3 ::.
@@ -20,14 +20,14 @@ SpreaD3 supports KML output for viewing in [GoogleEarth](www.google.com/intl/pl/
 Detailed tutorial on using SpreaD3 can be found [HERE](http://rega.kuleuven.be/cev/ecv/software/SpreaD3_tutorial).
 
 ## LICENSE
-  This is free software; you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as
-  published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+  This is free software; you can redistribute it and/or modify <br />
+  it under the terms of the GNU Lesser General Public License as <br />
+  published by the Free Software Foundation; either version 2 <br />
+  of the License, or (at your option) any later version. <br />
  
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   This software is distributed in the hope that it will be useful, <br />
+   but WITHOUT ANY WARRANTY; without even the implied warranty of <br />
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the <br />
    "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
 
