@@ -1,3 +1,5 @@
+<img src="http://rega.kuleuven.be/cev/ecv/software/spread3_files/h3n2.png/" width="250" align="right">
+
 ==============
 .:: SpreaD3 ::.
 ==============
@@ -7,19 +9,17 @@ Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe '
 Homepage: http://rega.kuleuven.be/cev/ecv/software/SpreaD3
 License: LGPL
 
-
-h1. PURPOSE
-
+## PURPOSE
 SpreaD3 is a program supporting processing and visualizations of Bayesian phylogeographic models.
 
-h1. USAGE
-
+## USAGE
 SpreaD3 visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
 
-SpreaD3 supports KML output for viewing in GoogleEarth [www.google.com/intl/pl/earth/] as well as in-browser, interactive display of the data, driven by D3 libraries [www.d3js.org]. 
+SpreaD3 supports KML output for viewing in [GoogleEarth](www.google.com/intl/pl/earth/) as well as in-browser, interactive display of the data, driven by [D3](www.d3js.org) libraries.
 
-h1. LICENSE
+Detailed tutorial on using SpreaD3 can be found [HERE](http://rega.kuleuven.be/cev/ecv/software/SpreaD3_tutorial).
 
+## LICENSE
   This is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2
@@ -30,12 +30,11 @@ h1. LICENSE
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
-h1. TODO
-* setup test scripts  
-* backend
-  - simpify d3 rendered folder structure
 
+## CONTRIBUTING
+Very much welcomed. Fork this repo. Clone your fork. Start hacking. Make a pull request.
 
-h1. BUGS
-* D3 line curvature listeners leave artifacts
+## KNOWN BUGS/PROBLEMS
+ D3 line curvature listeners leave artifacts
+
 
