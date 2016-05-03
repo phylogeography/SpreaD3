@@ -20,15 +20,15 @@ SpreaD3 supports KML output for viewing in [GoogleEarth](www.google.com/intl/pl/
 Detailed tutorial on using SpreaD3 can be found [HERE](http://rega.kuleuven.be/cev/ecv/software/SpreaD3_tutorial).
 
 ## LICENSE
-&nbsp;  This is free software; you can redistribute it and/or modify  
-&nbsp;  it under the terms of the GNU Lesser General Public License as  
-&nbsp;  published by the Free Software Foundation; either version 2 
-&nbsp;  of the License, or (at your option) any later version.  
+  This is free software; you can redistribute it and/or modify 
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation; either version 2 
+  of the License, or (at your option) any later version. 
  
-&nbsp;&nbsp;   This software is distributed in the hope that it will be useful,  
-&nbsp;&nbsp;   but WITHOUT ANY WARRANTY; without even the implied warranty of  
-&nbsp;&nbsp;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  
-&nbsp;&nbsp;   "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
+   This software is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+   "GNU Lesser General Public License": http://www.gnu.org/licenses/lgpl.html for more details.
 
 
 ## CONTRIBUTING
