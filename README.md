@@ -1,6 +1,5 @@
 <img src="http://rega.kuleuven.be/cev/ecv/software/spread3_files/h3n2.png/" height="250" align="center">
 
-==============
 .:: SpreaD3 ::.
 ==============
 *Spatial Phylogenetic Reconstruction of Evolutionary Dynamics* <br />
