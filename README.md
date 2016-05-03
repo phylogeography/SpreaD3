@@ -3,11 +3,11 @@
 ==============
 .:: SpreaD3 ::.
 ==============
-*Spatial Phylogenetic Reconstruction of Evolutionary Dynamics*
-Version: 0.9.6 Milford Cubicle, 2016
-Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey
-Homepage: http://rega.kuleuven.be/cev/ecv/software/SpreaD3
-License: LGPL
+*Spatial Phylogenetic Reconstruction of Evolutionary Dynamics* <br />
+Version: 0.9.6 Milford Cubicle, 2016 <br />
+Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey <br />
+Homepage: http://rega.kuleuven.be/cev/ecv/software/SpreaD3 <br />
+License: LGPL <br />
 
 ## PURPOSE
 SpreaD3 is a program supporting processing and visualizations of Bayesian phylogeographic models.
