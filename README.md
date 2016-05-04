@@ -11,11 +11,12 @@ License: LGPL <br />
 
 ## PURPOSE
 SpreaD3 is a program supporting processing and visualizations of Bayesian phylogeographic models.
+This is the main program. Rendering engine can be found [HERE](https://github.com/phylogeography/d3-renderer)
 
 ## USAGE
 SpreaD3 visualisation comprises 2-steps analysis. Parsing is done to a JSON file (data format), all the style choices are delegated to a second, renderering step, thus avoiding time consuming re-runs and facilitating different rendering possibilities. 
 
-SpreaD3 supports KML output for viewing in [GoogleEarth](www.google.com/intl/pl/earth/) as well as in-browser, interactive display of the data, driven by [D3](www.d3js.org) libraries.
+SpreaD3 supports KML output for viewing in [GoogleEarth](http://www.google.com/earth/) as well as in-browser, interactive display of the data, driven by [D3](https://d3js.org/) libraries.
 
 Detailed tutorial on using SpreaD3 can be found [HERE](http://rega.kuleuven.be/cev/ecv/software/SpreaD3_tutorial).
 
