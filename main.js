@@ -55,12 +55,12 @@
 	var global = __webpack_require__(10);
 	var utils = __webpack_require__(13);
 	var time = __webpack_require__(14);
-	var topo = __webpack_require__(34);
+	var topo = __webpack_require__(33);
 	var points = __webpack_require__(24);
-	var lines = __webpack_require__(31);
-	var areas = __webpack_require__(32);
-	var counts = __webpack_require__(33);
-	var locations = __webpack_require__(37);
+	var lines = __webpack_require__(30);
+	var areas = __webpack_require__(31);
+	var counts = __webpack_require__(32);
+	var locations = __webpack_require__(36);
 
 	// ---HTML---//
 
@@ -73,9 +73,8 @@
 	  [global.width / 2, global.height / 2]).size(
 	  [global.width, global.height]).on("zoom", move);
 
-
-	// TODO: make responsive
 	var svg = d3.select(".container").append('svg') //
+	.attr("class", "svg")
 	  .attr("preserveAspectRatio", "xMinYMin meet")
 	  .attr("viewBox", "0 0 " + global.width + " " + global.height)
 	  .call(zoom);
@@ -91,15 +90,12 @@
 
 	function createHtml() {
 
-	  // TODO: delegate relevant bits to modules, setupPanel methods
-
 	  document.write("<div class=\"all\" style=\"display: block;\">");
 
 	  document.write("		<div id=\"controls\">");
 	  document.write("			<h2>");
 	  document.write("				Current date: <span id=\"currentDate\"> 0 <\/span>");
 	  document.write("			<\/h2>");
-
 
 	  document.write("			<div>");
 	  document.write("				<div id=\"playPause\"><\/div>");
@@ -145,12 +141,9 @@
 
 	  // fit the paths to the zoom level
 	  // d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-	  //	 d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
-	  // d3.selectAll(".point").attr("stroke-width", 1.0 / s);
-
+	  // d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
+	  d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 	} // END: move
-
-	// var json;
 
 	function render() {
 
@@ -207,7 +200,7 @@
 	        var counts_ = layer.points;
 
 	        if (counts_.length > 0) {
-	          counts.generateCountsLayer(counts_, countAttribute);
+	          counts.generateCountsLayer(counts_, locations_, countAttribute);
 	          counts.setupPanels(countAttribute);
 	          global.hasCounts = true;
 	        } else {
@@ -236,7 +229,7 @@
 	        }
 
 	        if (!(typeof branches === 'undefined')) {
-	          lines.generateLinesLayer(branches, nodes, lineAttributes);
+	          lines.generateLinesLayer(branches, nodes, locations_, lineAttributes);
 	          lines.setupPanels(lineAttributes);
 	          global.hasLines = true;
 	        } else {
@@ -244,7 +237,7 @@
 	        }
 
 	        if (!(typeof nodes === 'undefined')) {
-	          points.generatePointsLayer(nodes, nodeAttributes);
+	          points.generatePointsLayer(nodes, locations_, nodeAttributes);
 	          points.setupPanels(nodeAttributes);
 	          global.hasPoints = true;
 	        } else {
@@ -384,6 +377,7 @@
 
 	collapsible.setUpPanels();
 	collapsible.collapseAll();
+	// collapsible.expandAll();
 
 	console.log("Done!");
 
@@ -10599,9 +10593,8 @@
 			expandAll : expandAll
 	};
 
-
 	function setUpPanels() {
-		
+
 		loadSettings();
 
 		// get all headings
@@ -10644,7 +10637,7 @@
 
 	/**
 	 * Start the expand/collapse animation of the panel
-	 * 
+	 *
 	 * @param panel
 	 *            reference to the panel div
 	 */
@@ -10679,7 +10672,7 @@
 
 	/**
 	 * Change the height of the target
-	 * 
+	 *
 	 * @param panelContent
 	 *            reference to the panel content to change height
 	 * @param iteration
@@ -10755,14 +10748,14 @@
 		for ( var key in panelsStatus) {
 			saveSettings(key, "false");
 		}
-			
+
 		setUpPanels();
 	}
 
 	/**
 	 * Takes data from the panelsStatus object, formats as key:value|key:value...
 	 * and puts in cookie valid for 365 days
-	 * 
+	 *
 	 * @param key
 	 *            key name to save
 	 * @paeam value key value
@@ -10793,6 +10786,7 @@
 		// the IE way
 		window.attachEvent("onload", setUpPanels);
 	}
+
 
 /***/ },
 /* 9 */
@@ -20357,7 +20351,10 @@
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	//require("script!kodama.js");
+	/**
+	 * @fbielejec
+	 */
+
 
 	// ---MODULE IMPORTS---//
 
@@ -20408,11 +20405,6 @@
 	};
 	exports.margin = margin;
 
-	// TODO
-	// console.log("window:");
-	// console.log(window.innerWidth);
-	// console.log(window.innerHeight);
-
 	var width = window.innerWidth - margin.left - margin.right;
 	exports.width = width;
 
@@ -20438,48 +20430,12 @@
 	exports.pairedSimpleColors = fixedColors;
 
 	// colors for categorical attributes
-	var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
+	var ordinalColors = d3.scale.category20().range();
+	// var ordinalColors = colorbrewer.Set1[9] ;
 	exports.ordinalColors = ordinalColors;
 
 	var projection;
 	exports.projection = projection;
-
-	// var lineAttributes;
-	// var pointAttributes;
-	//
-	// var areasLayer ;
-	// exports.areasLayer = areasLayer;
-	// var linesLayer ;
-	// exports.linesLayer = linesLayer;
-	// var pointsLayer;
-	// exports.pointsLayer = pointsLayer;
-	//
-	// //var minScaleExtent = 1;
-	// //exports.minScaleExtent=minScaleExtent;
-	// //var maxScaleExtent = 5;
-	// //exports.maxScaleExtent = maxScaleExtent;
-	// var lineWidth = 2;
-	//
-	// // time slider
-	// var playing = false;
-	// exports.playing = playing;
-	//
-	// var processID;
-	// //var currentSliderValue;
-	// var sliderInterval;
-	// var sliderStartValue;
-	// exports.sliderStartValue = sliderStartValue;
-	// var sliderEndValue;
-	// exports.sliderEndValue = sliderEndValue;
-	//
-	// var timeSlider;
-	// //exports.timeSlider = timeSlider;
-	//
-	// var timeScale;
-	// var currentDateDisplay;
-	// //exports.currentDateDisplay = currentDateDisplay;
-	// var dateFormat;
-	//
 
 
 /***/ },
@@ -20843,9 +20799,9 @@
 		return string[0].toUpperCase() + string.slice(1);
 	}// END: capitalizeFirstLetter
 
-	exports.getObject = function(obj, key, val) {
+	exports.getObject = function(objects, key, val) {
 		var newObj = false;
-		$.each(obj, function() {
+		$.each(objects, function() {
 			var testObject = this;
 			$.each(testObject, function(k, v) {
 				// alert(k);
@@ -20922,9 +20878,9 @@
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 	var points = __webpack_require__(24);
-	var lines = __webpack_require__(31);
-	var areas = __webpack_require__(32);
-	var counts = __webpack_require__(33);
+	var lines = __webpack_require__(30);
+	var areas = __webpack_require__(31);
+	var counts = __webpack_require__(32);
 
 	// ---MODULE VARIABLES---//
 
@@ -20945,122 +20901,120 @@
 
 	var exports = module.exports = {};
 
-	exports.initializeTimeSlider = function( timeLine) {
+	exports.initializeTimeSlider = function(timeLine) {
 
-		// initialize module variables
-		initializeVariables(timeLine);
+	    // initialize module variables
+	    initializeVariables(timeLine);
 
-		// put slider at the end of timeLine, everything painted
-		timeSlider.value( sliderEndValue);
-		updateDateDisplay(sliderEndValue);
+	    // put slider at the end of timeLine, everything painted
+	    timeSlider.value(sliderEndValue);
+	    updateDateDisplay(sliderEndValue);
 
-		// time slider listener
-		timeSlider.on('slide', function(evt, value) {
+	    // time slider listener
+	    timeSlider.on('slide', function(evt, value) {
 
-			update(value);
-			currentSliderValue = value;
+	      update(value);
+	      currentSliderValue = value;
 
-		});// END: slide
+	    }); // END: slide
 
-		var playPauseButton = d3.select('#playPause').attr("class", "playPause")
-				.on(
-						"click",
-						function() {
+	    var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+	      .on(
+	        "click",
+	        function() {
 
-							if ( playing) {
-								playing = false;
-								playPauseButton.classed("playing", playing);
+	          if (playing) {
+	            playing = false;
+	            playPauseButton.classed("playing", playing);
 
-								clearInterval(processID);
+	            clearInterval(processID);
 
-							} else {
-								playing = true;
-								playPauseButton.classed("playing", playing);
+	          } else {
+	            playing = true;
+	            playPauseButton.classed("playing", playing);
 
-								processID = setInterval(function() {
+	            processID = setInterval(function() {
 
-									var sliderValue = currentSliderValue
-											+ sliderInterval;
-									if (sliderValue > sliderEndValue) {
-										sliderValue = sliderStartValue;
-									}
+	              var sliderValue = currentSliderValue + sliderInterval;
+	              if (sliderValue > sliderEndValue) {
+	                sliderValue = sliderStartValue;
+	              }
 
-									timeSlider.value(sliderValue);
-									update(sliderValue);
+	              timeSlider.value(sliderValue);
+	              update(sliderValue);
 
-									currentSliderValue = sliderValue;
+	              currentSliderValue = sliderValue;
 
-								}, 100);
+	            }, 100);
 
-							}// END: playing check
+	          } // END: playing check
 
-						});
+	        });
 
-	}// END: initializeTimeSlider
+	  } // END: initializeTimeSlider
 
 	// ---FUNCTIONS---//
 
 	initializeVariables = function(timeLine) {
 
-		dateFormat = d3.time.format("%Y/%m/%d");
+	    dateFormat = d3.time.format("%Y/%m/%d");
 
-		var startDate = utils.formDate(timeLine.startTime);
-		sliderStartValue = startDate.getTime();
+	    var startDate = utils.formDate(timeLine.startTime);
+	    sliderStartValue = startDate.getTime();
 
-		var endDate = utils.formDate(timeLine.endTime);
-		sliderEndValue = endDate.getTime();
+	    var endDate = utils.formDate(timeLine.endTime);
+	    sliderEndValue = endDate.getTime();
 
-		currentSliderValue =  sliderStartValue;
+	    currentSliderValue = sliderStartValue;
 
-		var duration =  sliderEndValue -  sliderStartValue;
-		sliderInterval = duration / sliderSpeed;
+	    var duration = sliderEndValue - sliderStartValue;
+	    sliderInterval = duration / sliderSpeed;
 
-		// initial value
-		currentDateDisplay = d3.select('#currentDate');//.text(dateFormat(startDate));
+	    // initial value
+	    currentDateDisplay = d3.select('#currentDate'); //.text(dateFormat(startDate));
 
-		 timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-				[ 0, 1 ]);
+	    timeScale = d3.time.scale.utc().domain([startDate, endDate]).range(
+	      [0, 1]);
 
-		timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-		d3.select('#timeSlider').call(timeSlider);
+	    timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+	    d3.select('#timeSlider').call(timeSlider);
 
-	}// END: generateTime
+	  } // END: generateTime
 
 	function updateDateDisplay(value) {
 
-		var currentDate = timeScale.invert(timeScale(value));
-		currentDateDisplay.text(dateFormat(currentDate));
+	  var currentDate = timeScale.invert(timeScale(value));
+	  currentDateDisplay.text(dateFormat(currentDate));
 
-	}// END: updateDateDisplay
+	} // END: updateDateDisplay
 
 	function update(value) {
 
-		updateDateDisplay(value);
+	  updateDateDisplay(value);
 
-	    //---POINTS---//
+	  //---POINTS---//
 
-		if(global.hasPoints) {
-		points.updatePointsLayer(value);
-		}
+	  if (global.hasPoints) {
+	    points.updatePointsLayer(value);
+	  }
 
-		// ---LINES---//
+	  // ---LINES---//
 
-		if(global.hasLines) {
-		lines.updateLinesLayer(value);
-		}
+	  if (global.hasLines) {
+	    lines.updateLinesLayer(value);
+	  }
 
+	  // --- AREAS--//
+	  if (global.hasAreas) {
+	    areas.updateAreasLayer(value);
+	  }
 
-		// --- AREAS--//
-		if(global.hasAreas) {
-		areas.updateAreasLayer(value);
-		}
+	  // --- COUNTS--//
+	  if (global.hasCounts) {
+	    counts.updateCountsLayer(value);
+	  }
 
-		// --- COUNTS--//
-		if(global.hasCounts) {
-		counts.updateCountsLayer(value);
-		}
-
-	}// END: update
+	} // END: update
 
 
 /***/ },
@@ -21180,17 +21134,11 @@
 	__webpack_require__(25);
 	var d3 = __webpack_require__(9);
 	__webpack_require__(27);
+	__webpack_require__(29);
 
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 
-	// var slider = require('rangeslider.js');
-	// require("script!rangeslider.js");
-
-	__webpack_require__(29);
-
-	// import("./jquery.simple-color.js");
-	__webpack_require__(30);
 
 	// ---MODULE VARIABLES---//
 
@@ -21202,678 +21150,672 @@
 
 	var pointRadius = 2;
 	var min_point_radius = 1;
-	var max_point_radius = 7;
+	var max_point_radius = 10;
 
 	var tooltipAttributes = {
-		color : null,
-		radius : null
+	  color: null,
+	  radius: null
 	}
 
 	d3.kodama
-			.themeRegistry(
-					'nodesTheme',
-					{
-						frame : {
-							padding : '4px',
-							background : 'linear-gradient(to top, rgb(16, 74, 105) 0%, rgb(14, 96, 125) 90%)',
-							'font-family' : '"Helvetica Neue", Helvetica, Arial, sans-serif',
-							'border' : '1px solid rgb(57, 208, 204)',
-							color : 'rgb(245,240,220)',
-							'border-radius' : '4px',
-							'font-size' : '12px',
-							'box-shadow' : '0px 1px 3px rgba(0,20,40,.5)'
-						},
-						title : {
-							'text-align' : 'center',
-							'padding' : '4px'
-						},
-						item_title : {
-							'text-align' : 'right',
-							'color' : 'rgb(220,200,120)'
-						},
-						item_value : {
-							'padding' : '1px 2px 1px 10px',
-							'color' : 'rgb(234, 224, 184)'
-						}
-					});
+	  .themeRegistry(
+	    'nodesTheme', {
+	      frame: {
+	        padding: '4px',
+	        background: 'linear-gradient(to top, rgb(16, 74, 105) 0%, rgb(14, 96, 125) 90%)',
+	        'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
+	        'border': '1px solid rgb(57, 208, 204)',
+	        color: 'rgb(245,240,220)',
+	        'border-radius': '4px',
+	        'font-size': '12px',
+	        'box-shadow': '0px 1px 3px rgba(0,20,40,.5)'
+	      },
+	      title: {
+	        'text-align': 'center',
+	        'padding': '4px'
+	      },
+	      item_title: {
+	        'text-align': 'right',
+	        'color': 'rgb(220,200,120)'
+	      },
+	      item_value: {
+	        'padding': '1px 2px 1px 10px',
+	        'color': 'rgb(234, 224, 184)'
+	      }
+	    });
 
 	// ---MODULE EXPORTS---//
 
 	var exports = module.exports = {};
 
-	exports.generatePointsLayer = function(nodes, nodeAttributes) {
+	exports.generatePointsLayer = function(nodes, locations, nodeAttributes) {
 
-		pointsLayer = global.g.append("g").attr("class", "pointsLayer");
+	    pointsLayer = global.g.append("g").attr("class", "pointsLayer");
 
-		var points = pointsLayer.selectAll("circle").data(nodes).enter().append(
-				"circle") //
-		.attr("class", "point") //
-		.attr("startTime", function(d) {
+	    var points = pointsLayer.selectAll("circle").data(nodes).enter().append(
+	        "circle") //
+	      .attr("class", "point") //
+	      .attr("startTime", function(d) {
 
-			return (d.startTime);
+	        return (d.startTime);
 
-		}) //
-		.attr("cx", function(d) {
+	      }) //
+	      .attr("cx", function(d) {
 
-			var xy;
-			var location = d.location;
-			if (typeof location != 'undefined') {
+	        var pointCoordinate = d['coordinate'];
+	        if (typeof pointCoordinate == 'undefined') {
+	          // discrete
+	          var pointLocationId = d.locationId;
+	          var pointLocation = utils.getObject(locations, "id", pointLocationId);
+	          pointCoordinate = pointLocation.coordinate;
+	          d['coordinate'] = pointCoordinate;
+	        }
 
-				xy = global.projection([ location.coordinate.xCoordinate, // long
-				location.coordinate.yCoordinate // lat
-				]);
+	        var xy = global.projection([pointCoordinate.xCoordinate, // long
+	          pointCoordinate.yCoordinate // lat
+	        ]);
 
-			} else {
+	        var cx = xy[0]; // long
 
-				xy = global.projection([ d.coordinate.xCoordinate, // long
-				d.coordinate.yCoordinate // lat
-				]);
+	        return (cx);
+	      }) //
+	      .attr(
+	        "cy",
+	        function(d) {
 
-			}
+	          var pointCoordinate = d['coordinate'];
+	          if (typeof pointCoordinate == 'undefined') {
+	            // discrete
+	            var pointLocationId = d.locationId;
+	            var pointLocation = utils.getObject(locations, "id", pointLocationId);
+	            pointCoordinate = pointLocation.coordinate;
+	            d['coordinate'] = pointCoordinate;
+	          }
 
-			var cx = xy[0]; // long
+	          var xy = global.projection([pointCoordinate.xCoordinate, // long
+	            pointCoordinate.yCoordinate // lat
+	          ]);
 
-			return (cx);
-		}) //
-		.attr(
-				"cy",
-				function(d) {
+	          var cy = xy[1]; // lat
 
-					var xy;
-					var location = d.location;
-					if (typeof location != 'undefined') {
+	          return (cy);
+	        }) //
+	      .attr("r", pointRadius) //
+	      .attr("fill", global.fixedColors[pointDefaultColorIndex]) //
+	      .attr("stroke", "black") //
+	      .attr("opacity", 1.0) //
+	      .on('mouseover', function(d) {
 
-						xy = global.projection([ location.coordinate.xCoordinate,
-								location.coordinate.yCoordinate ]);
+	        var point = d3.select(this);
+	        point.attr('stroke', 'white');
 
-					} else {
+	      }) //
+	      .on('mouseout', function(d, i) {
 
-						xy = global.projection([ d.coordinate.xCoordinate,
-								d.coordinate.yCoordinate ]);
+	        var point = d3.select(this);
+	        point.attr('stroke', "black");
 
-					}
+	      });
 
-					var cy = xy[1]; // lat
+	    updateTooltips();
 
-					return (cy);
-				}) //
-		.attr("r", pointRadius) //
-		.attr("fill", global.fixedColors[pointDefaultColorIndex]) //
-		.attr("stroke", "black") //
-		.attr("opacity", 1.0)//
-		.on('mouseover', function(d) {
+	    // dump attribute values into DOM
+	    points[0].forEach(function(d, i) {
 
-			var point = d3.select(this);
-			point.attr('stroke', 'white');
+	      var thisPoint = d3.select(d);
+	      var properties = nodes[i].attributes;
 
-		}) //
-		.on('mouseout', function(d, i) {
+	      for (var property in properties) {
+	        if (properties.hasOwnProperty(property)) {
 
-			var point = d3.select(this);
-			point.attr('stroke', "black");
+	          thisPoint.attr(property, properties[property]);
 
-		});
+	        }
+	      } // END: properties loop
+	    });
 
-		updateTooltips();
-
-		// dump attribute values into DOM
-		points[0].forEach(function(d, i) {
-
-			var thisPoint = d3.select(d);
-			var properties = nodes[i].attributes;
-
-			for ( var property in properties) {
-				if (properties.hasOwnProperty(property)) {
-
-					thisPoint.attr(property, properties[property]);
-
-				}
-			}// END: properties loop
-		});
-
-	}// END: generatePointsLayer
+	  } // END: generatePointsLayer
 
 	exports.setupPanels = function(attributes) {
 
-		setupPointsLayerCheckbox();
-		setupPointFixedColorPanel();
-		setupPointColorAttributePanel(attributes);
-		setupPointFixedRadiusPanel();
-		setupPointRadiusAttributePanel(attributes);
+	    setupPointsLayerCheckbox();
+	    setupPointFixedColorPanel();
+	    setupPointColorAttributePanel(attributes);
+	    setupPointFixedRadiusPanel();
+	    setupPointRadiusAttributePanel(attributes);
 
-	}// END: setupPanels
+	  } // END: setupPanels
 
 	function setupPointsLayerCheckbox() {
 
-		$('#layerVisibility')
-				.append(
-						"<input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
+	  $('#layerVisibility')
+	    .append(
+	      "<input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
 
-		var pointsLayerCheckbox = document.getElementById("pointsLayerCheckbox");
-		// default state is checked
-		pointsLayerCheckbox.checked = true;
+	  var pointsLayerCheckbox = document.getElementById("pointsLayerCheckbox");
+	  // default state is checked
+	  pointsLayerCheckbox.checked = true;
 
-		d3.select(pointsLayerCheckbox).on("change", function() {
+	  d3.select(pointsLayerCheckbox).on("change", function() {
 
-			var visibility = this.checked ? "visible" : "hidden";
-			pointsLayer.selectAll("circle").style("visibility", visibility);
-			// locationsLayer.selectAll("circle").style("visibility", visibility);
+	    var visibility = this.checked ? "visible" : "hidden";
+	    pointsLayer.selectAll("circle").style("visibility", visibility);
+	    // locationsLayer.selectAll("circle").style("visibility", visibility);
 
-		});
+	  });
 
-	}// END: setupPointsLayerCheckbox
+	} // END: setupPointsLayerCheckbox
 
 	exports.updatePointsLayer = function(value) {
 
-		// ---select points yet to be displayed---//
+	    // ---select points yet to be displayed---//
 
-		pointsLayer.selectAll(".point") //
-		.filter(
-				function(d) {
-					var point = this;
-					var startDate = utils
-							.formDate(point.attributes.startTime.value).getTime();
+	    pointsLayer.selectAll(".point") //
+	      .filter(
+	        function(d) {
+	          var point = this;
+	          var startDate = utils
+	            .formDate(point.attributes.startTime.value).getTime();
 
-					return (value < startDate);
-				}) //
-		.transition() //
-		.ease("linear") //
-		.attr("visibility", "hidden").attr("opacity", 0);
+	          return (value < startDate);
+	        }) //
+	      .transition() //
+	      .ease("linear") //
+	      .attr("visibility", "hidden") //
+	      .attr("opacity", 0);
 
-		// ---select points displayed now---//
+	    // ---select points displayed now---//
 
-		pointsLayer.selectAll(".point") //
-		.filter(
-				function(d) {
-					var point = this;
-					var startDate = utils
-							.formDate(point.attributes.startTime.value).getTime();
+	    pointsLayer.selectAll(".point") //
+	      .filter(
+	        function(d) {
+	          var point = this;
+	          var startDate = utils
+	            .formDate(point.attributes.startTime.value).getTime();
 
-					return (value >= startDate);
-				}) //
-		.transition() //
-		.ease("linear") //
-		.attr("visibility", "visible") //
-		.attr("opacity", 1);
+	          return (value >= startDate);
+	        }) //
+	      .transition() //
+	      .ease("linear") //
+	      .attr("visibility", "visible") //
+	      .attr("opacity", 1);
 
-	}// END: updatePointsLayer
+	  } // END: updatePointsLayer
 
 	// ---MODULE PRIVATE FUNCTIONS---//
 
 	updatePointColorLegend = function(scale) {
 
-		var width = 150;
-		var height = 110;
+	    var width = 150;
+	    var height = 110;
 
-		var margin = {
-			left : 20,
-			top : 20
-		};
+	    var margin = {
+	      left: 20,
+	      top: 20
+	    };
 
-		$('#pointColorLegend').html('');
-		var svg = d3.select("#pointColorLegend").append('svg').attr("width", width)
-				.attr("height", height);
+	    $('#pointColorLegend').html('');
+	    var svg = d3.select("#pointColorLegend").append('svg').attr("width", width)
+	      .attr("height", height);
 
-		var pointColorLegend = d3.legend.color().scale(scale).shape('circle')
-				.shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
+	    var pointColorLegend = d3.legend.color().scale(scale).shape('circle')
+	      .shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
 
-		svg.append("g").attr("class", "pointColorLegend").attr("transform",
-				"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-				pointColorLegend);
+	    svg.append("g").attr("class", "pointColorLegend").attr("transform",
+	      "translate(" + (margin.left) + "," + (margin.top) + ")").call(
+	      pointColorLegend);
 
-	}// END: updateColorScale
+	  } // END: updateColorScale
 
 	updatePointColors = function(scale, colorAttribute) {
 
-		pointsLayer.selectAll(".point").transition() //
-		.ease("linear") //
-		.attr("fill", function() {
+	    pointsLayer.selectAll(".point").transition() //
+	      .ease("linear") //
+	      .attr("fill", function() {
 
-			var point = d3.select(this);
-			var attributeValue = point.attr(colorAttribute);
-			var color = scale(attributeValue);
+	        var point = d3.select(this);
+	        var attributeValue = point.attr(colorAttribute);
+	        var color = scale(attributeValue);
 
-			if (attributeValue == null) {
-				console.log("null found");
-				color = "#000";
-			}
+	        if (attributeValue == null) {
+	          console.log("null found");
+	          color = "#000";
+	        }
 
-			return (color);
-		});
+	        return (color);
+	      });
 
-	}// END: updatePointColors
+	  } // END: updatePointColors
 
 	updateTooltips = function() {
 
-		pointsLayer
-				.selectAll(".point")
-				.call(
-						d3.kodama
-								.tooltip()
-								.format(
-										function(d, i) {
+	    pointsLayer
+	      .selectAll(".point")
+	      .call(
+	        d3.kodama
+	        .tooltip()
+	        .format(
+	          function(d, i) {
 
-											var tooltipItems = [];
-											for ( var tooltipAttribute in tooltipAttributes) { //
+	            var tooltipItems = [];
+	            for (var tooltipAttribute in tooltipAttributes) { //
 
-												if (tooltipAttributes[tooltipAttribute]) {
-													var element = {};
-													element.title = utils
-															.capitalizeFirstLetter(tooltipAttribute);
-													element.value = tooltipAttributes[tooltipAttribute]
-															+ "="
-															+ d.attributes[tooltipAttributes[tooltipAttribute]];
-													tooltipItems.push(element);
-												}// END: null check
+	              if (tooltipAttributes[tooltipAttribute]) {
+	                var element = {};
+	                element.title = utils
+	                  .capitalizeFirstLetter(tooltipAttribute);
+	                element.value = tooltipAttributes[tooltipAttribute] + "=" + d.attributes[tooltipAttributes[tooltipAttribute]];
+	                tooltipItems.push(element);
+	              } // END: null check
 
-											}// END: attributes loop
+	            } // END: attributes loop
 
-											return {
-												title : d.attributes.nodeName,
-												items : tooltipItems
-											};
+	            return {
+	              title: d.attributes.nodeName,
+	              items: tooltipItems
+	            };
 
-										}).theme('nodesTheme') //
-				);
+	          }).theme('nodesTheme') //
+	      );
 
-	}// END: updateTooltips
+	  } // END: updateTooltips
 
 	updatePointFixedColorLegend = function(scale) {
 
-		var width = 150;
-		var height = 265;
+	    var width = 150;
+	    var height = 265;
 
-		var margin = {
-			left : 20,
-			top : 20
-		};
+	    var margin = {
+	      left: 20,
+	      top: 20
+	    };
 
-		$('#pointFixedColorLegend').html('');
-		var svg = d3.select("#pointFixedColorLegend").append('svg').attr("width",
-				width).attr("height", height);
+	    $('#pointFixedColorLegend').html('');
+	    var svg = d3.select("#pointFixedColorLegend").append('svg').attr("width",
+	      width).attr("height", height);
 
-		var pointFixedColorLegend = d3.legend.color().scale(scale).shape('circle')
-				.shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
+	    var pointFixedColorLegend = d3.legend.color().scale(scale).shape('circle')
+	      .shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
 
-		svg.append("g").attr("class", "pointFixedColorLegend").attr("transform",
-				"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-				pointFixedColorLegend);
+	    svg.append("g").attr("class", "pointFixedColorLegend").attr("transform",
+	      "translate(" + (margin.left) + "," + (margin.top) + ")").call(
+	      pointFixedColorLegend);
 
-	}// END: updatePointFixedColorLegend
+	  } // END: updatePointFixedColorLegend
 
 	setupPointFixedColorPanel = function() {
 
-	var str = ("				<div class=\"panelcollapsed\">") +
-	 ("					<h2>Points fixed color<\/h2>")+
-	   ("					<div class=\"panelcontent\">")+
-	  ("						<select id=\"pointFixedColor\">") +
-	  ("						<\/select>") +
-	("						<div id=\"pointFixedColorLegend\"><\/div>") +
-	("					<\/div>") +
-	  ("				<\/div>");
+	    var str = ("				<div class=\"panelcollapsed\">") +
+	      ("					<h2>Points fixed color<\/h2>") +
+	      ("					<div class=\"panelcontent\">") +
+	      ("						<select id=\"pointFixedColor\">") +
+	      ("						<\/select>") +
+	      ("						<div id=\"pointFixedColorLegend\"><\/div>") +
+	      ("					<\/div>") +
+	      ("				<\/div>");
 
-		var html = $.parseHTML( str );
+	    var html = $.parseHTML(str);
 
-		$(".selectors").append(html);
+	    $(".selectors").append(html);
 
-		var pointFixedColorSelect = document.getElementById("pointFixedColor");
-		var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
-				global.fixedColors);
+	    var pointFixedColorSelect = document.getElementById("pointFixedColor");
+	    var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+	      global.fixedColors);
 
-		for (var i = 0; i < global.fixedColors.length; i++) {
+	    for (var i = 0; i < global.fixedColors.length; i++) {
 
-			var option = global.fixedColors[i];
-			var element = document.createElement("option");
-			element.textContent = option;
-			element.value = option;
+	      var option = global.fixedColors[i];
+	      var element = document.createElement("option");
+	      element.textContent = option;
+	      element.value = option;
 
-			pointFixedColorSelect.appendChild(element);
+	      pointFixedColorSelect.appendChild(element);
 
-		}// END: i loop
+	    } // END: i loop
 
-		// select the default
-		pointFixedColorSelect.selectedIndex = pointDefaultColorIndex;
+	    // select the default
+	    pointFixedColorSelect.selectedIndex = pointDefaultColorIndex;
 
-		// point fixed color listener
-		d3
-				.select(pointFixedColorSelect)
-				.on(
-						'change',
-						function() {
+	    // point fixed color listener
+	    d3
+	      .select(pointFixedColorSelect)
+	      .on(
+	        'change',
+	        function() {
 
-							var colorSelect = pointFixedColorSelect.options[pointFixedColorSelect.selectedIndex].text;
-							var color = scale(colorSelect);
+	          var colorSelect = pointFixedColorSelect.options[pointFixedColorSelect.selectedIndex].text;
+	          var color = scale(colorSelect);
 
-							pointsLayer.selectAll(".point") //
-							.transition() //
-							.ease("linear") //
-							.attr("fill", color);
+	          pointsLayer.selectAll(".point") //
+	            .transition() //
+	            .ease("linear") //
+	            .attr("fill", color);
 
-							// setup legend
-							updatePointFixedColorLegend(scale);
+	          // setup legend
+	          updatePointFixedColorLegend(scale);
 
-						});
+	        });
 
-		tooltipAttributes['color'] = null;
-		updateTooltips();
+	    tooltipAttributes['color'] = null;
+	    updateTooltips();
 
-	}// END: setupFixedColorPanel
+	  } // END: setupFixedColorPanel
 
 	setupPointColorAttributePanel = function(attributes) {
 
-	var str = ("				<div class=\"panelcollapsed\">")+
-	  ("					<h2>Points color attribute<\/h2>") +
-	  ("					<div class=\"panelcontent\">") +
-	  ("						<div id=\"pointStartColor\">")+
-	  ("						<\/div>") +
-	("						<div id=\"pointEndColor\">") +
-	("						<\/div>") +
-	("						<h4>Attribute<\/h4>") +
-	("						<select id=\"pointColorAttribute\">") +
-	("						<\/select>") +
-	("						<div id=\"pointColorLegend\"><\/div>") +
-	("					<\/div>") +
-	("				<\/div>");
+	    var str = ("				<div class=\"panelcollapsed\">") +
+	      ("					<h2>Points color attribute<\/h2>") +
+	      ("					<div class=\"panelcontent\">") +
+	      ("						<div id=\"pointStartColor\">") +
+	      ("						<\/div>") +
+	      ("						<div id=\"pointEndColor\">") +
+	      ("						<\/div>") +
+	      ("						<h4>Attribute<\/h4>") +
+	      ("						<select id=\"pointColorAttribute\">") +
+	      ("						<\/select>") +
+	      ("						<div id=\"pointColorLegend\"><\/div>") +
+	      ("					<\/div>") +
+	      ("				<\/div>");
 
-	var html = $.parseHTML(str);
+	    var html = $.parseHTML(str);
 
-	$(".selectors").append(html);
+	    $(".selectors").append(html);
 
-		// attribute
-		var pointColorAttributeSelect = document
-				.getElementById("pointColorAttribute");
+	    // attribute
+	    var pointColorAttributeSelect = document
+	      .getElementById("pointColorAttribute");
 
-		for (var i = 0; i < attributes.length; i++) {
+	    for (var i = 0; i < attributes.length; i++) {
 
-			option = attributes[i].id;
-			// skip points with count attribute
-			if (option == global.COUNT) {
-				continue;
-			}
+	      option = attributes[i].id;
+	      // skip points with count attribute
+	      if (option == global.COUNT) {
+	        continue;
+	      }
 
-			element = document.createElement("option");
-			element.textContent = option;
-			element.value = option;
+	      element = document.createElement("option");
+	      element.textContent = option;
+	      element.value = option;
 
-			pointColorAttributeSelect.appendChild(element);
+	      pointColorAttributeSelect.appendChild(element);
 
-		}// END: i loop
+	    } // END: i loop
 
-		// point color attribute listener
-		d3
-				.select(pointColorAttributeSelect)
-				.on(
-						'change',
-						function() {
+	    // point color attribute listener
+	    d3
+	      .select(pointColorAttributeSelect)
+	      .on(
+	        'change',
+	        function() {
 
-							var colorAttribute = pointColorAttributeSelect.options[pointColorAttributeSelect.selectedIndex].text;
-							var attribute = utils.getObject(attributes, "id",
-									colorAttribute);
+	          var colorAttribute = pointColorAttributeSelect.options[pointColorAttributeSelect.selectedIndex].text;
+	          var attribute = utils.getObject(attributes, "id",
+	            colorAttribute);
 
-							var data;
-							var scale;
+	          var data;
+	          var scale;
 
-							$('#pointStartColor').html('');
-							$('#pointEndColor').html('');
+	          $('#pointStartColor').html('');
+	          $('#pointEndColor').html('');
 
-							if (attribute.scale == global.ORDINAL) {
+	          if (attribute.scale == global.ORDINAL) {
 
-								data = attribute.domain;
-								scale = d3.scale.ordinal().range(
-										global.ordinalColors).domain(data);
+	            data = attribute.domain;
+	            scale = d3.scale.ordinal().range(
+	              global.ordinalColors).domain(data);
 
-								updatePointColorLegend(scale);
+	            updatePointColorLegend(scale);
 
-							} else if (attribute.scale == global.LINEAR) {
+	          } else if (attribute.scale == global.LINEAR) {
 
-								data = attribute.range;
+	            data = attribute.range;
 
-								scale = d3.scale.linear().domain(data).range(
-										[ pointStartColor, pointEndColor ]);
+	            scale = d3.scale.linear().domain(data).range(
+	              [pointStartColor, pointEndColor]);
 
-								updatePointColorLegend(scale);
+	            updatePointColorLegend(scale);
 
-								// start color
-								$('#pointStartColor').html("<h4>Start color<\/h4>");
-								$('#pointStartColor').append(
-										"<input class=\"pointStartColor\" \/>");
+	            // start color
+	            $('#pointStartColor').html("<h4>Start color<\/h4>");
+	            $('#pointStartColor').append(
+	              "<input class=\"pointStartColor\" \/>");
 
-								$('.pointStartColor')
-										.simpleColor(
-												{
-													cellWidth : 13,
-													cellHeight : 13,
-													columns : 4,
-													displayColorCode : true,
-													colors : utils
-															.getSimpleColors(global.pairedSimpleColors),
+	            $('.pointStartColor')
+	              .simpleColor({
+	                cellWidth: 13,
+	                cellHeight: 13,
+	                columns: 4,
+	                displayColorCode: true,
+	                colors: utils
+	                  .getSimpleColors(global.pairedSimpleColors),
 
-													onSelect : function(hex,
-															element) {
+	                onSelect: function(hex,
+	                    element) {
 
-														pointStartColor = "#" + hex;
+	                    pointStartColor = "#" + hex;
 
-														scale.range([
-																pointStartColor,
-																pointEndColor ]);
-														updatePointColorLegend(scale);
+	                    scale.range([
+	                      pointStartColor,
+	                      pointEndColor
+	                    ]);
+	                    updatePointColorLegend(scale);
 
-														// trigger repaint
-														updatePointColors(scale,
-																colorAttribute);
+	                    // trigger repaint
+	                    updatePointColors(scale,
+	                      colorAttribute);
 
-													}// END: onSelect
-												});
+	                  } // END: onSelect
+	              });
 
-								$('.pointStartColor').setColor(pointStartColor);
+	            $('.pointStartColor').setColor(pointStartColor);
 
-								// end color
-								$('#pointEndColor').html("<h4>End color<\/h4>");
-								$('#pointEndColor').append(
-										"<input class=\"pointEndColor\" \/>");
+	            // end color
+	            $('#pointEndColor').html("<h4>End color<\/h4>");
+	            $('#pointEndColor').append(
+	              "<input class=\"pointEndColor\" \/>");
 
-								$('.pointEndColor')
-										.simpleColor(
-												{
-													cellWidth : 13,
-													cellHeight : 13,
-													columns : 4,
-													colors : utils
-															.getSimpleColors(global.pairedSimpleColors),
-													displayColorCode : true,
-													onSelect : function(hex,
-															element) {
+	            $('.pointEndColor')
+	              .simpleColor({
+	                cellWidth: 13,
+	                cellHeight: 13,
+	                columns: 4,
+	                colors: utils
+	                  .getSimpleColors(global.pairedSimpleColors),
+	                displayColorCode: true,
+	                onSelect: function(hex,
+	                  element) {
 
-														pointEndColor = "#" + hex;
+	                  pointEndColor = "#" + hex;
 
-														scale.range([
-																pointStartColor,
-																pointEndColor ]);
-														updatePointColorLegend(scale);
+	                  scale.range([
+	                    pointStartColor,
+	                    pointEndColor
+	                  ]);
+	                  updatePointColorLegend(scale);
 
-														// trigger repaint
-														updatePointColors(scale,
-																colorAttribute);
-													}
-												});
+	                  // trigger repaint
+	                  updatePointColors(scale,
+	                    colorAttribute);
+	                }
+	              });
 
-								$('.pointEndColor').setColor(pointEndColor);
+	            $('.pointEndColor').setColor(pointEndColor);
 
-							} else {
-								console
-										.log("Error occured when resolving scale type!");
-							}
+	          } else {
+	            console
+	              .log("Error occured when resolving scale type!");
+	          }
 
-							// trigger repaint
-							updatePointColors(scale, colorAttribute);
+	          // trigger repaint
+	          updatePointColors(scale, colorAttribute);
 
-							tooltipAttributes['color'] = colorAttribute;
-							updateTooltips();
+	          tooltipAttributes['color'] = colorAttribute;
+	          updateTooltips();
 
-						});
+	        });
 
-	} // END: setupPointColorAttributePanel
+	  } // END: setupPointColorAttributePanel
 
 	setupPointFixedRadiusPanel = function() {
 
-		var str = ("				<div class=\"panelcollapsed\">") +
-	 ("					<h2>Points fixed radius<\/h2>") +
-	   ("					<div class=\"panelcontent\">") +
-	 ("						<div id=\"pointFixedRadiusSlider\">") +
-	   ("						<\/div>") +
-	   ("					<\/div>") +
-	   ("				<\/div>");
+	    var str = ("				<div class=\"panelcollapsed\">") +
+	      ("					<h2>Points fixed radius<\/h2>") +
+	      ("					<div class=\"panelcontent\">") +
+	      ("						<div id=\"pointFixedRadiusSlider\">") +
+	      ("						<\/div>") +
+	      ("					<\/div>") +
+	      ("				<\/div>");
 
-		 var html = $.parseHTML(str);
+	    var html = $.parseHTML(str);
 
-		 $(".selectors").append(html);
+	    $(".selectors").append(html);
 
-	$('#pointFixedRadiusSlider').html('<input type="range" class="pointFixedRadiusSlider" step="1" min="' + min_point_radius + '" max="' + max_point_radius + '" value="'+pointRadius+'"  />');
-	$('#pointFixedRadiusSlider').append('<span>' + pointRadius + '</span>');
+	    $('#pointFixedRadiusSlider').html('<input type="range" class="pointFixedRadiusSlider" step="1" min="' + min_point_radius + '" max="' + max_point_radius + '" value="' + pointRadius + '"  />');
+	    $('#pointFixedRadiusSlider').append('<span>' + pointRadius + '</span>');
 
-	$('.pointFixedRadiusSlider').on("input", function() {
+	    $('.pointFixedRadiusSlider').on("input", function() {
 
-	pointRadius = $(this).val();
+	      pointRadius = $(this).val();
 
-	 $(this).next().html(pointRadius);
+	      $(this).next().html(pointRadius);
 
-		pointsLayer.selectAll(".point")//
-		.transition()//
-		.ease("linear") //
-		.attr("r", pointRadius);
+	      pointsLayer.selectAll(".point") //
+	        .transition() //
+	        .ease("linear") //
+	        .attr("r", pointRadius);
 
-		});
+	    });
 
-		tooltipAttributes['radius'] = null;
-		updateTooltips();
+	    tooltipAttributes['radius'] = null;
+	    updateTooltips();
 
-	}// END: setupPointFixedAreaPanel
+	  } // END: setupPointFixedAreaPanel
 
 	setupPointRadiusAttributePanel = function(attributes) {
 
-	  var str = ("				<div class=\"panelcollapsed\">") +
-	 ("					<h2>Points radius attribute<\/h2>") +
-	   ("					<div class=\"panelcontent\">") +
-	   ("						<select id=\"pointRadiusAttribute\">") +
-	   ("						<\/select>") +
-	 ("						  <div id=\"pointRadiusLegend\"  ><\/div>  ") +
-	   ("					<\/div>") +
-	   ("				<\/div>");
+	    var str = ("				<div class=\"panelcollapsed\">") +
+	      ("					<h2>Points radius attribute<\/h2>") +
+	      ("					<div class=\"panelcontent\">") +
+	      ("						<select id=\"pointRadiusAttribute\">") +
+	      ("						<\/select>") +
+	      ("						  <div id=\"pointRadiusLegend\"  ><\/div>  ") +
+	      ("					<\/div>") +
+	      ("				<\/div>");
 
-		 var html = $.parseHTML(str);
+	    var html = $.parseHTML(str);
 
-		 $(".selectors").append(html);
+	    $(".selectors").append(html);
 
-		var pointRadiusAttributeSelect = document
-				.getElementById("pointRadiusAttribute");
+	    var pointRadiusAttributeSelect = document
+	      .getElementById("pointRadiusAttribute");
 
-		for (var i = 0; i < attributes.length; i++) {
+	    for (var i = 0; i < attributes.length; i++) {
 
-			var option = attributes[i].id;
-			// skip points with count attribute
-			if (option == global.COUNT) {
-				continue;
-			}
+	      var option = attributes[i].id;
+	      // skip points with count attribute
+	      if (option == global.COUNT) {
+	        continue;
+	      }
 
-			var element = document.createElement("option");
-			element.textContent = option;
-			element.value = option;
+	      var element = document.createElement("option");
+	      element.textContent = option;
+	      element.value = option;
 
-			pointRadiusAttributeSelect.appendChild(element);
+	      pointRadiusAttributeSelect.appendChild(element);
 
-		}// END: i loop
+	    } // END: i loop
 
-		// point area attribute listener
-		d3
-				.select(pointRadiusAttributeSelect)
-				.on(
-						'change',
-						function() {
+	    // point area attribute listener
+	    d3
+	      .select(pointRadiusAttributeSelect)
+	      .on(
+	        'change',
+	        function() {
 
-							var radiusAttribute = pointRadiusAttributeSelect.options[pointRadiusAttributeSelect.selectedIndex].text;
-							var attribute = utils.getObject(attributes, "id",
-									radiusAttribute);
+	          var radiusAttribute = pointRadiusAttributeSelect.options[pointRadiusAttributeSelect.selectedIndex].text;
+	          var attribute = utils.getObject(attributes, "id",
+	            radiusAttribute);
 
-							var data;
-							var scale;
+	          var data;
+	          var scale;
 
-							if (attribute.scale == global.ORDINAL) {
+	          if (attribute.scale == global.ORDINAL) {
 
-								data = attribute.domain;
+	            data = attribute.domain;
 
-								// smart range
-								var range = Array.apply(0, Array(data.length)).map(
-										function(x, y) {
-											return y + 1;
-										});
-								scale = d3.scale.ordinal().domain(data)
-										.range(range);
+	            // smart range
+	            var range = Array.apply(0, Array(data.length)).map(
+	              function(x, y) {
+	                return y + 1;
+	              });
+	            scale = d3.scale.ordinal().domain(data)
+	              .range(range);
 
-								updatePointRadiusLegend(scale);
+	            updatePointRadiusLegend(scale);
 
-							} else if (attribute.scale == global.LINEAR) {
+	          } else if (attribute.scale == global.LINEAR) {
 
-								data = attribute.range;
-								scale = d3.scale.linear().domain(data).range(
-										[ min_point_radius, max_point_radius ]);
+	            data = attribute.range;
+	            scale = d3.scale.linear().domain(data).range(
+	              [min_point_radius, max_point_radius]);
 
-								updatePointRadiusLegend(scale);
+	            updatePointRadiusLegend(scale);
 
-							} else {
-								console
-										.log("Error occured when resolving point radius scale type!");
-							}
+	          } else {
+	            console
+	              .log("Error occured when resolving point radius scale type!");
+	          }
 
-							pointsLayer
-									.selectAll(".point")
-									.transition()
-									.ease("linear")
-									.attr(
-											"r",
-											function(d) {
+	          pointsLayer
+	            .selectAll(".point")
+	            .transition()
+	            .ease("linear")
+	            .attr(
+	              "r",
+	              function(d) {
 
-												var attributeValue = d.attributes[radiusAttribute];
-												var radius = scale(attributeValue);
+	                var attributeValue = d.attributes[radiusAttribute];
+	                var radius = scale(attributeValue);
 
-												if (attributeValue == null) {
-													console
-															.log("null point radius attribute value found");
-													radius = 0.0;
-												}
+	                if (attributeValue == null) {
+	                  console
+	                    .log("null point radius attribute value found");
+	                  radius = 0.0;
+	                }
 
-												return (radius);
-											});
+	                return (radius);
+	              });
 
-							tooltipAttributes['radius'] = radiusAttribute;
-							updateTooltips();
+	          tooltipAttributes['radius'] = radiusAttribute;
+	          updateTooltips();
 
-						});
+	        });
 
-	}// END: setupPointAreaAttributePanel
+	  } // END: setupPointAreaAttributePanel
 
 	updatePointRadiusLegend = function(scale) {
 
-		var width = 150;
-		var height = 200;
+	    var width = 150;
+	    var height = 200;
 
-		var margin = {
-			left : 20,
-			top : 20
-		};
+	    var margin = {
+	      left: 20,
+	      top: 20
+	    };
 
-		$('#pointRadiusLegend').html('');
-		var svg = d3.select("#pointRadiusLegend").append('svg')
-				.attr("width", width).attr("height", height);
+	    $('#pointRadiusLegend').html('');
+	    var svg = d3.select("#pointRadiusLegend").append('svg')
+	      .attr("width", width).attr("height", height);
 
-		var pointRadiusLegend = d3.legend.size().scale(scale).shape('circle')
-				.shapePadding(15).labelOffset(20).orient('vertical');
-		// .title(capitalizeFirstLetter(sizeAttribute.id));
+	    var pointRadiusLegend = d3.legend.size().scale(scale).shape('circle')
+	      .shapePadding(15).labelOffset(20).orient('vertical');
+	    // .title(capitalizeFirstLetter(sizeAttribute.id));
 
-		svg.append("g").attr("class", "pointRadiusLegend").attr("transform",
-				"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-				pointRadiusLegend);
+	    svg.append("g").attr("class", "pointRadiusLegend").attr("transform",
+	      "translate(" + (margin.left) + "," + (margin.top) + ")").call(
+	      pointRadiusLegend);
 
-	}// END: updatePointRadiusLegend
+	  } // END: updatePointRadiusLegend
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -21903,501 +21845,6 @@
 
 /***/ },
 /* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*** IMPORTS FROM imports-loader ***/
-	var $ = __webpack_require__(1);
-
-	/*! rangeslider.js - v2.1.1 | (c) 2016 @andreruffert | MIT license | https://github.com/andreruffert/rangeslider.js */
-	(function(factory) {
-	    'use strict';
-
-	    if (true) {
-	        // AMD. Register as an anonymous module.
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports === 'object') {
-	        // CommonJS
-	        module.exports = factory(require('jquery'));
-	    } else {
-	        // Browser globals
-	        factory(jQuery);
-	    }
-	}(function($) {
-	    'use strict';
-
-	    // Polyfill Number.isNaN(value)
-	    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
-	    Number.isNaN = Number.isNaN || function(value) {
-	        return typeof value === 'number' && value !== value;
-	    };
-
-	    /**
-	     * Range feature detection
-	     * @return {Boolean}
-	     */
-	    function supportsRange() {
-	        var input = document.createElement('input');
-	        input.setAttribute('type', 'range');
-	        return input.type !== 'text';
-	    }
-
-	    var pluginName = 'rangeslider',
-	        pluginIdentifier = 0,
-	        hasInputRangeSupport = supportsRange(),
-	        defaults = {
-	            polyfill: true,
-	            orientation: 'horizontal',
-	            rangeClass: 'rangeslider',
-	            disabledClass: 'rangeslider--disabled',
-	            horizontalClass: 'rangeslider--horizontal',
-	            verticalClass: 'rangeslider--vertical',
-	            fillClass: 'rangeslider__fill',
-	            handleClass: 'rangeslider__handle',
-	            startEvent: ['mousedown', 'touchstart', 'pointerdown'],
-	            moveEvent: ['mousemove', 'touchmove', 'pointermove'],
-	            endEvent: ['mouseup', 'touchend', 'pointerup']
-	        },
-	        constants = {
-	            orientation: {
-	                horizontal: {
-	                    dimension: 'width',
-	                    direction: 'left',
-	                    directionStyle: 'left',
-	                    coordinate: 'x'
-	                },
-	                vertical: {
-	                    dimension: 'height',
-	                    direction: 'top',
-	                    directionStyle: 'bottom',
-	                    coordinate: 'y'
-	                }
-	            }
-	        };
-
-	    /**
-	     * Delays a function for the given number of milliseconds, and then calls
-	     * it with the arguments supplied.
-	     *
-	     * @param  {Function} fn   [description]
-	     * @param  {Number}   wait [description]
-	     * @return {Function}
-	     */
-	    function delay(fn, wait) {
-	        var args = Array.prototype.slice.call(arguments, 2);
-	        return setTimeout(function(){ return fn.apply(null, args); }, wait);
-	    }
-
-	    /**
-	     * Returns a debounced function that will make sure the given
-	     * function is not triggered too much.
-	     *
-	     * @param  {Function} fn Function to debounce.
-	     * @param  {Number}   debounceDuration OPTIONAL. The amount of time in milliseconds for which we will debounce the function. (defaults to 100ms)
-	     * @return {Function}
-	     */
-	    function debounce(fn, debounceDuration) {
-	        debounceDuration = debounceDuration || 100;
-	        return function() {
-	            if (!fn.debouncing) {
-	                var args = Array.prototype.slice.apply(arguments);
-	                fn.lastReturnVal = fn.apply(window, args);
-	                fn.debouncing = true;
-	            }
-	            clearTimeout(fn.debounceTimeout);
-	            fn.debounceTimeout = setTimeout(function(){
-	                fn.debouncing = false;
-	            }, debounceDuration);
-	            return fn.lastReturnVal;
-	        };
-	    }
-
-	    /**
-	     * Check if a `element` is visible in the DOM
-	     *
-	     * @param  {Element}  element
-	     * @return {Boolean}
-	     */
-	    function isHidden(element) {
-	        return (
-	            element && (
-	                element.offsetWidth === 0 ||
-	                element.offsetHeight === 0 ||
-	                // Also Consider native `<details>` elements.
-	                element.open === false
-	            )
-	        );
-	    }
-
-	    /**
-	     * Get hidden parentNodes of an `element`
-	     *
-	     * @param  {Element} element
-	     * @return {[type]}
-	     */
-	    function getHiddenParentNodes(element) {
-	        var parents = [],
-	            node    = element.parentNode;
-
-	        while (isHidden(node)) {
-	            parents.push(node);
-	            node = node.parentNode;
-	        }
-	        return parents;
-	    }
-
-	    /**
-	     * Returns dimensions for an element even if it is not visible in the DOM.
-	     *
-	     * @param  {Element} element
-	     * @param  {String}  key     (e.g. offsetWidth …)
-	     * @return {Number}
-	     */
-	    function getDimension(element, key) {
-	        var hiddenParentNodes       = getHiddenParentNodes(element),
-	            hiddenParentNodesLength = hiddenParentNodes.length,
-	            inlineStyle             = [],
-	            dimension               = element[key];
-
-	        // Used for native `<details>` elements
-	        function toggleOpenProperty(element) {
-	            if (typeof element.open !== 'undefined') {
-	                element.open = (element.open) ? false : true;
-	            }
-	        }
-
-	        if (hiddenParentNodesLength) {
-	            for (var i = 0; i < hiddenParentNodesLength; i++) {
-
-	                // Cache style attribute to restore it later.
-	                inlineStyle[i] = hiddenParentNodes[i].style.cssText;
-
-	                // visually hide
-	                if (hiddenParentNodes[i].style.setProperty) {
-	                    hiddenParentNodes[i].style.setProperty('display', 'block', 'important');
-	                } else {
-	                    hiddenParentNodes[i].style.cssText += ';display: block !important';
-	                }
-	                hiddenParentNodes[i].style.height = '0';
-	                hiddenParentNodes[i].style.overflow = 'hidden';
-	                hiddenParentNodes[i].style.visibility = 'hidden';
-	                toggleOpenProperty(hiddenParentNodes[i]);
-	            }
-
-	            // Update dimension
-	            dimension = element[key];
-
-	            for (var j = 0; j < hiddenParentNodesLength; j++) {
-
-	                // Restore the style attribute
-	                hiddenParentNodes[j].style.cssText = inlineStyle[j];
-	                toggleOpenProperty(hiddenParentNodes[j]);
-	            }
-	        }
-	        return dimension;
-	    }
-
-	    /**
-	     * Returns the parsed float or the default if it failed.
-	     *
-	     * @param  {String}  str
-	     * @param  {Number}  defaultValue
-	     * @return {Number}
-	     */
-	    function tryParseFloat(str, defaultValue) {
-	        var value = parseFloat(str);
-	        return Number.isNaN(value) ? defaultValue : value;
-	    }
-
-	    /**
-	     * Capitalize the first letter of string
-	     *
-	     * @param  {String} str
-	     * @return {String}
-	     */
-	    function ucfirst(str) {
-	        return str.charAt(0).toUpperCase() + str.substr(1);
-	    }
-
-	    /**
-	     * Plugin
-	     * @param {String} element
-	     * @param {Object} options
-	     */
-	    function Plugin(element, options) {
-	        this.$window            = $(window);
-	        this.$document          = $(document);
-	        this.$element           = $(element);
-	        this.options            = $.extend( {}, defaults, options );
-	        this.polyfill           = this.options.polyfill;
-	        this.orientation        = this.$element[0].getAttribute('data-orientation') || this.options.orientation;
-	        this.onInit             = this.options.onInit;
-	        this.onSlide            = this.options.onSlide;
-	        this.onSlideEnd         = this.options.onSlideEnd;
-	        this.DIMENSION          = constants.orientation[this.orientation].dimension;
-	        this.DIRECTION          = constants.orientation[this.orientation].direction;
-	        this.DIRECTION_STYLE    = constants.orientation[this.orientation].directionStyle;
-	        this.COORDINATE         = constants.orientation[this.orientation].coordinate;
-
-	        // Plugin should only be used as a polyfill
-	        if (this.polyfill) {
-	            // Input range support?
-	            if (hasInputRangeSupport) { return false; }
-	        }
-
-	        this.identifier = 'js-' + pluginName + '-' +(pluginIdentifier++);
-	        this.startEvent = this.options.startEvent.join('.' + this.identifier + ' ') + '.' + this.identifier;
-	        this.moveEvent  = this.options.moveEvent.join('.' + this.identifier + ' ') + '.' + this.identifier;
-	        this.endEvent   = this.options.endEvent.join('.' + this.identifier + ' ') + '.' + this.identifier;
-	        this.toFixed    = (this.step + '').replace('.', '').length - 1;
-	        this.$fill      = $('<div class="' + this.options.fillClass + '" />');
-	        this.$handle    = $('<div class="' + this.options.handleClass + '" />');
-	        this.$range     = $('<div class="' + this.options.rangeClass + ' ' + this.options[this.orientation + 'Class'] + '" id="' + this.identifier + '" />').insertAfter(this.$element).prepend(this.$fill, this.$handle);
-
-	        // visually hide the input
-	        this.$element.css({
-	            'position': 'absolute',
-	            'width': '1px',
-	            'height': '1px',
-	            'overflow': 'hidden',
-	            'opacity': '0'
-	        });
-
-	        // Store context
-	        this.handleDown = $.proxy(this.handleDown, this);
-	        this.handleMove = $.proxy(this.handleMove, this);
-	        this.handleEnd  = $.proxy(this.handleEnd, this);
-
-	        this.init();
-
-	        // Attach Events
-	        var _this = this;
-	        this.$window.on('resize.' + this.identifier, debounce(function() {
-	            // Simulate resizeEnd event.
-	            delay(function() { _this.update(false, false); }, 300);
-	        }, 20));
-
-	        this.$document.on(this.startEvent, '#' + this.identifier + ':not(.' + this.options.disabledClass + ')', this.handleDown);
-
-	        // Listen to programmatic value changes
-	        this.$element.on('change.' + this.identifier, function(e, data) {
-	            if (data && data.origin === _this.identifier) {
-	                return;
-	            }
-
-	            var value = e.target.value,
-	                pos = _this.getPositionFromValue(value);
-	            _this.setPosition(pos);
-	        });
-	    }
-
-	    Plugin.prototype.init = function() {
-	        this.update(true, false);
-
-	        if (this.onInit && typeof this.onInit === 'function') {
-	            this.onInit();
-	        }
-	    };
-
-	    Plugin.prototype.update = function(updateAttributes, triggerSlide) {
-	        updateAttributes = updateAttributes || false;
-
-	        if (updateAttributes) {
-	            this.min    = tryParseFloat(this.$element[0].getAttribute('min'), 0);
-	            this.max    = tryParseFloat(this.$element[0].getAttribute('max'), 100);
-	            this.value  = tryParseFloat(this.$element[0].value, Math.round(this.min + (this.max-this.min)/2));
-	            this.step   = tryParseFloat(this.$element[0].getAttribute('step'), 1);
-	        }
-
-	        this.handleDimension    = getDimension(this.$handle[0], 'offset' + ucfirst(this.DIMENSION));
-	        this.rangeDimension     = getDimension(this.$range[0], 'offset' + ucfirst(this.DIMENSION));
-	        this.maxHandlePos       = this.rangeDimension - this.handleDimension;
-	        this.grabPos            = this.handleDimension / 2;
-	        this.position           = this.getPositionFromValue(this.value);
-
-	        // Consider disabled state
-	        if (this.$element[0].disabled) {
-	            this.$range.addClass(this.options.disabledClass);
-	        } else {
-	            this.$range.removeClass(this.options.disabledClass);
-	        }
-
-	        this.setPosition(this.position, triggerSlide);
-	    };
-
-	    Plugin.prototype.handleDown = function(e) {
-	        this.$document.on(this.moveEvent, this.handleMove);
-	        this.$document.on(this.endEvent, this.handleEnd);
-
-	        // If we click on the handle don't set the new position
-	        if ((' ' + e.target.className + ' ').replace(/[\n\t]/g, ' ').indexOf(this.options.handleClass) > -1) {
-	            return;
-	        }
-
-	        var pos         = this.getRelativePosition(e),
-	            rangePos    = this.$range[0].getBoundingClientRect()[this.DIRECTION],
-	            handlePos   = this.getPositionFromNode(this.$handle[0]) - rangePos,
-	            setPos      = (this.orientation === 'vertical') ? (this.maxHandlePos - (pos - this.grabPos)) : (pos - this.grabPos);
-
-	        this.setPosition(setPos);
-
-	        if (pos >= handlePos && pos < handlePos + this.handleDimension) {
-	            this.grabPos = pos - handlePos;
-	        }
-	    };
-
-	    Plugin.prototype.handleMove = function(e) {
-	        e.preventDefault();
-	        var pos = this.getRelativePosition(e);
-	        var setPos = (this.orientation === 'vertical') ? (this.maxHandlePos - (pos - this.grabPos)) : (pos - this.grabPos);
-	        this.setPosition(setPos);
-	    };
-
-	    Plugin.prototype.handleEnd = function(e) {
-	        e.preventDefault();
-	        this.$document.off(this.moveEvent, this.handleMove);
-	        this.$document.off(this.endEvent, this.handleEnd);
-
-	        // Ok we're done fire the change event
-	        this.$element.trigger('change', { origin: this.identifier });
-
-	        if (this.onSlideEnd && typeof this.onSlideEnd === 'function') {
-	            this.onSlideEnd(this.position, this.value);
-	        }
-	    };
-
-	    Plugin.prototype.cap = function(pos, min, max) {
-	        if (pos < min) { return min; }
-	        if (pos > max) { return max; }
-	        return pos;
-	    };
-
-	    Plugin.prototype.setPosition = function(pos, triggerSlide) {
-	        var value, newPos;
-
-	        if (triggerSlide === undefined) {
-	            triggerSlide = true;
-	        }
-
-	        // Snapping steps
-	        value = this.getValueFromPosition(this.cap(pos, 0, this.maxHandlePos));
-	        newPos = this.getPositionFromValue(value);
-
-	        // Update ui
-	        this.$fill[0].style[this.DIMENSION] = (newPos + this.grabPos) + 'px';
-	        this.$handle[0].style[this.DIRECTION_STYLE] = newPos + 'px';
-	        this.setValue(value);
-
-	        // Update globals
-	        this.position = newPos;
-	        this.value = value;
-
-	        if (triggerSlide && this.onSlide && typeof this.onSlide === 'function') {
-	            this.onSlide(newPos, value);
-	        }
-	    };
-
-	    // Returns element position relative to the parent
-	    Plugin.prototype.getPositionFromNode = function(node) {
-	        var i = 0;
-	        while (node !== null) {
-	            i += node.offsetLeft;
-	            node = node.offsetParent;
-	        }
-	        return i;
-	    };
-
-	    Plugin.prototype.getRelativePosition = function(e) {
-	        // Get the offset DIRECTION relative to the viewport
-	        var ucCoordinate = ucfirst(this.COORDINATE),
-	            rangePos = this.$range[0].getBoundingClientRect()[this.DIRECTION],
-	            pageCoordinate = 0;
-
-	        if (typeof e['page' + ucCoordinate] !== 'undefined') {
-	            pageCoordinate = e['client' + ucCoordinate];
-	        }
-	        else if (typeof e.originalEvent['client' + ucCoordinate] !== 'undefined') {
-	            pageCoordinate = e.originalEvent['client' + ucCoordinate];
-	        }
-	        else if (e.originalEvent.touches && e.originalEvent.touches[0] && typeof e.originalEvent.touches[0]['client' + ucCoordinate] !== 'undefined') {
-	            pageCoordinate = e.originalEvent.touches[0]['client' + ucCoordinate];
-	        }
-	        else if(e.currentPoint && typeof e.currentPoint[this.COORDINATE] !== 'undefined') {
-	            pageCoordinate = e.currentPoint[this.COORDINATE];
-	        }
-
-	        return pageCoordinate - rangePos;
-	    };
-
-	    Plugin.prototype.getPositionFromValue = function(value) {
-	        var percentage, pos;
-	        percentage = (value - this.min)/(this.max - this.min);
-	        pos = (!Number.isNaN(percentage)) ? percentage * this.maxHandlePos : 0;
-	        return pos;
-	    };
-
-	    Plugin.prototype.getValueFromPosition = function(pos) {
-	        var percentage, value;
-	        percentage = ((pos) / (this.maxHandlePos || 1));
-	        value = this.step * Math.round(percentage * (this.max - this.min) / this.step) + this.min;
-	        return Number((value).toFixed(this.toFixed));
-	    };
-
-	    Plugin.prototype.setValue = function(value) {
-	        if (value === this.value && this.$element[0].value !== '') {
-	            return;
-	        }
-
-	        // Set the new value and fire the `input` event
-	        this.$element
-	            .val(value)
-	            .trigger('input', { origin: this.identifier });
-	    };
-
-	    Plugin.prototype.destroy = function() {
-	        this.$document.off('.' + this.identifier);
-	        this.$window.off('.' + this.identifier);
-
-	        this.$element
-	            .off('.' + this.identifier)
-	            .removeAttr('style')
-	            .removeData('plugin_' + pluginName);
-
-	        // Remove the generated markup
-	        if (this.$range && this.$range.length) {
-	            this.$range[0].parentNode.removeChild(this.$range[0]);
-	        }
-	    };
-
-	    // A really lightweight plugin wrapper around the constructor,
-	    // preventing against multiple instantiations
-	    $.fn[pluginName] = function(options) {
-	        var args = Array.prototype.slice.call(arguments, 1);
-
-	        return this.each(function() {
-	            var $this = $(this),
-	                data  = $this.data('plugin_' + pluginName);
-
-	            // Create a new instance.
-	            if (!data) {
-	                $this.data('plugin_' + pluginName, (data = new Plugin(this, options)));
-	            }
-
-	            // Make it possible to access methods from public.
-	            // e.g `$element.rangeslider('method');`
-	            if (typeof options === 'string') {
-	                data[options].apply(data, args);
-	            }
-	        });
-	    };
-
-	    return 'rangeslider.js is available in jQuery context e.g $(selector).rangeslider(options);';
-
-	}));
-
-
-
-/***/ },
-/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(jQuery) {/*** IMPORTS FROM imports-loader ***/
@@ -22755,7 +22202,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -22768,7 +22215,7 @@
 	__webpack_require__(27);
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
-	__webpack_require__(30);
+	__webpack_require__(29);
 
 	// ---MODULE VARIABLES---//
 	var linesLayer;
@@ -22787,13 +22234,13 @@
 
 	var lineCurvature = 0.1;
 	var min_line_curvature = 0.0;
-	var max_line_curvature = 1.0;
+	var max_line_curvature = 0.3;//1.0;
 
 	// ---MODULE EXPORTS---//
 
 	var exports = module.exports = {};
 
-	exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
+	exports.generateLinesLayer = function(branches, nodes, locations, branchAttributes) {
 
 	    linesLayer = global.g.append("g").attr("class", "linesLayer");
 
@@ -22806,47 +22253,51 @@
 
 	          var line = d;
 
-	          var startPointId = line.startPointId;
-	          var startPoint = utils.getObject(nodes, "id", startPointId);
-	          line['startPoint'] = startPoint;
+	          var startCoordinate = line['startCoordinate'];
+	          if (typeof startCoordinate == 'undefined') {
 
-	          var startCoordinate;
-	          var startLocation = startPoint.location;
-	          if (typeof startLocation != 'undefined') {
+	            var startPointId = line.startPointId;
+	            var startPoint = utils.getObject(nodes, "id", startPointId);
 
-	            startCoordinate = startLocation.coordinate;
+	            var startLocationId = startPoint.locationId;
+	            if (typeof startLocationId != 'undefined') {
 
-	          } else {
+	              // discrete
+	              var startLocation = utils.getObject(locations, "id", startLocationId);
+	              startCoordinate = startLocation.coordinate;
+	              line['startCoordinate'] = startCoordinate;
 
-	            startCoordinate = startPoint.coordinate;
+	            } else {
+	              // continuous
+	              startCoordinate = startPoint.coordinate;
+	              line['startCoordinate'] = startCoordinate;
 
-	          }
+	            }
 
-	          var endPointId = line.endPointId;
-	          var endPoint = utils.getObject(nodes, "id", endPointId);
-	          line['endPoint'] = endPoint;
+	          } //END: start coord check
 
-	          var endCoordinate;
-	          var endLocation = endPoint.location;
-	          if (typeof startLocation != 'undefined') {
+	          var endCoordinate = line['endCoordinate'];
+	          if (typeof endCoordinate == 'undefined') {
 
-	            endCoordinate = endLocation.coordinate;
+	            var endPointId = line.endPointId;
+	            var endPoint = utils.getObject(nodes, "id", endPointId);
 
-	          } else {
+	            var endLocationId = endPoint.locationId;
+	            if (typeof endLocationId != 'undefined') {
 
-	            endCoordinate = endPoint.coordinate;
+	              // discrete
+	              var endLocation = utils.getObject(locations, "id", endLocationId);
+	              endCoordinate = endLocation.coordinate;
+	              line['endCoordinate'] = endCoordinate;
 
-	          }
+	            } else {
+	              // continuous
+	              endCoordinate = endPoint.coordinate;
+	              line['endCoordinate'] = endCoordinate;
 
-	          var curvature;
-	          var startTime = line.startTime;
-	          // if (typeof startTime != "undefined") {
+	            }
 
-	          curvature = lineCurvature; // scale(formDate(line.startTime));
-
-	          // } else {
-	          // 	curvature = min_line_curvature;
-	          // }
+	          } //END: end coord check
 
 	          var startY = startCoordinate.yCoordinate;
 	          var startX = startCoordinate.xCoordinate;
@@ -22876,12 +22327,12 @@
 
 	          var dx = targetX - sourceX;
 	          var dy = targetY - sourceY;
-	          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
+
+	          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(lineCurvature);
 
 	          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
 	          return (bearing);
-
 	        }) //
 	      .attr("fill", "none") //
 	      .attr("stroke-width", lineWidth + "px") //
@@ -23173,7 +22624,6 @@
 
 	        // trigger repaint
 	        updateLineColors(scale, colorAttribute);
-
 	      });
 
 	} // END: setupLineColorAttributePanel
@@ -23181,7 +22631,7 @@
 	function updateLineColorLegend(scale) {
 
 	  var width = 150;
-	  var height = 110;
+	  var height = 230;
 
 	  var margin = {
 	    left: 20,
@@ -23292,7 +22742,6 @@
 	          var line = d;
 
 	          // console.log(Date.parse(line.startTime));
-
 	          // var curvature = lineCurvature;
 
 	          var targetX = line.targetX;
@@ -23546,7 +22995,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -23560,7 +23009,7 @@
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 
-	__webpack_require__(30);
+	__webpack_require__(29);
 
 	// ---MODULE VARIABLES---//
 
@@ -24153,7 +23602,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -24177,321 +23626,342 @@
 	var max_count_opacity = 1;
 
 	d3.kodama
-			.themeRegistry(
-					'countsTheme',
-					{
-						frame : {
-							padding : '4px',
-							background : 'linear-gradient(to top, rgb(177, 68, 68) 0%, rgb(188, 95, 95) 90%)',
-							'font-family' : '"Helvetica Neue", Helvetica, Arial, sans-serif',
-							'border' : '1px solid rgb(57, 208, 204)',
-							color : 'rgb(245,240,220)',
-							'border-radius' : '4px',
-							'font-size' : '12px',
-							'box-shadow' : '0px 1px 3px rgba(0,20,40,.5)'
-						},
-						title : {
-							'text-align' : 'center',
-							'padding' : '4px'
-						},
-						item_title : {
-							'text-align' : 'right',
-							'color' : 'rgb(220,200,120)'
-						},
-						item_value : {
-							'padding' : '1px 2px 1px 10px',
-							'color' : 'rgb(234, 224, 184)'
-						}
-					});
+	  .themeRegistry(
+	    'countsTheme', {
+	      frame: {
+	        padding: '4px',
+	        background: 'linear-gradient(to top, rgb(177, 68, 68) 0%, rgb(188, 95, 95) 90%)',
+	        'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
+	        'border': '1px solid rgb(57, 208, 204)',
+	        color: 'rgb(245,240,220)',
+	        'border-radius': '4px',
+	        'font-size': '12px',
+	        'box-shadow': '0px 1px 3px rgba(0,20,40,.5)'
+	      },
+	      title: {
+	        'text-align': 'center',
+	        'padding': '4px'
+	      },
+	      item_title: {
+	        'text-align': 'right',
+	        'color': 'rgb(220,200,120)'
+	      },
+	      item_value: {
+	        'padding': '1px 2px 1px 10px',
+	        'color': 'rgb(234, 224, 184)'
+	      }
+	    });
 
 	// ---MODULE EXPORTS---//
 
 	var exports = module.exports = {};
 
-	exports.generateCountsLayer = function(counts_, countAttribute) {
+	exports.generateCountsLayer = function(counts_, locations, countAttribute) {
 
-		var min_area = 1000;
-		var max_area = 10000;
-		var scale = d3.scale.linear().domain(countAttribute.range).range(
-				[ min_area, max_area ]);
+	    var min_area = 1000;
+	    var max_area = 10000;
+	    var scale = d3.scale.linear().domain(countAttribute.range).range(
+	      [min_area, max_area]);
 
-		countsLayer = global.g.append("g").attr("class", "countsLayer");
+	    countsLayer = global.g.append("g").attr("class", "countsLayer");
 
-		var counts = countsLayer.selectAll("circle").data(counts_).enter() //
-		.append("circle") //
-		.attr("class", "count") //
-		.attr("startTime", function(d) {
+	    var counts = countsLayer.selectAll("circle").data(counts_).enter() //
+	      .append("circle") //
+	      .attr("class", "count") //
+	      .attr("startTime", function(d) {
 
-			return (d.startTime);
+	        return (d.startTime);
 
-		}) //
-		.attr("endTime", function(d) {
+	      }) //
+	      .attr("endTime", function(d) {
 
-			return (d.endTime);
+	        return (d.endTime);
 
-		}) //
-		.attr("cx", function(d) {
+	      }) //
+	      .attr("cx", function(d) {
 
-			var xy = global.projection([ d.location.coordinate.xCoordinate, // long
-			d.location.coordinate.yCoordinate // lat
-			]);
+	        var count = d;
 
-			var cx = xy[0]; // long
+	        var countCoordinate = count['coordinate'];
+	        if (typeof countCoordinate == 'undefined') {
+	          // always discrete
+	          var countLocationId = count.locationId;
+	          var countLocation = utils.getObject(locations, "id", countLocationId);
+	          countCoordinate = countLocation.coordinate;
+	          count['coordinate'] = countCoordinate;
+	        }
 
-			return (cx);
-		}) //
-		.attr("cy", function(d) {
+	        var xy = global.projection([countCoordinate.xCoordinate, // long
+	          countCoordinate.yCoordinate // lat
+	        ]);
 
-			var xy = global.projection([ d.location.coordinate.xCoordinate, // long
-			d.location.coordinate.yCoordinate // lat
-			]);
+	        var cx = xy[0]; // long
 
-			var cy = xy[1]; // lat
+	        return (cx);
+	      }) //
+	      .attr("cy", function(d) {
 
-			return (cy);
-		}) //
-		.attr("r", function(d) {
+	        var count = d;
 
-			var count = d.attributes.count;
-			var area = scale(count);
-			var radius = Math.sqrt(area / Math.PI);
+	        var countCoordinate = count['coordinate'];
+	        if (typeof countCoordinate == 'undefined') {
+	          // always discrete
+	          var countLocationId = count.locationId;
+	          var countLocation = utils.getObject(locations, "id", countLocationId);
+	          countCoordinate = countLocation.coordinate;
+	          count['coordinate'] = countCoordinate;
+	        }
 
-			return (radius);
+	        var xy = global.projection([countCoordinate.xCoordinate, // long
+	          countCoordinate.yCoordinate // lat
+	        ]);
 
-		}) //
-		.attr("fill", global.fixedColors[countDefaultColorIndex]) //
-		.attr("stroke-width", "0.5px") //
-		.attr("fill-opacity", countOpacity) //
-		.attr("visibility", "visible") //
-		.on('mouseover', function(d) {
+	        var cy = xy[1]; // lat
 
-			var point = d3.select(this);
-			point.attr('stroke', '#000');
+	        return (cy);
+	      }) //
+	      .attr("r", function(d) {
 
-		}) //
-		.on('mouseout', function(d, i) {
+	        var count = d.attributes.count;
+	        var area = scale(count);
+	        var radius = Math.sqrt(area / Math.PI);
 
-			var point = d3.select(this);
-			point.attr('stroke', null);
+	        return (radius);
 
-		}) //
-		.call(d3.kodama.tooltip().format(function(d, i) {
+	      }) //
+	      .attr("fill", global.fixedColors[countDefaultColorIndex]) //
+	      .attr("stroke-width", "0.5px") //
+	      .attr("fill-opacity", countOpacity) //
+	      .attr("visibility", "visible") //
+	      .on('mouseover', function(d) {
 
-			return {
-				title : d.location.id,
-				items : [ {
-					title : 'Date',
-					value : d.startTime
-				}, {
-					title : 'Count',
-					value : d.attributes.count
-				} ]
-			};
+	        var point = d3.select(this);
+	        point.attr('stroke', '#000');
 
-		}) //
-		.theme('countsTheme'));
+	      }) //
+	      .on('mouseout', function(d, i) {
 
-		// dump attribute values into DOM
-		counts[0].forEach(function(d, i) {
+	        var point = d3.select(this);
+	        point.attr('stroke', null);
 
-			var thisArea = d3.select(d);
+	      }) //
+	      .call(d3.kodama.tooltip().format(function(d, i) {
 
-			var properties = counts_[i].attributes;
-			for ( var property in properties) {
-				if (properties.hasOwnProperty(property)) {
+	          return {
+	            title: d.locationId,
+	            items: [{
+	              title: 'Date',
+	              value: d.startTime
+	            }, {
+	              title: 'Count',
+	              value: d.attributes.count
+	            }]
+	          };
 
-					thisArea.attr(property, properties[property]);
+	        }) //
+	        .theme('countsTheme'));
 
-				}
-			}// END: properties loop
-		});
+	    // dump attribute values into DOM
+	    counts[0].forEach(function(d, i) {
 
-	}// END: generateCountsLayer
+	      var thisArea = d3.select(d);
+
+	      var properties = counts_[i].attributes;
+	      for (var property in properties) {
+	        if (properties.hasOwnProperty(property)) {
+
+	          thisArea.attr(property, properties[property]);
+
+	        }
+	      } // END: properties loop
+	    });
+
+	  } // END: generateCountsLayer
 
 	exports.updateCountsLayer = function(value) {
 
-		// ---select counts yet to be displayed or already displayed---//
+	    // ---select counts yet to be displayed or already displayed---//
 
-		countsLayer.selectAll(".count") //
-		.filter(
-				function(d) {
-					var point = this;
-					var startDate = utils
-							.formDate(point.attributes.startTime.value).getTime();
-					var endDate = utils.formDate(point.attributes.endTime.value)
-							.getTime();
+	    countsLayer.selectAll(".count") //
+	      .filter(
+	        function(d) {
+	          var point = this;
+	          var startDate = utils
+	            .formDate(point.attributes.startTime.value).getTime();
+	          var endDate = utils.formDate(point.attributes.endTime.value)
+	            .getTime();
 
-					return (value < startDate || value > endDate);
-				}) //
-		.transition() //
-		.ease("linear") //
-		.attr("visibility", "hidden");
+	          return (value < startDate || value > endDate);
+	        }) //
+	      .transition() //
+	      .ease("linear") //
+	      .attr("visibility", "hidden");
 
-		// ---select counts displayed now---//
+	    // ---select counts displayed now---//
 
-		countsLayer.selectAll(".count") //
-		.filter(
-				function() {
-					var point = this;
-					var startDate = utils
-							.formDate(point.attributes.startTime.value).getTime();
-					var endDate = utils.formDate(point.attributes.endTime.value)
-							.getTime();
+	    countsLayer.selectAll(".count") //
+	      .filter(
+	        function() {
+	          var point = this;
+	          var startDate = utils
+	            .formDate(point.attributes.startTime.value).getTime();
+	          var endDate = utils.formDate(point.attributes.endTime.value)
+	            .getTime();
 
-					return (value > startDate && value < endDate);
-				}) //
-		.transition() //
-		.ease("linear") //
-		.attr("visibility", "visible");
+	          return (value > startDate && value < endDate);
+	        }) //
+	      .transition() //
+	      .ease("linear") //
+	      .attr("visibility", "visible");
 
-	}// END: updateCountsLayer
+	  } // END: updateCountsLayer
 
 	exports.setupPanels = function(attributes) {
 
-		setupCountsLayerCheckbox();
-		setupCountsFixedColorPanel();
-		setupCountsFixedOpacityPanel();
-	}// END: setupPanels
+	    setupCountsLayerCheckbox();
+	    setupCountsFixedColorPanel();
+	    setupCountsFixedOpacityPanel();
+	  } // END: setupPanels
 
 	function setupCountsFixedOpacityPanel() {
 
-		 var str = (" <div class=\"panelcollapsed\">")+
-	   (" <h2>Counts opacity<\/h2>")+
-	   (" <div class=\"panelcontent\">")+
-	   (" <div id=\"countFixedOpacitySlider\"><\/div>")+
-	   (" <\/div>")+
-	   (" <\/div>");
+	  var str = (" <div class=\"panelcollapsed\">") +
+	    (" <h2>Counts opacity<\/h2>") +
+	    (" <div class=\"panelcontent\">") +
+	    (" <div id=\"countFixedOpacitySlider\"><\/div>") +
+	    (" <\/div>") +
+	    (" <\/div>");
 
-		 var html = $.parseHTML(str);
+	  var html = $.parseHTML(str);
 
-		 $(".selectors").append(html);
+	  $(".selectors").append(html);
 
-		$('#countFixedOpacitySlider').html('<input type="range" class="countFixedOpacitySlider" step="0.1" min="' + min_count_opacity + '" max="' + max_count_opacity + '" value="'+countOpacity+'"  />');
-		$('#countFixedOpacitySlider').append('<span>' + countOpacity + '</span>');
+	  $('#countFixedOpacitySlider').html('<input type="range" class="countFixedOpacitySlider" step="0.1" min="' + min_count_opacity + '" max="' + max_count_opacity + '" value="' + countOpacity + '"  />');
+	  $('#countFixedOpacitySlider').append('<span>' + countOpacity + '</span>');
 
-		$('.countFixedOpacitySlider').on("input", function() {
+	  $('.countFixedOpacitySlider').on("input", function() {
 
-		countOpacity = $(this).val();
+	    countOpacity = $(this).val();
 
-		 $(this).next().html(countOpacity);
+	    $(this).next().html(countOpacity);
 
-		 	// fill-opacity / stroke-opacity / opacity
-	 		countsLayer.selectAll(".count") //
-	 		.transition() //
-	 		.ease("linear") //
-	 		.attr("fill-opacity", countOpacity);
+	    // fill-opacity / stroke-opacity / opacity
+	    countsLayer.selectAll(".count") //
+	      .transition() //
+	      .ease("linear") //
+	      .attr("fill-opacity", countOpacity);
 
-			});
+	  });
 
-	}// END: setupCountsFixedOpacityPanel
+	} // END: setupCountsFixedOpacityPanel
 
 	function setupCountsFixedColorPanel() {
 
-		var str = (" <div class=\"panelcollapsed\">") +
-	  (" <h2>Counts fixed color<\/h2>")+
-	  (" <div class=\"panelcontent\">")+
-	  (" <select id=\"countFixedColor\">")+
-	  (" <\/select>")+
-	  (" <div id=\"countFixedColorLegend\"><\/div>")+
-	  (" <\/div>")+
-	  (" <\/div>");
+	  var str = (" <div class=\"panelcollapsed\">") +
+	    (" <h2>Counts fixed color<\/h2>") +
+	    (" <div class=\"panelcontent\">") +
+	    (" <select id=\"countFixedColor\">") +
+	    (" <\/select>") +
+	    (" <div id=\"countFixedColorLegend\"><\/div>") +
+	    (" <\/div>") +
+	    (" <\/div>");
 
-		var html = $.parseHTML(str);
+	  var html = $.parseHTML(str);
 
-		$(".selectors").append(html);
+	  $(".selectors").append(html);
 
-		var countFixedColorSelect = document.getElementById("countFixedColor");
-		var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
-				global.fixedColors);
+	  var countFixedColorSelect = document.getElementById("countFixedColor");
+	  var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+	    global.fixedColors);
 
-		for (var i = 0; i < global.fixedColors.length; i++) {
+	  for (var i = 0; i < global.fixedColors.length; i++) {
 
-			var option = global.fixedColors[i];
-			var element = document.createElement("option");
-			element.textContent = option;
-			element.value = option;
+	    var option = global.fixedColors[i];
+	    var element = document.createElement("option");
+	    element.textContent = option;
+	    element.value = option;
 
-			countFixedColorSelect.appendChild(element);
+	    countFixedColorSelect.appendChild(element);
 
-		}// END: i loop
+	  } // END: i loop
 
-		// select the default
-		countFixedColorSelect.selectedIndex = countDefaultColorIndex;
+	  // select the default
+	  countFixedColorSelect.selectedIndex = countDefaultColorIndex;
 
-		// counts fixed color listener
-		d3
-				.select(countFixedColorSelect)
-				.on(
-						'change',
-						function() {
+	  // counts fixed color listener
+	  d3
+	    .select(countFixedColorSelect)
+	    .on(
+	      'change',
+	      function() {
 
-							var colorSelect = countFixedColorSelect.options[countFixedColorSelect.selectedIndex].text;
-							var color = scale(colorSelect);
+	        var colorSelect = countFixedColorSelect.options[countFixedColorSelect.selectedIndex].text;
+	        var color = scale(colorSelect);
 
-							countsLayer.selectAll(".count") //
-							.transition() //
-							.ease("linear") //
-							.attr("fill", color);
+	        countsLayer.selectAll(".count") //
+	          .transition() //
+	          .ease("linear") //
+	          .attr("fill", color);
 
-							// setup legend
-							updateCountFixedColorLegend(scale);
+	        // setup legend
+	        updateCountFixedColorLegend(scale);
 
-						});
+	      });
 
-	}// END: setupCountsFixedColorPanel
+	} // END: setupCountsFixedColorPanel
 
 	function updateCountFixedColorLegend(scale) {
 
-		var width = 150;
-		var height = 265;
+	  var width = 150;
+	  var height = 265;
 
-		var margin = {
-			left : 20,
-			top : 20
-		};
+	  var margin = {
+	    left: 20,
+	    top: 20
+	  };
 
-		$('#countFixedColorLegend').html('');
-		var svg = d3.select("#countFixedColorLegend").append('svg').attr("width",
-				width).attr("height", height);
+	  $('#countFixedColorLegend').html('');
+	  var svg = d3.select("#countFixedColorLegend").append('svg').attr("width",
+	    width).attr("height", height);
 
-		var countFixedColorLegend = d3.legend.color().scale(scale).shape('circle')
-				.shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
+	  var countFixedColorLegend = d3.legend.color().scale(scale).shape('circle')
+	    .shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
 
-		svg.append("g").attr("class", "countFixedColorLegend").attr("transform",
-				"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-				countFixedColorLegend);
+	  svg.append("g").attr("class", "countFixedColorLegend").attr("transform",
+	    "translate(" + (margin.left) + "," + (margin.top) + ")").call(
+	    countFixedColorLegend);
 
-	}// END:updateCountFixedColorLegend
+	} // END:updateCountFixedColorLegend
 
 	function setupCountsLayerCheckbox() {
 
-		$('#layerVisibility')
-				.append(
-						"<input type=\"checkbox\" id=\"countsLayerCheckbox\"> Counts layer<br>");
+	  $('#layerVisibility')
+	    .append(
+	      "<input type=\"checkbox\" id=\"countsLayerCheckbox\"> Counts layer<br>");
 
-		var countsLayerCheckbox = document.getElementById("countsLayerCheckbox");
-		// default state is checked
-		countsLayerCheckbox.checked = true;
+	  var countsLayerCheckbox = document.getElementById("countsLayerCheckbox");
+	  // default state is checked
+	  countsLayerCheckbox.checked = true;
 
-		d3.select(countsLayerCheckbox).on("change", function() {
+	  d3.select(countsLayerCheckbox).on("change", function() {
 
-			if (this.checked) {
-				// remove style, then visibility is driven by the time-based
-				// selections
-				countsLayer.selectAll("circle").style("visibility", null);
-			} else {
-				// style is superior to attribute, make them hidden
-				countsLayer.selectAll("circle").style("visibility", "hidden");
-			}
+	    if (this.checked) {
+	      // remove style, then visibility is driven by the time-based
+	      // selections
+	      countsLayer.selectAll("circle").style("visibility", null);
+	    } else {
+	      // style is superior to attribute, make them hidden
+	      countsLayer.selectAll("circle").style("visibility", "hidden");
+	    }
 
-		});
+	  });
 
-	}// END:setupCountsLayerCheckbox
+	} // END:setupCountsLayerCheckbox
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -24499,13 +23969,13 @@
 	 */
 
 	// ---MODULE IMPORTS---//
-	__webpack_require__(35);
+
+	__webpack_require__(34);
 	var d3 = __webpack_require__(9);
 	__webpack_require__(27);
+	__webpack_require__(29);
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
-
-	__webpack_require__(30);
 
 	// ---MODULE VARIABLES---//
 
@@ -24547,6 +24017,7 @@
 
 		// determine the bounds
 		var bounds = path.bounds(geojson);
+
 		var hscale = projectionScale * global.width / (bounds[1][0] - bounds[0][0]);
 		var vscale = projectionScale * global.height
 				/ (bounds[1][1] - bounds[0][1]);
@@ -24560,14 +24031,12 @@
 
 		// if it failed stick to basics
 		if (projectionScale < basicScale) {
-
 			projectionScale = (global.width / 2 / Math.PI);
 			var offset = [ (global.width / 2), (global.height / 2) ];
 
 			global.projection = d3.geo.mercator() //
 			.scale(projectionScale) //
 			.translate(offset);
-
 		}
 
 		// new path
@@ -24626,7 +24095,6 @@
 		});
 
 	updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
-
 	}// END: generateTopoLayer
 
 	exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
@@ -24659,7 +24127,7 @@
 		//console.log("vscale: " + vscale);
 
 		var projectionScale = (hscale < vscale) ? hscale : vscale;
-	    projectionScale = projectionScale * 100;
+	  projectionScale = projectionScale * 100;
 
 	    //console.log("projectionScale: " + projectionScale);
 
@@ -24771,7 +24239,6 @@
 	        .text(utils.capitalizeFirstLetter(axisAttributes.yCoordinate));
 
 	    updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
-
 	}// END: generateEmptyLayer
 
 	exports.setupPanels = function(attributes) {
@@ -24815,7 +24282,6 @@
 			element.value = option;
 
 			mapBackgroundSelect.appendChild(element);
-
 		}// END: i loop
 
 		// map background listener
@@ -24833,21 +24299,22 @@
 
 							// setup legend
 							updateMapBackgroundLegend(scale);
-
 						});
 
 	}// END:setupTopoBackgroundPanel
 
 	updateMapBackground = function(color) {
-
-		d3.select('.container').style("background", color);
-
+		d3.select('.svg').style({
+			// "fill": color,
+		 //  "color" :color,
+	     "background" : color
+		});
 	}//END: updateMapBackground
 
 	updateMapBackgroundLegend = function(scale) {
 
 		var width = 150;
-		var height = 250;
+		var height = 100;
 
 		var margin = {
 			left : 20,
@@ -25190,13 +24657,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(36);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(7)(content, {});
@@ -25216,14 +24683,14 @@
 	}
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
 	exports.push([module.id, ".axis path, .axis line {\n\tfill: none;\n\tstroke: black;\n}\n\n.tick text {\n\tfont-size: 12px;\n}\n\n.tick line {\n\topacity: 0.1;\n}", ""]);
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
