@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
 import exceptions.AnalysisException;
 import utils.Utils;
 
+/**
+ * @author fbielejec
+ */
 public class LogParser {
 
 	// two commented lines and header. This is a hack off course

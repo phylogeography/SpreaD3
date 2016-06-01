@@ -263,7 +263,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 			// Executed in event dispatch thread
 			public void done() {
 
-				frame.setStatus("Opened " + settings.treeFilename + "\n");
+				frame.setStatus("Opened " + settings.treesFilename + "\n");
 				frame.setIdle();
 
 			}// END: done
