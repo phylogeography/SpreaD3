@@ -61,4 +61,5 @@
 
 2016: SpreaD3 version 0.9.7 rc
 ------------------------------
-
+* ActionListener listens to attribute combobox action. User can now select a first item and it will result in the proper handlers fired. 
+  Previous ItemListener reacted only to changes in the selected item. 

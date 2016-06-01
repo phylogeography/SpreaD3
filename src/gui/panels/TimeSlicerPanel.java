@@ -234,7 +234,8 @@ public class TimeSlicerPanel extends SpreadPanel {
 					ComboBoxModel<Object> traitSelectorModel = new DefaultComboBoxModel<Object>(
 							traitAttributes.toArray(new String[0]));
 					trait.setModel(traitSelectorModel);
-					trait.addItemListener(new ListenTrait());
+//					trait.addItemListener(new ListenTrait());
+					trait. addActionListener(new ListenTrait());
 					addComponentWithLabel("Select 2D trait attribute:", trait);
 
 				}
@@ -273,13 +274,13 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 	}// END: populateTraitSelector
 
-	private class ListenTrait implements ItemListener {
+	private class ListenTrait implements ActionListener {
 
-		@Override
-		public void itemStateChanged(ItemEvent event) {
-			if (event.getStateChange() == ItemEvent.SELECTED) {
+		  public void actionPerformed(ActionEvent event) {
+			  
+              JComboBox<?> comboBox = (JComboBox<?>) event.getSource();
 
-				Object item = event.getItem();
+              Object item = comboBox.getSelectedItem();
 				String attribute = item.toString();
 
 				settings.trait = attribute;
@@ -288,10 +289,25 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 				populateAnalysisType();
 
-				// populateOptionalSettings();
-
-			} // END: selected check
-		}// END: itemStateChanged
+          }
+		
+//		@Override
+//		public void itemStateChanged(ItemEvent event) {
+//			if (event.getStateChange() == ItemEvent.SELECTED) {
+//
+//				Object item = event.getItem();
+//				String attribute = item.toString();
+//
+//				settings.trait = attribute;
+//				frame.setStatus("2D trait '" + settings.trait + "'"
+//						+ " selected");
+//
+//				populateAnalysisType();
+//
+//				// populateOptionalSettings();
+//
+//			} // END: selected check
+//		}// END: itemStateChanged
 
 	}// END: ListenTrait
 
