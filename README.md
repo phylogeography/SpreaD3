@@ -4,7 +4,7 @@
 ==============
 
 *Spatial Phylogenetic Reconstruction of Evolutionary Dynamics* <br />
-Version: 0.9.6 Milford Cubicle, 2016 <br />
+Version: 0.9.7rc, 2016 <br />
 Authors: Filip Bielejec, Guy Baele, Andrew Rambaut, Marc A. Suchard & Philippe 'The Wise' Lemey <br />
 Homepage: http://rega.kuleuven.be/cev/ecv/software/SpreaD3 <br />
 License: LGPL <br />

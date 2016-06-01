@@ -59,7 +59,7 @@
 * coordinates editor saves in (lat,long) [or (y,x)] order, consistent with the rest of the program
 * help message when setting locations or fake locations for the Bayes factor test
 
-2016: SpreaD3 version 0.9.7 rc
+2016: SpreaD3 version 0.9.7rc
 ------------------------------
 * ActionListener listens to attribute combobox action. User can now select a first item and it will result in the proper handlers fired. Previously ItemListener reacted only to changes in the selected item. 
 * Explicitly check for empty hpd_modality attribute when parsing continuously annotated trees. Throws checked exception and handles it.
