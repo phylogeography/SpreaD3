@@ -34,6 +34,8 @@ import utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import exceptions.AnalysisException;
+
 @SuppressWarnings("serial")
 public class ContinuousTreePanel extends SpreadPanel {
 
@@ -324,6 +326,10 @@ public class ContinuousTreePanel extends SpreadPanel {
 							} // END: hpd check
 						}// END: attributes loop
 
+						if(hpdAttributes.isEmpty()) {
+							throw new AnalysisException("No matching HPD_modality attributes found for selected coordinate attributes.");
+						}
+						
 						// Utils.printArray(hpdAttributes.toArray());
 
 						ComboBoxModel<Object> hpdSelectorModel = new DefaultComboBoxModel<Object>(
@@ -397,6 +403,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 			populateHpdCombobox();
 
+			if(hpdCreated) {
+			
 			if(!externalAnnotationsCreated) {
 				externalAnnotations  = new JCheckBox( );
 				externalAnnotations.addItemListener(new ListenExternalAnnotations());
@@ -437,6 +445,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 				outputCreated = true;
 			}
 
+			}//hpdCreated check
+			
 		} // END: coord check
 
 	}// END: populateOptionalSettings

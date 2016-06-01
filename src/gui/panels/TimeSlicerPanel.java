@@ -276,20 +276,19 @@ public class TimeSlicerPanel extends SpreadPanel {
 
 	private class ListenTrait implements ActionListener {
 
-		  public void actionPerformed(ActionEvent event) {
-			  
-              JComboBox<?> comboBox = (JComboBox<?>) event.getSource();
+		public void actionPerformed(ActionEvent event) {
 
-              Object item = comboBox.getSelectedItem();
-				String attribute = item.toString();
+			JComboBox<?> comboBox = (JComboBox<?>) event.getSource();
+			Object item = comboBox.getSelectedItem();
 
-				settings.trait = attribute;
-				frame.setStatus("2D trait '" + settings.trait + "'"
-						+ " selected");
+			String attribute = item.toString();
 
-				populateAnalysisType();
+			settings.trait = attribute;
+			frame.setStatus("2D trait '" + settings.trait + "'" + " selected");
 
-          }
+			populateAnalysisType();
+
+		}
 		
 //		@Override
 //		public void itemStateChanged(ItemEvent event) {

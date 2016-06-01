@@ -202,9 +202,12 @@ public class DiscreteTreePanel extends SpreadPanel {
 							uniqueAttributes.toArray(new String[0]));
 					locationAttributeSelector
 							.setModel(locationAttributeSelectorModel);
+//					locationAttributeSelector
+//							.addItemListener(new ListenLocationAttributeSelector());
 					locationAttributeSelector
-							.addItemListener(new ListenLocationAttributeSelector());
-
+					.addActionListener(new ListenLocationAttributeSelector());
+					
+					
 					addComponentWithLabel("Select location attribute",
 							locationAttributeSelector);
 					locationAttributeSelectorCreated = true;
@@ -226,17 +229,18 @@ public class DiscreteTreePanel extends SpreadPanel {
 
 	}// END: populateLocationAttributeCombobox
 
-	private class ListenLocationAttributeSelector implements ItemListener {
+	private class ListenLocationAttributeSelector implements ActionListener {
 
 		@Override
-		public void itemStateChanged(ItemEvent event) {
-			if (event.getStateChange() == ItemEvent.SELECTED) {
+		public void actionPerformed(ActionEvent event) {
 
-				// if selection changed reparse everything below
-				removeChildComponents(locationAttributeSelector);
-				resetFlags();
-
-				Object item = event.getItem();
+			// if selection changed reparse everything below
+			removeChildComponents(locationAttributeSelector);
+			resetFlags();
+			
+			   JComboBox<?> comboBox = (JComboBox<?>) event.getSource();
+			   Object item = comboBox.getSelectedItem();
+			   
 				String locationAttribute = item.toString();
 
 				if (!setupLocationCoordinatesCreated) {
@@ -262,9 +266,47 @@ public class DiscreteTreePanel extends SpreadPanel {
 				settings.locationAttributeName = locationAttribute;
 				frame.setStatus("Location attribute '" + locationAttribute
 						+ "'" + " selected");
+			
+		}
+		
+//		@Override
+//		public void itemStateChanged(ItemEvent event) {
+//			if (event.getStateChange() == ItemEvent.SELECTED) {
+//
+//				// if selection changed reparse everything below
+//				removeChildComponents(locationAttributeSelector);
+//				resetFlags();
+//
+//				Object item = event.getItem();
+//				String locationAttribute = item.toString();
+//
+//				if (!setupLocationCoordinatesCreated) {
+//
+//					// erase locationsList
+//					resetUISettings();
+//
+//					setupLocationCoordinates = new JButton(
+//							"Setup",
+//							InterfaceUtils
+//									.createImageIcon(InterfaceUtils.LOCATIONS_ICON));
+//
+//					setupLocationCoordinates
+//							.addActionListener(new ListenOpenLocationCoordinatesEditor());
+//
+//					addComponentWithLabel(
+//							"Setup location coordinates:",
+//							setupLocationCoordinates);
+//
+//					setupLocationCoordinatesCreated = true;
+//				}
+//
+//				settings.locationAttributeName = locationAttribute;
+//				frame.setStatus("Location attribute '" + locationAttribute
+//						+ "'" + " selected");
+//
+//			} // END: selected check
+//		}// END: itemStateChanged
 
-			} // END: selected check
-		}// END: itemStateChanged
 
 	}// END: ListenParserSelector
 
