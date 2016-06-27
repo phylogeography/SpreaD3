@@ -403,7 +403,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 			populateHpdCombobox();
 
-			if(hpdCreated) {
+//			if(hpdCreated) {
 			
 			if(!externalAnnotationsCreated) {
 				externalAnnotations  = new JCheckBox( );
@@ -445,7 +445,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 				outputCreated = true;
 			}
 
-			}//hpdCreated check
+//			}//hpdCreated check
 			
 		} // END: coord check
 

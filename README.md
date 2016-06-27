@@ -37,5 +37,5 @@ Very much welcomed. Fork this repo. Clone your fork. Start hacking. Make a pull 
 
 ## KNOWN BUGS/PROBLEMS
  D3 line curvature listeners leave artifacts
-
+ Time slicer json does not include axis attributes and won't render without a map. 
 

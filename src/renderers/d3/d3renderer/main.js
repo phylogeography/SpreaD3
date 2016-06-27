@@ -55,12 +55,12 @@
 	var global = __webpack_require__(10);
 	var utils = __webpack_require__(13);
 	var time = __webpack_require__(14);
-	var topo = __webpack_require__(34);
+	var topo = __webpack_require__(33);
 	var points = __webpack_require__(24);
-	var lines = __webpack_require__(31);
-	var areas = __webpack_require__(32);
-	var counts = __webpack_require__(33);
-	var locations = __webpack_require__(37);
+	var lines = __webpack_require__(30);
+	var areas = __webpack_require__(31);
+	var counts = __webpack_require__(32);
+	var locations = __webpack_require__(36);
 
 	// ---HTML---//
 
@@ -388,7 +388,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * jQuery JavaScript Library v2.2.1
+	 * jQuery JavaScript Library v2.2.4
 	 * http://jquery.com/
 	 *
 	 * Includes Sizzle.js
@@ -398,7 +398,7 @@
 	 * Released under the MIT license
 	 * http://jquery.org/license
 	 *
-	 * Date: 2016-02-22T19:11Z
+	 * Date: 2016-05-20T17:23Z
 	 */
 
 	(function( global, factory ) {
@@ -454,7 +454,7 @@
 
 
 	var
-		version = "2.2.1",
+		version = "2.2.4",
 
 		// Define a local copy of jQuery
 		jQuery = function( selector, context ) {
@@ -665,6 +665,7 @@
 		},
 
 		isPlainObject: function( obj ) {
+			var key;
 
 			// Not plain objects:
 			// - Any object or value whose internal [[Class]] property is not "[object Object]"
@@ -674,14 +675,18 @@
 				return false;
 			}
 
+			// Not own constructor property must be Object
 			if ( obj.constructor &&
-					!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
+					!hasOwn.call( obj, "constructor" ) &&
+					!hasOwn.call( obj.constructor.prototype || {}, "isPrototypeOf" ) ) {
 				return false;
 			}
 
-			// If the function hasn't returned already, we're confident that
-			// |obj| is a plain object, created by {} or constructed with new Object
-			return true;
+			// Own properties are enumerated firstly, so to speed up,
+			// if last one is own, then all properties are own
+			for ( key in obj ) {}
+
+			return key === undefined || hasOwn.call( obj, key );
 		},
 
 		isEmptyObject: function( obj ) {
@@ -5390,13 +5395,14 @@
 		isDefaultPrevented: returnFalse,
 		isPropagationStopped: returnFalse,
 		isImmediatePropagationStopped: returnFalse,
+		isSimulated: false,
 
 		preventDefault: function() {
 			var e = this.originalEvent;
 
 			this.isDefaultPrevented = returnTrue;
 
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.preventDefault();
 			}
 		},
@@ -5405,7 +5411,7 @@
 
 			this.isPropagationStopped = returnTrue;
 
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.stopPropagation();
 			}
 		},
@@ -5414,7 +5420,7 @@
 
 			this.isImmediatePropagationStopped = returnTrue;
 
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.stopImmediatePropagation();
 			}
 
@@ -6344,19 +6350,6 @@
 			val = name === "width" ? elem.offsetWidth : elem.offsetHeight,
 			styles = getStyles( elem ),
 			isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
-
-		// Support: IE11 only
-		// In IE 11 fullscreen elements inside of an iframe have
-		// 100x too small dimensions (gh-1764).
-		if ( document.msFullscreenElement && window.top !== window ) {
-
-			// Support: IE11 only
-			// Running getBoundingClientRect on a disconnected node
-			// in IE throws an error.
-			if ( elem.getClientRects().length ) {
-				val = Math.round( elem.getBoundingClientRect()[ name ] * 100 );
-			}
-		}
 
 		// Some non-html elements return undefined for offsetWidth, so check for null/undefined
 		// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
@@ -7714,6 +7707,12 @@
 		}
 	} );
 
+	// Support: IE <=11 only
+	// Accessing the selectedIndex property
+	// forces the browser to respect setting selected
+	// on the option
+	// The getter ensures a default option is selected
+	// when in an optgroup
 	if ( !support.optSelected ) {
 		jQuery.propHooks.selected = {
 			get: function( elem ) {
@@ -7722,6 +7721,16 @@
 					parent.parentNode.selectedIndex;
 				}
 				return null;
+			},
+			set: function( elem ) {
+				var parent = elem.parentNode;
+				if ( parent ) {
+					parent.selectedIndex;
+
+					if ( parent.parentNode ) {
+						parent.parentNode.selectedIndex;
+					}
+				}
 			}
 		};
 	}
@@ -7916,7 +7925,8 @@
 
 
 
-	var rreturn = /\r/g;
+	var rreturn = /\r/g,
+		rspaces = /[\x20\t\r\n\f]+/g;
 
 	jQuery.fn.extend( {
 		val: function( value ) {
@@ -7992,9 +8002,15 @@
 			option: {
 				get: function( elem ) {
 
-					// Support: IE<11
-					// option.value not trimmed (#14858)
-					return jQuery.trim( elem.value );
+					var val = jQuery.find.attr( elem, "value" );
+					return val != null ?
+						val :
+
+						// Support: IE10-11+
+						// option.text throws exceptions (#14686, #14858)
+						// Strip and collapse whitespace
+						// https://html.spec.whatwg.org/#strip-and-collapse-whitespace
+						jQuery.trim( jQuery.text( elem ) ).replace( rspaces, " " );
 				}
 			},
 			select: {
@@ -8047,7 +8063,7 @@
 					while ( i-- ) {
 						option = options[ i ];
 						if ( option.selected =
-								jQuery.inArray( jQuery.valHooks.option.get( option ), values ) > -1
+							jQuery.inArray( jQuery.valHooks.option.get( option ), values ) > -1
 						) {
 							optionSet = true;
 						}
@@ -8225,6 +8241,7 @@
 		},
 
 		// Piggyback on a donor event to simulate a different one
+		// Used only for `focus(in | out)` events
 		simulate: function( type, elem, event ) {
 			var e = jQuery.extend(
 				new jQuery.Event(),
@@ -8232,27 +8249,10 @@
 				{
 					type: type,
 					isSimulated: true
-
-					// Previously, `originalEvent: {}` was set here, so stopPropagation call
-					// would not be triggered on donor event, since in our own
-					// jQuery.event.stopPropagation function we had a check for existence of
-					// originalEvent.stopPropagation method, so, consequently it would be a noop.
-					//
-					// But now, this "simulate" function is used only for events
-					// for which stopPropagation() is noop, so there is no need for that anymore.
-					//
-					// For the 1.x branch though, guard for "click" and "submit"
-					// events is still used, but was moved to jQuery.event.stopPropagation function
-					// because `originalEvent` should point to the original event for the constancy
-					// with other events and for more focused logic
 				}
 			);
 
 			jQuery.event.trigger( e, null, elem );
-
-			if ( e.isDefaultPrevented() ) {
-				event.preventDefault();
-			}
 		}
 
 	} );
@@ -9742,18 +9742,6 @@
 
 
 
-	// Support: Safari 8+
-	// In Safari 8 documents created via document.implementation.createHTMLDocument
-	// collapse sibling forms: the second one becomes a child of the first one.
-	// Because of that, this security measure has to be disabled in Safari 8.
-	// https://bugs.webkit.org/show_bug.cgi?id=137337
-	support.createHTMLDocument = ( function() {
-		var body = document.implementation.createHTMLDocument( "" ).body;
-		body.innerHTML = "<form></form><form></form>";
-		return body.childNodes.length === 2;
-	} )();
-
-
 	// Argument "data" should be string of html
 	// context (optional): If specified, the fragment will be created in this context,
 	// defaults to document
@@ -9766,12 +9754,7 @@
 			keepScripts = context;
 			context = false;
 		}
-
-		// Stop scripts or inline event handlers from being executed immediately
-		// by using document.implementation
-		context = context || ( support.createHTMLDocument ?
-			document.implementation.createHTMLDocument( "" ) :
-			document );
+		context = context || document;
 
 		var parsed = rsingleTag.exec( data ),
 			scripts = !keepScripts && [];
@@ -9853,7 +9836,7 @@
 			// If it fails, this function gets "jqXHR", "status", "error"
 			} ).always( callback && function( jqXHR, status ) {
 				self.each( function() {
-					callback.apply( self, response || [ jqXHR.responseText, status, jqXHR ] );
+					callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
 				} );
 			} );
 		}
@@ -10538,7 +10521,6 @@
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
-		var sourceMap = obj.sourceMap;
 
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -10556,7 +10538,6 @@
 
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
-		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 
 		if(sourceMap) {
@@ -10794,7 +10775,7 @@
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
 	  var d3 = {
-	    version: "3.5.16"
+	    version: "3.5.17"
 	  };
 	  var d3_arraySlice = [].slice, d3_array = function(list) {
 	    return d3_arraySlice.call(list);
@@ -14319,7 +14300,7 @@
 	        λ0 = λ, sinφ0 = sinφ, cosφ0 = cosφ, point0 = point;
 	      }
 	    }
-	    return (polarAngle < -ε || polarAngle < ε && d3_geo_areaRingSum < 0) ^ winding & 1;
+	    return (polarAngle < -ε || polarAngle < ε && d3_geo_areaRingSum < -ε) ^ winding & 1;
 	  }
 	  function d3_geo_clipCircle(radius) {
 	    var cr = Math.cos(radius), smallRadius = cr > 0, notHemisphere = abs(cr) > ε, interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
@@ -20878,9 +20859,9 @@
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 	var points = __webpack_require__(24);
-	var lines = __webpack_require__(31);
-	var areas = __webpack_require__(32);
-	var counts = __webpack_require__(33);
+	var lines = __webpack_require__(30);
+	var areas = __webpack_require__(31);
+	var counts = __webpack_require__(32);
 
 	// ---MODULE VARIABLES---//
 
@@ -20901,122 +20882,120 @@
 
 	var exports = module.exports = {};
 
-	exports.initializeTimeSlider = function( timeLine) {
+	exports.initializeTimeSlider = function(timeLine) {
 
-		// initialize module variables
-		initializeVariables(timeLine);
+	    // initialize module variables
+	    initializeVariables(timeLine);
 
-		// put slider at the end of timeLine, everything painted
-		timeSlider.value( sliderEndValue);
-		updateDateDisplay(sliderEndValue);
+	    // put slider at the end of timeLine, everything painted
+	    timeSlider.value(sliderEndValue);
+	    updateDateDisplay(sliderEndValue);
 
-		// time slider listener
-		timeSlider.on('slide', function(evt, value) {
+	    // time slider listener
+	    timeSlider.on('slide', function(evt, value) {
 
-			update(value);
-			currentSliderValue = value;
+	      update(value);
+	      currentSliderValue = value;
 
-		});// END: slide
+	    }); // END: slide
 
-		var playPauseButton = d3.select('#playPause').attr("class", "playPause")
-				.on(
-						"click",
-						function() {
+	    var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+	      .on(
+	        "click",
+	        function() {
 
-							if ( playing) {
-								playing = false;
-								playPauseButton.classed("playing", playing);
+	          if (playing) {
+	            playing = false;
+	            playPauseButton.classed("playing", playing);
 
-								clearInterval(processID);
+	            clearInterval(processID);
 
-							} else {
-								playing = true;
-								playPauseButton.classed("playing", playing);
+	          } else {
+	            playing = true;
+	            playPauseButton.classed("playing", playing);
 
-								processID = setInterval(function() {
+	            processID = setInterval(function() {
 
-									var sliderValue = currentSliderValue
-											+ sliderInterval;
-									if (sliderValue > sliderEndValue) {
-										sliderValue = sliderStartValue;
-									}
+	              var sliderValue = currentSliderValue + sliderInterval;
+	              if (sliderValue > sliderEndValue) {
+	                sliderValue = sliderStartValue;
+	              }
 
-									timeSlider.value(sliderValue);
-									update(sliderValue);
+	              timeSlider.value(sliderValue);
+	              update(sliderValue);
 
-									currentSliderValue = sliderValue;
+	              currentSliderValue = sliderValue;
 
-								}, 100);
+	            }, 100);
 
-							}// END: playing check
+	          } // END: playing check
 
-						});
+	        });
 
-	}// END: initializeTimeSlider
+	  } // END: initializeTimeSlider
 
 	// ---FUNCTIONS---//
 
 	initializeVariables = function(timeLine) {
 
-		dateFormat = d3.time.format("%Y/%m/%d");
+	    dateFormat = d3.time.format("%Y/%m/%d");
 
-		var startDate = utils.formDate(timeLine.startTime);
-		sliderStartValue = startDate.getTime();
+	    var startDate = utils.formDate(timeLine.startTime);
+	    sliderStartValue = startDate.getTime();
 
-		var endDate = utils.formDate(timeLine.endTime);
-		sliderEndValue = endDate.getTime();
+	    var endDate = utils.formDate(timeLine.endTime);
+	    sliderEndValue = endDate.getTime();
 
-		currentSliderValue =  sliderStartValue;
+	    currentSliderValue = sliderStartValue;
 
-		var duration =  sliderEndValue -  sliderStartValue;
-		sliderInterval = duration / sliderSpeed;
+	    var duration = sliderEndValue - sliderStartValue;
+	    sliderInterval = duration / sliderSpeed;
 
-		// initial value
-		currentDateDisplay = d3.select('#currentDate');//.text(dateFormat(startDate));
+	    // initial value
+	    currentDateDisplay = d3.select('#currentDate'); //.text(dateFormat(startDate));
 
-		 timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-				[ 0, 1 ]);
+	    timeScale = d3.time.scale.utc().domain([startDate, endDate]).range(
+	      [0, 1]);
 
-		timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-		d3.select('#timeSlider').call(timeSlider);
+	    timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+	    d3.select('#timeSlider').call(timeSlider);
 
-	}// END: generateTime
+	  } // END: generateTime
 
 	function updateDateDisplay(value) {
 
-		var currentDate = timeScale.invert(timeScale(value));
-		currentDateDisplay.text(dateFormat(currentDate));
+	  var currentDate = timeScale.invert(timeScale(value));
+	  currentDateDisplay.text(dateFormat(currentDate));
 
-	}// END: updateDateDisplay
+	} // END: updateDateDisplay
 
 	function update(value) {
 
-		updateDateDisplay(value);
+	  updateDateDisplay(value);
 
-	    //---POINTS---//
+	  //---POINTS---//
 
-		if(global.hasPoints) {
-		points.updatePointsLayer(value);
-		}
+	  if (global.hasPoints) {
+	    points.updatePointsLayer(value);
+	  }
 
-		// ---LINES---//
+	  // ---LINES---//
 
-		if(global.hasLines) {
-		lines.updateLinesLayer(value);
-		}
+	  if (global.hasLines) {
+	    lines.updateLinesLayer(value);
+	  }
 
+	  // --- AREAS--//
+	  if (global.hasAreas) {
+	    areas.updateAreasLayer(value);
+	  }
 
-		// --- AREAS--//
-		if(global.hasAreas) {
-		areas.updateAreasLayer(value);
-		}
+	  // --- COUNTS--//
+	  if (global.hasCounts) {
+	    counts.updateCountsLayer(value);
+	  }
 
-		// --- COUNTS--//
-		if(global.hasCounts) {
-		counts.updateCountsLayer(value);
-		}
-
-	}// END: update
+	} // END: update
 
 
 /***/ },
@@ -21079,11 +21058,12 @@
 		Author Tobias Koppers @sokra
 	*/
 	module.exports = function(src) {
-		if (typeof execScript === "function")
+		if (typeof execScript !== "undefined")
 			execScript(src);
 		else
 			eval.call(null, src);
 	}
+
 
 /***/ },
 /* 21 */
@@ -21136,17 +21116,11 @@
 	__webpack_require__(25);
 	var d3 = __webpack_require__(9);
 	__webpack_require__(27);
+	__webpack_require__(29);
 
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 
-	// var slider = require('rangeslider.js');
-	// require("script!rangeslider.js");
-
-	__webpack_require__(29);
-
-	// import("./jquery.simple-color.js");
-	__webpack_require__(30);
 
 	// ---MODULE VARIABLES---//
 
@@ -21329,7 +21303,8 @@
 	        }) //
 	      .transition() //
 	      .ease("linear") //
-	      .attr("visibility", "hidden").attr("opacity", 0);
+	      .attr("visibility", "hidden") //
+	      .attr("opacity", 0);
 
 	    // ---select points displayed now---//
 
@@ -21854,501 +21829,6 @@
 /* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*** IMPORTS FROM imports-loader ***/
-	var $ = __webpack_require__(1);
-
-	/*! rangeslider.js - v2.1.1 | (c) 2016 @andreruffert | MIT license | https://github.com/andreruffert/rangeslider.js */
-	(function(factory) {
-	    'use strict';
-
-	    if (true) {
-	        // AMD. Register as an anonymous module.
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports === 'object') {
-	        // CommonJS
-	        module.exports = factory(require('jquery'));
-	    } else {
-	        // Browser globals
-	        factory(jQuery);
-	    }
-	}(function($) {
-	    'use strict';
-
-	    // Polyfill Number.isNaN(value)
-	    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
-	    Number.isNaN = Number.isNaN || function(value) {
-	        return typeof value === 'number' && value !== value;
-	    };
-
-	    /**
-	     * Range feature detection
-	     * @return {Boolean}
-	     */
-	    function supportsRange() {
-	        var input = document.createElement('input');
-	        input.setAttribute('type', 'range');
-	        return input.type !== 'text';
-	    }
-
-	    var pluginName = 'rangeslider',
-	        pluginIdentifier = 0,
-	        hasInputRangeSupport = supportsRange(),
-	        defaults = {
-	            polyfill: true,
-	            orientation: 'horizontal',
-	            rangeClass: 'rangeslider',
-	            disabledClass: 'rangeslider--disabled',
-	            horizontalClass: 'rangeslider--horizontal',
-	            verticalClass: 'rangeslider--vertical',
-	            fillClass: 'rangeslider__fill',
-	            handleClass: 'rangeslider__handle',
-	            startEvent: ['mousedown', 'touchstart', 'pointerdown'],
-	            moveEvent: ['mousemove', 'touchmove', 'pointermove'],
-	            endEvent: ['mouseup', 'touchend', 'pointerup']
-	        },
-	        constants = {
-	            orientation: {
-	                horizontal: {
-	                    dimension: 'width',
-	                    direction: 'left',
-	                    directionStyle: 'left',
-	                    coordinate: 'x'
-	                },
-	                vertical: {
-	                    dimension: 'height',
-	                    direction: 'top',
-	                    directionStyle: 'bottom',
-	                    coordinate: 'y'
-	                }
-	            }
-	        };
-
-	    /**
-	     * Delays a function for the given number of milliseconds, and then calls
-	     * it with the arguments supplied.
-	     *
-	     * @param  {Function} fn   [description]
-	     * @param  {Number}   wait [description]
-	     * @return {Function}
-	     */
-	    function delay(fn, wait) {
-	        var args = Array.prototype.slice.call(arguments, 2);
-	        return setTimeout(function(){ return fn.apply(null, args); }, wait);
-	    }
-
-	    /**
-	     * Returns a debounced function that will make sure the given
-	     * function is not triggered too much.
-	     *
-	     * @param  {Function} fn Function to debounce.
-	     * @param  {Number}   debounceDuration OPTIONAL. The amount of time in milliseconds for which we will debounce the function. (defaults to 100ms)
-	     * @return {Function}
-	     */
-	    function debounce(fn, debounceDuration) {
-	        debounceDuration = debounceDuration || 100;
-	        return function() {
-	            if (!fn.debouncing) {
-	                var args = Array.prototype.slice.apply(arguments);
-	                fn.lastReturnVal = fn.apply(window, args);
-	                fn.debouncing = true;
-	            }
-	            clearTimeout(fn.debounceTimeout);
-	            fn.debounceTimeout = setTimeout(function(){
-	                fn.debouncing = false;
-	            }, debounceDuration);
-	            return fn.lastReturnVal;
-	        };
-	    }
-
-	    /**
-	     * Check if a `element` is visible in the DOM
-	     *
-	     * @param  {Element}  element
-	     * @return {Boolean}
-	     */
-	    function isHidden(element) {
-	        return (
-	            element && (
-	                element.offsetWidth === 0 ||
-	                element.offsetHeight === 0 ||
-	                // Also Consider native `<details>` elements.
-	                element.open === false
-	            )
-	        );
-	    }
-
-	    /**
-	     * Get hidden parentNodes of an `element`
-	     *
-	     * @param  {Element} element
-	     * @return {[type]}
-	     */
-	    function getHiddenParentNodes(element) {
-	        var parents = [],
-	            node    = element.parentNode;
-
-	        while (isHidden(node)) {
-	            parents.push(node);
-	            node = node.parentNode;
-	        }
-	        return parents;
-	    }
-
-	    /**
-	     * Returns dimensions for an element even if it is not visible in the DOM.
-	     *
-	     * @param  {Element} element
-	     * @param  {String}  key     (e.g. offsetWidth …)
-	     * @return {Number}
-	     */
-	    function getDimension(element, key) {
-	        var hiddenParentNodes       = getHiddenParentNodes(element),
-	            hiddenParentNodesLength = hiddenParentNodes.length,
-	            inlineStyle             = [],
-	            dimension               = element[key];
-
-	        // Used for native `<details>` elements
-	        function toggleOpenProperty(element) {
-	            if (typeof element.open !== 'undefined') {
-	                element.open = (element.open) ? false : true;
-	            }
-	        }
-
-	        if (hiddenParentNodesLength) {
-	            for (var i = 0; i < hiddenParentNodesLength; i++) {
-
-	                // Cache style attribute to restore it later.
-	                inlineStyle[i] = hiddenParentNodes[i].style.cssText;
-
-	                // visually hide
-	                if (hiddenParentNodes[i].style.setProperty) {
-	                    hiddenParentNodes[i].style.setProperty('display', 'block', 'important');
-	                } else {
-	                    hiddenParentNodes[i].style.cssText += ';display: block !important';
-	                }
-	                hiddenParentNodes[i].style.height = '0';
-	                hiddenParentNodes[i].style.overflow = 'hidden';
-	                hiddenParentNodes[i].style.visibility = 'hidden';
-	                toggleOpenProperty(hiddenParentNodes[i]);
-	            }
-
-	            // Update dimension
-	            dimension = element[key];
-
-	            for (var j = 0; j < hiddenParentNodesLength; j++) {
-
-	                // Restore the style attribute
-	                hiddenParentNodes[j].style.cssText = inlineStyle[j];
-	                toggleOpenProperty(hiddenParentNodes[j]);
-	            }
-	        }
-	        return dimension;
-	    }
-
-	    /**
-	     * Returns the parsed float or the default if it failed.
-	     *
-	     * @param  {String}  str
-	     * @param  {Number}  defaultValue
-	     * @return {Number}
-	     */
-	    function tryParseFloat(str, defaultValue) {
-	        var value = parseFloat(str);
-	        return Number.isNaN(value) ? defaultValue : value;
-	    }
-
-	    /**
-	     * Capitalize the first letter of string
-	     *
-	     * @param  {String} str
-	     * @return {String}
-	     */
-	    function ucfirst(str) {
-	        return str.charAt(0).toUpperCase() + str.substr(1);
-	    }
-
-	    /**
-	     * Plugin
-	     * @param {String} element
-	     * @param {Object} options
-	     */
-	    function Plugin(element, options) {
-	        this.$window            = $(window);
-	        this.$document          = $(document);
-	        this.$element           = $(element);
-	        this.options            = $.extend( {}, defaults, options );
-	        this.polyfill           = this.options.polyfill;
-	        this.orientation        = this.$element[0].getAttribute('data-orientation') || this.options.orientation;
-	        this.onInit             = this.options.onInit;
-	        this.onSlide            = this.options.onSlide;
-	        this.onSlideEnd         = this.options.onSlideEnd;
-	        this.DIMENSION          = constants.orientation[this.orientation].dimension;
-	        this.DIRECTION          = constants.orientation[this.orientation].direction;
-	        this.DIRECTION_STYLE    = constants.orientation[this.orientation].directionStyle;
-	        this.COORDINATE         = constants.orientation[this.orientation].coordinate;
-
-	        // Plugin should only be used as a polyfill
-	        if (this.polyfill) {
-	            // Input range support?
-	            if (hasInputRangeSupport) { return false; }
-	        }
-
-	        this.identifier = 'js-' + pluginName + '-' +(pluginIdentifier++);
-	        this.startEvent = this.options.startEvent.join('.' + this.identifier + ' ') + '.' + this.identifier;
-	        this.moveEvent  = this.options.moveEvent.join('.' + this.identifier + ' ') + '.' + this.identifier;
-	        this.endEvent   = this.options.endEvent.join('.' + this.identifier + ' ') + '.' + this.identifier;
-	        this.toFixed    = (this.step + '').replace('.', '').length - 1;
-	        this.$fill      = $('<div class="' + this.options.fillClass + '" />');
-	        this.$handle    = $('<div class="' + this.options.handleClass + '" />');
-	        this.$range     = $('<div class="' + this.options.rangeClass + ' ' + this.options[this.orientation + 'Class'] + '" id="' + this.identifier + '" />').insertAfter(this.$element).prepend(this.$fill, this.$handle);
-
-	        // visually hide the input
-	        this.$element.css({
-	            'position': 'absolute',
-	            'width': '1px',
-	            'height': '1px',
-	            'overflow': 'hidden',
-	            'opacity': '0'
-	        });
-
-	        // Store context
-	        this.handleDown = $.proxy(this.handleDown, this);
-	        this.handleMove = $.proxy(this.handleMove, this);
-	        this.handleEnd  = $.proxy(this.handleEnd, this);
-
-	        this.init();
-
-	        // Attach Events
-	        var _this = this;
-	        this.$window.on('resize.' + this.identifier, debounce(function() {
-	            // Simulate resizeEnd event.
-	            delay(function() { _this.update(false, false); }, 300);
-	        }, 20));
-
-	        this.$document.on(this.startEvent, '#' + this.identifier + ':not(.' + this.options.disabledClass + ')', this.handleDown);
-
-	        // Listen to programmatic value changes
-	        this.$element.on('change.' + this.identifier, function(e, data) {
-	            if (data && data.origin === _this.identifier) {
-	                return;
-	            }
-
-	            var value = e.target.value,
-	                pos = _this.getPositionFromValue(value);
-	            _this.setPosition(pos);
-	        });
-	    }
-
-	    Plugin.prototype.init = function() {
-	        this.update(true, false);
-
-	        if (this.onInit && typeof this.onInit === 'function') {
-	            this.onInit();
-	        }
-	    };
-
-	    Plugin.prototype.update = function(updateAttributes, triggerSlide) {
-	        updateAttributes = updateAttributes || false;
-
-	        if (updateAttributes) {
-	            this.min    = tryParseFloat(this.$element[0].getAttribute('min'), 0);
-	            this.max    = tryParseFloat(this.$element[0].getAttribute('max'), 100);
-	            this.value  = tryParseFloat(this.$element[0].value, Math.round(this.min + (this.max-this.min)/2));
-	            this.step   = tryParseFloat(this.$element[0].getAttribute('step'), 1);
-	        }
-
-	        this.handleDimension    = getDimension(this.$handle[0], 'offset' + ucfirst(this.DIMENSION));
-	        this.rangeDimension     = getDimension(this.$range[0], 'offset' + ucfirst(this.DIMENSION));
-	        this.maxHandlePos       = this.rangeDimension - this.handleDimension;
-	        this.grabPos            = this.handleDimension / 2;
-	        this.position           = this.getPositionFromValue(this.value);
-
-	        // Consider disabled state
-	        if (this.$element[0].disabled) {
-	            this.$range.addClass(this.options.disabledClass);
-	        } else {
-	            this.$range.removeClass(this.options.disabledClass);
-	        }
-
-	        this.setPosition(this.position, triggerSlide);
-	    };
-
-	    Plugin.prototype.handleDown = function(e) {
-	        this.$document.on(this.moveEvent, this.handleMove);
-	        this.$document.on(this.endEvent, this.handleEnd);
-
-	        // If we click on the handle don't set the new position
-	        if ((' ' + e.target.className + ' ').replace(/[\n\t]/g, ' ').indexOf(this.options.handleClass) > -1) {
-	            return;
-	        }
-
-	        var pos         = this.getRelativePosition(e),
-	            rangePos    = this.$range[0].getBoundingClientRect()[this.DIRECTION],
-	            handlePos   = this.getPositionFromNode(this.$handle[0]) - rangePos,
-	            setPos      = (this.orientation === 'vertical') ? (this.maxHandlePos - (pos - this.grabPos)) : (pos - this.grabPos);
-
-	        this.setPosition(setPos);
-
-	        if (pos >= handlePos && pos < handlePos + this.handleDimension) {
-	            this.grabPos = pos - handlePos;
-	        }
-	    };
-
-	    Plugin.prototype.handleMove = function(e) {
-	        e.preventDefault();
-	        var pos = this.getRelativePosition(e);
-	        var setPos = (this.orientation === 'vertical') ? (this.maxHandlePos - (pos - this.grabPos)) : (pos - this.grabPos);
-	        this.setPosition(setPos);
-	    };
-
-	    Plugin.prototype.handleEnd = function(e) {
-	        e.preventDefault();
-	        this.$document.off(this.moveEvent, this.handleMove);
-	        this.$document.off(this.endEvent, this.handleEnd);
-
-	        // Ok we're done fire the change event
-	        this.$element.trigger('change', { origin: this.identifier });
-
-	        if (this.onSlideEnd && typeof this.onSlideEnd === 'function') {
-	            this.onSlideEnd(this.position, this.value);
-	        }
-	    };
-
-	    Plugin.prototype.cap = function(pos, min, max) {
-	        if (pos < min) { return min; }
-	        if (pos > max) { return max; }
-	        return pos;
-	    };
-
-	    Plugin.prototype.setPosition = function(pos, triggerSlide) {
-	        var value, newPos;
-
-	        if (triggerSlide === undefined) {
-	            triggerSlide = true;
-	        }
-
-	        // Snapping steps
-	        value = this.getValueFromPosition(this.cap(pos, 0, this.maxHandlePos));
-	        newPos = this.getPositionFromValue(value);
-
-	        // Update ui
-	        this.$fill[0].style[this.DIMENSION] = (newPos + this.grabPos) + 'px';
-	        this.$handle[0].style[this.DIRECTION_STYLE] = newPos + 'px';
-	        this.setValue(value);
-
-	        // Update globals
-	        this.position = newPos;
-	        this.value = value;
-
-	        if (triggerSlide && this.onSlide && typeof this.onSlide === 'function') {
-	            this.onSlide(newPos, value);
-	        }
-	    };
-
-	    // Returns element position relative to the parent
-	    Plugin.prototype.getPositionFromNode = function(node) {
-	        var i = 0;
-	        while (node !== null) {
-	            i += node.offsetLeft;
-	            node = node.offsetParent;
-	        }
-	        return i;
-	    };
-
-	    Plugin.prototype.getRelativePosition = function(e) {
-	        // Get the offset DIRECTION relative to the viewport
-	        var ucCoordinate = ucfirst(this.COORDINATE),
-	            rangePos = this.$range[0].getBoundingClientRect()[this.DIRECTION],
-	            pageCoordinate = 0;
-
-	        if (typeof e['page' + ucCoordinate] !== 'undefined') {
-	            pageCoordinate = e['client' + ucCoordinate];
-	        }
-	        else if (typeof e.originalEvent['client' + ucCoordinate] !== 'undefined') {
-	            pageCoordinate = e.originalEvent['client' + ucCoordinate];
-	        }
-	        else if (e.originalEvent.touches && e.originalEvent.touches[0] && typeof e.originalEvent.touches[0]['client' + ucCoordinate] !== 'undefined') {
-	            pageCoordinate = e.originalEvent.touches[0]['client' + ucCoordinate];
-	        }
-	        else if(e.currentPoint && typeof e.currentPoint[this.COORDINATE] !== 'undefined') {
-	            pageCoordinate = e.currentPoint[this.COORDINATE];
-	        }
-
-	        return pageCoordinate - rangePos;
-	    };
-
-	    Plugin.prototype.getPositionFromValue = function(value) {
-	        var percentage, pos;
-	        percentage = (value - this.min)/(this.max - this.min);
-	        pos = (!Number.isNaN(percentage)) ? percentage * this.maxHandlePos : 0;
-	        return pos;
-	    };
-
-	    Plugin.prototype.getValueFromPosition = function(pos) {
-	        var percentage, value;
-	        percentage = ((pos) / (this.maxHandlePos || 1));
-	        value = this.step * Math.round(percentage * (this.max - this.min) / this.step) + this.min;
-	        return Number((value).toFixed(this.toFixed));
-	    };
-
-	    Plugin.prototype.setValue = function(value) {
-	        if (value === this.value && this.$element[0].value !== '') {
-	            return;
-	        }
-
-	        // Set the new value and fire the `input` event
-	        this.$element
-	            .val(value)
-	            .trigger('input', { origin: this.identifier });
-	    };
-
-	    Plugin.prototype.destroy = function() {
-	        this.$document.off('.' + this.identifier);
-	        this.$window.off('.' + this.identifier);
-
-	        this.$element
-	            .off('.' + this.identifier)
-	            .removeAttr('style')
-	            .removeData('plugin_' + pluginName);
-
-	        // Remove the generated markup
-	        if (this.$range && this.$range.length) {
-	            this.$range[0].parentNode.removeChild(this.$range[0]);
-	        }
-	    };
-
-	    // A really lightweight plugin wrapper around the constructor,
-	    // preventing against multiple instantiations
-	    $.fn[pluginName] = function(options) {
-	        var args = Array.prototype.slice.call(arguments, 1);
-
-	        return this.each(function() {
-	            var $this = $(this),
-	                data  = $this.data('plugin_' + pluginName);
-
-	            // Create a new instance.
-	            if (!data) {
-	                $this.data('plugin_' + pluginName, (data = new Plugin(this, options)));
-	            }
-
-	            // Make it possible to access methods from public.
-	            // e.g `$element.rangeslider('method');`
-	            if (typeof options === 'string') {
-	                data[options].apply(data, args);
-	            }
-	        });
-	    };
-
-	    return 'rangeslider.js is available in jQuery context e.g $(selector).rangeslider(options);';
-
-	}));
-
-
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(jQuery) {/*** IMPORTS FROM imports-loader ***/
 	var $ = __webpack_require__(1);
 
@@ -22704,7 +22184,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -22717,7 +22197,7 @@
 	__webpack_require__(27);
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
-	__webpack_require__(30);
+	__webpack_require__(29);
 
 	// ---MODULE VARIABLES---//
 	var linesLayer;
@@ -23497,7 +22977,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -23511,7 +22991,7 @@
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 
-	__webpack_require__(30);
+	__webpack_require__(29);
 
 	// ---MODULE VARIABLES---//
 
@@ -24104,7 +23584,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -24463,7 +23943,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**
@@ -24472,10 +23952,10 @@
 
 	// ---MODULE IMPORTS---//
 
-	__webpack_require__(35);
+	__webpack_require__(34);
 	var d3 = __webpack_require__(9);
 	__webpack_require__(27);
-	__webpack_require__(30);
+	__webpack_require__(29);
 	var utils = __webpack_require__(13);
 	var global = __webpack_require__(10);
 
@@ -24519,6 +23999,7 @@
 
 		// determine the bounds
 		var bounds = path.bounds(geojson);
+
 		var hscale = projectionScale * global.width / (bounds[1][0] - bounds[0][0]);
 		var vscale = projectionScale * global.height
 				/ (bounds[1][1] - bounds[0][1]);
@@ -24628,7 +24109,7 @@
 		//console.log("vscale: " + vscale);
 
 		var projectionScale = (hscale < vscale) ? hscale : vscale;
-	    projectionScale = projectionScale * 100;
+	  projectionScale = projectionScale * 100;
 
 	    //console.log("projectionScale: " + projectionScale);
 
@@ -24740,7 +24221,6 @@
 	        .text(utils.capitalizeFirstLetter(axisAttributes.yCoordinate));
 
 	    updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
-
 	}// END: generateEmptyLayer
 
 	exports.setupPanels = function(attributes) {
@@ -24784,7 +24264,6 @@
 			element.value = option;
 
 			mapBackgroundSelect.appendChild(element);
-
 		}// END: i loop
 
 		// map background listener
@@ -24802,23 +24281,16 @@
 
 							// setup legend
 							updateMapBackgroundLegend(scale);
-
 						});
 
 	}// END:setupTopoBackgroundPanel
 
 	updateMapBackground = function(color) {
-
-		// d3.select('.container').style("background", color);
-		// d3.select('.svg').style("background", color);
-
 		d3.select('.svg').style({
 			// "fill": color,
 		 //  "color" :color,
 	     "background" : color
 		});
-
-
 	}//END: updateMapBackground
 
 	updateMapBackgroundLegend = function(scale) {
@@ -25167,13 +24639,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(36);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(7)(content, {});
@@ -25193,14 +24665,14 @@
 	}
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
 	exports.push([module.id, ".axis path, .axis line {\n\tfill: none;\n\tstroke: black;\n}\n\n.tick text {\n\tfont-size: 12px;\n}\n\n.tick line {\n\topacity: 0.1;\n}", ""]);
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/**

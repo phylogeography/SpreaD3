@@ -20,19 +20,19 @@ public class ContinuousTreeTest {
 
 			ContinuousTreeSettings settings = new ContinuousTreeSettings();
 
-			settings.treeFilename = "/home/filip/Dropbox/JavaProjects/SpreaD3/data/continuous/languages/IE2011_RelaxedSDollo_AllSingletonsGeo2.MCC.tre";
+			settings.treeFilename = "/home/filip/WNV_relaxed_geo_gamma_MCC.tre";
 			
-			settings.xCoordinate = "trait2";
+			settings.xCoordinate = "location2";
 			
-			settings.yCoordinate = "trait1";
+			settings.yCoordinate = "location1";
 
-			settings.hpd = "80";
+			settings.hpd = "95";
 			
 			settings.mrsd = "2011.33";
 			
-			settings.geojsonFilename = "/home/filip/Dropbox/JavaProjects/SpreaD3/data/geoJSON_maps/world.geojson";
+			settings.geojsonFilename = "/home/filip/map.geojson";
 			
-			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/languages.json");
+			settings.outputFilename = new String("/home/filip/Dropbox/JavaScriptProjects/d3-renderer/public/wnv.json");
 
 			// ---PARSE---//
 

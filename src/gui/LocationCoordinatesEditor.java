@@ -9,9 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -27,6 +25,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
+import exceptions.AnalysisException;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.trees.RootedTree;
 import parsers.DiscreteLocationsParser;
@@ -36,7 +35,6 @@ import settings.parsing.DiscreteTreeSettings;
 import structure.data.Location;
 import structure.data.primitive.Coordinate;
 import utils.Utils;
-import exceptions.AnalysisException;
 
 /**
  * @author Filip Bielejec

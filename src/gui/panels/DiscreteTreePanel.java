@@ -1,15 +1,7 @@
 package gui.panels;
 
-import gui.DateEditor;
-import gui.InterfaceUtils;
-import gui.LocationCoordinatesEditor;
-import gui.MainFrame;
-import gui.SimpleFileFilter;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,6 +18,14 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import gui.DateEditor;
+import gui.InterfaceUtils;
+import gui.LocationCoordinatesEditor;
+import gui.MainFrame;
+import gui.SimpleFileFilter;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
@@ -33,9 +33,6 @@ import parsers.DiscreteTreeSpreadDataParser;
 import settings.parsing.DiscreteTreeSettings;
 import structure.data.SpreadData;
 import utils.Utils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @SuppressWarnings({ "rawtypes", "serial" })
 public class DiscreteTreePanel extends SpreadPanel {
