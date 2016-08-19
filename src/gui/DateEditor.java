@@ -138,7 +138,9 @@ public class DateEditor extends JPanel {
 			add(spinner);
 
 			dateFormatCreated = true;
-			callRepaint();
+
+            revalidate();
+            repaint();
 		}
 
 	}// END: populateDateFormat
@@ -152,7 +154,9 @@ public class DateEditor extends JPanel {
 			decimalDate = new JTextField(convertToDecimalDate(today), 10);
 			add(decimalDate);
 			decimalFormatCreated = true;
-			callRepaint();
+
+            revalidate();
+            repaint();
 		}
 
 	}// END: populateDecimalFormat
@@ -193,8 +197,4 @@ public class DateEditor extends JPanel {
 		return decimalDateString;
 	}// END: convertToDecimalDate
 
-	private void callRepaint() {
-		this.repaint();
-	}//END: callRepaint
-	
 }// END: class
