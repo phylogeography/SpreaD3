@@ -125,7 +125,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 				String[] logFiles = new String[] { "log" };
 
 				final JFileChooser chooser = new JFileChooser();
-				chooser.setDialogTitle("Loading tree file...");
+				chooser.setDialogTitle("Loading BSSVS log file...");
 				chooser.setMultiSelectionEnabled(false);
 				chooser.addChoosableFileFilter(new SimpleFileFilter(logFiles, "Log files (*.log)"));
 				chooser.setCurrentDirectory(frame.getWorkingDirectory());
@@ -336,7 +336,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 			} catch (NumberFormatException e) {
 				InterfaceUtils
 						.handleException(e,
-								"Spread needs a numerical value enterd as Poisson prior mean.");
+								"Spread needs a numerical value entered as Poisson prior mean.");
 				meanPoissonPrior.setSelectedIndex(0);
 			} // END: try-catch
 
@@ -438,7 +438,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 				} catch (Exception e) {
 
 					InterfaceUtils.handleException(e, e.getMessage());
-					frame.setStatus("Exception occured.");
+					frame.setStatus("Exception occurred.");
 					frame.setIdle();
 
 				} // END: try-catch
