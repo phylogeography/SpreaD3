@@ -11,9 +11,9 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
-public class Spread2UIApp {
+public class Spread3UIApp {
 
-	public Spread2UIApp() {
+	public Spread3UIApp() {
 		
 		boolean lafLoaded = false;
 
