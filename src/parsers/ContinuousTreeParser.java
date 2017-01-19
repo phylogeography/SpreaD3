@@ -83,7 +83,7 @@ public class ContinuousTreeParser {
 
 		} catch (Exception e) {
 			throw new AnalysisException(
-					"Troble creating HPD modality attribute name. I suspect this is not a continuously annotated tree.");
+					"Trouble creating HPD modality attribute name. I suspect this is not a continuously annotated tree.");
 		}
 
 		int index = 0;
