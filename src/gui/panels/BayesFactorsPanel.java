@@ -297,7 +297,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 			} catch (NumberFormatException e) {
 				InterfaceUtils
 						.handleException(e,
-								"Spread needs a numerical value enterd as Poisson prior offset.");
+								"spreaD3 needs a numerical value entered as Poisson prior offset.");
 				offsetPoissonPrior.setSelectedIndex(0);
 			} // END: try-catch
 
@@ -336,7 +336,7 @@ public class BayesFactorsPanel extends SpreadPanel {
 			} catch (NumberFormatException e) {
 				InterfaceUtils
 						.handleException(e,
-								"Spread needs a numerical value entered as Poisson prior mean.");
+								"spreaD3 needs a numerical value entered as Poisson prior mean.");
 				meanPoissonPrior.setSelectedIndex(0);
 			} // END: try-catch
 
