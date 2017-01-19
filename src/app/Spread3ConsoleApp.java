@@ -33,7 +33,7 @@ import structure.data.SpreadData;
 import utils.Arguments;
 import utils.Utils;
 
-public class Spread2ConsoleApp {
+public class Spread3ConsoleApp {
 
 	// ---ARGUMENTS--//
 
@@ -158,7 +158,7 @@ public class Spread2ConsoleApp {
 	private static final String COUNTS = "counts";
 	private static final String AXIS_ATTRIBUTES = "axisAttributes";
 
-	public Spread2ConsoleApp() {
+	public Spread3ConsoleApp() {
 
 		// //////////////////
 		// ---DEFINITION---//
