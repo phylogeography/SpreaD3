@@ -101,6 +101,8 @@ public class D3RenderPanel extends OptionsPanel {
 			render.addActionListener(new ListenRender());
 			addComponentWithLabel("Render to D3:", render);
 			renderCreated = true;
+
+			revalidate();
 		}
 	}// END: populateRender
 

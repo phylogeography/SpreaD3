@@ -248,6 +248,8 @@ public class KmlRendererPanel extends SpreadPanel {
 
 			renderSettingsCreated = true;
 
+			revalidate();
+
 		}
 
 	}// END: populateRender
@@ -383,7 +385,7 @@ public class KmlRendererPanel extends SpreadPanel {
 					settings.minPointBlue.intValue(), //
 					settings.minPointAlpha.intValue() //
 			);
-			
+
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
@@ -396,7 +398,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenPointStartColor
-	
+
 	private class ListenPointEndColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -406,7 +408,7 @@ public class KmlRendererPanel extends SpreadPanel {
 					settings.maxPointBlue.intValue(), //
 					settings.maxPointAlpha.intValue() //
 			);
-			
+
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
@@ -419,7 +421,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenPointEndColor
-	
+
 	private class ListenPointColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -454,7 +456,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_SUPER_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Lines color attribute:"));
-		
+
 		lineStartColor = new  JButton("Start color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		lineStartColor.addActionListener(new ListenLineStartColor());
@@ -463,7 +465,7 @@ public class KmlRendererPanel extends SpreadPanel {
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		lineEndColor.addActionListener(new ListenLineEndColor());
 		tmpPanel.add(lineEndColor);
-		
+
 		lineColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				lineAttributeNames.toArray());
@@ -601,7 +603,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 	}// END: ListenLineColorMapping
 
-	
+
 	private class ListenLineStartColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -611,7 +613,7 @@ public class KmlRendererPanel extends SpreadPanel {
 					settings.minLineBlue.intValue(), //
 					settings.minLineAlpha.intValue() //
 			);
-			
+
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
@@ -624,7 +626,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenLineStartColor
-	
+
 	private class ListenLineEndColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -634,7 +636,7 @@ public class KmlRendererPanel extends SpreadPanel {
 					settings.maxLineBlue.intValue(), //
 					settings.maxLineAlpha.intValue() //
 			);
-			
+
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
@@ -647,8 +649,8 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenLineEndColor
-	
-	
+
+
 	private class ListenLineColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -683,7 +685,7 @@ public class KmlRendererPanel extends SpreadPanel {
 		tmpPanel = new JPanel();
 		tmpPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_SUPER_HEIGHT));
 		tmpPanel.setBorder(new TitledBorder("Area color attribute:"));
-		
+
 		areaStartColor = new  JButton("Start color",
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		areaStartColor.addActionListener(new ListenAreaStartColor());
@@ -692,7 +694,7 @@ public class KmlRendererPanel extends SpreadPanel {
 				InterfaceUtils.createImageIcon(InterfaceUtils.COLOR_WHEEL_ICON));
 		areaEndColor.addActionListener(new ListenAreaEndColor());
 		tmpPanel.add(areaEndColor);
-		
+
 		areaColorMapping = new JComboBox();
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(
 				pointAttributeNames.toArray());
@@ -755,7 +757,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 	}// END: ListenLineColorMapping
 
-	
+
 	private class ListenAreaStartColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -765,7 +767,7 @@ public class KmlRendererPanel extends SpreadPanel {
 					settings.minAreaBlue.intValue(), //
 					settings.minAreaAlpha.intValue() //
 			);
-			
+
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
@@ -778,7 +780,7 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenPointStartColor
-	
+
 	private class ListenAreaEndColor implements ActionListener {
 		public void actionPerformed(ActionEvent ev) {
 
@@ -788,7 +790,7 @@ public class KmlRendererPanel extends SpreadPanel {
 					settings.maxAreaBlue.intValue(), //
 					settings.maxAreaAlpha.intValue() //
 			);
-			
+
 			Color c = ColorPicker.showDialog(InterfaceUtils.getActiveFrame(),
 					"Choose color...", defaultColor, true);
 
@@ -801,11 +803,11 @@ public class KmlRendererPanel extends SpreadPanel {
 
 		}// END: actionPerformed
 	}// END: ListenPointEndColor
-	
-	
-	
-	
-	
+
+
+
+
+
 	// //////////////
 	// ---COUNTS---//
 	// //////////////
