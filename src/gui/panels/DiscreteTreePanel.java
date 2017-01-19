@@ -491,7 +491,7 @@ public class DiscreteTreePanel extends SpreadPanel {
 				} catch (Exception e) {
 
 					InterfaceUtils.handleException(e, e.getMessage());
-					frame.setStatus("Exception occured.");
+					frame.setStatus("Exception occurred.");
 					frame.setIdle();
 
 				} // END: try-catch
