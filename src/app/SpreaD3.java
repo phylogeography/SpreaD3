@@ -26,14 +26,14 @@ public class SpreaD3 {
 
 		if (args.length > 0) {
 
-			Spread2ConsoleApp cli = new Spread2ConsoleApp();
+			Spread3ConsoleApp cli = new Spread3ConsoleApp();
 			welcomeDialog();
 			cli.run(args);
 
 		} else {
 
 //			Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-			new Spread2UIApp();
+			new Spread3UIApp();
 
 		}
 
