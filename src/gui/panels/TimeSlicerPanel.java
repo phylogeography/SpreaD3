@@ -543,6 +543,7 @@ public class TimeSlicerPanel extends SpreadPanel {
 			int spacing = (max - min) / nIntervals;
 
 			burnIn = new JSlider(JSlider.HORIZONTAL, min, max - 1, spacing);
+			settings.burnIn = spacing;
 
 			burnIn.setMajorTickSpacing(spacing);
 			burnIn.setPaintTicks(true);
