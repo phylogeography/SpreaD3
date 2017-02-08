@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.trees.RootedTree;
+import settings.parsing.DiscreteTreeSettings;
 import structure.data.Attribute;
 import structure.data.Location;
 import structure.data.attributable.Line;
@@ -22,11 +23,15 @@ public class DiscreteTreeParser {
 
 	public static final String COUNT = "count";
     private static final Integer UNRESOLVED_INDEX = Integer.MAX_VALUE;
+
+	private static final boolean DEBUG = false;
 	
 	private String locationTrait;
 	private RootedTree rootedTree;
 	private double timescaleMultiplier;
 	private TimeParser timeParser;
+
+	private int intervals;
 
 	private LinkedList<Location> locationsList;
 	private LinkedList<Attribute> uniqueBranchAttributes;
@@ -40,13 +45,16 @@ public class DiscreteTreeParser {
 			String locationTrait, //
 			LinkedList<Location> locationsList, //
 			TimeParser timeParser, //
-			double timescaleMultiplier //
+			double timescaleMultiplier, //
+			int intervals
 	) throws AnalysisException {
 
 		this.locationTrait = locationTrait;
 		this.rootedTree = rootedTree;
 		this.timeParser = timeParser;
 		this.timescaleMultiplier = timescaleMultiplier;
+
+		this.intervals = intervals;
 
 		// structures
 		this.locationsList = locationsList;
@@ -64,7 +72,9 @@ public class DiscreteTreeParser {
 
 		HashMap<Node, Point> pointsMap = new HashMap<Node, Point>();
 
-		Double[] sliceHeights = createSliceHeights(10);
+		//Why was the number of slice heights hard-coded?
+		//Double[] sliceHeights = createSliceHeights(10);
+		Double[] sliceHeights = createSliceHeights(this.intervals);
 		int[][] locationCounts = new int[sliceHeights.length][locationsList.size()];
 
 		Location dummy;
@@ -134,6 +144,10 @@ public class DiscreteTreeParser {
 
 					linesList.add(line);
 
+					if (DEBUG) {
+						System.out.println(line);
+					}
+
 				} else {
 
 					// count lineages holding state
@@ -191,6 +205,11 @@ public class DiscreteTreeParser {
 		Double[] countRange = new Double[2];
 		countRange[Attribute.MIN_INDEX] = Double.MAX_VALUE;
 		countRange[Attribute.MAX_INDEX] = Double.MIN_VALUE;
+
+		if (DEBUG) {
+			System.out.println("sliceHeights length = " + sliceHeights.length);
+			System.out.println("locationCounts length = " + locationCounts.length);
+		}
 
 		for (int sliceIndex = 0; sliceIndex < locationCounts.length; sliceIndex++) {
 
