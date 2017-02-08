@@ -20,7 +20,7 @@ public class DiscreteTreeSettings implements DiscreteSpreadDataSettings {
 	
 	//---OPTIONAL---//
 	
-	// moste recent sampling date string yyyy/MM/dd
+	// most recent sampling date string yyyy/MM/dd
 	public String mrsd = "0/0/0";
 	
 	// multiplier for the branch lengths. Defaults to 1 unit = 1 year
@@ -29,7 +29,7 @@ public class DiscreteTreeSettings implements DiscreteSpreadDataSettings {
 	public String geojsonFilename = null;
 	
 	// number of discrete intervals
-	public Integer intervals = 10;
+	public int intervals = 10;
 	
 	// path to json output file 
 	public String outputFilename = "output.json";
