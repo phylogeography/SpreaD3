@@ -103,7 +103,8 @@ public class DiscreteTreeSpreadDataParser {
 				settings.locationAttributeName, //
 				locationsList, //
 				timeParser, //
-				settings.timescaleMultiplier//
+				settings.timescaleMultiplier,
+				settings.intervals //
 		);
 		treeParser.parseTree();
 
