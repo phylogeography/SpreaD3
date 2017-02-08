@@ -78,4 +78,9 @@ public class Line {
 		return attributes;
 	}
 
+	public String toString() {
+		String output = "line (" + startTime + ";" + endTime + ")";
+		return output;
+	}
+
 }// END: class
