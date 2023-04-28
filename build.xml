@@ -56,6 +56,7 @@
          <zipgroupfileset dir="${lib}" includes="jam.jar" />
          <zipgroupfileset dir="${lib}" includes="jebl.jar" />
          <zipgroupfileset dir="${lib}" includes="joda-time-2.7.jar" />
+	 <zipgroupfileset dir="${lib}" includes="corba-api-5.0.1.jar"/>
 
       </jar>
    </target>
@@ -65,7 +66,7 @@
       <mkdir dir="${buildDir}/icons" />
       <mkdir dir="${buildDir}/colorpicker/swing/resources" />
       <mkdir dir="${buildDir}/renderers/d3/d3renderer" />
-      <javac source="1.6" target="1.6" srcdir="${src}" destdir="classes" classpathref="classpath" />
+      <javac source="1.8" target="1.8" srcdir="${src}" destdir="classes" classpathref="classpath" />
 
       <!--copy resources -->
       <copy todir="${buildDir}/gui/icons">
