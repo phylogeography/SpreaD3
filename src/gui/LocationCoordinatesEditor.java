@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -48,8 +47,9 @@ public class LocationCoordinatesEditor {
 	private JDialog window;
 	private Frame owner;
 
-	// Menubar
-	private JMenuBar menu;
+	// Top button bar (a plain panel; a JMenuBar misused as a container does not
+	// render reliably under some look & feels, e.g. FlatLaf)
+	private JPanel menu;
 	private boolean createGenerateButton;
 
 	// Buttons with options
@@ -81,8 +81,8 @@ public class LocationCoordinatesEditor {
 		done = new JButton("Done",
 				InterfaceUtils.createImageIcon(InterfaceUtils.CHECK_ICON));
 
-		// Setup menu
-		menu = new JMenuBar();
+		// Setup top button bar
+		menu = new JPanel();
 		menu.setLayout(new BorderLayout());
 		JPanel buttonsHolder = new JPanel();
 		buttonsHolder.setOpaque(false);
