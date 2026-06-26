@@ -2,7 +2,7 @@ package gui.panels;
 
 public enum AnalysisTypes {
 
-	MCC_TREE("MCC_TREE", "Generated from MCC tree"), //
+	MCC_TREE("MCC_TREE", "Generated from Summary tree"), //
 	CUSTOM("CUSTOM", "Custom");
 
 	private String type;
