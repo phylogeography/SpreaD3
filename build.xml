@@ -53,6 +53,7 @@
          <zipgroupfileset dir="${lib}" includes="colt.jar" />
          <zipgroupfileset dir="${lib}" includes="commons-io-2.16.1.jar" />
          <zipgroupfileset dir="${lib}" includes="gson-2.11.0.jar" />
+         <zipgroupfileset dir="${lib}" includes="flatlaf-3.7.1.jar" />
          <zipgroupfileset dir="${lib}" includes="jam.jar" />
          <zipgroupfileset dir="${lib}" includes="jebl.jar" />
 

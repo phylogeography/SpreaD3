@@ -11,11 +11,22 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 public class Spread3UIApp {
 
 	public Spread3UIApp() {
 		
 		boolean lafLoaded = false;
+
+		// Primary look & feel: modern flat theme. Throwable so a missing jar
+		// (NoClassDefFoundError) also falls back to the platform L&Fs below.
+		try {
+			UIManager.setLookAndFeel(new FlatLightLaf());
+			lafLoaded = true;
+		} catch (Throwable e) {
+			//
+		}
 
 		// Setup Look & Feel
 		if (System.getProperty("os.name").toLowerCase().startsWith("mac os x")) {
@@ -38,32 +49,26 @@ public class Spread3UIApp {
 			UIManager.put("SmallSystemFont", new Font("Lucida Grande",
 					Font.PLAIN, 11));
 
-			try {
-
-				// UIManager.setLookAndFeel(UIManager
-				// .getSystemLookAndFeelClassName());
-
-				UIManager
-						.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
-				lafLoaded = true;
-
-			} catch (Exception e) {
-				//
+			if (!lafLoaded) {
+				try {
+					UIManager
+							.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+					lafLoaded = true;
+				} catch (Exception e) {
+					//
+				}
 			}
 
 		} else {
 
-			try {
-
-				// UIManager.setLookAndFeel(UIManager
-				// .getSystemLookAndFeelClassName());
-
-				UIManager
-						.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-				lafLoaded = true;
-
-			} catch (Exception e) {
-				//
+			if (!lafLoaded) {
+				try {
+					UIManager
+							.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+					lafLoaded = true;
+				} catch (Exception e) {
+					//
+				}
 			}
 
 		}
