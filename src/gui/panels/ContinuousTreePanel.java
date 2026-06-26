@@ -440,6 +440,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 				}
 				if (settings.geojsonFilename != null) {
 					loadGeojson.setToolTipText(settings.geojsonFilename);
+					boolean usingDefault = settings.geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+					loadGeojson.setText(new File(settings.geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
 				}
 				loadGeojsonCreated = true;
 			}
@@ -505,6 +507,8 @@ public class ContinuousTreePanel extends SpreadPanel {
 
 					settings.geojsonFilename = geojsonFilename;
 					loadGeojson.setToolTipText(geojsonFilename);
+					boolean usingDefault = geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+					loadGeojson.setText(new File(geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
 					frame.setStatus(settings.geojsonFilename + " selected.");
 
 				} else {
