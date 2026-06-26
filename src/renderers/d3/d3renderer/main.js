@@ -22233,6 +22233,12 @@ var SPREAD3_DATA = null;
 	var min_line_curvature = 0.0;
 	var max_line_curvature = 0.3;//1.0;
 
+	// Curvature jitter: branches connecting the same pair of discrete locations
+	// are otherwise drawn as identical arcs and superimpose. They are fanned to
+	// alternating sides with slightly larger radii so they can be told apart.
+	// 0 disables it; larger spreads them more.
+	var lineCurvatureJitter = 0.5;
+
 	// ---MODULE EXPORTS---//
 
 	var exports = module.exports = {};
@@ -22240,6 +22246,38 @@ var SPREAD3_DATA = null;
 	exports.generateLinesLayer = function(branches, nodes, locations, branchAttributes) {
 
 	    linesLayer = global.g.append("g").attr("class", "linesLayer");
+
+	    // Group branches that connect the same pair of discrete locations and
+	    // give each member a distinct side (arc sweep) and radius multiplier, so
+	    // overlapping branches fan out instead of superimposing. Singletons and
+	    // continuous branches (no locationId) keep the original arc.
+	    (function() {
+	      var groups = {};
+	      branches.forEach(function(line) {
+	        line['_jitterMul'] = 1;
+	        line['_jitterSide'] = "1";
+	        var sp = utils.getObject(nodes, "id", line.startPointId);
+	        var ep = utils.getObject(nodes, "id", line.endPointId);
+	        var sLoc = (typeof sp != 'undefined') ? sp.locationId : undefined;
+	        var eLoc = (typeof ep != 'undefined') ? ep.locationId : undefined;
+	        if (typeof sLoc != 'undefined' && typeof eLoc != 'undefined') {
+	          var a = String(sLoc), b = String(eLoc);
+	          var key = (a < b) ? (a + " " + b) : (b + " " + a);
+	          (groups[key] = groups[key] || []).push(line);
+	        }
+	      });
+	      for (var key in groups) {
+	        if (!groups.hasOwnProperty(key)) continue;
+	        var grp = groups[key];
+	        var n = grp.length;
+	        if (n < 2) continue;
+	        for (var k = 0; k < n; k++) {
+	          var r = k - (n - 1) / 2;             // symmetric rank about 0
+	          grp[k]['_jitterSide'] = (r < 0) ? "0" : "1";
+	          grp[k]['_jitterMul'] = 1 + lineCurvatureJitter * Math.abs(r);
+	        }
+	      }
+	    })();
 
 	    var lines = linesLayer.selectAll("path").data(branches).enter().append(
 	        "path") //
@@ -22325,9 +22363,9 @@ var SPREAD3_DATA = null;
 	          var dx = targetX - sourceX;
 	          var dy = targetY - sourceY;
 
-	          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(lineCurvature);
+	          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(lineCurvature) * line['_jitterMul'];
 
-	          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
+	          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0," + line['_jitterSide'] + " " + targetX + "," + targetY;
 
 	          return (bearing);
 	        }) //
@@ -22748,9 +22786,9 @@ var SPREAD3_DATA = null;
 
 	          var dx = targetX - sourceX;
 	          var dy = targetY - sourceY;
-	          var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature;
+	          var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature * line['_jitterMul'];
 
-	          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
+	          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0," + line['_jitterSide'] + " " + targetX + "," + targetY;
 
 	          return (bearing);
 
