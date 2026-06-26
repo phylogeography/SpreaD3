@@ -50,17 +50,15 @@ public class D3Renderer {
 
 				if (je.toString().startsWith(D3_RENDERER_DIR)) {
 
-					// System.out.println(je.getName());
-
-					File fl = new File(destdir, je.getName());
-					if (!fl.exists()) {
-						fl.getParentFile().mkdirs();
-						fl = new File(destdir, je.getName());
-					}
-
 					if (je.isDirectory()) {
 						continue;
 					}
+
+					// strip the renderers/d3/d3renderer/ prefix so the files land
+					// directly in the user-selected output folder, not nested deep
+					String relativeName = je.getName().substring(D3_RENDERER_DIR.length());
+					File fl = new File(destdir, relativeName);
+					fl.getParentFile().mkdirs();
 
 					java.io.InputStream is = jarfile.getInputStream(je);
 					java.io.FileOutputStream fo = new java.io.FileOutputStream(fl);
@@ -78,12 +76,11 @@ public class D3Renderer {
 
 			// inline input.json into main.js (so it loads from file:// without CORS)
 			File jsonFile = new File(settings.jsonFilename);
-			File mainJsFile = new File(
-					settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(MAIN_JS));
+			File mainJsFile = new File(settings.outputFilename.concat("/").concat(MAIN_JS));
 			inlineDataIntoMainJs(mainJsFile, jsonFile);
 
 			// point system default browser to index.html
-			String htmlPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(HTML);
+			String htmlPath = settings.outputFilename.concat("/").concat(HTML);
 			openInBrowser(htmlPath);
 
 		} else {// running from IDE
