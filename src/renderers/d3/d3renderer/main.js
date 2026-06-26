@@ -1,3 +1,8 @@
+/* SPREAD3 inlined data. The next line is replaced at render time by D3Renderer
+   with the contents of the input JSON, so the visualization works when opened
+   directly from disk (file://) without fetching data.json over HTTP. When left
+   as null (un-rendered template) the code falls back to fetching data.json. */
+var SPREAD3_DATA = null;
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -145,9 +150,19 @@
 	  d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 	} // END: move
 
+	// Use the data inlined into this file (SPREAD3_DATA) when present; otherwise
+	// fall back to fetching data.json (works when served over HTTP).
+	function loadData(callback) {
+	  if (typeof SPREAD3_DATA !== 'undefined' && SPREAD3_DATA !== null) {
+	    callback(null, SPREAD3_DATA);
+	  } else {
+	    d3.json("data.json", callback);
+	  }
+	}
+
 	function render() {
 
-	  d3.json("data.json", function(error, json) {
+	  loadData(function(error, json) {
 
 	    if (error) {
 	      return console.warn(error);

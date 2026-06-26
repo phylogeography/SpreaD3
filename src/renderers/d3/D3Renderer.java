@@ -7,6 +7,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.net.URI;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -19,8 +20,11 @@ import settings.rendering.D3RendererSettings;
 public class D3Renderer {
 
 	private static final String D3_RENDERER_DIR = "renderers/d3/d3renderer/";
-	private static final String D3_DATA_FILENAME = "data.json";
+	private static final String MAIN_JS = "main.js";
 	private static final String HTML = "index.html";
+
+	// Marker line in main.js whose value is replaced with the inlined input JSON.
+	private static final String DATA_MARKER = "var SPREAD3_DATA = null;";
 
 	private D3RendererSettings settings;
 
@@ -72,11 +76,11 @@ public class D3Renderer {
 			} // END: entries loop
 			jarfile.close();
 
-			// copy input.json to path/output/data/data.json
-			File srcDir = new File(settings.jsonFilename);
-			String destPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(D3_DATA_FILENAME);
-			File destDir = new File(destPath);
-			FileUtils.copyFile(srcDir, destDir);
+			// inline input.json into main.js (so it loads from file:// without CORS)
+			File jsonFile = new File(settings.jsonFilename);
+			File mainJsFile = new File(
+					settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(MAIN_JS));
+			inlineDataIntoMainJs(mainJsFile, jsonFile);
 
 			// point system default browser to index.html
 			String htmlPath = settings.outputFilename.concat("/").concat(D3_RENDERER_DIR).concat(HTML);
@@ -89,10 +93,10 @@ public class D3Renderer {
 			File destDir = new File(settings.outputFilename);
 			FileUtils.copyDirectory(srcDir, destDir);
 
-			// copy input.json to path/output/data/data.json
-			srcDir = new File(settings.jsonFilename);
-			destDir = new File(settings.outputFilename.concat("/").concat(D3_DATA_FILENAME));
-			FileUtils.copyFile(srcDir, destDir);
+			// inline input.json into main.js (so it loads from file:// without CORS)
+			File jsonFile = new File(settings.jsonFilename);
+			File mainJsFile = new File(settings.outputFilename.concat("/").concat(MAIN_JS));
+			inlineDataIntoMainJs(mainJsFile, jsonFile);
 
 			// point system default browser to index.html
 			String htmlPath = settings.outputFilename.concat("/").concat(HTML);
@@ -101,6 +105,26 @@ public class D3Renderer {
 		}
 
 	}// END: render
+
+	// Replace the SPREAD3_DATA marker line in main.js with the input JSON so the
+	// data is embedded in the script and no separate data.json fetch is needed.
+	private void inlineDataIntoMainJs(File mainJsFile, File jsonFile) throws IOException {
+
+		String mainJs = FileUtils.readFileToString(mainJsFile, StandardCharsets.UTF_8);
+		String json = FileUtils.readFileToString(jsonFile, StandardCharsets.UTF_8).trim();
+
+		if (!mainJs.contains(DATA_MARKER)) {
+			throw new IOException("Could not find data marker '" + DATA_MARKER
+					+ "' in " + mainJsFile.getPath());
+		}
+
+		// java.lang.String#replace treats both arguments as literals, so JSON
+		// content (e.g. '$' or backslashes) needs no escaping.
+		String replacement = "var SPREAD3_DATA = " + json + ";";
+		mainJs = mainJs.replace(DATA_MARKER, replacement);
+
+		FileUtils.writeStringToFile(mainJsFile, mainJs, StandardCharsets.UTF_8);
+	}// END: inlineDataIntoMainJs
 
 	private String getRunningJarName() {
 
