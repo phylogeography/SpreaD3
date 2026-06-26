@@ -343,6 +343,14 @@ public class DiscreteTreePanel extends SpreadPanel {
 					InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 			loadGeojson.addActionListener(new ListenLoadGeojson());
 			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+
+			// default to the bundled world map; the user can still load another
+			if (settings.geojsonFilename == null) {
+				settings.geojsonFilename = Utils.getDefaultGeojsonPath();
+			}
+			if (settings.geojsonFilename != null) {
+				loadGeojson.setToolTipText(settings.geojsonFilename);
+			}
 			loadGeojsonCreated = true;
 		}
 
@@ -413,6 +421,7 @@ public class DiscreteTreePanel extends SpreadPanel {
 					}
 
 					settings.geojsonFilename = geojsonFilename;
+					loadGeojson.setToolTipText(geojsonFilename);
 
 				} else {
 					frame.setStatus("Could not Open! \n");

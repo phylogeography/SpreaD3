@@ -59,6 +59,68 @@ public class Utils {
 		 String[] id = string.split(c);
 		 return id[id.length - 1];
 	}//END: splitString
+
+	private static String defaultGeojsonPath = null;
+
+	// Path to the bundled default world map (geojson/world.geojson). When running
+	// from a jar the resource is extracted to a temp file so it can be read with a
+	// FileReader; from the IDE the data/ folder is used directly. The result is
+	// cached. Returns null if it cannot be located.
+	public static String getDefaultGeojsonPath() {
+
+		if (defaultGeojsonPath != null) {
+			return defaultGeojsonPath;
+		}
+
+		try {
+
+			java.net.URL res = Utils.class.getResource("/geojson/world.geojson");
+			if (res != null) {
+
+				if ("file".equals(res.getProtocol())) {
+					defaultGeojsonPath = new java.io.File(res.toURI()).getAbsolutePath();
+					return defaultGeojsonPath;
+				}
+
+				// bundled inside a jar: extract to a temp file named world.geojson
+				// (so the derived layer id stays "world.geojson")
+				java.io.File tmpDir = java.io.File.createTempFile("spread3geo", "");
+				tmpDir.delete();
+				tmpDir.mkdirs();
+				tmpDir.deleteOnExit();
+
+				java.io.File tmp = new java.io.File(tmpDir, "world.geojson");
+				tmp.deleteOnExit();
+
+				java.io.InputStream in = res.openStream();
+				java.io.OutputStream out = new java.io.FileOutputStream(tmp);
+				try {
+					byte[] buf = new byte[8192];
+					int n;
+					while ((n = in.read(buf)) > 0) {
+						out.write(buf, 0, n);
+					}
+				} finally {
+					out.close();
+					in.close();
+				}
+
+				defaultGeojsonPath = tmp.getAbsolutePath();
+				return defaultGeojsonPath;
+			}
+
+			// IDE / dev fallback: data folder relative to the working directory
+			java.io.File f = new java.io.File("data/geoJSON_maps/world.geojson");
+			if (f.exists()) {
+				defaultGeojsonPath = f.getAbsolutePath();
+			}
+
+		} catch (Exception e) {
+			// no default available; users can still load a file manually
+		}
+
+		return defaultGeojsonPath;
+	}//END: getDefaultGeojsonPath
 	
 	
 	// //////////////////////////

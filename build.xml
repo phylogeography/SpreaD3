@@ -82,7 +82,12 @@
 
   <!--copy D3 scripts -->
      <copy todir="${buildDir}/renderers/d3/d3renderer">
-         <fileset dir="${src}/renderers/d3/d3renderer" includes="**"/>  
+         <fileset dir="${src}/renderers/d3/d3renderer" includes="**"/>
+      </copy>
+
+  <!--copy default world map so it can be bundled and loaded by default -->
+     <copy todir="${buildDir}/geojson">
+         <fileset dir="data/geoJSON_maps" includes="world.geojson"/>
       </copy>
 
    </target>

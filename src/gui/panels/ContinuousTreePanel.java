@@ -433,6 +433,14 @@ public class ContinuousTreePanel extends SpreadPanel {
 								.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 				loadGeojson.addActionListener(new ListenLoadGeojson());
 				addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+
+				// default to the bundled world map; the user can still load another
+				if (settings.geojsonFilename == null) {
+					settings.geojsonFilename = Utils.getDefaultGeojsonPath();
+				}
+				if (settings.geojsonFilename != null) {
+					loadGeojson.setToolTipText(settings.geojsonFilename);
+				}
 				loadGeojsonCreated = true;
 			}
 
@@ -496,6 +504,7 @@ public class ContinuousTreePanel extends SpreadPanel {
 					}
 
 					settings.geojsonFilename = geojsonFilename;
+					loadGeojson.setToolTipText(geojsonFilename);
 					frame.setStatus(settings.geojsonFilename + " selected.");
 
 				} else {
