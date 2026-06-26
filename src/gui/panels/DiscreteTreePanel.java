@@ -203,8 +203,18 @@ public class DiscreteTreePanel extends SpreadPanel {
 //							.addItemListener(new ListenLocationAttributeSelector());
 					locationAttributeSelector
 					.addActionListener(new ListenLocationAttributeSelector());
-					
-					
+
+					// default to "location", or "loc" as a second choice, when present
+					String preferredLocationAttribute = null;
+					if (uniqueAttributes.contains("location")) {
+						preferredLocationAttribute = "location";
+					} else if (uniqueAttributes.contains("loc")) {
+						preferredLocationAttribute = "loc";
+					}
+					if (preferredLocationAttribute != null) {
+						locationAttributeSelector.setSelectedItem(preferredLocationAttribute);
+					}
+
 					addComponentWithLabel("Select location attribute",
 							locationAttributeSelector);
 					locationAttributeSelectorCreated = true;
