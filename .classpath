@@ -4,7 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jebl.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.11.0.jar"/>
-	<classpathentry kind="lib" path="lib/joda-time-2.7.jar"/>
 	<classpathentry kind="lib" path="lib/colt.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.16.1.jar"/>
 	<classpathentry kind="lib" path="lib/jam.jar"/>

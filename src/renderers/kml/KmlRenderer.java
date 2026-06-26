@@ -27,12 +27,9 @@ import kmlframework.kml.PolyStyle;
 import kmlframework.kml.StyleSelector;
 import kmlframework.kml.TimeSpan;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -88,7 +85,8 @@ public class KmlRenderer implements Renderer {
 
 		// this.data = data;
 		this.settings = settings;
-		this.formatter = DateTimeFormat.forPattern("yyyy/MM/dd");
+		// 'uuuu' (proleptic year) not 'yyyy' (year-of-era), to support negative/zero years
+		this.formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd");
 
 	}// END: Constructor
 
@@ -418,26 +416,25 @@ public class KmlRenderer implements Renderer {
 
 		LinkedList<Coordinate> coords = getIntermediateCoords(startCoordinate, endCoordinate, sliceCount);
 
-		DateTime startDate = new DateTime();
+		LocalDate startDate = LocalDate.now();
 		if (line.hasTime()) {
 			String startTime = line.getStartTime();
-			startDate = formatter.parseDateTime(startTime);
+			startDate = LocalDate.parse(startTime, formatter);
 		}
 
-		DateTime endDate = new DateTime();
+		LocalDate endDate = LocalDate.now();
 		if (line.hasTime()) {
 			String endTime = line.getEndTime();
-			endDate = formatter.parseDateTime(endTime);
+			endDate = LocalDate.parse(endTime, formatter);
 		}
 
-		Interval interval = new Interval(startDate, endDate);
-		long millis = interval.toDurationMillis();
+		long millis = Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toMillis();
 		long segmentMillis = millis / (sliceCount - 1);
 
 		for (int i = 0; i < sliceCount; i++) {
 
-			Duration duration = new Duration(segmentMillis * i);
-			LocalDate segmentDate = new LocalDate(startDate.plus(duration));
+			Duration duration = Duration.ofMillis(segmentMillis * i);
+			LocalDate segmentDate = startDate.atStartOfDay().plus(duration).toLocalDate();
 			String segmentStartTime = segmentDate.toString();
 
 			double segmentStartAltitude = a * Math.pow((double) i, 2) + b * (double) i;
@@ -745,7 +742,7 @@ public class KmlRenderer implements Renderer {
 
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
-		LocalDate startDate = formatter.parseLocalDate(area.getStartTime());
+		LocalDate startDate = LocalDate.parse(area.getStartTime(), formatter);
 		timeSpan.setBegin(startDate.toString());
 		placemark.setTimePrimitive(timeSpan);
 
@@ -920,8 +917,8 @@ public class KmlRenderer implements Renderer {
 
 		// set time
 		TimeSpan timeSpan = new TimeSpan();
-		LocalDate startDate = formatter.parseLocalDate(countPoint.getStartTime());
-		LocalDate endDate = formatter.parseLocalDate(countPoint.getEndTime());
+		LocalDate startDate = LocalDate.parse(countPoint.getStartTime(), formatter);
+		LocalDate endDate = LocalDate.parse(countPoint.getEndTime(), formatter);
 
 		timeSpan.setBegin(startDate.toString());
 		timeSpan.setEnd(endDate.toString());

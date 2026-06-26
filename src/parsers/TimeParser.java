@@ -1,8 +1,7 @@
 package parsers;
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import structure.data.TimeLine;
 import utils.Utils;
@@ -17,7 +16,8 @@ public class TimeParser {
 	public TimeParser(String mrsd) throws AnalysisException {
 
 		this.mrsd = mrsd;
-		this.dateFormatter = DateTimeFormat.forPattern("yyyy/MM/dd");
+		// 'uuuu' (proleptic year) not 'yyyy' (year-of-era), to support negative/zero years
+		this.dateFormatter = DateTimeFormatter.ofPattern("uuuu/MM/dd");
 
 		parseTime();
 
@@ -82,23 +82,23 @@ public class TimeParser {
 
 		}// END: format check
 
-		// joda monthOfYear must be [1,12]
+		// month must be [1,12]
 		if (month == 0) {
 			month = 1;
 		}
 
-		// joda dayOfMonth must be [1,31]
+		// day must be [1,31]
 		if (day == 0) {
 			day = 1;
 		}
 
-		this.endDate = new LocalDate(year, month, day);
+		this.endDate = LocalDate.of(year, month, day);
 	}// END: parseTime
 
 	public TimeLine getTimeLine(double rootNodeHeight) {
 
 		String startDate = this.getNodeDate(rootNodeHeight);
-		String endDate = dateFormatter.print(this.endDate);
+		String endDate = this.endDate.format(dateFormatter);
 
 		TimeLine timeLine = new TimeLine(startDate, endDate);
 
@@ -113,7 +113,7 @@ public class TimeParser {
 		Integer days = Integer.valueOf(fields[Utils.DAY_INDEX]);
 		LocalDate date = endDate.minusYears(years).minusMonths(months)
 				.minusDays(days);
-		String stringDate = dateFormatter.print(date);
+		String stringDate = date.format(dateFormatter);
 
 		return stringDate;
 	}// END: getNodeDate

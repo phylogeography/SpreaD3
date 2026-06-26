@@ -55,7 +55,6 @@
          <zipgroupfileset dir="${lib}" includes="gson-2.11.0.jar" />
          <zipgroupfileset dir="${lib}" includes="jam.jar" />
          <zipgroupfileset dir="${lib}" includes="jebl.jar" />
-         <zipgroupfileset dir="${lib}" includes="joda-time-2.7.jar" />
 
       </jar>
    </target>
