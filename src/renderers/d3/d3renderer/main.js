@@ -22793,10 +22793,13 @@ var SPREAD3_DATA = null;
 	          return (bearing);
 
 	        }) //
-	      .attr("stroke-dasharray", function(d) {
+	      .each("end", function() {
 
-	        var totalLength = d3.select(this).node().getTotalLength();
-	        return (totalLength + " " + totalLength);
+	        // recompute the dash mask from the FINAL (morphed) path length;
+	        // measuring during the transition uses the old, shorter length and
+	        // leaves more-curved branches painted short of the location
+	        var totalLength = this.getTotalLength();
+	        d3.select(this).attr("stroke-dasharray", totalLength + " " + totalLength);
 
 	      });
 
