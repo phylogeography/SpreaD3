@@ -21,12 +21,11 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @SuppressWarnings("serial")
 public class DateEditor extends JPanel {
-
-	// TODO : change to Joda's LocalDate
 
 	private Date today;
 	private JSpinner spinner;
@@ -183,10 +182,10 @@ public class DateEditor extends JPanel {
 
 	private String convertToDecimalDate(Date date) {
 
-		LocalDate localDate = new LocalDate(date);
+		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 		int year = localDate.getYear();
-		int month = localDate.getMonthOfYear();
+		int month = localDate.getMonthValue();
 		int day = localDate.getDayOfMonth();
 		double decimalDate = year + (double) month / 12.0 + (double) day
 				/ 365.0;

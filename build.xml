@@ -3,7 +3,7 @@
 
    <property name="build.sysclasspath" value="last" />
    <property name="Main-Class" value="app.SpreaD3" />
-   <property name="JDK_VERSION" value="1.6" />
+   <property name="JDK_VERSION" value="1.8" />
    <property name="src" location="src"/>
    <property name="buildDir" location="classes" />
    <property name="dist" location="dist" />
@@ -51,11 +51,11 @@
          </fileset>
 -->
          <zipgroupfileset dir="${lib}" includes="colt.jar" />
-         <zipgroupfileset dir="${lib}" includes="commons-io-2.4.jar" />
-         <zipgroupfileset dir="${lib}" includes="gson-2.3.1.jar" />
+         <zipgroupfileset dir="${lib}" includes="commons-io-2.16.1.jar" />
+         <zipgroupfileset dir="${lib}" includes="gson-2.11.0.jar" />
+         <zipgroupfileset dir="${lib}" includes="flatlaf-3.7.1.jar" />
          <zipgroupfileset dir="${lib}" includes="jam.jar" />
          <zipgroupfileset dir="${lib}" includes="jebl.jar" />
-         <zipgroupfileset dir="${lib}" includes="joda-time-2.7.jar" />
 
       </jar>
    </target>
@@ -65,7 +65,7 @@
       <mkdir dir="${buildDir}/icons" />
       <mkdir dir="${buildDir}/colorpicker/swing/resources" />
       <mkdir dir="${buildDir}/renderers/d3/d3renderer" />
-      <javac source="1.6" target="1.6" srcdir="${src}" destdir="classes" classpathref="classpath" />
+      <javac source="1.8" target="1.8" srcdir="${src}" destdir="classes" classpathref="classpath" />
 
       <!--copy resources -->
       <copy todir="${buildDir}/gui/icons">
@@ -82,7 +82,12 @@
 
   <!--copy D3 scripts -->
      <copy todir="${buildDir}/renderers/d3/d3renderer">
-         <fileset dir="${src}/renderers/d3/d3renderer" includes="**"/>  
+         <fileset dir="${src}/renderers/d3/d3renderer" includes="**"/>
+      </copy>
+
+  <!--copy default world map so it can be bundled and loaded by default -->
+     <copy todir="${buildDir}/geojson">
+         <fileset dir="data/geoJSON_maps" includes="world.geojson"/>
       </copy>
 
    </target>

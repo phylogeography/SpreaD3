@@ -10,9 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -82,7 +81,7 @@ public class JsonMerger {
 			jsonFiles.add(settings.axisAttributesFile);
 		}
 
-		DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("yyyy/MM/dd");
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("uuuu/MM/dd");
 
 		TimeLine timeLine = null;
 		AxisAttributes axisAttributes = null;
@@ -481,20 +480,20 @@ public class JsonMerger {
 		
 		TimeLine timeLine = null;
 
-		LocalDate currentStart = dateFormatter.parseLocalDate(current.getStartTime());
-		LocalDate candidateStart = dateFormatter.parseLocalDate(candidate.getStartTime());
+		LocalDate currentStart = LocalDate.parse(current.getStartTime(), dateFormatter);
+		LocalDate candidateStart = LocalDate.parse(candidate.getStartTime(), dateFormatter);
 
-		String newStartTime = dateFormatter.print(currentStart);
+		String newStartTime = currentStart.format(dateFormatter);
 		if (candidateStart.isBefore(currentStart)) {
-			newStartTime = dateFormatter.print(candidateStart);
+			newStartTime = candidateStart.format(dateFormatter);
 		}
 
-		LocalDate currentEnd = dateFormatter.parseLocalDate(current.getEndTime());
-		LocalDate candidateEnd = dateFormatter.parseLocalDate(candidate.getEndTime());
+		LocalDate currentEnd = LocalDate.parse(current.getEndTime(), dateFormatter);
+		LocalDate candidateEnd = LocalDate.parse(candidate.getEndTime(), dateFormatter);
 
-		String newEndTime = dateFormatter.print(currentEnd);
+		String newEndTime = currentEnd.format(dateFormatter);
 		if (candidateEnd.isAfter(currentEnd)) {
-			newEndTime = dateFormatter.print(candidateEnd);
+			newEndTime = candidateEnd.format(dateFormatter);
 		}
 
 		timeLine = new TimeLine(newStartTime, newEndTime);

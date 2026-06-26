@@ -558,6 +558,16 @@ public class TimeSlicerPanel extends SpreadPanel {
 					InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 			loadGeojson.addActionListener(new ListenLoadGeojson());
 			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+
+			// default to the bundled world map; the user can still load another
+			if (settings.geojsonFilename == null) {
+				settings.geojsonFilename = Utils.getDefaultGeojsonPath();
+			}
+			if (settings.geojsonFilename != null) {
+				loadGeojson.setToolTipText(settings.geojsonFilename);
+				boolean usingDefault = settings.geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+				loadGeojson.setText(new File(settings.geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
+			}
 			loadGeojsonCreated = true;
 		}
 
@@ -743,6 +753,9 @@ public class TimeSlicerPanel extends SpreadPanel {
 					}
 
 					settings.geojsonFilename = geojsonFilename;
+					loadGeojson.setToolTipText(geojsonFilename);
+					boolean usingDefault = geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+					loadGeojson.setText(new File(geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
 
 				} else {
 					frame.setStatus("Could not Open! \n");

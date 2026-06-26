@@ -8,6 +8,7 @@ public class MenuBarFactory extends DefaultMenuBarFactory {
 		
 		  registerMenuFactory(new DefaultFileMenuFactory());
 		  registerMenuFactory(new DefaultEditMenuFactory());
+		  registerMenuFactory(new ViewMenuFactory());
 		  registerMenuFactory(new DefaultHelpMenuFactory());
 		  
 	}//END: Constructor

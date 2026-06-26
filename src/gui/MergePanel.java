@@ -20,7 +20,6 @@ import javax.swing.table.TableColumn;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 import exceptions.AnalysisException;
 import gui.panels.AnalysisTypes;

@@ -203,8 +203,7 @@ public class DiscreteTreePanel extends SpreadPanel {
 //							.addItemListener(new ListenLocationAttributeSelector());
 					locationAttributeSelector
 					.addActionListener(new ListenLocationAttributeSelector());
-					
-					
+
 					addComponentWithLabel("Select location attribute",
 							locationAttributeSelector);
 					locationAttributeSelectorCreated = true;
@@ -218,6 +217,37 @@ public class DiscreteTreePanel extends SpreadPanel {
 
 				frame.setStatus("Opened " + settings.treeFilename + "\n");
 				frame.setIdle();
+
+				// Default the location attribute to "location", or "loc" as a second
+				// choice, when present. Done here (EDT, after the selector has been
+				// built and added) so it behaves exactly like a manual selection:
+				// the listener then adds "Setup location coordinates" underneath and
+				// sets settings.locationAttributeName.
+				if (locationAttributeSelector != null) {
+
+					ComboBoxModel model = locationAttributeSelector.getModel();
+					String preferred = null;
+					for (int i = 0; i < model.getSize(); i++) {
+						if ("location".equals(model.getElementAt(i))) {
+							preferred = "location";
+							break;
+						}
+					}
+					if (preferred == null) {
+						for (int i = 0; i < model.getSize(); i++) {
+							if ("loc".equals(model.getElementAt(i))) {
+								preferred = "loc";
+								break;
+							}
+						}
+					}
+
+					if (preferred != null
+							&& !preferred.equals(locationAttributeSelector.getSelectedItem())) {
+						locationAttributeSelector.setSelectedItem(preferred);
+					}
+
+				}
 
 			}// END: done
 		};
@@ -343,6 +373,16 @@ public class DiscreteTreePanel extends SpreadPanel {
 					InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 			loadGeojson.addActionListener(new ListenLoadGeojson());
 			addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+
+			// default to the bundled world map; the user can still load another
+			if (settings.geojsonFilename == null) {
+				settings.geojsonFilename = Utils.getDefaultGeojsonPath();
+			}
+			if (settings.geojsonFilename != null) {
+				loadGeojson.setToolTipText(settings.geojsonFilename);
+				boolean usingDefault = settings.geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+				loadGeojson.setText(new File(settings.geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
+			}
 			loadGeojsonCreated = true;
 		}
 
@@ -413,6 +453,9 @@ public class DiscreteTreePanel extends SpreadPanel {
 					}
 
 					settings.geojsonFilename = geojsonFilename;
+					loadGeojson.setToolTipText(geojsonFilename);
+					boolean usingDefault = geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+					loadGeojson.setText(new File(geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
 
 				} else {
 					frame.setStatus("Could not Open! \n");

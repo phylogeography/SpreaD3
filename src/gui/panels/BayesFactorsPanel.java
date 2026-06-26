@@ -26,6 +26,7 @@ import parsers.BayesFactorSpreadDataParser;
 import parsers.LogParser;
 import settings.parsing.BayesFactorsSettings;
 import structure.data.SpreadData;
+import utils.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -249,6 +250,16 @@ public class BayesFactorsPanel extends SpreadPanel {
 					loadGeojson = new JButton("Load", InterfaceUtils.createImageIcon(InterfaceUtils.GEOJSON_ICON));
 					loadGeojson.addActionListener(new ListenLoadGeojson());
 					addComponentWithLabel("Load GeoJSON file:", loadGeojson);
+
+					// default to the bundled world map; the user can still load another
+					if (settings.geojsonFilename == null) {
+						settings.geojsonFilename = Utils.getDefaultGeojsonPath();
+					}
+					if (settings.geojsonFilename != null) {
+						loadGeojson.setToolTipText(settings.geojsonFilename);
+						boolean usingDefault = settings.geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+						loadGeojson.setText(new File(settings.geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
+					}
 					loadGeojsonCreated = true;
 				}
 				
@@ -370,6 +381,9 @@ public class BayesFactorsPanel extends SpreadPanel {
 					}
 
 					settings.geojsonFilename = geojsonFilename;
+					loadGeojson.setToolTipText(geojsonFilename);
+					boolean usingDefault = geojsonFilename.equals(Utils.getDefaultGeojsonPath());
+					loadGeojson.setText(new File(geojsonFilename).getName() + (usingDefault ? " (default)" : ""));
 					// populateLocationAttributeCombobox(discreteTreeSettings.treeFilename);
 
 				} else {

@@ -57,7 +57,7 @@ public class MainFrame extends DocumentFrame implements FileMenuHandler {
 	@Override
 	protected void initializeComponents() {
 
-		setSize(new Dimension(1400,700));
+		setSize(new Dimension(800,700));
 		setMinimumSize(new Dimension(300, 200));
 
 		dataPanel = new DataPanel(this);
