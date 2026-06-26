@@ -129,11 +129,15 @@ public class D3Renderer {
 		String classJar = this.getClass().getResource("/" + className + ".class").toString();
 
 		if (classJar.startsWith("jar:")) {
-			String vals[] = classJar.split("/");
-			for (String val : vals) {
-				if (val.contains("!")) {
-					return val.substring(0, val.length() - 1);
-				}
+
+			// classJar looks like "jar:file:/path/to/app.jar!/pkg/Class.class".
+			// Return the absolute path of the jar itself (not just its basename),
+			// so it can be opened regardless of the current working directory.
+			String jarUrl = classJar.substring("jar:".length(), classJar.indexOf("!"));
+			try {
+				return new File(new URI(jarUrl)).getAbsolutePath();
+			} catch (Exception e) {
+				return new File(jarUrl.replaceFirst("^file:", "")).getAbsolutePath();
 			}
 		}
 
